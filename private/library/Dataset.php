@@ -10,7 +10,7 @@
 
 namespace MediaCMS\Panel;
 
-use MediaCMS\Panel\Exception\Dataset as DatasetException;
+use MediaCMS\Panel\Exception\Mapper as DatasetException;
 
 abstract class Dataset implements \Iterator, \JsonSerializable {
 

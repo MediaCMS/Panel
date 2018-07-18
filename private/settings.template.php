@@ -32,9 +32,6 @@ define('DB_USER', '');
 /** Пароль користувача БД MySQL */
 define('DB_PASSWORD', '');
 
-/** Архітектура проекту (standard|extended) */
-define('ARCHITECTURE', 'standard');
-
 /** Адреса сервера Memcached */
 define('MEMCACHED_HOST', 'localhost');
 

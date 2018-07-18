@@ -41,7 +41,7 @@ try {
  */
 function autoload(string $object) {
 
-    $object = str_replace('MediaCMS\Panel', '\library\\' . ARCHITECTURE, $object);
+    $object = str_replace('MediaCMS\Panel', '\library\\', $object);
 
     $object = str_replace('\\', '/', $object);
 
