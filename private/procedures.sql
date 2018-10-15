@@ -151,14 +151,14 @@ BEGIN
   IF (_id IS NOT NULL) THEN
     SET _token = MD5(CONCAT(_id, NOW(), _email, _password));
     UPDATE `user` SET `token` = _token WHERE `id` = _id;
-    SELECT _token AS 'token';
+    SELECT _id AS 'id', _token AS 'token';
   END IF;
 END;;
 
 DROP PROCEDURE IF EXISTS `UserGet`;;
 CREATE PROCEDURE `UserGet`(IN `_id` int unsigned)
 BEGIN 
-  SELECT `id`, `time`, `title`, `description`, `phone`, `skype`, `email`, `image`, `role`, `status`
+  SELECT `id`, `time`, `title`, `description`, `phone`, `skype`, `email`, `image`, `role`, `alias`, `status`
   FROM `user` WHERE `id` = _id;
 END;;
 
@@ -248,6 +248,7 @@ BEGIN
   DECLARE _password VARCHAR(32);
   DECLARE _image VARCHAR(32);
   DECLARE _role TINYINT(1) UNSIGNED;
+  DECLARE _alias VARCHAR(32);
 
   IF (JSON_TYPE(params->'$.id') <> 'NULL') THEN
     SET _id = params->'$.id';
@@ -271,20 +272,21 @@ BEGIN
     SET _image = params->>'$.image';
   END IF;
   SET _role = params->'$.role';
+  SET _alias = params->>'$.alias';
 
   IF (_id IS NOT NULL) THEN
     UPDATE  `user` 
-      SET   `title` = _title, `description` = _description, `phone` = _phone,
-            `skype` = _skype, `email` = _email, `image` = _image, `role` = _role
+      SET   `title` = _title, `description` = _description, `phone` = _phone, `skype` = _skype,
+            `email` = _email, `image` = _image, `role` = _role, `alias` = _alias
       WHERE `id` = _id;
   ELSE
-    INSERT INTO `user` (`title`, `description`, `phone`, `skype`, `email`, `image`, `role`) 
-      VALUES (_title, _description, _phone, _skype, _email,  _image, _role);
+    INSERT INTO `user` (`title`, `description`, `phone`, `skype`, `email`, `image`, `role`, `alias`) 
+      VALUES (_title, _description, _phone, _skype, _email,  _image, _role, _alias);
     SET _id = LAST_INSERT_ID();
   END IF;
 
   IF (_password IS NOT NULL) THEN
-    UPDATE `user` SET `password` = _password WHERE `id` = _id;
+    UPDATE `user` SET `password` = MD5(_password) WHERE `id` = _id;
   END IF;
 END;;
 
@@ -311,4 +313,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-09-22 18:12:15
+-- 2018-10-15 20:32:27
