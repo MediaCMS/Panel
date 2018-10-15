@@ -169,6 +169,7 @@
                                     <div class="bottom" />
                                 </div>
                             </div>
+                            <!--
                             <div class="form-group text-center">
                                 <input type="checkbox" name="remember-me" value="1">
                                     <xsl:if test="@rememberMe">
@@ -176,6 +177,7 @@
                                     </xsl:if>
                                 </input>&#160;&#160;Запам'ятати мене
                             </div>
+                            -->
                             </xsl:if>
                         <div class="form-group text-center pt-3">
                             <input type="submit" name="submit" value="Авторизуватись" class="btn btn-primary" />

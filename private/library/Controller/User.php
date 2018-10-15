@@ -105,13 +105,11 @@ class User extends Controller {
 
         $this->menu = false;
 
-        $this->view->setRecaptcha();
+        if (!DEVELOPMENT) $this->view->setRecaptcha();
 
         if (count($_POST) > 0) {
 
             try {
-
-                //if (!isset($_POST['remember-me'])) $this->template->attributes()->rememberMe = 0;
 
                 if (!isset($_POST['email']) || (strlen($_POST['email']) == 0))
 

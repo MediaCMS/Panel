@@ -23,7 +23,7 @@
     <xsl:template match="/*">
         <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html></xsl:text>
         <html xml:lang="uk" lang="uk" dir="ltr" id="root">
-            <xsl:if test="(@debug=1)"><xsl:attribute name="data-debug">true</xsl:attribute></xsl:if>
+            <xsl:if test="debug"><xsl:attribute name="data-debug">true</xsl:attribute></xsl:if>
             <head>
                 <title><xsl:value-of select="@title" /></title>
                 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
@@ -33,7 +33,7 @@
                 <script src="/jquery.min.js" type="application/javascript" />
                 <script src="/popper.min.js" type="application/javascript" />
                 <script src="/bootstrap.min.js" type="application/javascript" />
-                <xsl:if test="@recaptcha">
+                <xsl:if test="not(debug)">
                     <script src='https://www.google.com/recaptcha/api.js' />
                 </xsl:if>
                 <script src="/index.js" type="application/javascript" />
