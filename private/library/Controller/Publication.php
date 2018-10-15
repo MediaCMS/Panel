@@ -3,9 +3,9 @@
  * Контролер для роботи з публікаціями
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
- * @package     MediaCMS\Panel\Controller\Publication
+ * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 
 namespace MediaCMS\Panel\Controller;
@@ -15,7 +15,7 @@ use  MediaCMS\Panel\Controller;
 class Publication extends Controller {
 
     /**
-     * Головний метод контролера
+     * Список публікацій
      */
-    public function run(): void {}
+    public function Index(): void {}
 }

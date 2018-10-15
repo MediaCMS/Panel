@@ -3,9 +3,9 @@
  * Налаштування
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
- * @package     MediaCMS/Panel
+ * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 
 /** Назва сайту */

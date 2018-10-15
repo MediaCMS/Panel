@@ -3,19 +3,14 @@
  * Вигляд
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
- * @package     MediaCMS/Panel
+ * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 
 namespace MediaCMS\Panel;
 
-use MediaCMS\Panel\Exception\View as ViewException;
-
 class View {
-
-    /** @var string Початковий xml-файл вигляду */
-    protected $fileXML = 'view.xml';
 
     /** @var string Загальний xsl-файл вигляду */
     protected $fileXSL = 'templates/index.xsl';
@@ -23,11 +18,36 @@ class View {
     /** @var \SimpleXMLElement Дерево вигляду */
     protected $xml;
 
-    /** @var \SimpleXMLElement Поточний шаблон сторінки */
-    protected $template;
+    /** @var \SimpleXMLElement Поточний елемент сторінки */
+    protected $node;
 
-    /** @var integer Кількість сторінок в пейджері */
-    protected $adjacent = 10;
+    /** @var array Можливі стани записів списку */
+    protected $statuses = [
+
+        ['title' => 'Всі статуси', 'value' => null],
+        ['title' => 'Діючий', 'value' => '1'],
+        ['title' => 'Видалений', 'value' => '0']
+    ];
+
+    /** @var array Можливі напрямки сортування списку */
+    protected $orderDirections = [
+
+        ['title' => 'Висхідний', 'value' => '1'],
+        ['title' => 'Низхідний', 'value' => '0']
+    ];
+
+    /** @var array Моєлива кільткість записів в списку */
+    protected $limits = [
+
+        ['title' => '3', 'value' => '3'],
+        ['title' => '5', 'value' => '5'],
+        ['title' => '7', 'value' => '7'],
+        ['title' => '11', 'value' => '11'],
+        ['title' => '13', 'value' => '13']
+    ];
+
+    /** @var integer Максимальна кількість суміжних номерів сторінок пагінатора */
+    protected $adjacent = 3;
 
     /** @var array Перелік типів оповіщень */
     protected $alerts = [
@@ -41,9 +61,9 @@ class View {
      */
     public function __construct() {
 
-        $xmlFile = PATH_PRIVATE . DIRECTORY_SEPARATOR . $this->fileXML;
+        $xml = '<?xml version="1.0" encoding="utf-8" ?><root><main /></root>';
 
-        $this->xml = new \SimpleXMLElement(file_get_contents($xmlFile));
+        $this->xml = new \SimpleXMLElement($xml);
 
         $this->xml->addAttribute('title', TITLE);
 
@@ -53,6 +73,10 @@ class View {
 
         $this->xml->addAttribute('hostIDN', $_SERVER['HTTP_HOST']);
 
+        $this->xml->addAttribute('hostMain', HOST_MAIN);
+
+        $this->xml->addAttribute('hostPhoto', HOST_PHOTO);
+
         $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
         $this->xml->addAttribute('url', $url);
@@ -61,9 +85,7 @@ class View {
 
         $this->xml->addAttribute('uri', $_SERVER['REQUEST_URI']);
 
-        $this->xml->addAttribute('hostMain', HOST_MAIN);
-
-        $this->xml->addAttribute('hostPhoto', HOST_PHOTO);
+        $this->xml->addAttribute('logo', TITLE);
 
         $this->xml->addAttribute('copyright', TITLE . ' @ ' . date('Y'));
 
@@ -71,7 +93,7 @@ class View {
     }
 
     /**
-     * Додає заголовок сторінки
+     * Додає у вигляд заголовок сторінки
      *
      * @param string $title Текст заголовка
      */
@@ -81,62 +103,48 @@ class View {
     }
 
     /**
-     * Повертаэ заголовок сторінки
+     * Повертає заголовок сторінки
      *
-     * @return integer Текст заголовка
+     * @return string Текст заголовка
      */
     public function getTitle(): string {
 
-        return ($this->xml->attributes()->title) ?? null;
+        return $this->xml->attributes()->title;
     }
 
     /**
-     * Додає поточний шаблон сторінки
+     * Додає у вигляд головне меню
      *
-     * @param string $template Назва шаблону
-     * @return \SimpleXMLElement Поточний шаблон сторінки
+     * @param array $schema Схема сайту
      */
-    public function setTemplate(string $template): \SimpleXMLElement {
-
-        return $this->template = $this->xml->main->addChild($template);
-    }
-
-    /**
-     * Вмикає завантаження js-файлу reCaptcha
-     */
-    public function setRecaptcha(): void {
-
-        $this->xml->addAttribute('recaptcha', RECAPTCHA_PUBLIC);
-    }
-
-    /**
-     * Додає головне меню
-     *
-     * @param array $menu Меню
-     * @param string $alias Поточний перший псевдонім адреси
-     */
-    public function setMenu(array $menu, string $alias): void {
+    public function setMenu(array $schema): void {
 
         $menuNode = $this->xml->addChild('menu');
 
-        foreach($menu as $item) {
+        foreach($schema as $alias => $section) {
 
-            $itemNode = $menuNode->addChild('item');
+            $itemNode = $this->xml->menu->addChild('item');
 
-            $itemNode->addAttribute('title', $item['title']);
+            $itemNode->addAttribute('title', $section['title']);
 
-            $itemNode->addAttribute('uri', '/' . implode('/', $item['uri']));
+            $itemNode->addAttribute('uri', '/' . $alias . '/' . key($section['subsections']));
 
-            if ($alias == $item['uri'][0])
+            if (isset($section['active']))
 
-                $itemNode->addAttribute('active', 'true');
+                $itemNode->addAttribute('active', 1);
         }
+
+        $itemNode = $menuNode->addChild('item');
+
+        $itemNode->addAttribute('title', 'Вихід');
+
+        $itemNode->addAttribute('uri', '/користувачі/вихід');
     }
 
     /**
-     * Додає поточне підменю
+     * Додає у вигляд поточне підменю
      *
-     * @param array $submenu Підменю
+     * @param array $submenu Масив з пунктами підменю
      * @param string $alias Поточний перший псевдонім адреси
      */
     public function setSubmenu(array $submenu, string $alias): void {
@@ -160,17 +168,16 @@ class View {
     }
 
     /**
-     * Додає оповіщення
+     * Додає у вигляд оповіщення
      *
      * @param string $text Текст оповіщення
      * @param string $type Тип оповіщення
-     * @throws ViewException Виняток вигляду
      */
     public function setAlert(string $text, string $type = 'info'): void {
 
         if (!in_array($type, $this->alerts))
 
-            throw new ViewException(sprintf('Невідомий тип оповіщення %s', $type));
+            throw new Exception(sprintf('Невідомий тип оповіщення %s', $type));
 
         $alertNode = $this->xml->addChild('alert');
 
@@ -180,13 +187,161 @@ class View {
     }
 
     /**
-     * Додає сторінку з 404-ю помилкою
+     * Додає у вигляд поточний елемент сторінки
+     *
+     * @param string $controller Назва контролера
+     * @param string $action Назва дії контролера
+     */
+    public function setNode(string $controller, string $action): void {
+
+        $node = $this->xml->main->addChild(strtolower($controller));
+
+        $this->node = $node->addChild(strtolower($action));
+    }
+
+    /**
+     * Повертає поточний елемент виводу
+     *
+     * @return \SimpleXMLElement Шаблон виводу
+     */
+    public function getNode(): \SimpleXMLElement {
+
+        return $this->node;
+    }
+
+    /**
+     * Додає у вигляд сутність
+     *
+     * @param \SimpleXMLElement $node Елемент, в який необхідно додати сутність
+     * @param array|null $item Масив, який необхідно додати у вигляд
+     */
+    public function setItem(\SimpleXMLElement $node, ?array $item): void {
+
+        //if (!isset($item)) return;
+
+        foreach($item as $title => $value) {
+
+            if (!isset($value)) continue;
+
+            if (is_array($value)) {
+
+                $this->setItems($node->addChild($title), $value);
+
+            } else {
+
+                $node->addAttribute($title, $value);
+            }
+        }
+    }
+
+    /**
+     * Додає у вигляд колекцію
+     *
+     * @param \SimpleXMLElement $node Елемент, в який необхідно додати колекцію
+     * @param array $index Таблиця, яку необхідно додати у вивід
+     */
+    public function setItems(\SimpleXMLElement $node, array $index): void {
+
+        foreach($index as $item)
+
+            $this->setItem($node->addChild('item'), $item);
+    }
+
+    /**
+     * Додає у вигляд фільтр для списку
+     *
+     * @param array $filter Фільтр для списку
+     * @param string $alias Псевдонім поточного контролера
+     */
+    public function setFilter(array $filter, array $orderFields, string $alias): void {
+
+        $filterNode = $this->node->addChild('filter');
+
+        $filterNode->addAttribute('uri', '/' . $alias . '/список');
+
+        $this->setItem($filterNode, $filter);
+
+        $this->setItems($filterNode->addChild('statuses'), $this->statuses);
+
+        if (count($orderFields)) {
+
+            $this->setItems($filterNode->addChild('orderFields'), $orderFields);
+
+            $this->setItems($filterNode->addChild('orderDirections'), $this->orderDirections);
+        }
+
+        $this->setItems($filterNode->addChild('limits'), $this->limits);
+    }
+
+    /**
+     * Додає у вигляд пагінацію для списка
+     *
+     * @param integer $page Номер поточної сторінки
+     * @param integer $pages Загальна кількість сторінок в списку
+     * @param string $alias Псевдонім поточного контролера
+     */
+    public function setPagination(int $page = 1, int $pages = 1, string $alias): void {
+
+        if ($pages < 2) return;
+
+        $pagination = range(1, $pages);
+
+        if (($adjacent = floor($this->adjacent / 2) * 2 + 1) >= 1) {
+
+            $paginationMin = count($pagination) - $this->adjacent;
+
+            $paginationMax = intval($page) - ceil($this->adjacent / 2);
+
+            $paginationOffset = max(0, min($paginationMin, $paginationMax));
+
+            $pagination = array_slice($pagination, $paginationOffset, $this->adjacent);
+        }
+
+        $paginationNode = $this->node->addChild('pagination');
+
+        $paginationNode->addAttribute('uri', '/' . $alias . '/список');
+
+        $paginationNode->addAttribute('page', $page);
+
+        $paginationNode->addAttribute('pages', $pages);
+
+        $pagesNode = $paginationNode->addChild( 'pages' );
+
+        foreach($pagination AS $item) {
+
+            $pageNode = $pagesNode->addChild('page');
+
+            $pageNode->addAttribute('title', 'Сторінка №' . $item);
+
+            $pageNode->addAttribute('value', $item);
+        }
+
+        if ($page > 1) {
+
+            $title = $this->getTitle();
+
+            $title = sprintf('%s (сторінка №%d)', $title, $page);
+
+            $this->setTitle($title);
+        }
+    }
+
+    /**
+     * Вмикає завантаження js-файлу reCaptcha
+     */
+    public function setRecaptcha(): void {
+
+        $this->xml->addAttribute('recaptcha', RECAPTCHA_PUBLIC);
+    }
+
+    /**
+     * Додає у вигляд сторінку з 404-ю помилкою
      *
      * @param string $uri Відносна адреса сторінки
      */
     public function pageNotFound(string $uri): void {
 
-        $this->xml->main->addChild('PageNotFound');
+        $this->xml->addChild('pageNotFound');
 
         $this->xml->attributes()->title = 'Сторінка не знайдена';
 
@@ -198,7 +353,7 @@ class View {
     }
 
     /**
-     * Додає відлагодження
+     * Додає у вигляд відлагодження
      *
      * @param array $queries SQL-запити мапера
      */
@@ -218,11 +373,11 @@ class View {
 
         if (isset($queries)) {
 
-            $mapperNode = $this->xml->debug->addChild('mapper');
+            $databaseNode = $this->xml->debug->addChild('database');
 
             if (is_array($queries)) {
 
-                $queriesNode = $mapperNode->addChild('queries');
+                $queriesNode = $databaseNode->addChild('queries');
 
                 foreach($queries as $key => $query) {
 
@@ -240,9 +395,7 @@ class View {
 
                     $queryNode = $queriesNode->addChild('query', $string);
 
-                    $time = round($query['time'], 2);
-
-                    $time = sprintf('%01.2f', $query['time']);
+                    $time = sprintf('%01.2f', round($query['time'], 2));
 
                     $queryNode->addAttribute('time', $time);
 
@@ -251,16 +404,15 @@ class View {
 
                 $timeTotal = sprintf('%01.2f', $timeTotal);
 
-                $mapperNode->addAttribute('time', $timeTotal);
+                $databaseNode->addAttribute('time', $timeTotal);
             }
         }
     }
 
     /**
-     * Додає трасування
+     * Додає у вигляд трасування
      *
      * @param \Exception $exception Виняток
-     * @throws ViewException Виняток контроллера
      */
     public function setException(\Exception $exception): void {
 

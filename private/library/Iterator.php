@@ -3,9 +3,9 @@
  * Клас роботи з ітератором
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
- * @package     MediaCMS\Panel\Iterator
+ * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 
 namespace MediaCMS\Panel;

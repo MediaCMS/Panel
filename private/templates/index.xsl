@@ -6,7 +6,7 @@
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -42,8 +42,8 @@
                 <xsl:if test="menu">
                     <header>
                         <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
-                            <a class="navbar-brand" href="{/root/@hostMain}" title="Головний сайт">
-                                <img src="/logo.png" alt="Медіа" />
+                            <a class="navbar-brand" href="{@hostMain}" title="Головний сайт">
+                                <img src="/logo.png" alt="{@logo}" />
                             </a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,16 +86,16 @@
                         </div>
                     </div>
                 </xsl:if>
-                <main class="{name(main/*[1])} container">
+                <main class="container">
                     <xsl:if test="menu"><h1 class="mt-5"><xsl:value-of select="@title" /></h1></xsl:if>
-                    <div class="body mt-4"><xsl:apply-templates select="main/*[1]" /></div>
+                    <div class="body mt-4"><xsl:apply-templates select="main/*" /></div>
                 </main>
                 <footer class="text-center small my-5">
                     <div class="copyright"><xsl:value-of select="@copyright" disable-output-escaping="yes" /></div>
                     <xsl:if test="debug">
                         <div class="debug text-muted my-2">
-                            <span title="Загальний час"><xsl:value-of select="debug/@time" /> мс</span>&#160;/
-                            <span title="Час витрачений на Mapper"><xsl:value-of select="debug/mapper/@time" /> мс</span>&#160;/
+                            <span title="Загальний час створення сторінки"><xsl:value-of select="debug/@time" /> мс</span>&#160;/
+                            <span title="Час витрачений на запит до БД"><xsl:value-of select="debug/database/@time" /> мс</span>&#160;/
                             <span title="Використано пам’яті"><xsl:value-of select="debug/@memory" /> kB</span>&#160;/
                             <span title="Максимальний рівень пам’яті"><xsl:value-of select="debug/@memoryPeak" /> kB</span>
                         </div>
@@ -106,46 +106,151 @@
         </html>
     </xsl:template>
 
-    <xsl:template match="AccessLogin">
-        <div id="access-login">
-            <div class="card d-table mx-auto">
-                <div class="card-header">Авторизація</div>
-                <div class="card-body ">
-                    <form class="form" method="POST">
-                        <div class="form-group">
-                            <input type="email" name="login" value="{@login}" placeholder="Логін" class="form-control text-center" />
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="password" placeholder="Пароль" class="form-control text-center" />
-                        </div>
-                        <!--
-                        <div class="form-group">
-                            <div class="recaptcha">
-                                <div class="g-recaptcha" data-size="normal"
-                                     data-sitekey="{/root/@recaptcha}" />
-                                <div class="logo" />
-                                <div class="right" />
-                                <div class="bottom" />
+    <xsl:template match="main/*/index">
+        <div class="index">
+            <xsl:choose>
+                <xsl:when test="items/item">
+                    <xsl:apply-templates select="." mode="extends" />
+                    <xsl:apply-templates select="pagination" />
+                </xsl:when>
+                <xsl:otherwise>Записів не знайдено</xsl:otherwise>
+            </xsl:choose>
+            <xsl:apply-templates select="filter" />
+        </div>
+    </xsl:template>
+
+    <xsl:template match="main/*/index/filter">
+        <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Фільтр</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#215;</span>
+                        </button>
+                    </div>
+                    <form action="{@uri}" method="POST">
+                        <div class="modal-body">
+                            <xsl:apply-templates select="." mode="extends" />
+                            <div class="form-group row">
+                                <label for="filterStatus" class="col-sm-5 col-form-label">Статус</label>
+                                <div class="col-sm-7">
+                                    <select name="_status" title="Фільтр за статусом" id="filterStatus" class="form-control">
+                                        <xsl:for-each select="statuses/item">
+                                            <option value="{@value}">
+                                                <xsl:if test="@value=../../@_status">
+                                                    <xsl:attribute name="selected">selected</xsl:attribute>
+                                                </xsl:if>
+                                                <xsl:value-of select="@title" />
+                                            </option>
+                                        </xsl:for-each>
+                                    </select>
+                                </div>
+                            </div>
+                            <xsl:if test="orderFields">
+                                <div class="form-group row">
+                                    <label for="filterOrderField" class="col-sm-5 col-form-label">Поле для сортування</label>
+                                    <div class="col-sm-7">
+                                        <select name="_orderField" title="Поле для сортування" id="filterOrderField" class="form-control">
+                                            <xsl:for-each select="orderFields/item">
+                                                <option value="{@field}">
+                                                    <xsl:if test="@field=../../@_orderField">
+                                                        <xsl:attribute name="selected">selected</xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:value-of select="@title" />
+                                                </option>
+                                            </xsl:for-each>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="filterOrderDirection" class="col-sm-5 col-form-label">Напрям сортування</label>
+                                    <div class="col-sm-7">
+                                        <select name="_orderDirection" title="Напрямок сортування" id="filterOrderDirection" class="form-control">
+                                            <xsl:for-each select="orderDirections/item">
+                                                <option value="{@value}">
+                                                    <xsl:if test="@value=../../@_oredrDirection">
+                                                        <xsl:attribute name="selected">selected</xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:value-of select="@title" />
+                                                </option>
+                                            </xsl:for-each>
+                                        </select>
+                                    </div>
+                                </div>
+                            </xsl:if>
+                            <div class="form-group row">
+                                <label for="filterLimit" class="col-sm-5 col-form-label">Записів на сторінку</label>
+                                <div class="col-sm-7">
+                                    <select name="_limit" title="Кількість записів на сторінку" id="filterLimit" class="form-control">
+                                        <xsl:for-each select="limits/item">
+                                            <option value="{@value}">
+                                                <xsl:if test="@value=../../@_limit">
+                                                    <xsl:attribute name="selected">selected</xsl:attribute>
+                                                </xsl:if>
+                                                <xsl:value-of select="@title" />
+                                            </option>
+                                        </xsl:for-each>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        -->
-                        <!--
-                        <div class="form-group text-center">
-                            <input type="checkbox" name="remember-me" value="1">
-                                <xsl:if test="@rememberMe">
-                                    <xsl:attribute name="checked">checked</xsl:attribute>
-                                </xsl:if>
-                            </input>&#160;&#160;Запам'ятати мене
-                        </div>
-                        -->
-                        <div class="form-group text-center pt-3">
-                            <input type="submit" name="submit" value="Авторизуватись" class="btn btn-primary" />
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                            <input type="submit" name="submit" value="Фільтрувати" class="btn btn-primary" />
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-     </xsl:template>
+    </xsl:template>
+
+    <xsl:template match="main/*/edit">
+        <div class="edit container mt-5">
+            <form action="" method="POST" class="col-5 mx-auto">
+                <xsl:apply-templates select="." mode="extends" />
+                <xsl:if test="@id">
+                    <xsl:if test="@alias">
+                        <div class="form-group row">
+                            <label for="formAlias" class="col-sm-4 col-form-label">Псевдонім</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="time" value="{@alias}" readonly="readonly"
+                                       id="formAlias" class="form-control" title="Псевдонім" />
+                            </div>
+                        </div>
+                    </xsl:if>
+                    <div class="form-group row">
+                        <label for="formTime" class="col-sm-4 col-form-label">Дата та час</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="time" value="{@time}" readonly="readonly"
+                                   id="formTime" class="form-control" title="Дата та час останньої модифікації" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formID" class="col-sm-4 col-form-label">Ідентифікатор</label>
+                        <div class="col-sm-8">
+                            <input type="text" value="{@id}" readonly="readonly"
+                                   id="formID" class="form-control" title="Ідентифікатор" />
+                        </div>
+                    </div>
+                </xsl:if>
+                <div class="form-group text-center py-5">
+                    <input type="submit" name="_save" value="Зберегти" class="btn btn-primary mx-1" />
+                    <xsl:if test="not(@id)">
+                        <input type="reset" name="_reset" value="Очистити" class="btn btn-secondary mx-1" />
+                    </xsl:if>
+                    <xsl:if test="@id">
+                        <input type="submit" name="_delete" value="Видалити" class="btn btn-danger mx-1">
+                            <xsl:if test="@status=0">
+                                <xsl:attribute name="value">Відновити</xsl:attribute>
+                            </xsl:if>
+                        </input>
+                    </xsl:if>
+                    <xsl:if test="@id"><input type="hidden" name="id" value="{@id}" /></xsl:if>
+                </div>
+            </form>
+        </div>
+    </xsl:template>
 
     <xsl:template match="pagination">
         <nav aria-label="Page navigation example">
@@ -189,7 +294,7 @@
 
     <xsl:template match="debug">
         <div id="debug">
-            <xsl:if test="mapper/queries/query">
+            <xsl:if test="database/queries/query">
                 <div class="container mapper">
                     <table class="table">
                         <caption>Запити</caption>
@@ -201,7 +306,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <xsl:for-each select="mapper/queries/query">
+                            <xsl:for-each select="database/queries/query">
                                 <tr>
                                     <th scope="row" class="text-right"><xsl:value-of select="position()" />.</th>
                                     <td class="text-right"><xsl:value-of select="@time" /></td>

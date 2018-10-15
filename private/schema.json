@@ -1,0 +1,11 @@
+{
+  "публікації": {"title": "Публікації", "controller": "Publication", "default": true},
+  "категорії":  {"title": "Категорії",  "controller": "Category"},
+  "мітки":      {"title": "Мітки",      "controller": "Tag"},
+  "коментарі":  {"title": "Коментарі",  "controller": "Comment", "subsections": {"редагування": null}},
+  "сторінки":   {"title": "Сторінки",   "controller": "Page"},
+  "користувачі":{"title": "Користувачі","controller": "User", "subsections": {
+    "вхід":     {"title": "Вхід",       "action": "Login"},
+    "вихід":    {"title": "Вихід",      "action": "Logout"}}
+  }
+}

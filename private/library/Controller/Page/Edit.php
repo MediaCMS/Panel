@@ -3,9 +3,9 @@
  * Контролер для редагування користувача
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
- * @package     MediaCMS/Panel
+ * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 
 namespace MediaCMS\Panel\Controller\User;
@@ -21,7 +21,7 @@ class Edit extends UserController {
      */
     public function run(): void {
 
-        $this->repository = new UserRepository($this->mapper);
+        $this->repository = new UserRepository($this->database);
 
         if (count($_POST) > 0) {
 

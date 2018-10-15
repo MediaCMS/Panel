@@ -3,9 +3,9 @@
  * Контролер для виводу списку статичних сторінок
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
- * @package     MediaCMS/Panel
+ * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 
 namespace MediaCMS\Panel\Controller\Page;
@@ -25,7 +25,7 @@ class Index extends PageController {
      */
     public function run(): void {
 
-        $this->repository = new PageRepository($this->mapper);
+        $this->repository = new PageRepository($this->database);
 
         $pageCollection = $this->repository->getIndex($this->filter);
 

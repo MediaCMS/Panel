@@ -3,9 +3,9 @@
  * Маршрутизатор (вибір необхідного контролера)
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
- * @package     MediaCMS\Panel\Router
+ * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 
 namespace MediaCMS\Panel;
@@ -15,26 +15,40 @@ class Router {
     /** @var array Перелік частин адреси сторінки */
     protected $uri;
 
-    /** @var \SimpleXMLElement Дерево схеми сайта */
-    protected $tree;
+    /** @var string Адреса сторінки за налаштуванням */
+    protected $uriDefault;
 
-    /** @var array Поточні гілки дерева схеми сайта */
-    protected $branches;
+    /** @var array Схема сайта */
+    protected $schema;
 
-    /** @var array Головне меню сайту */
-    protected $menu;
+    /** @var array Типові підрозділи схеми */
+    protected $subsections = [
 
-    /** @var array Підменю поточної сторінки сайту */
-    protected $submenu;
+        "список"        => ["title" => "Список", "action" => "Index"],
+        "редагування"   => ["title" => "Редагування", "action" => "Edit"]
+    ];
 
     /** @var string Назва поточного контролера */
-    protected $controller = '\MediaCMS\Panel\Controller';
+    protected $controller;
+
+    /** @var string Назва поточної дії */
+    protected $action;
 
     /** @var string Заголовок сторінки */
     protected $title;
 
-    /** @var string Шаблон вигляду сторінки */
-    protected $template;
+    /** @var array Перелік кодів та опису переадресації */
+    protected $redirects = [
+
+        300 => 'Multiple Choices',
+        301 => 'Moved Permanently',
+        302 => 'Moved Temporarily',
+        303 => 'See Other',
+        304 => 'Not Modified',
+        305 => 'Use Proxy',
+        306 => '',
+        307 => 'Temporary Redirect'
+    ];
 
 
     /**
@@ -44,27 +58,23 @@ class Router {
 
         $this->setURI();
 
-        $this->setTree();
+        if (!isset($_SESSION['token']) || !preg_match('/^[0-9a-f]{32}$/', $_SESSION['token'])
 
-        $this->setBranches($this->tree, $this->uri);
+            || !isset($_SESSION['user']) || !preg_match('/^\d{1,6}$/', $_SESSION['user'])) {
 
-        if (isset($_SESSION['token']) && (strlen($_SESSION['token']) == 32)) {
+            $this->setController('User');
 
-            $this->setMenu($this->tree);
+            $this->setAction('Login');
 
-            $this->setController();
-
-            $this->setTitle();
-
-            $this->setTemplate();
+            $this->setTitle('Авторизація');
 
         } else {
 
-            $this->controller .= '\Access\Login';
+            $this->setSchema();
 
-            $this->template = 'AccessLogin';
+            if ($this->getURI(0) == '')
 
-            $this->title = 'Авторизація';
+                $this->redirect($this->getURIDefault());
         }
     }
 
@@ -103,141 +113,95 @@ class Router {
     }
 
     /**
-     * Отримує та зберігає дерево схеми сайта
+     * Зберігає адресу сторінки сайту за налаштуванням
+     *
+     * @param string $uri Адреса сторінки
      */
-    private function setTree(): void {
+    private function setURIDefault(string $uri): void {
 
-        $this->tree = PATH_PRIVATE . '/schema.xml';
-
-        $this->tree = file_get_contents($this->tree);
-
-        $this->tree = new \SimpleXMLElement($this->tree);
-   }
-
-    /**
-     * Повертає дерево схеми сайта
-     */
-    public function getTree(): \SimpleXMLElement {
-
-        return $this->tree;
+        $this->uriDefault = $uri;
     }
 
     /**
-     * Отримує та зберігає поточні гілки дерева схеми сайту
+     * Повертає елемент ідентифікатора сторінки
      *
-     * @param \SimpleXMLElement $branchElement Гілка дерева
-     * @param array $uri Перелік псевдонімів адреси сторінки
+     * @return string Назва елемента
      */
-    private function setBranches(\SimpleXMLElement $branchElement, array $uri): void {
+    public function getURIDefault(): string {
 
-        $alias = array_shift($uri);
+        return $this->uriDefault;
+    }
 
-        foreach($branchElement->branch as $childBranchElement) {
+    /**
+     * Отримує та зберігає схему сайта
+     */
+    private function setSchema(): void {
 
-            if ($childBranchElement->attributes()->alias == $alias) {
+        $this->schema = json_decode(
 
-                $branch['title'] = (string) $childBranchElement->attributes()->title;
+            file_get_contents(PATH_PRIVATE . '/schema.json'), true
+        );
 
-                $branch['alias'] = (string) $childBranchElement->attributes()->alias;
+        foreach($this->schema as $sectionAlias => &$section) {
 
-                $branch['controller'] = (string) $childBranchElement->attributes()->controller;
+            $subsections = (isset($section['subsections'])) ?
 
-                if (isset($childBranchElement->attributes()->menu))
+                array_replace($this->subsections, $section['subsections']) : $this->subsections;
 
-                    $branch['menu'] = (string) $childBranchElement->attributes()->menu;
+            foreach($subsections as $subsectionAlias => $subsection) {
 
-                $this->branches[] = $branch;
+                if (is_null($subsection)) {
 
-                if (isset($childBranchElement->submenu)) {
+                    unset($subsections[$subsectionAlias]);
 
-                    foreach($childBranchElement->submenu->item as $item) {
+                } else {
 
-                        $submenu['title'] = (string) $item->attributes()->title;
-
-                        if (isset($item->attributes()->alias))
-
-                            $submenu['alias'] = (string) $item->attributes()->alias;
-
-                        if (isset($item->attributes()->modal))
-
-                            $submenu['modal'] = (string) $item->attributes()->modal;
-
-                        $this->submenu[] = $submenu;
-                    }
+                    $subsections[$subsectionAlias] = $subsection;
                 }
 
-                if (count($childBranchElement) > 0) $this->setBranches($childBranchElement, $uri);
+                if (($sectionAlias == $this->getURI(0)) && ($subsectionAlias == $this->getURI(1))) {
+
+                    $this->setController($section['controller']);
+
+                    $this->setAction($subsection['action']);
+
+                    $this->setTitle($section['title'] . ' / ' . $subsection['title']);
+
+                    $section['active'] = true;
+
+                    $subsections[$subsectionAlias]['active'] = true;
+                }
+             }
+
+            $section['subsections'] = $subsections;
+
+            if (isset($section['default'])) {
+
+                $uri = '/' . $sectionAlias . '/' . key($section['subsections']);
+
+                $this->setURIDefault($uri);
             }
         }
     }
 
     /**
-     * Повертає поточні гілки дерева схеми сайту
+     * Повертає схему сайту
      *
-     * @return array Список гілок
+     * @return array Схема сайта
      */
-    public function getBranches(): array {
+    public function getSchema(): array {
 
-        return $this->branches;
+        return $this->schema;
     }
 
     /**
-     * Вибирає та зберігає меню з дерева схеми сайту
+     * Зберігає контролер
      *
-     * @param \SimpleXMLElement $branch Гілка дерева
-     * @param array $parentURI Перелік псевдонімів адреси сторінки
+     * @param string $controller Назва поточного контролера
      */
-    private function setMenu(\SimpleXMLElement $branch, array $parentURI = null): void {
+    protected function setController(string $controller): void {
 
-        foreach($branch as $childBranch) {
-
-            if ($childBranch->getName() != 'branch') continue;
-
-            $uri = $parentURI;
-
-            $uri[] = (string) $childBranch->attributes()->alias;
-
-            if (isset($childBranch->attributes()->menu)) {
-
-                $item['title'] = (string) $childBranch->attributes()->menu;
-
-                $item['uri'] = $uri;
-
-                $this->menu[] = $item;
-            }
-
-            if (count($childBranch) > 0) $this->setMenu($childBranch, $uri);
-        }
-    }
-
-    /**
-     * Повертає головне меню
-     *
-     * @return array Список пунктів меню
-     */
-    public function getMenu(): array {
-
-        return $this->menu;
-    }
-
-    /**
-     * Повертає підменю поточної сторінки сайту
-     *
-     * @return array|null Список пунктів меню
-     */
-    public function getSubmenu(): ?array {
-
-        return $this->submenu;
-    }
-
-    /**
-     * Отримує та зберігає контролер
-     */
-    private function setController(): void {
-
-        foreach($this->branches as $branch)
-
-            $this->controller .= '\\' . $branch['controller'];
+        $this->controller = $controller;
     }
 
     /**
@@ -245,21 +209,39 @@ class Router {
      *
      * @return string Назва контролера
      */
-    public function getController() {
+    public function getController(): string {
 
         return $this->controller;
     }
 
     /**
-     * Отримує та зберігає заголовок сторінки
+     * Зберігає поточну дію контролера
+     *
+     * @param string $action Назва поточної дії контролера
      */
-    private function setTitle(): void {
+    protected function setAction(string $action): void {
 
-        foreach($this->branches as $branch)
+        $this->action = $action;
+    }
 
-            $titles[] = $branch['title'];
+    /**
+     * Повертає поточну дію контролера
+     *
+     * @return string Назва дії
+     */
+    public function getAction(): string {
 
-        $this->title = implode(' / ', $titles);
+        return $this->action;
+    }
+
+    /**
+     * Зберігає поточну найменування сторінки
+     *
+     * @param string $title Назва поточної сторінки
+     */
+    protected function setTitle(string $title): void {
+
+        $this->title = $title;
     }
 
     /**
@@ -273,24 +255,19 @@ class Router {
     }
 
     /**
-     * Отримує та зберігає шаблон сторінки
-     */
-    private function setTemplate(): void {
-
-        foreach($this->branches as $branch)
-
-            $controllers[] = $branch['controller'];
-
-        $this->template = implode('', $controllers);
-    }
-
-    /**
-     * Повертає шаблон сторінки
+     * Здійснює переадресацію
      *
-     * @return string|null Назва шаблона сторінки
+     * @param   string $uri Адреса сторінки сайту, на яку потрібно переадресувати
+     * @param   integer $code Код переадресації HTTP-протоколу
      */
-    public function getTemplate(): ?string {
+    public function redirect(string $uri = '/', int $code = 303): void {
 
-        return $this->template;
+        $uri = ($uri) ?? urldecode($_SERVER['REQUEST_URI']);
+
+        header('HTTP/1.x '. $code . ' ' . $this->redirects[$code]);
+
+        header('Location: '. HOST . $uri);
+
+        exit($code);
     }
 }

@@ -3,9 +3,9 @@
  * Головний файл з обмеженим доступом
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
- * @package     MediaCMS/Panel
+ * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 
 use MediaCMS\Panel\Router;
@@ -22,15 +22,30 @@ try {
 
     $router = new Router();
 
-    $controllerTitle = $router->getController();
+    $controllerTitle = '\MediaCMS\Panel\Controller\\' .$router->getController();
 
     $controller = new $controllerTitle($router);
 
+    $action = $router->getAction();
+
+    call_user_func([$controller, $action]);
+
 } catch (\Exception $exception) {
 
-    header('HTTP/1.x 404 Not Found');
+    header('HTTP/1.x 500 Internal Server Error');
 
-    throw $exception;
+    $message = [$exception->getMessage(), $exception->getFile(), $exception->getLine(), $exception->getCode()];
+
+    MediaCMS\Panel\Log::append(vsprintf('%s (%s:%d, %d)', $message));
+
+    if (isset($controller) && is_object($controller)) {
+
+        call_user_func([$controller, 'setException'], $exception);
+
+    } else {
+
+        throw new $exception;
+    }
 }
 
 

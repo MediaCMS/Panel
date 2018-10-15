@@ -1,19 +1,19 @@
 <?php
 /**
- * Абстрактний базовий клас для роботи з логом
+ * Клас для роботи з логом
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
- * @package     MediaCMS\Panel\Log
+ * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 
 namespace MediaCMS\Panel;
 
-abstract class Log {
+class Log {
 
     /** @var string Назва файлу лога */
-    protected static $file;
+    protected static $file = 'log';
 
 
     /**
@@ -23,7 +23,7 @@ abstract class Log {
      */
     public static function append(string $message) {
 
-        $file = PATH_PRIVATE . '/logs/' . static::$file;
+        $file = PATH_PRIVATE . DIRECTORY_SEPARATOR . static::$file;
 
         $string['time'] = date('Y-m-d H:i:s');
 

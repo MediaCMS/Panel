@@ -3,51 +3,71 @@
  * Контролер для роботи з сторінками
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
- * @package     MediaCMS/Panel
+ * @package     MediaCMS\Panel
  * @link        https://медіа.укр
- * @copyright   Всі права застережено (c) 2018 Медіа
+ * @copyright   GNU General Public License v3
  */
 
 namespace MediaCMS\Panel\Controller;
 
 use MediaCMS\Panel\Controller;
-use MediaCMS\Panel\Repository\Page as PageRepository;
-use MediaCMS\Panel\Repository\User as UserRepository;
-use MediaCMS\Panel\Filter\User as UserFilter;
+use MediaCMS\Panel\System;
 
 class Page extends Controller {
 
-    /** @var PageRepository Репозиторій користувачів */
-    protected $repository;
+    /**
+     * Список статичних сторінок
+     */
+    public function Index(): void {
+
+        $this->setFilter();
+
+        $this->database->call('PageGetIndex', $this->filter);
+
+        $indexNode = $this->view->getNode();
+
+        $this->setItems($indexNode->addChild('items'));
+
+        $this->setPagination();
+
+    }
 
     /**
-     * Головний метод контролера
+     * Редагування статичної сторінки
      */
-    public function run(): void {}
+    public function Edit(): void {
 
-    /**
-     * Отримує перелік користувачів та додає їх у вигляд
-     *
-     * @param \SimpleXMLElement $node Батьківський елемент виводу
-     * @param boolean $common Ознака додавання загального пункту у перелік
-     */
-    protected function setUsers(\SimpleXMLElement $node, bool $common = false): void {
+        $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 
-        $userRepository = new UserRepository($this->mapper);
+        $node = $this->view->getNode();
 
-        $userFilter = new UserFilter();
+        if (count($_POST) > 0) {
 
-        $userCollection = $userRepository->getIndex($userFilter);
+            if (isset($_POST['_save'])) {
 
-        $usersNode = $node->addChild('users');
+                $_POST['alias'] = System::getAlias($_POST['title']);
 
-        if ($common) {
+                $_POST['user'] = $this->user;
 
-            $userNode = $usersNode->addChild('user');
+                $this->view->setItem($node, $_POST);
 
-            $userNode->addAttribute('title', 'Всі користувачі');
+                $this->database->call('PageSet', $_POST);
+            }
+
+            if (isset($_POST['_delete']))
+
+                $this->database->call('PageUnset', $_POST['id']);
+
+            $this->router->redirect('/' . $this->router->getURI(0) . '/список');
         }
 
-        $this->setCollection($usersNode, $userCollection);
+        $id = $this->router->getURI(2);
+
+        if (isset($id)) {
+
+            $this->database->call('PageGet', $id);
+
+            $this->view->setItem($node, $this->database->getResult());
+        }
     }
 }
