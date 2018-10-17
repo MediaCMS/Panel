@@ -17,5 +17,5 @@ class Tag extends Controller {
     /**
      * Список міток
      */
-    public function Index(): void {}
+    public function IndexAction(): void {}
 }

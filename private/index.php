@@ -26,7 +26,7 @@ try {
 
     $controller = new $controllerTitle($router);
 
-    $action = $router->getAction();
+    $action = $router->getAction() . 'Action';
 
     call_user_func([$controller, $action]);
 

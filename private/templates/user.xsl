@@ -17,7 +17,7 @@
 
     <xsl:template match="main/user/index" mode="extends">
          <table class="table clickable">
-            <caption>Список користувачів2</caption>
+            <caption>Список користувачів</caption>
             <thead>
                 <tr class="text-center">
                     <th scope="col">#</th>
@@ -39,7 +39,7 @@
                         <td class="text-left"><xsl:value-of select="@title" /></td>
                         <td class="text-left"><xsl:value-of select="@phone" /></td>
                         <td class="text-left"><xsl:value-of select="@email" /></td>
-                        <td class="text-center"><xsl:value-of select="@roleTitle" /></td>
+                        <td class="text-center"><xsl:value-of select="@role" /></td>
                         <td class="text-center"><xsl:value-of select="@time" /></td>
                         <td class="text-center"><xsl:value-of select="@id" /></td>
                     </tr>
@@ -50,30 +50,30 @@
 
     <xsl:template match="main/user/index/filter" mode="extends">
          <div class="form-group row">
-            <label for="userDateBegin" class="col-sm-5 col-form-label">Початкова дата</label>
+            <label for="formDateBegin" class="col-sm-5 col-form-label">Початкова дата</label>
             <div class="col-sm-7">
                 <input type="date" name="dateBegin" value="{@dateBegin}"
-                       title="Фільтр за початковою датою" id="userDateBegin" class="form-control" />
+                       title="Фільтр за початковою датою" id="formDateBegin" class="form-control" />
             </div>
         </div>
         <div class="form-group row">
-            <label for="userDateEnd" class="col-sm-5 col-form-label">Кінцева дата</label>
+            <label for="formDateEnd" class="col-sm-5 col-form-label">Кінцева дата</label>
             <div class="col-sm-7">
                 <input type="date" name="dateEnd" value="{@dateEnd}"
-                       title="Фільтр за кінцевою датою" id="userDateEnd" class="form-control" />
+                       title="Фільтр за кінцевою датою" id="formDateEnd" class="form-control" />
             </div>
         </div>
         <div class="form-group row">
-            <label for="userTitle" class="col-sm-5 col-form-label">Назва</label>
+            <label for="formTitle" class="col-sm-5 col-form-label">Назва</label>
             <div class="col-sm-7">
-                <input type="text" name="title" value="{@title}" placeholder="Іванов"
-                       title="Фільтр за назвою" id="userTitle" class="form-control" />
+                <input type="text" name="title" value="{@title}" placeholder="Назва"
+                       title="Фільтр за назвою" id="formTitle" class="form-control" />
             </div>
         </div>
         <div class="form-group row">
-            <label for="userRole" class="col-sm-5 col-form-label">Роль</label>
+            <label for="formRole" class="col-sm-5 col-form-label">Роль</label>
             <div class="col-sm-7">
-                <select name="roleID" title="Фільтр за привами доступу" id="userRole" class="form-control">
+                <select name="roleID" title="Фільтр за привами доступу" id="formRole" class="form-control">
                     <xsl:for-each select="roles/item">
                         <option value="{@id}">
                             <xsl:if test="@id=../../@roleID">
@@ -91,42 +91,43 @@
         <div class="form-group row">
             <label for="formTitle" class="col-sm-4 col-form-label">Найменування</label>
             <div class="col-sm-8">
-                <input type="text" name="title" value="{@title}"
+                <input type="text" name="title" value="{@title}" placeholder="Прізвище Імя По-батькові"
                        id="formTitle" class="form-control" title="Прізвище Імя По-батькові" />
             </div>
         </div>
         <div class="form-group row">
             <label for="formDescription" class="col-sm-4 col-form-label">Опис</label>
             <div class="col-sm-8">
-                <textarea name="description" value="{@description}" id="formDescription" class="form-control"
+                <textarea name="description" value="{@description}" id="formDescription"
+                          placeholder="Опис користувача" class="form-control"
                           title="Опис користувача"><xsl:value-of select="@description" /></textarea>
             </div>
         </div>
         <div class="form-group row">
             <label for="formPhone" class="col-sm-4 col-form-label">Телефон</label>
             <div class="col-sm-8">
-                <input type="text" name="phone" value="{@phone}"
+                <input type="text" name="phone" value="{@phone}" placeholder="Номер мобільного телефону"
                        id="formPhone" class="form-control" title="Номер мобільного телефону" />
             </div>
         </div>
         <div class="form-group row">
             <label for="formSkype" class="col-sm-4 col-form-label">Skype</label>
             <div class="col-sm-8">
-                <input type="text" name="skype" value="{@skype}"
+                <input type="text" name="skype" value="{@skype}" placeholder="Адреса Skype"
                        id="formSkype" class="form-control" title="Адреса Skype" />
             </div>
         </div>
         <div class="form-group row">
             <label for="formEmail" class="col-sm-4 col-form-label">Пошта</label>
             <div class="col-sm-8">
-                <input type="text" name="email" value="{@email}"
+                <input type="text" name="email" value="{@email}" placeholder="Адреса електронної пошти"
                        id="formEmail" class="form-control" title="Адреса електронної пошти" />
             </div>
         </div>
         <div class="form-group row">
             <label for="formPassword" class="col-sm-4 col-form-label">Пароль</label>
             <div class="col-sm-8">
-                <input type="password" name="password"
+                <input type="password" name="password" placeholder="Пароль користувача"
                        id="formPassword" class="form-control" title="Пароль користувача" />
             </div>
         </div>

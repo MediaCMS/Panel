@@ -214,15 +214,24 @@
                         <div class="form-group row">
                             <label for="formAlias" class="col-sm-4 col-form-label">Псевдонім</label>
                             <div class="col-sm-8">
-                                <input type="text" name="time" value="{@alias}" readonly="readonly"
+                                <input type="text" value="{@alias}" readonly="readonly"
                                        id="formAlias" class="form-control" title="Псевдонім" />
+                            </div>
+                        </div>
+                    </xsl:if>
+                    <xsl:if test="@user">
+                        <div class="form-group row">
+                            <label for="formUser" class="col-sm-4 col-form-label">Користувач</label>
+                            <div class="col-sm-8">
+                                <input type="text" value="{@user}" readonly="readonly"
+                                       id="formUser" class="form-control" title="Користувач" />
                             </div>
                         </div>
                     </xsl:if>
                     <div class="form-group row">
                         <label for="formTime" class="col-sm-4 col-form-label">Дата та час</label>
                         <div class="col-sm-8">
-                            <input type="text" name="time" value="{@time}" readonly="readonly"
+                            <input type="text" value="{@time}" readonly="readonly"
                                    id="formTime" class="form-control" title="Дата та час останньої модифікації" />
                         </div>
                     </div>

@@ -17,5 +17,5 @@ class Publication extends Controller {
     /**
      * Список публікацій
      */
-    public function Index(): void {}
+    public function IndexAction(): void {}
 }

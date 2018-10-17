@@ -33,9 +33,9 @@
                             <xsl:if test="@status=0">
                                 <xsl:attribute name="class">disabled</xsl:attribute>
                             </xsl:if>
-                            <th scope="row" class="text-right"><xsl:value-of select="@position" />.</th>
+                            <th scope="row" class="text-center"><xsl:value-of select="@position" />.</th>
                             <td class="text-left"><xsl:value-of select="@title" /></td>
-                            <td class="text-center"><xsl:value-of select="@userTitle" /></td>
+                            <td class="text-center"><xsl:value-of select="@user" /></td>
                             <td class="text-center"><xsl:value-of select="@time" /></td>
                             <td class="text-center"><xsl:value-of select="@id" /></td>
                         </tr>
@@ -54,26 +54,27 @@
         </div>
     </xsl:template>
 
-
     <xsl:template match="main/page/edit" mode="extends">
         <div class="form-group row">
             <label for="formTitle" class="col-sm-4 col-form-label">Найменування</label>
             <div class="col-sm-8">
-                <input type="text" name="title" value="{@title}"
+                <input type="text" name="title" value="{@title}" placeholder="Назва сторінки"
                        id="formTitle" class="form-control" title="Назва сторінки" />
             </div>
         </div>
         <div class="form-group row">
             <label for="formDescription" class="col-sm-4 col-form-label">Опис</label>
             <div class="col-sm-8">
-                <textarea name="description" value="{@description}" id="formDescription" class="form-control"
+                <textarea name="description" value="{@description}" id="formDescription"
+                          placeholder="Опис сторінки" class="form-control"
                           title="Опис сторінки"><xsl:value-of select="@description" /></textarea>
             </div>
         </div>
         <div class="form-group row">
             <label for="formText" class="col-sm-4 col-form-label">Текст</label>
             <div class="col-sm-8">
-                <textarea name="text" value="{@text}" id="formText" class="form-control"
+                <textarea name="text" value="{@text}" id="formText"
+                          placeholder="Текст сторінки" class="form-control"
                           title="Текст сторінки"><xsl:value-of select="@text" /></textarea>
             </div>
         </div>

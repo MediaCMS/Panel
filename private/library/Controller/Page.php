@@ -11,6 +11,7 @@
 namespace MediaCMS\Panel\Controller;
 
 use MediaCMS\Panel\Controller;
+use MediaCMS\Panel\Exception;
 use MediaCMS\Panel\System;
 
 class Page extends Controller {
@@ -18,15 +19,15 @@ class Page extends Controller {
     /**
      * Список статичних сторінок
      */
-    public function Index(): void {
+    public function IndexAction(): void {
 
         $this->setFilter();
 
         $this->database->call('PageGetIndex', $this->filter);
 
-        $indexNode = $this->view->getNode();
+        $node = $this->view->getNode();
 
-        $this->setItems($indexNode->addChild('items'));
+        $this->setItems($node->addChild('items'));
 
         $this->setPagination();
 
@@ -35,7 +36,7 @@ class Page extends Controller {
     /**
      * Редагування статичної сторінки
      */
-    public function Edit(): void {
+    public function EditAction(): void {
 
         $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 
@@ -49,9 +50,16 @@ class Page extends Controller {
 
                 $_POST['user'] = $this->user;
 
-                $this->view->setItem($node, $_POST);
+                try {
 
-                $this->database->call('PageSet', $_POST);
+                    $this->database->call('PageSet', $_POST);
+
+                } catch (Exception $exception) {
+
+                    $this->view->setItem($node, $_POST);
+
+                    throw $exception;
+                }
             }
 
             if (isset($_POST['_delete']))

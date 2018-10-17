@@ -21,11 +21,11 @@ class User extends Controller {
     /**
      * Список користувачів
      */
-    public function Index(): void {
+    public function IndexAction(): void {
 
         $this->orderFields = [
 
-            ['title' => 'Заголовок', 'field' => 'title'],
+            ['title' => 'Назва', 'field' => 'title'],
             ['title' => 'Доступ', 'field' => 'roleID'],
             ['title' => 'Час', 'field' => 'time']
         ];
@@ -56,7 +56,7 @@ class User extends Controller {
     /**
      * Редагування користувача
      */
-    public function Edit(): void {
+    public function EditAction(): void {
 
         $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 
@@ -72,9 +72,16 @@ class User extends Controller {
 
                 $_POST['alias'] = System::getAlias($_POST['title']);
 
-                $this->view->setItem($node, $_POST);
+                try {
 
-                $this->database->call('UserSet', $_POST);
+                    $this->database->call('UserSet', $_POST);
+
+                } catch (Exception $exception) {
+
+                    $this->view->setItem($node, $_POST);
+
+                    throw $exception;
+                }
             }
 
             if (isset($_POST['_delete']))
@@ -101,7 +108,7 @@ class User extends Controller {
     /**
      * Авторизація користувача
      */
-    public function Login(): void {
+    public function LoginAction(): void {
 
         $this->menu = false;
 
@@ -167,7 +174,7 @@ class User extends Controller {
     /**
      * Вихід користувача
      */
-    public function Logout(): void {
+    public function LogoutAction(): void {
 
         session_destroy();
 

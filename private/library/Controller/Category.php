@@ -17,5 +17,5 @@ class Category extends Controller {
     /**
      * Список категорій
      */
-    public function Index(): void {}
+    public function IndexAction(): void {}
 }
