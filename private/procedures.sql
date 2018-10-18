@@ -111,8 +111,7 @@ BEGIN
   SET _rowsLimit = params->'$._limit';
 
   SELECT SQL_CALC_FOUND_ROWS
-         `p`.`id`, `p`.`time`, `p`.`title`, `p`.`description`, `p`.`text`, `p`.`image`,
-         `u`.`title` AS 'user', `p`.`status`
+         `p`.`id`, `p`.`time`, `p`.`title`, `u`.`title` AS 'user', `p`.`status`
     FROM `page` AS `p`
     INNER JOIN `user` AS `u` ON `u`.`id` = `p`.`user`
     WHERE `p`.`id` > 0
@@ -173,11 +172,88 @@ BEGIN
   SELECT `id`, `title`, `description` FROM `role` ORDER BY `id` DESC;
 END;;
 
+DROP PROCEDURE IF EXISTS `TagGet`;;
+CREATE PROCEDURE `TagGet`(IN `_id` int unsigned)
+BEGIN
+  SELECT      `t`.`id`, `t`.`time`, `t`.`title`, `t`.`description`, `t`.`image`, `u`.`title` AS `user`, `t`.`status`
+  FROM        `tag` AS `t`
+  INNER JOIN  `user` AS `u` ON `u`.`id` = `t`.`user`
+  WHERE       `t`.`id` = _id;
+END;;
+
+DROP PROCEDURE IF EXISTS `TagGetIndex`;;
+CREATE PROCEDURE `TagGetIndex`(IN `params` json)
+BEGIN
+  DECLARE _title VARCHAR(32);
+  DECLARE _status TINYINT(1) UNSIGNED;
+  DECLARE _rowsOffset INTEGER UNSIGNED DEFAULT 0;
+  DECLARE _rowsLimit INTEGER UNSIGNED DEFAULT 100;
+
+  IF (JSON_TYPE(params->'$.title') <> 'NULL') THEN SET _title = params->>'$.title'; END IF;
+  IF (JSON_TYPE(params->'$._status') <> 'NULL') THEN SET _status = params->'$._status'; END IF;
+  SET _rowsOffset = params->'$._offset';
+  SET _rowsLimit = params->'$._limit';
+
+  SELECT SQL_CALC_FOUND_ROWS
+         `t`.`id`, `t`.`time`, `t`.`title`, `u`.`title` AS 'user', `t`.`status`
+    FROM `tag` AS `t`
+    INNER JOIN `user` AS `u` ON `u`.`id` = `t`.`user`
+    WHERE `t`.`id` > 0
+      AND (_title       IS NULL OR `t`.`title` LIKE CONCAT('%', _title, '%'))
+      AND (_status      IS NULL OR `t`.`status` = _status)
+    ORDER BY `t`.`title`
+    LIMIT _rowsOffset, _rowsLimit; 
+END;;
+
+DROP PROCEDURE IF EXISTS `TagSet`;;
+CREATE PROCEDURE `TagSet`(IN `params` json)
+BEGIN
+  DECLARE _id TINYINT(3) UNSIGNED;
+  DECLARE _title VARCHAR(32);
+  DECLARE _description VARCHAR(128);
+  DECLARE _image VARCHAR(32);
+  DECLARE _alias VARCHAR(32);
+  DECLARE _user TINYINT(3) UNSIGNED;
+
+  SET _title = params->>'$.title'; 
+  SET _alias = params->>'$.alias';
+  SET _user = params->'$.user';
+  IF (JSON_TYPE(params->'$.id') <> 'NULL')          THEN SET _id = params->'$.id'; END IF;
+  IF (JSON_TYPE(params->'$.description') <> 'NULL') THEN SET _description = params->>'$.description'; END IF;
+  IF (JSON_TYPE(params->'$.image') <> 'NULL')       THEN SET _image = params->>'$.image'; END IF;
+
+  IF (_id IS NOT NULL) THEN
+    UPDATE  `tag` 
+      SET   `title` = _title, `description` = _description, `image` = _image, `alias` = _alias, `user` = _user
+      WHERE `id` = _id AND `status` = 1;
+  ELSE
+    INSERT INTO `tag` (`title`, `description`, `image`, `alias`, `user`) 
+      VALUES (_title, _description, _image, _alias, _user);
+  END IF;
+END;;
+
+DROP PROCEDURE IF EXISTS `TagUnset`;;
+CREATE PROCEDURE `TagUnset`(IN `_id` int unsigned)
+BEGIN
+  DECLARE _count INTEGER UNSIGNED DEFAULT 0;
+
+  SELECT COUNT(*) INTO _count FROM `article` WHERE `user` = _id;
+
+  IF (_count = 0) THEN
+SELECT * FROM `tag` WHERE `id` = _id; #cut
+    #DELETE FROM `tag` WHERE `id` = _id;
+  ELSE
+    UPDATE `tag` SET `status` = (1 - `status`) WHERE `id` = _id;
+  END IF;
+
+  
+  
+END;;
+
 DROP PROCEDURE IF EXISTS `UserAuthorize`;;
 CREATE PROCEDURE `UserAuthorize`(IN `_email` varchar(32) CHARACTER SET 'utf8mb4', IN `_password` varchar(32) CHARACTER SET 'utf8mb4')
 BEGIN 
   DECLARE _id INTEGER UNSIGNED DEFAULT NULL;
-  DECLARE _count INTEGER UNSIGNED;
   DECLARE _token VARCHAR(32);
 
 
@@ -221,8 +297,7 @@ BEGIN
   SET _rowsLimit = params->'$._limit';
 
   SELECT SQL_CALC_FOUND_ROWS
-         `u`.`id`, `u`.`time`, `u`.`title`, `u`.`phone`, `u`.`skype`, `u`.`email`,
-         `u`.`image`, `r`.`title` AS 'role', `u`.`status`
+         `u`.`id`, `u`.`time`, `u`.`title`, `u`.`phone`, `u`.`email`, `r`.`title` AS 'role', `u`.`status`
     FROM `user` AS `u`
     INNER JOIN `role` AS `r` ON `r`.`id` = `u`.`role`
     WHERE `u`.`id` > 0
@@ -322,4 +397,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-10-17 20:50:59
+-- 2018-10-18 18:15:36

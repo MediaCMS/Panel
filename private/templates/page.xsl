@@ -11,7 +11,7 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:template match="main/user">
+    <xsl:template match="main/page">
         <div class="page"><xsl:apply-templates select="*" /></div>
     </xsl:template>
 
@@ -22,7 +22,7 @@
                     <tr class="text-center">
                         <th scope="col">#</th>
                         <th scope="col">Назва</th>
-                        <th scope="col">Автор</th>
+                        <th scope="col">Редактор</th>
                         <th scope="col">Дата</th>
                         <th scope="col">ID</th>
                     </tr>
@@ -46,10 +46,10 @@
 
     <xsl:template match="main/page/index/filter" mode="extends">
         <div class="form-group row">
-            <label for="pageTitle" class="col-sm-5 col-form-label">Назва</label>
+            <label for="formTitle" class="col-sm-5 col-form-label">Назва</label>
             <div class="col-sm-7">
-                <input type="text" name="title" value="{@title}" placeholder="Назва сторінки"
-                       title="Фільтр за назвою сторінки" id="pageTitle" class="form-control" />
+                <input type="text" name="title" value="{@title}" placeholder="Фрагмент назви сторінки"
+                       title="Фільтр за назвою сторінки" id="formTitle" class="form-control" />
             </div>
         </div>
     </xsl:template>

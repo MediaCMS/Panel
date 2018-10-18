@@ -101,6 +101,7 @@ CREATE TABLE `tag` (
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user` tinyint(3) unsigned NOT NULL,
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
@@ -130,4 +131,4 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- 2018-10-17 20:51:40
+-- 2018-10-18 18:16:08

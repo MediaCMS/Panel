@@ -30,7 +30,6 @@ class Page extends Controller {
         $this->setItems($node->addChild('items'));
 
         $this->setPagination();
-
     }
 
     /**
