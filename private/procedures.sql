@@ -240,14 +240,11 @@ BEGIN
   SELECT COUNT(*) INTO _count FROM `article` WHERE `user` = _id;
 
   IF (_count = 0) THEN
-SELECT * FROM `tag` WHERE `id` = _id; #cut
     #DELETE FROM `tag` WHERE `id` = _id;
+    UPDATE `tag` SET `status` = (1 - `status`) WHERE `id` = _id; #cut
   ELSE
     UPDATE `tag` SET `status` = (1 - `status`) WHERE `id` = _id;
-  END IF;
-
-  
-  
+  END IF;  
 END;;
 
 DROP PROCEDURE IF EXISTS `UserAuthorize`;;
@@ -397,4 +394,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-10-18 18:15:36
+-- 2018-10-18 18:28:31
