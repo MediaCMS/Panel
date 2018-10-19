@@ -52,7 +52,7 @@
 
     <xsl:template match="main/tag/edit" mode="extends">
         <div class="form-group row">
-            <label for="formTitle" class="col-sm-4 col-form-label">Найменування</label>
+            <label for="formTitle" class="col-sm-4 col-form-label">Назва</label>
             <div class="col-sm-8">
                 <input type="text" name="title" value="{@title}" placeholder="Назва мітки"
                        id="formTitle" class="form-control" title="Назва мітки" />

@@ -9,8 +9,122 @@ SET NAMES utf8mb4;
 
 DELIMITER ;;
 
+DROP PROCEDURE IF EXISTS `ArticleGet`;;
+CREATE PROCEDURE `ArticleGet`(IN `_id` int unsigned)
+BEGIN
+  SELECT      `a`.*, `u`.`title` AS `user`
+  FROM        `article` AS `a`
+  INNER JOIN  `user` AS `u` ON `u`.`id` = `a`.`user`
+  WHERE       `a`.`id` = _id;
+END;;
+
+DROP PROCEDURE IF EXISTS `ArticleGetIndex`;;
+CREATE PROCEDURE `ArticleGetIndex`(IN `params` json)
+BEGIN
+  DECLARE _dateBegin DATETIME;
+  DECLARE _dateEnd DATETIME;
+  DECLARE _title VARCHAR(32);
+  DECLARE _category VARCHAR(32);
+  DECLARE _user VARCHAR(32);
+  DECLARE _status TINYINT(1) UNSIGNED;
+  DECLARE _orderField VARCHAR(32) DEFAULT 'id';
+  DECLARE _orderDirection INTEGER DEFAULT 1;
+  DECLARE _rowsOffset INTEGER UNSIGNED DEFAULT 0;
+  DECLARE _rowsLimit INTEGER UNSIGNED DEFAULT 100;
+
+  IF (JSON_TYPE(params->'$.dateBegin') <> 'NULL') THEN
+    SET _dateBegin = CONCAT(params->>'$.dateBegin', ' 00:00:00'); END IF;
+  IF (JSON_TYPE(params->'$.dateEnd') <> 'NULL') THEN
+    SET _dateEnd = CONCAT(params->>'$.dateEnd', ' 23:59:59'); END IF;
+  IF (JSON_TYPE(params->'$.title') <> 'NULL') THEN
+    SET _title = params->>'$.title'; END IF;
+  IF (JSON_TYPE(params->'$.category') <> 'NULL') THEN
+    SET _category = params->>'$.category'; END IF;
+  IF (JSON_TYPE(params->'$.user') <> 'NULL') THEN
+    SET _user = params->>'$.user'; END IF;
+  IF (JSON_TYPE(params->'$._status') <> 'NULL') THEN
+    SET _status = params->'$._status'; END IF;
+  SET _orderField = params->>'$._orderField';
+  SET _orderDirection = params->'$._orderDirection';
+  SET _rowsOffset = params->'$._offset';
+  SET _rowsLimit = params->'$._limit';
+
+  SELECT SQL_CALC_FOUND_ROWS
+         `a`.`id`, `a`.`time`, `a`.`title`, `a`.`status`,
+         `c`.`title` AS 'category', `u`.`title` AS 'user'
+    FROM `article` AS `a`
+    INNER JOIN `category` AS `c` ON `c`.`id` = `a`.`category`
+    INNER JOIN `user` AS `u` ON `u`.`id` = `a`.`user`
+    WHERE `a`.`id` > 0
+      AND (_dateBegin IS NULL OR `a`.`time` >= _dateBegin)
+      AND (_dateEnd   IS NULL OR `a`.`time` <= _dateEnd)
+      AND (_title     IS NULL OR `a`.`title` LIKE CONCAT('%', _title, '%'))
+      AND (_category  IS NULL OR `c`.`title` LIKE CONCAT('%', _category, '%'))
+      AND (_user      IS NULL OR `u`.`title` LIKE CONCAT('%', _user, '%'))
+      AND (_status    IS NULL OR `a`.`status` = _status)
+    ORDER BY
+      CASE WHEN _orderField = 'time'     AND _orderDirection = 1 THEN `a`.`time`  END ASC,
+      CASE WHEN _orderField = 'time'     AND _orderDirection = 0 THEN `a`.`time`  END DESC,
+      CASE WHEN _orderField = 'title'    AND _orderDirection = 1 THEN `a`.`title` END ASC,
+      CASE WHEN _orderField = 'title'    AND _orderDirection = 0 THEN `a`.`title` END DESC,
+      CASE WHEN _orderField = 'category' AND _orderDirection = 1 THEN `c`.`title` END ASC,
+      CASE WHEN _orderField = 'category' AND _orderDirection = 0 THEN `c`.`title` END DESC,
+      CASE WHEN _orderField = 'user'     AND _orderDirection = 1 THEN `u`.`title` END ASC,
+      CASE WHEN _orderField = 'user'     AND _orderDirection = 0 THEN `u`.`title` END DESC
+    LIMIT _rowsOffset, _rowsLimit; 
+END;;
+
+DROP PROCEDURE IF EXISTS `ArticleSet`;;
+CREATE PROCEDURE `ArticleSet`(IN `params` json)
+BEGIN
+  DECLARE _id TINYINT(3) UNSIGNED;
+  DECLARE _title VARCHAR(32);
+  DECLARE _description VARCHAR(128);
+  DECLARE _text TEXT;
+  DECLARE _image VARCHAR(32);
+  DECLARE _alias VARCHAR(32);
+  DECLARE _category TINYINT(3) UNSIGNED;
+  DECLARE _user TINYINT(3) UNSIGNED;
+
+  IF (JSON_TYPE(params->'$.id') <> 'NULL') THEN
+    SET _id = params->'$.id';
+  END IF;
+  SET _title = params->>'$.title';
+  IF (JSON_TYPE(params->'$.description') <> 'NULL') THEN
+    SET _description = params->>'$.description';
+  END IF;
+  IF (JSON_TYPE(params->'$.text') <> 'NULL') THEN
+    SET _text = params->>'$.text';
+  END IF;
+  IF (JSON_TYPE(params->'$.image') <> 'NULL') THEN
+    SET _image = params->>'$.image';
+  END IF;
+  SET _alias = params->>'$.alias';
+  SET _category = params->'$.category';
+  SET _user = params->'$.user';
+
+  IF (_id IS NOT NULL) THEN
+    UPDATE  `article` 
+      SET   `title` = _title, `description` = _description, `text` = _text,
+            `image` = _image, `alias` = _alias, `category` = _category, `user` = _user
+      WHERE `id` = _id AND `status` = 1;
+  ELSE
+    INSERT INTO `article` (`title`, `description`, `text`, `image`, `alias`, `category`, `user`) 
+      VALUES (_title, _description, _text, _image, _alias, _category, _user);
+  END IF;
+END;;
+
+DROP PROCEDURE IF EXISTS `ArticleUnset`;;
+CREATE PROCEDURE `ArticleUnset`(IN `_id` int unsigned)
+BEGIN
+  #DELETE FROM `comment` WHERE `article` = _id;
+  #DELETE FROM `article_tag` WHERE `article` = _id;
+  #DELETE FROM `article` WHERE `id` = _id;
+  UPDATE `article` SET `status` = (1 - `status`) WHERE `id` = _id; #cut
+END;;
+
 DROP PROCEDURE IF EXISTS `CategoryGet`;;
-CREATE PROCEDURE `CategoryGet`(IN `_id` int unsigned)
+CREATE PROCEDURE `CategoryGet`(IN `_id` tinyint unsigned)
 BEGIN
   SELECT      `c`.*, `u`.`title` AS `user`
   FROM        `category` AS `c`
@@ -30,8 +144,10 @@ BEGIN
     SET _title = params->>'$.title'; END IF;
   IF (JSON_TYPE(params->'$._status') <> 'NULL') THEN
     SET _status = params->'$._status'; END IF;
-  SET _rowsOffset = params->'$._offset';
-  SET _rowsLimit = params->'$._limit';
+  IF (JSON_TYPE(params->'$._offset') <> 'NULL') THEN
+    SET _rowsOffset = params->'$._offset'; END IF;
+  IF (JSON_TYPE(params->'$._limit') <> 'NULL') THEN
+    SET _rowsLimit = params->'$._limit'; END IF;
 
   SELECT SQL_CALC_FOUND_ROWS
          `c`.`id`, `c`.`time`, `c`.`title`, `u`.`title` AS 'user', `c`.`status`
@@ -166,14 +282,14 @@ BEGIN
 END;;
 
 DROP PROCEDURE IF EXISTS `CommentUnset`;;
-CREATE PROCEDURE `CommentUnset`(IN `_id` tinyint unsigned)
+CREATE PROCEDURE `CommentUnset`(IN `_id` int unsigned)
 BEGIN
   #DELETE FROM `comment` WHERE `id` = _id;
   UPDATE `comment` SET `status` = (1 - `status`) WHERE `id` = _id; #cut
 END;;
 
 DROP PROCEDURE IF EXISTS `PageGet`;;
-CREATE PROCEDURE `PageGet`(IN `_id` int unsigned)
+CREATE PROCEDURE `PageGet`(IN `_id` tinyint unsigned)
 BEGIN
   SELECT      `p`.*, `u`.`title` AS `user`
   FROM        `page` AS `p`
@@ -259,7 +375,7 @@ BEGIN
 END;;
 
 DROP PROCEDURE IF EXISTS `TagGet`;;
-CREATE PROCEDURE `TagGet`(IN `_id` int unsigned)
+CREATE PROCEDURE `TagGet`(IN `_id` smallint(5) unsigned)
 BEGIN
   SELECT      `t`.*, `u`.`title` AS `user`
   FROM        `tag` AS `t`
@@ -324,7 +440,7 @@ BEGIN
 END;;
 
 DROP PROCEDURE IF EXISTS `TagUnset`;;
-CREATE PROCEDURE `TagUnset`(IN `_id` int unsigned)
+CREATE PROCEDURE `TagUnset`(IN `_id` smallint unsigned)
 BEGIN
   DECLARE _count INTEGER UNSIGNED DEFAULT 0;
 
@@ -355,7 +471,7 @@ BEGIN
 END;;
 
 DROP PROCEDURE IF EXISTS `UserGet`;;
-CREATE PROCEDURE `UserGet`(IN `_id` int unsigned)
+CREATE PROCEDURE `UserGet`(IN `_id` tinyint unsigned)
 BEGIN 
   SELECT * FROM `user` WHERE `id` = _id;
 END;;
@@ -485,4 +601,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-10-19 12:16:53
+-- 2018-10-19 20:11:41

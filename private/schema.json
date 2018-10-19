@@ -1,5 +1,5 @@
 {
-  "публікації": {"title": "Публікації", "controller": "Publication", "default": true},
+  "статті":     {"title": "Статті",     "controller": "Article", "default": true},
   "категорії":  {"title": "Категорії",  "controller": "Category"},
   "мітки":      {"title": "Мітки",      "controller": "Tag"},
   "коментарі":  {"title": "Коментарі",  "controller": "Comment"},

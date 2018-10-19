@@ -11,7 +11,7 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:include href="publication.xsl" />
+    <xsl:include href="article.xsl" />
     <xsl:include href="category.xsl" />
     <xsl:include href="tag.xsl" />
     <xsl:include href="comment.xsl" />
