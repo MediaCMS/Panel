@@ -116,6 +116,8 @@ class Database {
 
                     $param = str_replace(",", ", ", $param);
 
+                    $param = str_replace("\\\"", "\\\\\"", $param);
+
                 } else {
 
                     $param = $this->protect($param);

@@ -12,9 +12,10 @@ CREATE TABLE `article` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `text` text COLLATE utf8mb4_unicode_ci,
+  `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `text` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
+  `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` tinyint(3) unsigned NOT NULL,
   `user` tinyint(3) unsigned NOT NULL,
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -22,9 +23,7 @@ CREATE TABLE `article` (
   KEY `category` (`category`),
   KEY `user` (`user`),
   CONSTRAINT `article_ibfk_1` FOREIGN KEY (`category`) REFERENCES `category` (`id`),
-  CONSTRAINT `article_ibfk_3` FOREIGN KEY (`user`) REFERENCES `user` (`id`),
-  CONSTRAINT `article_ibfk_4` FOREIGN KEY (`category`) REFERENCES `category` (`id`),
-  CONSTRAINT `article_ibfk_5` FOREIGN KEY (`user`) REFERENCES `user` (`id`)
+  CONSTRAINT `article_ibfk_3` FOREIGN KEY (`user`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -44,11 +43,16 @@ CREATE TABLE `article_tag` (
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
+  `alias` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user` tinyint(3) unsigned NOT NULL,
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user` (`user`),
+  CONSTRAINT `category_ibfk_1` FOREIGN KEY (`user`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -131,4 +135,4 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- 2018-10-18 18:16:08
+-- 2018-10-19 12:17:46

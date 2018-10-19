@@ -88,7 +88,9 @@
                 </xsl:if>
                 <main class="container">
                     <xsl:if test="menu"><h1 class="mt-5"><xsl:value-of select="@title" /></h1></xsl:if>
-                    <div class="body mt-4"><xsl:apply-templates select="main/*" /></div>
+                    <div class="body controller-{name(main/*/.)} action-{name(main/*/*/.)} mt-4">
+                        <xsl:apply-templates select="main/*" />
+                    </div>
                 </main>
                 <footer class="text-center small my-5">
                     <div class="copyright"><xsl:value-of select="@copyright" disable-output-escaping="yes" /></div>
@@ -107,16 +109,14 @@
     </xsl:template>
 
     <xsl:template match="main/*/index">
-        <div class="index">
-            <xsl:choose>
-                <xsl:when test="items/item">
-                    <xsl:apply-templates select="." mode="extends" />
-                    <xsl:apply-templates select="pagination" />
-                </xsl:when>
-                <xsl:otherwise>Записів не знайдено</xsl:otherwise>
-            </xsl:choose>
-            <xsl:apply-templates select="filter" />
-        </div>
+         <xsl:choose>
+            <xsl:when test="items/item">
+                <xsl:apply-templates select="." mode="extends" />
+                <xsl:apply-templates select="pagination" />
+            </xsl:when>
+            <xsl:otherwise>Записів не знайдено</xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates select="filter" />
     </xsl:template>
 
     <xsl:template match="main/*/index/filter">
@@ -206,59 +206,57 @@
     </xsl:template>
 
     <xsl:template match="main/*/edit">
-        <div class="edit container mt-5">
-            <form action="" method="POST" class="col-5 mx-auto">
-                <xsl:apply-templates select="." mode="extends" />
-                <xsl:if test="@id">
-                    <xsl:if test="@alias">
-                        <div class="form-group row">
-                            <label for="formAlias" class="col-sm-4 col-form-label">Псевдонім</label>
-                            <div class="col-sm-8">
-                                <input type="text" value="{@alias}" readonly="readonly"
-                                       id="formAlias" class="form-control" title="Псевдонім" />
-                            </div>
-                        </div>
-                    </xsl:if>
-                    <xsl:if test="@user">
-                        <div class="form-group row">
-                            <label for="formUser" class="col-sm-4 col-form-label">Користувач</label>
-                            <div class="col-sm-8">
-                                <input type="text" value="{@user}" readonly="readonly"
-                                       id="formUser" class="form-control" title="Користувач" />
-                            </div>
-                        </div>
-                    </xsl:if>
+        <form action="" method="POST" class="mx-auto">
+            <xsl:apply-templates select="." mode="extends" />
+            <xsl:if test="@id">
+                <xsl:if test="@alias">
                     <div class="form-group row">
-                        <label for="formTime" class="col-sm-4 col-form-label">Дата та час</label>
+                        <label for="formAlias" class="col-sm-4 col-form-label">Псевдонім</label>
                         <div class="col-sm-8">
-                            <input type="text" value="{@time}" readonly="readonly"
-                                   id="formTime" class="form-control" title="Дата та час останньої модифікації" />
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="formID" class="col-sm-4 col-form-label">Ідентифікатор</label>
-                        <div class="col-sm-8">
-                            <input type="text" value="{@id}" readonly="readonly"
-                                   id="formID" class="form-control" title="Ідентифікатор" />
+                            <input type="text" value="{@alias}" readonly="readonly"
+                                   id="formAlias" class="form-control" title="Псевдонім" />
                         </div>
                     </div>
                 </xsl:if>
-                <div class="form-group text-center py-5">
-                    <input type="submit" name="_save" value="Зберегти" class="btn btn-primary mx-1" />
-                    <xsl:if test="not(@id)">
-                        <input type="reset" name="_reset" value="Очистити" class="btn btn-secondary mx-1" />
-                    </xsl:if>
-                    <xsl:if test="@id">
-                        <input type="submit" name="_delete" value="Видалити" class="btn btn-danger mx-1">
-                            <xsl:if test="@status=0">
-                                <xsl:attribute name="value">Відновити</xsl:attribute>
-                            </xsl:if>
-                        </input>
-                    </xsl:if>
-                    <xsl:if test="@id"><input type="hidden" name="id" value="{@id}" /></xsl:if>
+                <xsl:if test="@user">
+                    <div class="form-group row">
+                        <label for="formUser" class="col-sm-4 col-form-label">Користувач</label>
+                        <div class="col-sm-8">
+                            <input type="text" value="{@user}" readonly="readonly"
+                                   id="formUser" class="form-control" title="Користувач" />
+                        </div>
+                    </div>
+                </xsl:if>
+                <div class="form-group row">
+                    <label for="formTime" class="col-sm-4 col-form-label">Дата та час</label>
+                    <div class="col-sm-8">
+                        <input type="text" value="{@time}" readonly="readonly"
+                               id="formTime" class="form-control" title="Дата та час останньої модифікації" />
+                    </div>
                 </div>
-            </form>
-        </div>
+                <div class="form-group row">
+                    <label for="formID" class="col-sm-4 col-form-label">Ідентифікатор</label>
+                    <div class="col-sm-8">
+                        <input type="text" value="{@id}" readonly="readonly"
+                               id="formID" class="form-control" title="Ідентифікатор" />
+                    </div>
+                </div>
+            </xsl:if>
+            <div class="form-group text-center py-5">
+                <input type="submit" name="_save" value="Зберегти" class="btn btn-primary mx-1" />
+                <xsl:if test="not(@id)">
+                    <input type="reset" name="_reset" value="Очистити" class="btn btn-secondary mx-1" />
+                </xsl:if>
+                <xsl:if test="@id">
+                    <input type="submit" name="_delete" value="Видалити" class="btn btn-danger mx-1">
+                        <xsl:if test="@status=0">
+                            <xsl:attribute name="value">Відновити</xsl:attribute>
+                        </xsl:if>
+                    </input>
+                </xsl:if>
+                <xsl:if test="@id"><input type="hidden" name="id" value="{@id}" /></xsl:if>
+            </div>
+        </form>
     </xsl:template>
 
     <xsl:template match="pagination">

@@ -27,12 +27,18 @@ html {
     }
 
     main {min-height: 80vh;
-
-      table {
-        tr {cursor: pointer;}
-        tr.disabled td {color: gray;}
+      div.body {
+        &.action-index {
+          table {
+            tr {cursor: pointer;}
+            tr.disabled td {color: gray;}
+          }
+        }
+        &.action-edit {
+          form {max-width: 640px;}
+        }
+        &.controller-user.action-login {padding-top: 10vh;}
       }
-      div.user div.login {padding-top: 10vh;}
     }
 
     footer {}
@@ -50,7 +56,6 @@ html {
         }
       }
     }
-
   }
 }
 

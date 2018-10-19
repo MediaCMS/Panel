@@ -11,13 +11,9 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:template match="main/tag">
-        <div class="page"><xsl:apply-templates select="*" /></div>
-    </xsl:template>
-
     <xsl:template match="main/tag/index" mode="extends">
         <table class="table clickable">
-            <caption>Список сторінок</caption>
+            <caption>Список міток</caption>
             <thead>
                 <tr class="text-center">
                     <th scope="col">#</th>

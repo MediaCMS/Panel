@@ -11,37 +11,33 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:template match="main/page">
-        <div class="page"><xsl:apply-templates select="*" /></div>
-    </xsl:template>
-
     <xsl:template match="main/page/index" mode="extends">
-            <table class="table clickable">
-                <caption>Список сторінок</caption>
-                <thead>
-                    <tr class="text-center">
-                        <th scope="col">#</th>
-                        <th scope="col">Назва</th>
-                        <th scope="col">Редактор</th>
-                        <th scope="col">Дата</th>
-                        <th scope="col">ID</th>
+        <table class="table clickable">
+            <caption>Список сторінок</caption>
+            <thead>
+                <tr class="text-center">
+                    <th scope="col">#</th>
+                    <th scope="col">Назва</th>
+                    <th scope="col">Редактор</th>
+                    <th scope="col">Дата</th>
+                    <th scope="col">ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <xsl:for-each select="items/item">
+                    <tr data-edit="{@edit}">
+                        <xsl:if test="@status=0">
+                            <xsl:attribute name="class">disabled</xsl:attribute>
+                        </xsl:if>
+                        <th scope="row" class="text-center"><xsl:value-of select="@position" />.</th>
+                        <td class="text-left"><xsl:value-of select="@title" /></td>
+                        <td class="text-center"><xsl:value-of select="@user" /></td>
+                        <td class="text-center"><xsl:value-of select="@time" /></td>
+                        <td class="text-center"><xsl:value-of select="@id" /></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <xsl:for-each select="items/item">
-                        <tr data-edit="{@edit}">
-                            <xsl:if test="@status=0">
-                                <xsl:attribute name="class">disabled</xsl:attribute>
-                            </xsl:if>
-                            <th scope="row" class="text-center"><xsl:value-of select="@position" />.</th>
-                            <td class="text-left"><xsl:value-of select="@title" /></td>
-                            <td class="text-center"><xsl:value-of select="@user" /></td>
-                            <td class="text-center"><xsl:value-of select="@time" /></td>
-                            <td class="text-center"><xsl:value-of select="@id" /></td>
-                        </tr>
-                    </xsl:for-each>
-                </tbody>
-            </table>
+                </xsl:for-each>
+            </tbody>
+        </table>
     </xsl:template>
 
     <xsl:template match="main/page/index/filter" mode="extends">

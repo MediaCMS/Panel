@@ -11,10 +11,6 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:template match="main/comment">
-        <div class="comment"><xsl:apply-templates select="*" /></div>
-    </xsl:template>
-
     <xsl:template match="main/comment/index" mode="extends">
         <table class="table clickable">
             <caption>Список коментарів</caption>

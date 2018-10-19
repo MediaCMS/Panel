@@ -11,16 +11,12 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:template match="publication">
-        <div id="publication">publication</div>
-    </xsl:template>
-
     <xsl:template match="publication-index">
         <div id="publication-index">publication-index</div>
     </xsl:template>
 
-    <xsl:template match="publication-view">
-        <div id="publication-view">publication-view</div>
+    <xsl:template match="publication-filter">
+        <div id="publication-filter">publication-filter</div>
     </xsl:template>
 
     <xsl:template match="publication-edit">
