@@ -6,7 +6,7 @@ html body header nav div.navbar-collapse ul.navbar-nav li:last-child { padding-l
 html body main { min-height: 80vh; }
 html body main div.body.action-index table tr { cursor: pointer; }
 html body main div.body.action-index table tr.disabled td { color: gray; }
-html body main div.body.action-edit form { max-width: 640px; }
+html body main div.body.action-edit form { max-width: 480px; }
 html body main div.body.controller-user.action-login { padding-top: 10vh; }
 html body #debug div.mapper table tbody { line-height: 180%; }
 html body #debug div.mapper table tbody td.string { font-size: 1.2rem; font-family: "Courier New",Courier,monospace; margin: 0; }
