@@ -92,7 +92,7 @@ CREATE TABLE `page` (
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `id` tinyint(1) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -131,8 +131,8 @@ CREATE TABLE `user` (
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `role` (`role`),
-  CONSTRAINT `user_ibfk_2` FOREIGN KEY (`role`) REFERENCES `role` (`id`)
+  CONSTRAINT `user_ibfk_3` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- 2018-10-19 20:12:15
+-- 2018-11-09 19:43:36
