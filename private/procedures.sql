@@ -25,6 +25,7 @@ BEGIN
   DECLARE _dateEnd DATETIME;
   DECLARE _title VARCHAR(32);
   DECLARE _category VARCHAR(32);
+  DECLARE _tag VARCHAR(32);
   DECLARE _user VARCHAR(32);
   DECLARE _status TINYINT(1) UNSIGNED;
   DECLARE _orderField VARCHAR(32) DEFAULT 'id';
@@ -40,6 +41,8 @@ BEGIN
     SET _title = params->>'$.title'; END IF;
   IF (JSON_TYPE(params->'$.category') <> 'NULL') THEN
     SET _category = params->>'$.category'; END IF;
+  IF (JSON_TYPE(params->'$.tag') <> 'NULL') THEN
+    SET _tag = params->>'$.tag'; END IF;
   IF (JSON_TYPE(params->'$.user') <> 'NULL') THEN
     SET _user = params->>'$.user'; END IF;
   IF (JSON_TYPE(params->'$._status') <> 'NULL') THEN
@@ -49,17 +52,65 @@ BEGIN
   SET _rowsOffset = params->'$._offset';
   SET _rowsLimit = params->'$._limit';
 
+  SELECT SQL_CALC_FOUND_ROWS * 
+    FROM (
+      SELECT 
+        `a`.`id`, `a`.`time`, `a`.`title`, `a`.`status`,
+        `c`.`title` AS 'category', `u`.`title` AS 'user',
+        GROUP_CONCAT(DISTINCT `t`.`title` ORDER BY `t`.`title` ASC SEPARATOR ', ') AS 'tags'
+        FROM (
+          SELECT *
+            FROM `article`
+            WHERE `id` > 0
+              AND (_dateBegin IS NULL OR `time` >= _dateBegin)
+              AND (_dateEnd   IS NULL OR `time` <= _dateEnd)
+              AND (_title     IS NULL OR `title` LIKE CONCAT('%', _title, '%'))
+              AND (_status    IS NULL OR `status` = _status)
+            LIMIT _rowsOffset, _rowsLimit 
+        ) AS `a`
+        INNER JOIN `category` AS `c` ON `c`.`id` = `a`.`category`
+        LEFT JOIN `article_tag` AS `at` ON `at`.`article` = `a`.`id`
+        LEFT JOIN `tag` AS `t` ON `t`.`id` = `at`.`tag`
+        INNER JOIN `user` AS `u` ON `u`.`id` = `a`.`user`
+        WHERE `a`.`id` > 0
+          AND (_category IS NULL OR `c`.`title` LIKE CONCAT('%', _category, '%'))
+          AND (_user     IS NULL OR `u`.`title` LIKE CONCAT('%', _user, '%'))
+        GROUP BY `a`.`id`
+    ) AS `a`
+    WHERE `id` > 0
+      AND (_tag IS NULL OR `tags` LIKE CONCAT('%', _tag, '%'))
+    ORDER BY
+      CASE WHEN _orderField = 'time'     AND _orderDirection = 1 THEN `time`  END ASC,
+      CASE WHEN _orderField = 'time'     AND _orderDirection = 0 THEN `time`  END DESC,
+      CASE WHEN _orderField = 'title'    AND _orderDirection = 1 THEN `title` END ASC,
+      CASE WHEN _orderField = 'title'    AND _orderDirection = 0 THEN `title` END DESC,
+      CASE WHEN _orderField = 'category' AND _orderDirection = 1 THEN `category` END ASC,
+      CASE WHEN _orderField = 'category' AND _orderDirection = 0 THEN `category` END DESC,
+      CASE WHEN _orderField = 'user'     AND _orderDirection = 1 THEN `user` END ASC,
+      CASE WHEN _orderField = 'user'     AND _orderDirection = 0 THEN `user` END DESC
+  ;
+
+/*
   SELECT SQL_CALC_FOUND_ROWS
          `a`.`id`, `a`.`time`, `a`.`title`, `a`.`status`,
-         `c`.`title` AS 'category', `u`.`title` AS 'user'
+         `c`.`title` AS 'category', `u`.`title` AS 'user', `at`.`tags`
     FROM `article` AS `a`
     INNER JOIN `category` AS `c` ON `c`.`id` = `a`.`category`
+    LEFT JOIN (
+      SELECT `at`.`article`, GROUP_CONCAT(DISTINCT `t`.`title` ORDER BY `t`.`title` ASC SEPARATOR ', ') AS 'tags'
+      FROM `article_tag`AS `at`
+      LEFT JOIN `tag` AS `t` ON `t`.`id` = `at`.`tag`
+      GROUP BY `at`.`article`
+    ) AS `at` ON `at`.`article` = `a`.`id`
+    #LEFT JOIN `article_tag` AS `at` ON `at`.`article` = `a`.`id`
+    #LEFT JOIN `tag` AS `t` ON `t`.`id` = `at`.`tag`
     INNER JOIN `user` AS `u` ON `u`.`id` = `a`.`user`
     WHERE `a`.`id` > 0
       AND (_dateBegin IS NULL OR `a`.`time` >= _dateBegin)
       AND (_dateEnd   IS NULL OR `a`.`time` <= _dateEnd)
       AND (_title     IS NULL OR `a`.`title` LIKE CONCAT('%', _title, '%'))
       AND (_category  IS NULL OR `c`.`title` LIKE CONCAT('%', _category, '%'))
+      AND (_tag       IS NULL OR `at`.`tags` LIKE CONCAT('%', _tag, '%'))
       AND (_user      IS NULL OR `u`.`title` LIKE CONCAT('%', _user, '%'))
       AND (_status    IS NULL OR `a`.`status` = _status)
     ORDER BY
@@ -72,6 +123,8 @@ BEGIN
       CASE WHEN _orderField = 'user'     AND _orderDirection = 1 THEN `u`.`title` END ASC,
       CASE WHEN _orderField = 'user'     AND _orderDirection = 0 THEN `u`.`title` END DESC
     LIMIT _rowsOffset, _rowsLimit; 
+*/
+
 END;;
 
 DROP PROCEDURE IF EXISTS `ArticleSet`;;
@@ -601,4 +654,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-10-19 20:11:41
+-- 2018-11-09 22:32:15

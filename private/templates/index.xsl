@@ -169,7 +169,7 @@
                                         <select name="_orderDirection" title="Напрямок сортування" id="filterOrderDirection" class="form-control">
                                             <xsl:for-each select="orderDirections/item">
                                                 <option value="{@value}">
-                                                    <xsl:if test="@value=../../@_oredrDirection">
+                                                    <xsl:if test="@value=../../@_orderDirection">
                                                         <xsl:attribute name="selected">selected</xsl:attribute>
                                                     </xsl:if>
                                                     <xsl:value-of select="@title" />

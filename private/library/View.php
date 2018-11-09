@@ -280,7 +280,7 @@ class View {
      * @param integer $pages Загальна кількість сторінок в списку
      * @param string $alias Псевдонім поточного контролера
      */
-    public function setPagination(int $page = 1, int $pages = 1, string $alias): void {
+    public function setPagination(int $page = 1, int $pages = 1, string $alias = null): void {
 
         if ($pages < 2) return;
 

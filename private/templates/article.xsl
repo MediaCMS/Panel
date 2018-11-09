@@ -20,6 +20,7 @@
                     <th scope="col">Дата</th>
                     <th scope="col">Назва</th>
                     <th scope="col">Категорія</th>
+                    <th scope="col">Мітки</th>
                     <th scope="col">Автор</th>
                     <th scope="col">ID</th>
                 </tr>
@@ -32,8 +33,9 @@
                         </xsl:if>
                         <th scope="row" class="text-center"><xsl:value-of select="@position" />.</th>
                         <td class="text-center"><xsl:value-of select="@time" /></td>
-                        <td class="text-left"><xsl:value-of select="@title" /></td>
+                        <td class="text-center"><xsl:value-of select="@title" /></td>
                         <td class="text-center"><xsl:value-of select="@category" /></td>
+                        <td class="text-center"><xsl:value-of select="@tags" /></td>
                         <td class="text-center"><xsl:value-of select="@user" /></td>
                         <td class="text-center"><xsl:value-of select="@id" /></td>
                     </tr>
@@ -69,6 +71,13 @@
             <div class="col-sm-7">
                 <input type="text" name="category" value="{@category}" placeholder="Фрагмент назви категорії"
                        title="Фільтр за назвою категорії" id="formCategory" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="formTag" class="col-sm-5 col-form-label">Мітка</label>
+            <div class="col-sm-7">
+                <input type="text" name="tag" value="{@tag}" placeholder="Фрагмент назви мітки"
+                       title="Фільтр за назвою мітки" id="formTag" class="form-control" />
             </div>
         </div>
         <div class="form-group row">

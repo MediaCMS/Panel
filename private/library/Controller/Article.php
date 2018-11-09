@@ -26,12 +26,13 @@ class Article extends Controller {
             ['title' => 'Час', 'field' => 'time'],
             ['title' => 'Назва', 'field' => 'title'],
             ['title' => 'Категорія', 'field' => 'category'],
+            ['title' => 'Мітка', 'field' => 'tag'],
             ['title' => 'Автор', 'field' => 'user']
         ];
 
         $this->filter['_orderField'] = 'time';
 
-        $this->filter['_orderDirection'] = 0;
+        //$this->filter['_orderDirection'] = 0;
 
         $this->setFilter(['dateBegin' => '2018-01-01', 'dateEnd' => date('Y-m-d')]);
 
