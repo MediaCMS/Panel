@@ -21,7 +21,7 @@
  
 3. Надати дозвіл для запису на файл `private/log`
 
-При потребі підключити необхідні модулі Apache (rewrite) та PHP (intl)
+При потребі підключити необхідні модулі Apache2 (rewrite) та PHP7 (intl)
   
 ##### Розповсюдження
 GNU General Public License v3
