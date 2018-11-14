@@ -110,6 +110,8 @@ class Database {
 
             foreach ($params as &$param) {
 
+                if (!isset($param)) continue;
+
                 if (is_array($param) || is_object($param)) {
 
                     $param = json_encode($param, JSON_UNESCAPED_UNICODE);
@@ -185,7 +187,7 @@ class Database {
 
         if ($this->getResultCount() > 0) {
 
-            while($row = $this->getResult()) $this->result[] = $row;
+            while($row = $this->getResult()) $result[] = $row;
 
             $this->result->close();
         }

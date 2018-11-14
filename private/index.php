@@ -9,6 +9,7 @@
  */
 
 use MediaCMS\Panel\Router;
+use MediaCMS\Panel\Exception;
 
 session_start();
 
@@ -30,21 +31,35 @@ try {
 
     call_user_func([$controller, $action]);
 
-} catch (\Exception $exception) {
+} catch (Exception $exception) {
 
     header('HTTP/1.x 500 Internal Server Error');
 
     $message = [$exception->getMessage(), $exception->getFile(), $exception->getLine(), $exception->getCode()];
 
-    MediaCMS\Panel\Log::append(vsprintf('%s (%s:%d, %d)', $message));
+    $message = vsprintf('%s (%s:%d, %d)', $message);
 
-    if (isset($controller) && is_object($controller)) {
+    MediaCMS\Panel\Log::append($message);
+
+    if (isset($controller) && is_object($controller) && ($router->isView())) {
 
         call_user_func([$controller, 'setException'], $exception);
 
     } else {
 
-        throw new $exception;
+        if (DEVELOPMENT) {
+
+            if ($exception->xdebug_message) {
+
+                echo '<table>' . $exception->xdebug_message . '</table>';
+
+            } else {
+
+                echo $message;
+
+                echo '<pre>' . $exception->getTraceAsString() . '</pre>';
+            }
+        }
     }
 }
 

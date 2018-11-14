@@ -17,6 +17,7 @@
     <xsl:include href="comment.xsl" />
     <xsl:include href="page.xsl" />
     <xsl:include href="user.xsl" />
+    <xsl:include href="common.xsl" />
 
     <xsl:output method="html" indent="yes" encoding="UTF-8"  media-type="text/html" />
 

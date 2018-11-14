@@ -194,9 +194,9 @@ class View {
      */
     public function setNode(string $controller, string $action): void {
 
-        $node = $this->xml->main->addChild(strtolower($controller));
+        $node = $this->xml->main->addChild(lcfirst($controller));
 
-        $this->node = $node->addChild(strtolower($action));
+        $this->node = $node->addChild(lcfirst($action));
     }
 
     /**

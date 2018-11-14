@@ -24,9 +24,9 @@ class Router {
     /** @var array Типові підрозділи схеми */
     protected $subsections = [
 
-        "список"        => ["title" => "Список", "action" => "Index"],
-        "аякс"          => ["title" => "Аякс", "action" => "Ajax", "isView" => false],
-        "редагування"   => ["title" => "Редагування", "action" => "Edit"]
+        "список"         => ["title" => "Список", "action" => "Index"],
+        "редагування"    => ["title" => "Редагування", "action" => "Edit"],
+        "автозаповнення" => ["title" => "Автозаповнення", "action" => "Autofill", "isView" => false]
     ];
 
     /** @var string Назва поточного контролера */
@@ -196,6 +196,16 @@ class Router {
 
                 $this->setURIDefault($uri);
             }
+
+            if (!isset($this->controller)) {
+
+                $this->setController('Common');
+
+                $this->setAction('NotFound');
+
+                $this->setTitle('Сторінку не знайдено');
+
+            }
         }
     }
 
@@ -284,7 +294,7 @@ class Router {
      *
      * @return boolean Ознака створення
      */
-    public function getIsDatabase(): bool {
+    public function isDatabase(): bool {
 
         return $this->isDatabase;
     }
@@ -304,7 +314,7 @@ class Router {
      *
      * @return boolean Ознака створення
      */
-    public function getIsView(): bool {
+    public function isView(): bool {
 
         return $this->isView;
     }

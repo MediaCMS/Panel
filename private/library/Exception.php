@@ -10,4 +10,8 @@
 
 namespace MediaCMS\Panel;
 
-class Exception extends \Exception {}
+class Exception extends \Exception {
+
+    /** @var string xdebug_message */
+    public $xdebug_message;
+}

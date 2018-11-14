@@ -436,6 +436,16 @@ BEGIN
   WHERE       `t`.`id` = _id;
 END;;
 
+DROP PROCEDURE IF EXISTS `TagGetAutofill`;;
+CREATE PROCEDURE `TagGetAutofill`(IN `_title` varchar(32) CHARACTER SET 'utf8mb4')
+BEGIN
+  SELECT     `id`, `title`
+    FROM     `tag`
+    WHERE    `title` LIKE CONCAT('%', _title COLLATE utf8mb4_unicode_ci, '%') AND `status` = 1
+    ORDER BY `title`
+    LIMIT    100; 
+END;;
+
 DROP PROCEDURE IF EXISTS `TagGetIndex`;;
 CREATE PROCEDURE `TagGetIndex`(IN `params` json)
 BEGIN
@@ -654,4 +664,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-11-09 22:32:15
+-- 2018-11-14 23:36:57

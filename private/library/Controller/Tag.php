@@ -33,17 +33,13 @@ class Tag extends Controller {
     }
 
     /**
-     * Список міток (Аякс)
+     * Автозаповнення міток
      */
-    public function AjaxAction(): void {
+    public function AutofillAction(): void {
 
-        $this->database->call('TagGetAjax', 'т');
+        $this->database->call('TagGetAutofill', ($_GET['title']) ?? null);
 
-        $tags = $this->database->getResult();
-
-        $tags = json_encode($tags, JSON_UNESCAPED_UNICODE);
-
-        echo $tags;
+        $this->api->setData('tags', $this->database->getResults());
     }
 
     /**

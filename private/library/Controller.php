@@ -21,6 +21,9 @@ abstract class Controller {
     /** @var View Вигляд (вид, представлення) сторінки */
     protected $view;
 
+    /** @var API Прикладний програмний інтерфейс */
+    protected $api;
+
     /** @var boolean Ознака створення меню */
     protected $menu = true;
 
@@ -37,7 +40,7 @@ abstract class Controller {
     /** @var array Фільтр списку */
     protected $filter = [
 
-        '_view' => 'standard', '_status' => 1, '_orderField' => 'title', '_orderDirection' => 1,
+        '_status' => 1, '_orderField' => 'title', '_orderDirection' => 1,
 
         '_offset' => 0, '_limit' => 7
     ];
@@ -60,23 +63,27 @@ abstract class Controller {
      *
      * @param Router $router Маршрутизатор
      */
-    public function __construct(Router $router) {
+    public function __construct(Router $router, array $params = null) {
 
         header(sprintf('Content-User: %s; charset=utf-8', $this->outputType));
 
         $this->router = $router;
 
-        if ($this->router->getIsDatabase())
+        if ($this->router->isDatabase())
 
             $this->database = new Database(DB_NAME, DB_USER, DB_PASSWORD);
 
-        if ($this->router->getIsView()) {
+        if ($this->router->isView()) {
 
             $this->view = new View();
 
             $this->view->setTitle($this->router->getTitle());
 
             $this->view->setNode($this->router->getController(), $this->router->getAction());
+
+        } else {
+
+            $this->api = new API();
         }
 
         if (isset($_SESSION['user'])) $this->user = $_SESSION['user'];
@@ -112,7 +119,7 @@ abstract class Controller {
 
         $_SESSION['filters'][$title] = $this->filter;
 
-        if ($this->router->getIsView())
+        if ($this->router->isView())
 
             $this->view->setFilter($this->filter, $this->orderFields, $this->router->getURI(0));
     }
@@ -162,7 +169,14 @@ abstract class Controller {
      */
     public function setException(\Exception $exception): void {
 
-        $this->view->setException($exception);
+        if ($this->router->isView()) {
+
+            $this->view->setException($exception);
+
+        } else {
+
+            $this->api->setException($exception);
+        }
     }
 
     /**
@@ -170,7 +184,12 @@ abstract class Controller {
      */
     public function __destruct() {
 
-        if (!isset($this->view)) return;
+        if (!isset($this->view)) {
+
+            $this->api->print();
+
+            return;
+        }
 
         if ($this->menu) {
 
