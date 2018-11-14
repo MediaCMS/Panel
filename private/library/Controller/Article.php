@@ -17,7 +17,7 @@ use MediaCMS\Panel\System;
 class Article extends Controller {
 
     /**
-     * Список статичних сторінок
+     * Список статей
      */
     public function IndexAction(): void {
 
@@ -46,7 +46,7 @@ class Article extends Controller {
     }
 
     /**
-     * Редагування статичної сторінки
+     * Редагування статті
      */
     public function EditAction(): void {
 

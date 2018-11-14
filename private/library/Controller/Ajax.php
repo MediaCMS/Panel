@@ -1,6 +1,6 @@
 <?php
 /**
- * Контролер для роботи з коментарями
+ * Контролер для роботи з Аяксом
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
@@ -10,43 +10,32 @@
 
 namespace MediaCMS\Panel\Controller;
 
-use  MediaCMS\Panel\Controller;
-use  MediaCMS\Panel\Exception;
+use MediaCMS\Panel\Controller;
+use MediaCMS\Panel\Exception;
+use MediaCMS\Panel\System;
 
-class Comment extends Controller {
+class Ajax extends Controller {
 
     /**
-     * Список коментарів
+     * Список статичних сторінок
      */
     public function IndexAction(): void {
 
-        unset($this->submenu[0]);
+        $this->setFilter();
 
-        $this->setFilter(['dateBegin' => '2018-01-01', 'dateEnd' => date('Y-m-d')]);
-
-        $this->database->call('CommentGetIndex', $this->filter);
+        $this->database->call('PageGetIndex', $this->filter);
 
         $node = $this->view->getNode();
 
         $this->setItems($node->addChild('items'));
 
         $this->setPagination();
-
     }
 
     /**
-     * Редагування коментаря
+     * Редагування статичної сторінки
      */
     public function EditAction(): void {
-
-        $id = $this->router->getURI(2);
-
-        if (!isset($id)) {
-
-            $this->router->redirect('/' . $this->router->getURI(0) . '/список');
-
-            throw new Exception('Відсутній ідентифікатор коментаря');
-        }
 
         $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 
@@ -56,9 +45,13 @@ class Comment extends Controller {
 
             if (isset($_POST['_save'])) {
 
+                $_POST['alias'] = System::getAlias($_POST['title']);
+
+                $_POST['user'] = $this->user;
+
                 try {
 
-                    $this->database->call('CommentSet', $_POST);
+                    $this->database->call('PageSet', $_POST);
 
                 } catch (Exception $exception) {
 
@@ -70,14 +63,18 @@ class Comment extends Controller {
 
             if (isset($_POST['_delete']))
 
-                $this->database->call('CommentUnset', $_POST['id']);
+                $this->database->call('PageUnset', $_POST['id']);
 
             $this->router->redirect('/' . $this->router->getURI(0) . '/список');
         }
 
-        $this->database->call('CommentGet', $id);
+        $id = $this->router->getURI(2);
 
-        $this->view->setItem($node, $this->database->getResult());
+        if (isset($id)) {
 
+            $this->database->call('PageGet', $id);
+
+            $this->view->setItem($node, $this->database->getResult());
+        }
     }
 }

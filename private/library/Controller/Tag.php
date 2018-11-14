@@ -17,7 +17,7 @@ use MediaCMS\Panel\System;
 class Tag extends Controller {
 
     /**
-     * Список статичних сторінок
+     * Список міток
      */
     public function IndexAction(): void {
 
@@ -33,7 +33,21 @@ class Tag extends Controller {
     }
 
     /**
-     * Редагування статичної сторінки
+     * Список міток (Аякс)
+     */
+    public function AjaxAction(): void {
+
+        $this->database->call('TagGetAjax', 'т');
+
+        $tags = $this->database->getResult();
+
+        $tags = json_encode($tags, JSON_UNESCAPED_UNICODE);
+
+        echo $tags;
+    }
+
+    /**
+     * Редагування мітки
      */
     public function EditAction(): void {
 

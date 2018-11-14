@@ -21,9 +21,6 @@ abstract class Controller {
     /** @var View Вигляд (вид, представлення) сторінки */
     protected $view;
 
-    /** @var array Перелік клаів для автоматичного завантаження */
-    protected $autoload = ['Database' => true, 'View' => true];
-
     /** @var boolean Ознака створення меню */
     protected $menu = true;
 
@@ -40,7 +37,9 @@ abstract class Controller {
     /** @var array Фільтр списку */
     protected $filter = [
 
-        '_status' => 1, '_orderField' => 'title', '_orderDirection' => 1, '_offset' => 0, '_limit' => 7
+        '_view' => 'standard', '_status' => 1, '_orderField' => 'title', '_orderDirection' => 1,
+
+        '_offset' => 0, '_limit' => 7
     ];
 
     /** @var array Можливі назви полів для сортування списку  */
@@ -67,7 +66,11 @@ abstract class Controller {
 
         $this->router = $router;
 
-        if ($this->autoload['View']) {
+        if ($this->router->getIsDatabase())
+
+            $this->database = new Database(DB_NAME, DB_USER, DB_PASSWORD);
+
+        if ($this->router->getIsView()) {
 
             $this->view = new View();
 
@@ -75,10 +78,6 @@ abstract class Controller {
 
             $this->view->setNode($this->router->getController(), $this->router->getAction());
         }
-
-        if (isset($this->autoload['Database']))
-
-            $this->database = new Database(DB_NAME, DB_USER, DB_PASSWORD);
 
         if (isset($_SESSION['user'])) $this->user = $_SESSION['user'];
     }
@@ -113,7 +112,9 @@ abstract class Controller {
 
         $_SESSION['filters'][$title] = $this->filter;
 
-        $this->view->setFilter($this->filter, $this->orderFields, $this->router->getURI(0));
+        if ($this->router->getIsView())
+
+            $this->view->setFilter($this->filter, $this->orderFields, $this->router->getURI(0));
     }
 
     /**

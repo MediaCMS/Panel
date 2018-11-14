@@ -17,7 +17,7 @@ use MediaCMS\Panel\System;
 class Category extends Controller {
 
     /**
-     * Список статичних сторінок
+     * Список категорій
      */
     public function IndexAction(): void {
 
@@ -33,7 +33,7 @@ class Category extends Controller {
     }
 
     /**
-     * Редагування статичної сторінки
+     * Редагування категорії
      */
     public function EditAction(): void {
 

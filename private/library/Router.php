@@ -1,6 +1,6 @@
 <?php
 /**
- * Маршрутизатор (вибір необхідного контролера)
+ * Маршрутизатор (вибір необхідного контролера та дії)
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
@@ -25,6 +25,7 @@ class Router {
     protected $subsections = [
 
         "список"        => ["title" => "Список", "action" => "Index"],
+        "аякс"          => ["title" => "Аякс", "action" => "Ajax", "isView" => false],
         "редагування"   => ["title" => "Редагування", "action" => "Edit"]
     ];
 
@@ -36,6 +37,12 @@ class Router {
 
     /** @var string Заголовок сторінки */
     protected $title;
+
+    /** @var string Ознака автоматичного створення об'єкта бази даних */
+    protected $isDatabase = true;
+
+    /** @var string Ознака автоматичного створення об'єкта вигляду */
+    protected $isView = true;
 
     /** @var array Перелік кодів та опису переадресації */
     protected $redirects = [
@@ -167,6 +174,14 @@ class Router {
 
                     $this->setTitle($section['title'] . ' / ' . $subsection['title']);
 
+                    if (isset($subsection['isDatabase']))
+
+                        $this->setIsDatabase($subsection['isDatabase']);
+
+                    if (isset($subsection['isView']))
+
+                        $this->setIsView($subsection['isView']);
+
                     $section['active'] = true;
 
                     $subsections[$subsectionAlias]['active'] = true;
@@ -252,6 +267,46 @@ class Router {
     public function getTitle() {
 
         return $this->title;
+    }
+
+    /**
+     * Зберігає ознаку автоматичного створення об'єкта бази даних
+     *
+     * @param boolean $isDatabase Ознака створення
+     */
+    protected function setIsDatabase(bool $isDatabase): void {
+
+        $this->isDatabase = $isDatabase;
+    }
+
+    /**
+     * Повертає ознаку автоматичного створення об'єкта бази даних
+     *
+     * @return boolean Ознака створення
+     */
+    public function getIsDatabase(): bool {
+
+        return $this->isDatabase;
+    }
+
+    /**
+     * Зберігає ознаку автоматичного створення об'єкта вигляду
+     *
+     * @param boolean $isView Ознака створення
+     */
+    protected function setIsView(bool $isView): void {
+
+        $this->isView = $isView;
+    }
+
+    /**
+     * Повертає ознаку автоматичного створення об'єкта вигляду
+     *
+     * @return boolean Ознака створення
+     */
+    public function getIsView(): bool {
+
+        return $this->isView;
     }
 
     /**
