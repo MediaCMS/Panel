@@ -22,39 +22,24 @@ class API {
     protected $debug;
 
 
-
-    /**
-     * Конструктор класу
-     */
-    public function __construct() {
-
-        //if (DEVELOPMENT) $this->xml->addChild('debug');
-    }
-
     /**
      * Додає дані
      *
-     * @param string $title Назва даних
      * @param array $data Дані
      */
-    public function setData(string $title, array $data): void {
+    public function setData(array $data): void {
 
-        $this->data[$title] = $data;
+        $this->data = $data;
     }
 
     /**
      * Повертає дані
      *
-     * @param string $title Назва даних
      * @return array|null Дані
      */
-    public function getData(string $title = null): ?array {
+    public function getData(): ?array {
 
-        return (isset($title))
-
-            ? ((isset($this->data[$title])) ? $this->data[$title] : null)
-
-            : $this->data;
+        return $this->data;
     }
 
     /**
@@ -105,6 +90,4 @@ class API {
 
         print json_encode($result, JSON_UNESCAPED_UNICODE);
     }
-
-
-};
+}

@@ -101,7 +101,7 @@
             <label for="formDescription" class="col-sm-4 col-form-label">Опис</label>
             <div class="col-sm-8">
                 <textarea name="description" value="{@description}" id="formDescription"
-                          placeholder="Опис сторінки" class="form-control"
+                          placeholder="Опис статті" class="form-control"
                           title="Опис сторінки"><xsl:value-of select="@description" /></textarea>
             </div>
         </div>
@@ -109,14 +109,14 @@
             <label for="formText" class="col-sm-4 col-form-label">Текст</label>
             <div class="col-sm-8">
                 <textarea name="text" value="{@text}" id="formText"
-                          placeholder="Текст сторінки" class="form-control"
+                          placeholder="Текст статті" class="form-control"
                           title="Текст сторінки"><xsl:value-of select="@text" /></textarea>
             </div>
         </div>
         <div class="form-group row">
             <label for="formImage" class="col-sm-4 col-form-label">Зображення</label>
             <div class="col-sm-8">
-                <input type="file" name="image" id="formImage" class="form-control" title="Зображення для сторінки" />
+                <input type="file" name="image" id="formImage" class="form-control" title="Зображення для статті" />
             </div>
         </div>
         <div class="form-group row">
@@ -132,6 +132,24 @@
                         </option>
                     </xsl:for-each>
                 </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="formTag" class="col-sm-4 col-form-label">Мітки</label>
+            <div class="autocomplete col-sm-8">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><img src="/search.png" alt="Пошук" /></span>
+                    </div>
+                    <input type="text" name="tag" list="formTagList" autocomplete="off"
+                           data-api="/мітки/автозаповнення" placeholder="Введіть літери для пошуку.."
+                           id="formTag" class="autocomplete-input form-control" title="Мітки для статті" />
+                </div>
+                <div class="autocomplete-selected">
+                    <xsl:for-each select="tags/tag">
+                        <a href="#{@id}"><xsl:value-of select="@title" /></a>
+                    </xsl:for-each>
+                </div>
             </div>
         </div>
     </xsl:template>

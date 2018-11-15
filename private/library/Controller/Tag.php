@@ -37,9 +37,9 @@ class Tag extends Controller {
      */
     public function AutofillAction(): void {
 
-        $this->database->call('TagGetAutofill', ($_GET['title']) ?? null);
+        $this->database->call('TagAutocomplete', ($_GET['title']) ?? null);
 
-        $this->api->setData('tags', $this->database->getResults());
+        $this->api->setData($this->database->getResults());
     }
 
     /**

@@ -63,7 +63,7 @@ abstract class Controller {
      *
      * @param Router $router Маршрутизатор
      */
-    public function __construct(Router $router, array $params = null) {
+    public function __construct(Router $router) {
 
         header(sprintf('Content-User: %s; charset=utf-8', $this->outputType));
 
