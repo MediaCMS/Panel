@@ -202,7 +202,7 @@ abstract class Controller {
 
             $queries = null;
 
-            if (isset($this->autoload['Database']))
+            if (isset($this->database))
 
                 $queries = $this->database->getQueries();
 

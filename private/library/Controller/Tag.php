@@ -35,11 +35,19 @@ class Tag extends Controller {
     /**
      * Автозаповнення міток
      */
-    public function AutofillAction(): void {
+    public function AutocompleteAction(): void {
 
-        $this->database->call('TagAutocomplete', ($_GET['title']) ?? null);
+        $title = ($_GET['title']) ?? null;
+
+        $exclude = ($_GET['exclude']) ?? null;
+
+        $this->database->call('TagAutocomplete', $title, $exclude);
 
         $this->api->setData($this->database->getResults());
+
+        $this->api->setDebug('$_GET', $_GET);
+
+        $this->api->setDebug('queries', $this->database->getQueries());
     }
 
     /**

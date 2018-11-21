@@ -50,8 +50,8 @@ html {
 
             }
           }
-          div.autocomplete-selected {
-            div.item {}
+          div.autocomplete-selected {position: relative; margin: 5px -5px -5px;
+            button {margin: 5px 5px; &:hover {text-decoration: line-through}}
           }
         }
       }

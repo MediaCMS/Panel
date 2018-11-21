@@ -12,10 +12,12 @@ DELIMITER ;;
 DROP PROCEDURE IF EXISTS `ArticleGet`;;
 CREATE PROCEDURE `ArticleGet`(IN `_id` int unsigned)
 BEGIN
-  SELECT      `a`.*, `u`.`title` AS `user`
+  SELECT      `a`.*, `u`.`title` AS `user`, GROUP_CONCAT(DISTINCT `at`.`id` SEPARATOR ',') AS 'tags'
   FROM        `article` AS `a`
   INNER JOIN  `user` AS `u` ON `u`.`id` = `a`.`user`
-  WHERE       `a`.`id` = _id;
+  INNER JOIN  `article_tag` AS `at` ON `at`.`article` = `a`.`id`
+  WHERE       `a`.`id` = _id
+  GROUP BY    `a`.`id`;
 END;;
 
 DROP PROCEDURE IF EXISTS `ArticleGetIndex`;;
@@ -427,6 +429,24 @@ BEGIN
   SELECT `id`, `title`, `description` FROM `role` ORDER BY `id` DESC;
 END;;
 
+DROP PROCEDURE IF EXISTS `TagAutocomplete`;;
+CREATE PROCEDURE `TagAutocomplete`(IN `_title` varchar(32), IN `_exlude` varchar(32))
+BEGIN
+  #DECLARE _title VARCHAR(32);
+  #DECLARE _exlude VARCHAR(32);
+
+  #SET _title = params->>'$.title';
+  #IF (JSON_TYPE(params->'$.exlude') <> 'NULL') THEN
+    #SET _exlude = params->>'$.exlude'; END IF;
+
+  SELECT     `id`, `title`
+    FROM     `tag`
+    WHERE    `title` LIKE CONCAT('%', _title, '%') AND `status` = 1
+             AND (_exlude IS NULL OR FIND_IN_SET(`id`, _exlude))
+    ORDER BY `title`
+    LIMIT    100; 
+END;;
+
 DROP PROCEDURE IF EXISTS `TagGet`;;
 CREATE PROCEDURE `TagGet`(IN `_id` smallint(5) unsigned)
 BEGIN
@@ -436,14 +456,10 @@ BEGIN
   WHERE       `t`.`id` = _id;
 END;;
 
-DROP PROCEDURE IF EXISTS `TagGetAutofill`;;
-CREATE PROCEDURE `TagGetAutofill`(IN `_title` varchar(32) CHARACTER SET 'utf8mb4')
+DROP PROCEDURE IF EXISTS `TagGetByIDs`;;
+CREATE PROCEDURE `TagGetByIDs`(IN `_ids` varchar(32) CHARACTER SET 'utf8mb4')
 BEGIN
-  SELECT     `id`, `title`
-    FROM     `tag`
-    WHERE    `title` LIKE CONCAT('%', _title COLLATE utf8mb4_unicode_ci, '%') AND `status` = 1
-    ORDER BY `title`
-    LIMIT    100; 
+  SELECT `id`, `title` FROM `tag` WHERE FIND_IN_SET (`id`, _ids);
 END;;
 
 DROP PROCEDURE IF EXISTS `TagGetIndex`;;
@@ -664,4 +680,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-11-14 23:36:57
+-- 2018-11-21 00:18:18

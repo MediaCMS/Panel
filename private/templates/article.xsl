@@ -145,11 +145,16 @@
                            data-api="/мітки/автозаповнення" placeholder="Введіть літери для пошуку.."
                            id="formTag" class="autocomplete-input form-control" title="Мітки для статті" />
                 </div>
-                <div class="autocomplete-selected">
-                    <xsl:for-each select="tags/tag">
-                        <a href="#{@id}"><xsl:value-of select="@title" /></a>
-                    </xsl:for-each>
-                </div>
+                <xsl:if test="tags">
+                    <div class="autocomplete-selected">
+                        <xsl:for-each select="tags/*">
+                            <button type="button" class="btn btn-outline-secondary">
+                                <xsl:value-of select="@title" />
+                                <input type="hidden" name="tag[]" value="{@id}" />
+                            </button>
+                        </xsl:for-each>
+                    </div>
+                </xsl:if>
             </div>
         </div>
     </xsl:template>

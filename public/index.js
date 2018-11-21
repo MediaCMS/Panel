@@ -7,7 +7,7 @@
  * @copyright   GNU General Public License v3
  */
 
-$(document).ready(function(){
+$(function(){
 
     console.log('document ready');
 
@@ -18,13 +18,12 @@ $(document).ready(function(){
         window.location.href = $(this).data('edit');
     });
 
-    let nodesAutocomplete =$('main div.autocomplete');
-    if (nodesAutocomplete.length > 0) {
-        nodesAutocomplete.on('keyup', 'input', function() {
+    nodes.autocomplete =$('main div.autocomplete');
+    if (nodes.autocomplete.length > 0) {
+        nodes.autocomplete.on('keyup', 'input', function() {
             console.log($(this));
-            let nodeAutocomplete = $(this).parent().parent();
-            let nodeAutocompleteInput = $(this);
-            nodeAutocomplete.find('div.autocomplete-list').remove();
+            autocompleteInput = $(this);
+            nodes.autocomplete.find('div.autocomplete-list').remove();
             request($(this).data('api'), {title: $(this).val()}, {
                 'done': function (data) {
                     console.log('request.done');
@@ -35,50 +34,68 @@ $(document).ready(function(){
                         });
                     }
                     autocompleteList = '<div class="autocomplete-list"><ul>'+autocompleteList.join('')+'</ul></div>';
-                    nodeAutocompleteInput.parent().after(autocompleteList);
+                    autocompleteInput.parent().after(autocompleteList);
                     nodes.body.on('click', function () {
-                        nodeAutocomplete.find('div.autocomplete-list').remove();
+                        nodes.autocomplete.find('div.autocomplete-list').remove();
                     })
                 },
                 'fail': function (jqXHR) {
                     console.log('request.fail');
-                    console.log(jqXHR);
+                    if (!!jqXHR && (jqXHR !== undefined)) console.log(jqXHR);
                 }
             })
         }).on('change', function() {
             console.log('request.change');
+        });
+        nodes.autocomplete.on('click', 'div.autocomplete-list ul li', function() {
+            console.log($(this).data('id') + '->' + $(this).text());
+            let tag = $('<button type="button" class="btn btn-outline-secondary" />').text($(this).text());
+            tag.append($('<input type="hidden" name="tag[]" />').val($(this).data('id')));
+            console.log(tag.prop('outerHTML'));
+            autocompleteSelected = nodes.autocomplete.find('div.autocomplete-selected');
+            if (autocompleteSelected.length === 0) {
+                autocompleteSelected = $('<div class="autocomplete-selected" />');
+                nodes.autocomplete.append(autocompleteSelected);
+            }
+            autocompleteSelected.append(tag);
+        });
+        nodes.autocomplete.on('click', 'div.autocomplete-selected button', function() {
+            autocompleteSelected = $(this).parent();
+            $(this).remove();
+            if (autocompleteSelected.find('button').length === 0)
+                autocompleteSelected.remove();
         });
     }
 });
 
 
 function request(uri, data, callbacks) {
-    let params = {method: 'GET', url: uri, data: [],
+    let params = {method: 'GET',
         text: 'text', dataType: 'json', cache: false, timeout: 3000};
     if (!!data && (data !== undefined)) params.data = data;
     console.log(params);
     try {
-        $.ajax(params)
-        .done(function(responce) {
-            console.log(responce);
-            if(responce.length === 0)
+        $.ajax(uri, params)
+        .done(function(response) {
+            console.log(response);
+            if(response.length === 0)
                 throw new Error('Відсутня відповідь сервера');
-            if(typeof responce !== 'object')
-                throw new Error('Відповідь сервера неправильного типу ('+typeof responce+')');
-            if(responce.debug !== undefined)
-                console.log({debug:responce.debug});
-            if(responce.exception !== undefined) {
-                console.log({exception:responce.exception});
-                throw new Error(responce.exception.message);
+            if(typeof response !== 'object')
+                throw new Error('Відповідь сервера неправильного типу ('+typeof response+')');
+            if(response.debug !== undefined)
+                console.log({debug:response.debug});
+            if(response.exception !== undefined) {
+                console.log({exception:response.exception});
+                throw new Error(response.exception.message);
             }
-            let data = (responce.data !== undefined) ? responce.data : null;
+            let data = (response.data !== undefined) ? response.data : null;
             if (!!callbacks && !!callbacks.done) callbacks.done(data);
         })
         .fail(function(jqXHR) {
             if (!!callbacks && !!callbacks.fail) callbacks.fail(jqXHR);
         });
     } catch(e) {
-        alert(e.message, e.name);
-        if (!!callbacks && !!callbacks.fail) callbacks.fail(jqXHR);
+        alert(e.message+': '+e.name);
+        if (!!callbacks && !!callbacks.fail) callbacks.fail();
     }
 }

@@ -26,7 +26,7 @@ class Router {
 
         "список"         => ["title" => "Список", "action" => "Index"],
         "редагування"    => ["title" => "Редагування", "action" => "Edit"],
-        "автозаповнення" => ["title" => "Автозаповнення", "action" => "Autofill", "isView" => false]
+        "автозаповнення" => ["title" => "Автозаповнення", "action" => "Autocomplete", "isView" => false]
     ];
 
     /** @var string Назва поточного контролера */

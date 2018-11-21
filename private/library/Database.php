@@ -110,9 +110,11 @@ class Database {
 
             foreach ($params as &$param) {
 
-                if (!isset($param)) continue;
+                if (is_null($param)) {
 
-                if (is_array($param) || is_object($param)) {
+                    $param = 'null';
+
+                } elseif (is_array($param) || is_object($param)) {
 
                     $param = json_encode($param, JSON_UNESCAPED_UNICODE);
 
@@ -120,15 +122,17 @@ class Database {
 
                     $param = str_replace("\\\"", "\\\\\"", $param);
 
-                } else {
+                    $param = sprintf("'%s'", $param);
 
-                    $param = $this->protect($param);
+                } elseif (is_string($param)) {
+
+                    $param = sprintf("'%s'", $this->protect($param));
                 }
             }
 
-            $params = implode("', '", $params);
+            $params = implode(", ", $params);
 
-            $query = "CALL %s('%s');";
+            $query = "CALL %s(%s);";
 
         } else {
 
@@ -193,20 +197,6 @@ class Database {
         }
 
         return $result;
-    }
-
-    /**
-     * Повертає результат запиту
-     *
-     * @param \SimpleXMLElement $node Елемент, в який потрібно додати результат
-     */
-    public function getResultsXML(\SimpleXMLElement $node): void {
-
-        if ($this->getResultCount() > 0) {
-
-
-            $this->result->close();
-        }
     }
 
     /**

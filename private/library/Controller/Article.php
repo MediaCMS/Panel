@@ -91,7 +91,18 @@ class Article extends Controller {
 
             $this->database->call('ArticleGet', $id);
 
-            $this->view->setItem($node, $this->database->getResult());
+            $article = $this->database->getResult();
+
+            $this->view->setItem($node, $article);
+
+            if (strlen($article['tags']) > 0) {
+
+                $this->database->call('TagGetByIDs', $article['tags']);
+
+                $this->setItems($node->addChild('tags'), 'tag');
+            }
+
+
         }
     }
 }
