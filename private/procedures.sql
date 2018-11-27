@@ -1,4 +1,4 @@
--- Adminer 4.6.3 MySQL dump
+-- Adminer 4.7.0 MySQL dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -12,7 +12,7 @@ DELIMITER ;;
 DROP PROCEDURE IF EXISTS `ArticleGet`;;
 CREATE PROCEDURE `ArticleGet`(IN `_id` int unsigned)
 BEGIN
-  SELECT      `a`.*, `u`.`title` AS `user`, GROUP_CONCAT(DISTINCT `at`.`id` SEPARATOR ',') AS 'tags'
+  SELECT      `a`.*, `u`.`title` AS `user`, GROUP_CONCAT(DISTINCT `at`.`tag` SEPARATOR ',') AS 'tags'
   FROM        `article` AS `a`
   INNER JOIN  `user` AS `u` ON `u`.`id` = `a`.`user`
   INNER JOIN  `article_tag` AS `at` ON `at`.`article` = `a`.`id`
@@ -132,6 +132,7 @@ END;;
 DROP PROCEDURE IF EXISTS `ArticleSet`;;
 CREATE PROCEDURE `ArticleSet`(IN `params` json)
 BEGIN
+  DECLARE _i TINYINT(3) DEFAULT 0;
   DECLARE _id TINYINT(3) UNSIGNED;
   DECLARE _title VARCHAR(32);
   DECLARE _description VARCHAR(128);
@@ -139,6 +140,9 @@ BEGIN
   DECLARE _image VARCHAR(32);
   DECLARE _alias VARCHAR(32);
   DECLARE _category TINYINT(3) UNSIGNED;
+  DECLARE _tag SMALLINT(5) UNSIGNED;
+  DECLARE _tags JSON;
+  DECLARE _tags2 JSON DEFAULT '[]';
   DECLARE _user TINYINT(3) UNSIGNED;
 
   IF (JSON_TYPE(params->'$.id') <> 'NULL') THEN
@@ -163,9 +167,22 @@ BEGIN
       SET   `title` = _title, `description` = _description, `text` = _text,
             `image` = _image, `alias` = _alias, `category` = _category, `user` = _user
       WHERE `id` = _id AND `status` = 1;
+    DELETE FROM `article_tag` WHERE `article` = _id;
   ELSE
     INSERT INTO `article` (`title`, `description`, `text`, `image`, `alias`, `category`, `user`) 
       VALUES (_title, _description, _text, _image, _alias, _category, _user);
+  END IF;
+
+  IF (JSON_TYPE(params->'$.tags') <> 'NULL') THEN
+    SET _tags = params->'$.tags';
+    WHILE _i < JSON_LENGTH(_tags) DO
+      SELECT JSON_EXTRACT(_tags,CONCAT('$[',_i,']')) INTO _tag;
+      IF (JSON_CONTAINS(_tags2, CAST(_tag AS CHAR)) = 0) THEN
+        INSERT INTO `article_tag` (`article`, `tag`) VALUES (_id, _tag);
+        SELECT JSON_ARRAY_APPEND(_tags2, '$', _tag) INTO _tags2;
+      END IF;
+      SELECT _i + 1 INTO _i;
+    END WHILE;
   END IF;
 END;;
 
@@ -680,4 +697,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-11-21 00:18:18
+-- 2018-11-27 22:45:28

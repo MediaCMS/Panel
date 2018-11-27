@@ -150,7 +150,7 @@
                         <xsl:for-each select="tags/*">
                             <button type="button" class="btn btn-outline-secondary">
                                 <xsl:value-of select="@title" />
-                                <input type="hidden" name="tag[]" value="{@id}" />
+                                <input type="hidden" name="tags[]" value="{@id}" />
                             </button>
                         </xsl:for-each>
                     </div>

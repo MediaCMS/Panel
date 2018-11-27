@@ -82,7 +82,7 @@ class Article extends Controller {
 
                 $this->database->call('ArticleUnset', $_POST['id']);
 
-            $this->router->redirect('/' . $this->router->getURI(0) . '/список');
+            //$this->router->redirect('/' . $this->router->getURI(0) . '/список');
         }
 
         $id = $this->router->getURI(2);
