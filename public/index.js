@@ -21,19 +21,22 @@ $(function(){
     nodes.autocomplete =$('main div.autocomplete');
     if (nodes.autocomplete.length > 0) {
         nodes.autocomplete.on('keyup', 'input', function() {
-            console.log($(this));
+            let exclude = [];
             let autocompleteInput = $(this);
             nodes.autocomplete.find('div.autocomplete-list').remove();
-            request($(this).data('api'), {title: $(this).val()}, {
+            nodes.autocomplete
+                .find('div.autocomplete-selected button input')
+                .each(function(){exclude.push($(this).val());});
+            request($(this).data('api'), {title: $(this).val(), exclude: exclude.join(',')}, {
                 'done': function (data) {
-                    console.log('request.done');
+                    //console.log('request.done');
                     let autocompleteList = [];
                     if (Object.keys(data).length > 0) {
                         $.each(data, function (key, value) {
                             autocompleteList.push('<li data-id="' + value.id + '">' + value.title + '</li>');
                         });
                     }
-                    autocompleteList = '<div class="autocomplete-list"><ul>'+autocompleteList.join('')+'</ul></div>';
+                    autocompleteList = '<div class="autocomplete-list"><ul>' + autocompleteList.join('') + '</ul></div>';
                     autocompleteInput.parent().after(autocompleteList);
                     nodes.body.on('click', function () {
                         nodes.autocomplete.find('div.autocomplete-list').remove();
@@ -45,13 +48,11 @@ $(function(){
                 }
             })
         }).on('change', function() {
-            console.log('request.change');
+            //console.log('request.change');
         });
         nodes.autocomplete.on('click', 'div.autocomplete-list ul li', function() {
-            console.log($(this).data('id') + '->' + $(this).text());
             let tag = $('<button type="button" class="btn btn-outline-secondary" />').text($(this).text());
             tag.append($('<input type="hidden" name="tags[]" />').val($(this).data('id')));
-            console.log(tag.prop('outerHTML'));
             let autocompleteSelected = nodes.autocomplete.find('div.autocomplete-selected');
             if (autocompleteSelected.length === 0) {
                 autocompleteSelected = $('<div class="autocomplete-selected" />');
@@ -73,11 +74,11 @@ function request(uri, data, callbacks) {
     let params = {method: 'GET',
         text: 'text', dataType: 'json', cache: false, timeout: 3000};
     params.data = data;
-    console.log(params);
+    //console.log(params);
     try {
         $.ajax(uri, params)
         .done(function(response) {
-            console.log(response);
+            //console.log(response);
             if(response.length === 0)
                 throw new Error('Відсутня відповідь сервера');
             if(typeof response !== 'object')

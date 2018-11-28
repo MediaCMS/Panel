@@ -141,7 +141,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><img src="/search.png" alt="Пошук" /></span>
                     </div>
-                    <input type="text" name="tag" list="formTagList" autocomplete="off"
+                    <input type="text" list="formTagList" autocomplete="off"
                            data-api="/мітки/автозаповнення" placeholder="Введіть літери для пошуку.."
                            id="formTag" class="autocomplete-input form-control" title="Мітки для статті" />
                 </div>

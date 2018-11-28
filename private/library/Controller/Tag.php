@@ -37,11 +37,21 @@ class Tag extends Controller {
      */
     public function AutocompleteAction(): void {
 
-        $exclude = ($_GET['exclude']) ?? null;
+        $title= $_GET['title'];
 
-        $this->database->call('TagAutocomplete', $_GET['title'], $exclude);
+        $exclude = $_GET['exclude'] ?? null;
 
-        $this->api->setData($this->database->getResults());
+        $this->database->call('TagAutocomplete', $title, $exclude);
+
+        $tags = $this->database->getResults();
+
+        $this->api->setData($tags);
+
+        //$this->api->setDebug('$_GET', $_GET);
+
+        //$this->api->setDebug('queries', $this->database->getQueries());
+
+        //$this->api->setDebug('results', $tags);
     }
 
     /**

@@ -89,44 +89,7 @@ BEGIN
       CASE WHEN _orderField = 'category' AND _orderDirection = 1 THEN `category` END ASC,
       CASE WHEN _orderField = 'category' AND _orderDirection = 0 THEN `category` END DESC,
       CASE WHEN _orderField = 'user'     AND _orderDirection = 1 THEN `user` END ASC,
-      CASE WHEN _orderField = 'user'     AND _orderDirection = 0 THEN `user` END DESC
-  ;
-
-/*
-  SELECT SQL_CALC_FOUND_ROWS
-         `a`.`id`, `a`.`time`, `a`.`title`, `a`.`status`,
-         `c`.`title` AS 'category', `u`.`title` AS 'user', `at`.`tags`
-    FROM `article` AS `a`
-    INNER JOIN `category` AS `c` ON `c`.`id` = `a`.`category`
-    LEFT JOIN (
-      SELECT `at`.`article`, GROUP_CONCAT(DISTINCT `t`.`title` ORDER BY `t`.`title` ASC SEPARATOR ', ') AS 'tags'
-      FROM `article_tag`AS `at`
-      LEFT JOIN `tag` AS `t` ON `t`.`id` = `at`.`tag`
-      GROUP BY `at`.`article`
-    ) AS `at` ON `at`.`article` = `a`.`id`
-    #LEFT JOIN `article_tag` AS `at` ON `at`.`article` = `a`.`id`
-    #LEFT JOIN `tag` AS `t` ON `t`.`id` = `at`.`tag`
-    INNER JOIN `user` AS `u` ON `u`.`id` = `a`.`user`
-    WHERE `a`.`id` > 0
-      AND (_dateBegin IS NULL OR `a`.`time` >= _dateBegin)
-      AND (_dateEnd   IS NULL OR `a`.`time` <= _dateEnd)
-      AND (_title     IS NULL OR `a`.`title` LIKE CONCAT('%', _title, '%'))
-      AND (_category  IS NULL OR `c`.`title` LIKE CONCAT('%', _category, '%'))
-      AND (_tag       IS NULL OR `at`.`tags` LIKE CONCAT('%', _tag, '%'))
-      AND (_user      IS NULL OR `u`.`title` LIKE CONCAT('%', _user, '%'))
-      AND (_status    IS NULL OR `a`.`status` = _status)
-    ORDER BY
-      CASE WHEN _orderField = 'time'     AND _orderDirection = 1 THEN `a`.`time`  END ASC,
-      CASE WHEN _orderField = 'time'     AND _orderDirection = 0 THEN `a`.`time`  END DESC,
-      CASE WHEN _orderField = 'title'    AND _orderDirection = 1 THEN `a`.`title` END ASC,
-      CASE WHEN _orderField = 'title'    AND _orderDirection = 0 THEN `a`.`title` END DESC,
-      CASE WHEN _orderField = 'category' AND _orderDirection = 1 THEN `c`.`title` END ASC,
-      CASE WHEN _orderField = 'category' AND _orderDirection = 0 THEN `c`.`title` END DESC,
-      CASE WHEN _orderField = 'user'     AND _orderDirection = 1 THEN `u`.`title` END ASC,
-      CASE WHEN _orderField = 'user'     AND _orderDirection = 0 THEN `u`.`title` END DESC
-    LIMIT _rowsOffset, _rowsLimit; 
-*/
-
+      CASE WHEN _orderField = 'user'     AND _orderDirection = 0 THEN `user` END DESC;
 END;;
 
 DROP PROCEDURE IF EXISTS `ArticleSet`;;
@@ -447,19 +410,12 @@ BEGIN
 END;;
 
 DROP PROCEDURE IF EXISTS `TagAutocomplete`;;
-CREATE PROCEDURE `TagAutocomplete`(IN `_title` varchar(32), IN `_exlude` varchar(32))
+CREATE PROCEDURE `TagAutocomplete`(IN `_title` varchar(32), IN `_exclude` varchar(32))
 BEGIN
-  #DECLARE _title VARCHAR(32);
-  #DECLARE _exlude VARCHAR(32);
-
-  #SET _title = params->>'$.title';
-  #IF (JSON_TYPE(params->'$.exlude') <> 'NULL') THEN
-    #SET _exlude = params->>'$.exlude'; END IF;
-
   SELECT     `id`, `title`
     FROM     `tag`
     WHERE    `title` LIKE CONCAT('%', _title, '%') AND `status` = 1
-             AND (_exlude IS NULL OR FIND_IN_SET(`id`, _exlude))
+             AND (_exclude IS NULL OR NOT FIND_IN_SET(`id`, _exclude))
     ORDER BY `title`
     LIMIT    100; 
 END;;
@@ -697,4 +653,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-11-27 22:45:28
+-- 2018-11-28 20:47:35

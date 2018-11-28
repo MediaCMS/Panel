@@ -62,17 +62,21 @@ class Article extends Controller {
 
             if (isset($_POST['_save'])) {
 
-                $_POST['alias'] = System::getAlias($_POST['title']);
+                $article = $_POST;
 
-                $_POST['user'] = $this->user;
+                $article['alias'] = System::getAlias($article['title']);
+
+                $article['user'] = $this->user;
+
+                unset($article['_save']);
 
                 try {
 
-                    $this->database->call('ArticleSet', $_POST);
+                    $this->database->call('ArticleSet', $article);
 
                 } catch (Exception $exception) {
 
-                    $this->view->setItem($node, $_POST);
+                    $this->view->setItem($node, $article);
 
                     throw $exception;
                 }
@@ -82,7 +86,7 @@ class Article extends Controller {
 
                 $this->database->call('ArticleUnset', $_POST['id']);
 
-            //$this->router->redirect('/' . $this->router->getURI(0) . '/список');
+            $this->router->redirect('/' . $this->router->getURI(0) . '/список');
         }
 
         $id = $this->router->getURI(2);
