@@ -20,6 +20,12 @@ BEGIN
   GROUP BY    `a`.`id`;
 END;;
 
+DROP PROCEDURE IF EXISTS `ArticleGetImage`;;
+CREATE PROCEDURE `ArticleGetImage`(IN `_id` int(10))
+BEGIN
+  SELECT `image` FROM `article` WHERE `id` = _id;
+END;;
+
 DROP PROCEDURE IF EXISTS `ArticleGetIndex`;;
 CREATE PROCEDURE `ArticleGetIndex`(IN `params` json)
 BEGIN
@@ -653,4 +659,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-11-28 20:47:35
+-- 2018-12-04 21:30:50
