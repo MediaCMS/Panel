@@ -13,6 +13,7 @@ namespace MediaCMS\Panel\Controller;
 use MediaCMS\Panel\Controller;
 use MediaCMS\Panel\Exception;
 use MediaCMS\Panel\System;
+use MediaCMS\Panel\Image;
 
 class Article extends Controller {
 
@@ -58,55 +59,102 @@ class Article extends Controller {
 
         $this->setItems($node->addChild('categories'), 'category');
 
-        if (count($_POST) > 0) {
+        try {
 
-            if (isset($_POST['_save'])) {
+            if (count($_POST) > 0) {
 
                 $article = $_POST;
 
-                $article['alias'] = System::getAlias($article['title']);
+                $this->send($article);
 
-                $article['user'] = $this->user;
+                //$this->router->redirect('/' . $this->router->getURI(0) . '/список');
+            }
 
-                unset($article['_save']);
+            $id = $this->router->getURI(2);
 
-                try {
+            if (isset($id)) {
 
-                    $this->database->call('ArticleSet', $article);
+                $this->database->call('ArticleGet', $id);
 
-                } catch (Exception $exception) {
+                $article = $this->database->getResult();
 
-                    $this->view->setItem($node, $article);
+                //$article['image'] = '/thumbnails/' . $article['image'][0];
 
-                    throw $exception;
+                //$article['image'] .= '/' . $article['image'] . '.original.jpg';
+
+                $this->view->setItem($node, $article);
+
+                if (strlen($article['tags']) > 0) {
+
+                    $this->database->call('TagGetByIDs', $article['tags']);
+
+                    $this->setItems($node->addChild('tags'), 'tag');
                 }
             }
 
-            if (isset($_POST['_delete']))
+        } catch (Exception $exception) {
 
-                $this->database->call('ArticleUnset', $_POST['id']);
+            $article['time'] = date('Y-m-d H:i:s');
 
-            $this->router->redirect('/' . $this->router->getURI(0) . '/список');
-        }
+            $article['tags'] = [];
 
-        $id = $this->router->getURI(2);
+            foreach($_POST['tags'] as $id => $title)
 
-        if (isset($id)) {
-
-            $this->database->call('ArticleGet', $id);
-
-            $article = $this->database->getResult();
+                $article['tags'][] = ['id' => $id, 'title' => $title];
 
             $this->view->setItem($node, $article);
 
-            if (strlen($article['tags']) > 0) {
-
-                $this->database->call('TagGetByIDs', $article['tags']);
-
-                $this->setItems($node->addChild('tags'), 'tag');
-            }
-
-
+            throw $exception;
         }
     }
+
+    /**
+     * Операції над статтею
+     *
+     * @param array $article Дані статті з форми
+     */
+    private function send(array $article): void {
+
+        if (isset($article['_save'])) {
+
+            $article['tags'] = array_keys($article['tags']);
+
+            $article['alias'] = System::getAlias($article['title']);
+
+            $article['user'] = $this->user;
+
+            unset($article['_save']);
+
+            $image = new Image();
+
+            if ($_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+
+                $article['image'] = $image->append($_FILES['image']);
+            }
+
+            if (!isset($article['image'])) {
+
+                $this->database->call('ArticleGetImage', $article['id']);
+
+                $hash = $this->database->getResultByName('image');
+
+                if (strlen($image) > 0) $image->delete($hash);
+            }
+
+            $this->database->call('ArticleSet', $article);
+        }
+
+        if (isset($article['_delete']))
+
+            $this->database->call('ArticleUnset', $article['id']);
+    }
+
+    /**
+     * Редагування статті
+     */
+    /*
+    private function imageDelete(): void {
+
+    }
+    */
 }

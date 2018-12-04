@@ -7,6 +7,10 @@ html body main { min-height: 80vh; }
 html body main div.body.action-index table tr { cursor: pointer; }
 html body main div.body.action-index table tr.disabled td { color: gray; }
 html body main div.body.action-edit form { max-width: 480px; }
+html body main div.body.action-edit form div.form-group.row div.image { position: relative; }
+html body main div.body.action-edit form div.form-group.row div.image img { max-width: 100%; }
+html body main div.body.action-edit form div.form-group.row div.image img:hover { opacity: 0.15; cursor: pointer; }
+html body main div.body.action-edit form div.form-group.row div.image p { width: 100%; position: absolute; top: 45%; z-index: -1; }
 html body main div.body.controller-user.action-login { padding-top: 10vh; }
 html body main div.body div.autocomplete div.autocomplete-list { position: relative; }
 html body main div.body div.autocomplete div.autocomplete-list ul { width: 100%; list-style-type: none; padding: 0; margin: 0; position: absolute; z-index: 10; }

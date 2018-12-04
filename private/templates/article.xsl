@@ -11,6 +11,26 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+
+<!--
+    <patterns>
+        <forms>
+            <form id="article" title="" pagination="true">
+                <fields>
+                    <field id="title" title="" description="" type="" />
+                    <field id="description" title="" description="" type="" />
+
+                    <field id="status" title="" description="" type="" />
+                </fields>
+            </form>
+        </forms>
+        <tables>
+
+        </tables>
+    </patterns>
+-->
+
+
     <xsl:template match="main/article/index" mode="extends">
         <table class="table clickable">
             <caption>Список статей</caption>
@@ -116,7 +136,18 @@
         <div class="form-group row">
             <label for="formImage" class="col-sm-4 col-form-label">Зображення</label>
             <div class="col-sm-8">
-                <input type="file" name="image" id="formImage" class="form-control" title="Зображення для статті" />
+                <input type="file" name="image" id="formImage" class="form-control" title="Зображення для статті">
+                <xsl:if test="@image">
+                    <xsl:attribute name="class">form-control d-none</xsl:attribute>
+                 </xsl:if>
+                </input>
+                <xsl:if test="@image">
+                    <div class="image">
+                        <img src="/thumbnails/{substring(@image,1,1)}/{@image}.original.jpg" />
+                        <input type="hidden" name="image" value="{@image}" />
+                        <p class="text-danger text-center lead">Видалити зображення</p>
+                    </div>
+                </xsl:if>
             </div>
         </div>
         <div class="form-group row">
@@ -150,7 +181,7 @@
                         <xsl:for-each select="tags/*">
                             <button type="button" class="btn btn-outline-secondary">
                                 <xsl:value-of select="@title" />
-                                <input type="hidden" name="tags[]" value="{@id}" />
+                                <input type="hidden" name="tags[{@id}]" value="{@title}" />
                             </button>
                         </xsl:for-each>
                     </div>

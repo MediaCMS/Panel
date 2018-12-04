@@ -18,6 +18,13 @@ $(function(){
         window.location.href = $(this).data('edit');
     });
 
+    nodes.formImage =$('main form div.image');
+    if (nodes.formImage.length > 0) {
+        nodes.formImage.on('click', function() {
+            $(this).parent().find('input:file').removeClass('d-none');
+            $(this).remove();
+        });
+    }
     nodes.autocomplete =$('main div.autocomplete');
     if (nodes.autocomplete.length > 0) {
         nodes.autocomplete.on('keyup', 'input', function() {
@@ -52,7 +59,8 @@ $(function(){
         });
         nodes.autocomplete.on('click', 'div.autocomplete-list ul li', function() {
             let tag = $('<button type="button" class="btn btn-outline-secondary" />').text($(this).text());
-            tag.append($('<input type="hidden" name="tags[]" />').val($(this).data('id')));
+            tag.append($('<input type="hidden" />').val($(this).text())
+                .attr('name', 'tags[' + $(this).data('id') + ']'));
             let autocompleteSelected = nodes.autocomplete.find('div.autocomplete-selected');
             if (autocompleteSelected.length === 0) {
                 autocompleteSelected = $('<div class="autocomplete-selected" />');

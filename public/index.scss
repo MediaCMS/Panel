@@ -35,7 +35,18 @@ html {
           }
         }
         &.action-edit {
-          form {max-width: 480px;}
+          form {max-width: 480px;
+            div.form-group.row {
+              div.image {position: relative;
+                img {max-width: 100%;;
+                  &:hover {opacity: 0.15;cursor: pointer;}
+                }
+                p {width: 100%; position: absolute; top: 45%; z-index: -1;
+
+                }
+              }
+            }
+          }
         }
         &.controller-user.action-login {padding-top: 10vh;}
         div.autocomplete {
