@@ -33,7 +33,9 @@ $(function(){
             nodes.autocomplete.find('div.autocomplete-list').remove();
             nodes.autocomplete
                 .find('div.autocomplete-selected button input')
-                .each(function(){exclude.push($(this).val());});
+                .each(function(){
+                    exclude.push($(this).attr('name').match(/(\d)/)[0]);
+                });
             request($(this).data('api'), {title: $(this).val(), exclude: exclude.join(',')}, {
                 'done': function (data) {
                     //console.log('request.done');
