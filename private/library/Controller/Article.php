@@ -67,7 +67,7 @@ class Article extends Controller {
 
                 $this->send($article);
 
-                //$this->router->redirect('/' . $this->router->getURI(0) . '/список');
+                $this->router->redirect('/' . $this->router->getURI(0) . '/список');
             }
 
             $id = $this->router->getURI(2);
@@ -77,10 +77,6 @@ class Article extends Controller {
                 $this->database->call('ArticleGet', $id);
 
                 $article = $this->database->getResult();
-
-                //$article['image'] = '/thumbnails/' . $article['image'][0];
-
-                //$article['image'] .= '/' . $article['image'] . '.original.jpg';
 
                 $this->view->setItem($node, $article);
 
@@ -117,6 +113,26 @@ class Article extends Controller {
 
         if (isset($article['_save'])) {
 
+            $image = new Image();
+
+            if (isset($article['image'])) {
+
+                $image->exists($article['image']);
+
+            } else {
+
+                if ($_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+
+                    $article['image'] = $image->append($_FILES['image']);
+                }
+
+                $this->database->call('ArticleGetImage', $article['id']);
+
+                $hash = $this->database->getResultByName('image');
+
+                if (strlen($hash) > 0) $image->delete($hash);
+            }
+
             $article['tags'] = array_keys($article['tags']);
 
             $article['alias'] = System::getAlias($article['title']);
@@ -125,22 +141,6 @@ class Article extends Controller {
 
             unset($article['_save']);
 
-            $image = new Image();
-
-            if ($_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
-
-                $article['image'] = $image->append($_FILES['image']);
-            }
-
-            if (!isset($article['image'])) {
-
-                $this->database->call('ArticleGetImage', $article['id']);
-
-                $hash = $this->database->getResultByName('image');
-
-                if (strlen($image) > 0) $image->delete($hash);
-            }
-
             $this->database->call('ArticleSet', $article);
         }
 
@@ -148,13 +148,4 @@ class Article extends Controller {
 
             $this->database->call('ArticleUnset', $article['id']);
     }
-
-    /**
-     * Редагування статті
-     */
-    /*
-    private function imageDelete(): void {
-
-    }
-    */
 }

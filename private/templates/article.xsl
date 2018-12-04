@@ -142,10 +142,13 @@
                  </xsl:if>
                 </input>
                 <xsl:if test="@image">
-                    <div class="image">
-                        <img src="/thumbnails/{substring(@image,1,1)}/{@image}.original.jpg" />
+                    <div class="image" title="Видалити зображення">
+                        <img src="/thumbnails/{substring(@image,1,1)}/{@image}.0320.jpg" />
                         <input type="hidden" name="image" value="{@image}" />
-                        <p class="text-danger text-center lead">Видалити зображення</p>
+                        <svg height="100%" width="100%">
+                            <line x1="0" y1="0" x2="100%" y2="100%" style="stroke:#ccc;stroke-width:1" />
+                            <line x1="100%" y1="0" x2="0" y2="100%" style="stroke:#ccc;stroke-width:1" />
+                        </svg>
                     </div>
                 </xsl:if>
             </div>

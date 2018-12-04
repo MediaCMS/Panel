@@ -1,6 +1,6 @@
 <?php
 /**
- * Системні статичні функції
+ * Клас для роботи з зображеннями
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
@@ -76,7 +76,7 @@ class Image {
 
         if (file_exists($imageAbsolute))
 
-            throw new Exception(sprintf("Файл вже існує '%s'", $imageRelative));
+            throw new Exception(sprintf("Файл '%s' вже існує", $imageRelative));
 
         if (!move_uploaded_file($file['tmp_name'], $imageAbsolute))
 
@@ -146,17 +146,43 @@ class Image {
     /**
      * Створює зменшені зображення
      *
+     *  s - source, d - destination
+     *
      * @param string $directory Назва теки
      * @param string $hash Хеш файла
      */
     private function create(string $directory, string $hash): void {
 
+        $sFile = $directory . DIRECTORY_SEPARATOR . $hash . '.original.jpg';
+
+        foreach($this->widths as $width) {
+
+            $dWidth = (integer) $width;
+
+            $dFile = $directory . DIRECTORY_SEPARATOR . $hash . '.' . $width . '.jpg';
+
+            $sResource = imagecreatefromjpeg($sFile);
+
+            $sWidth = imagesx($sResource);
+
+            $sHeight = imagesy($sResource);
+
+            $dHeight = round($dWidth / $sWidth * $sHeight);
+
+            $dResource = imagecreatetruecolor($dWidth, $dHeight);
+
+            imagecopyresampled($dResource, $sResource, 0, 0, 0, 0, $dWidth, $dHeight, $sWidth, $sHeight);
+
+            imagejpeg($dResource, $dFile, 88);
+
+            chmod($dFile, 0775);
+        }
     }
 
     /**
      * Видаляє файл зображення та його зменшені копії
      *
-     * @param string $file Назва зображення
+     * @param string $hash Хеш файла зображення
      */
     public function delete(string $hash) : void {
 
@@ -168,10 +194,31 @@ class Image {
 
         foreach($images as $image) {
 
-            $image = DIRECTORY_SEPARATOR . $hash . '.' . $image . $this->extension;
+            $image = $directory . DIRECTORY_SEPARATOR . $hash . '.' . $image . '.jpg';
 
             unlink($image);
         }
 
+    }
+
+    /**
+     * Перевіряє файл зображення на наявність
+     *
+     * @param string $hash Хеш файла зображення
+     * @param boolean $exception Ознака виклику винятка
+     */
+    public function exists(string $hash, bool $exception = true) : bool {
+
+        $imageRelative = $hash . '.original.jpg';
+
+        $imageAbsolute = $this->path . DIRECTORY_SEPARATOR . $hash[0] . DIRECTORY_SEPARATOR . $imageRelative;
+
+        $exists = file_exists($imageAbsolute);
+
+        if (!$exists && $exception)
+
+            throw new Exception(sprintf('Файл зображення відсутній (%s)', $imageRelative));
+
+        return $exists;
     }
 }
