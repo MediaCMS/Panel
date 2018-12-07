@@ -65,9 +65,11 @@ class Router {
 
         $this->setURI();
 
-        if (!isset($_SESSION['token']) || !preg_match('/^[0-9a-f]{32}$/', $_SESSION['token'])
+        if (!isset($_SESSION['user']) || !isset($_SESSION['user']['token'])
 
-            || !isset($_SESSION['user']) || !preg_match('/^\d{1,6}$/', $_SESSION['user'])) {
+            || !preg_match('/^[0-9a-f]{32}$/', $_SESSION['user']['token'])
+
+            || !isset($_SESSION['user']['id']) || !preg_match('/^\d{1,6}$/', $_SESSION['user']['id'])) {
 
             $this->setController('User');
 

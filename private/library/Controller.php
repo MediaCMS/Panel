@@ -34,7 +34,7 @@ abstract class Controller {
         ['title' => 'Фільтр', 'modal' => '#filter']
     ];
 
-    /** @var integer Ідентифікатор поточного користувача */
+    /** @var array Дані поточного користувача */
     protected $user;
 
     /** @var array Фільтр списку */
@@ -86,7 +86,12 @@ abstract class Controller {
             $this->api = new API();
         }
 
-        if (isset($_SESSION['user'])) $this->user = $_SESSION['user'];
+        if (isset($_SESSION['user'])) {
+
+            $this->user = $_SESSION['user'];
+
+            $this->view->setUser($this->user);
+        }
     }
 
     /**

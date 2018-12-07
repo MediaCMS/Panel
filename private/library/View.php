@@ -168,6 +168,26 @@ class View {
     }
 
     /**
+     * Додає у вигляд поточне підменю
+     *
+     * @param array $submenu Масив з пунктами підменю
+     */
+    public function setUser(array $user): void {
+
+        $userNode = $this->xml->addChild('user');
+
+        $userNode->addAttribute('id', $user['id']);
+
+        $userNode->addAttribute('title', $user['title']);
+
+        $image = isset($user['image']) ? $user['id'] . '.jpg' : 'user.png';
+
+        $userNode->addAttribute('image', '/' . $image);
+
+        $userNode->addAttribute('role', $user['roleTitle']);
+    }
+
+    /**
      * Додає у вигляд оповіщення
      *
      * @param string $text Текст оповіщення

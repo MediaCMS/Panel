@@ -61,21 +61,9 @@
                                         </li>
                                     </xsl:for-each>
                                 </ul>
-                                <xsl:if test="submenu">
-                                    <ul class="navbar-nav">
-                                        <xsl:for-each select="submenu/item">
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="{@uri}">
-                                                    <xsl:if test="@modal">
-                                                        <xsl:attribute name="data-toggle">modal</xsl:attribute>
-                                                        <xsl:attribute name="data-target"><xsl:value-of select="@modal" /></xsl:attribute>
-                                                    </xsl:if>
-                                                    <xsl:value-of select="(@title)" /> <span class="sr-only">(current)</span>
-                                                </a>
-                                            </li>
-                                        </xsl:for-each>
-                                    </ul>
-                                </xsl:if>
+                            </div>
+                            <div title="{user/@role}" class="text-light"><xsl:value-of select="(user/@title)" />
+                                <img src="{user/@image}" alt="Фото" style="width: 32px; margin-left: 8px;"/>
                             </div>
                         </nav>
                     </header>
@@ -88,7 +76,28 @@
                     </div>
                 </xsl:if>
                 <main class="container">
-                    <xsl:if test="menu"><h1 class="mt-5"><xsl:value-of select="@title" /></h1></xsl:if>
+                    <xsl:if test="menu">
+                        <div class="row mt-5">
+                            <h1 class="col"><xsl:value-of select="@title" /></h1>
+                            <xsl:if test="submenu">
+                                <nav class="navbar sticky-top navbar-expand-md">
+                                    <ul class="col navbar-nav">
+                                        <xsl:for-each select="submenu/item">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{@uri}">
+                                                    <xsl:if test="@modal">
+                                                        <xsl:attribute name="data-toggle">modal</xsl:attribute>
+                                                        <xsl:attribute name="data-target"><xsl:value-of select="@modal" /></xsl:attribute>
+                                                    </xsl:if>
+                                                    <xsl:value-of select="(@title)" /> <span class="sr-only">(current)</span>
+                                                </a>
+                                            </li>
+                                        </xsl:for-each>
+                                    </ul>
+                                </nav>
+                            </xsl:if>
+                        </div>
+                    </xsl:if>
                     <div class="body controller-{name(main/*/.)} action-{name(main/*/*/.)} mt-4">
                         <xsl:apply-templates select="main/*" />
                     </div>

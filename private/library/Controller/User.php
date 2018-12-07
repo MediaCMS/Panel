@@ -155,9 +155,7 @@ class User extends Controller {
 
                 $result = $this->database->getResult();
 
-                $_SESSION['user'] = $result['id'];
-
-                $_SESSION['token'] = $result['token'];
+                $_SESSION['user'] = $result;
 
                 $this->router->redirect($_SERVER['REQUEST_URI']);
 
