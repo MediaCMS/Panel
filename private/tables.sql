@@ -104,7 +104,7 @@ CREATE TABLE `tag` (
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
+  `image` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user` tinyint(3) unsigned NOT NULL,
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -128,11 +128,12 @@ CREATE TABLE `user` (
   `role` tinyint(1) unsigned NOT NULL,
   `token` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `user` tinyint(3) unsigned NOT NULL,
+  `status` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `role` (`role`),
   CONSTRAINT `user_ibfk_3` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- 2018-12-04 21:31:21
+-- 2018-12-14 23:27:17

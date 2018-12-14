@@ -140,41 +140,41 @@ abstract class Controller {
     /**
      * Додає результат запиту до БД у вигляд
      *
-     * @param string $node Назва елемента
-     * @param string $item Назва дочірніх елементів
+     * @param \SimpleXMLElement $node Елемент який потрібно зповнити
+     * @param bool $index Ознака списку
      */
-    public function setItems(string $node = 'items', string $item = 'item'): void {
+    /*
+    public function setItems(\SimpleXMLElement $node, bool $index = false): void {
 
         $i = 1;
 
-        $node = $this->node->addChild($node);
-
         while($row = $this->database->getResult()) {
 
-            $itemNode = $node->addChild($item);
+            $childNode = $node->addChild('item');
 
-            $itemNode->addAttribute('position', $this->filter['_offset'] + $i);
+            if ($index) {
 
-            $uri = '/' . $this->router->getURI(0) . '/редагування/' . $row['id'];
+                $childNode->addAttribute('position', $this->filter['_offset'] + $i);
 
-            $itemNode->addAttribute('edit', $uri);
+                $uri = '/' . $this->router->getURI(0) . '/редагування/' . $row['id'];
 
-            $this->view->setItem($itemNode, $row);
+                $childNode->addAttribute('edit', $uri);
 
-            $i ++;
+                $i ++;
+            }
+
+            $this->view->setItem($childNode, $row);
         }
     }
+*/
 
     /**
      * Створює та виводить пагінацію списку
      */
+    /*
     protected function setPagination(): void {
-
-        $pages = ceil($this->database->getFoundRows() / $this->filter['_limit']);
-
-        $this->view->setPagination($this->page, $pages, $this->router->getURI(0));
     }
-
+*/
     /**
      * Створює та додає у вигляд виняток
      *

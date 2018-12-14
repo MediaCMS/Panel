@@ -117,7 +117,7 @@
             </body>
         </html>
     </xsl:template>
-
+<!--
     <xsl:template match="main/*/index">
          <xsl:choose>
             <xsl:when test="items/item">
@@ -128,7 +128,8 @@
         </xsl:choose>
         <xsl:apply-templates select="filter" />
     </xsl:template>
-
+-->
+<!--
     <xsl:template match="main/*/index/filter">
         <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -214,7 +215,8 @@
             </div>
         </div>
     </xsl:template>
-
+-->
+<!--
     <xsl:template match="main/*/edit">
         <form action="" method="POST" enctype="multipart/form-data" class="mx-auto">
             <xsl:apply-templates select="." mode="extends" />
@@ -267,7 +269,7 @@
             </div>
         </form>
     </xsl:template>
-
+-->
     <xsl:template match="pagination">
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">

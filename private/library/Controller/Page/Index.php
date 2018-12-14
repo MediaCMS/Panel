@@ -1,6 +1,6 @@
 <?php
 /**
- * Контролер для виводу списка категорій
+ * Контролер для виводу списку статичних сторінок
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
@@ -8,7 +8,7 @@
  * @copyright   GNU General Public License v3
  */
 
-namespace MediaCMS\Panel\Controller\Category;
+namespace MediaCMS\Panel\Controller\Page;
 
 class Index extends \MediaCMS\Panel\Controller {
 
@@ -19,21 +19,21 @@ class Index extends \MediaCMS\Panel\Controller {
 
         $this->setFilter();
 
-        $this->database->call('CategoryGetIndex', $this->filter);
+        $this->database->call('PageGetIndex', $this->filter);
 
         $i = 1;
 
-        $categoriesNode = $this->node->addChild('categories');
+        $pagesNode = $this->node->addChild('pages');
 
-        while($category = $this->database->getResult()) {
+        while($page = $this->database->getResult()) {
 
-            $categoryNode = $categoriesNode->addChild('category');
+            $pageNode = $pagesNode->addChild('page');
 
-            $category['position'] = $this->filter['_offset'] + $i;
+            $page['position'] = $this->filter['_offset'] + $i;
 
-            $category['edit'] = '/' . $this->router->getURI(0) . '/редагування/' . $category['id'];
+            $page['edit'] = '/' . $this->router->getURI(0) . '/редагування/' . $page['id'];
 
-            $this->view->setItem($categoryNode, $category);
+            $this->view->setItem($pageNode, $page);
 
             $i ++;
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Контролер для роботи з загальними діями
+ * Контролер для відсутніх сторінок
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
@@ -8,16 +8,14 @@
  * @copyright   GNU General Public License v3
  */
 
-namespace MediaCMS\Panel\Controller;
+namespace MediaCMS\Panel\Controller\Common;
 
-use MediaCMS\Panel\Controller;
-
-class Common extends Controller {
+class Common extends \MediaCMS\Panel\Controller {
 
     /**
-     * Сторінка не знайдена (невідома адреса)
+     * Запускає виконання дії контролера
      */
-    public function NotFoundAction(): void {
+    public function run(): void {
 
         $alert = 'Невідома адреса ' . urldecode($_SERVER['REQUEST_URI']);
 

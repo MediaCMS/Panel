@@ -1,6 +1,6 @@
 <?php
 /**
- * Контролер для роботи зі статтями
+ * Контролер для виходу користувачів
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
@@ -8,14 +8,17 @@
  * @copyright   GNU General Public License v3
  */
 
-namespace MediaCMS\Panel\Controller;
+namespace MediaCMS\Panel\Controller\User;
 
-use MediaCMS\Panel\Controller;
-
-class Article extends Controller {
+class Logout extends \MediaCMS\Panel\Controller {
 
     /**
      * Запускає виконання дії контролера
      */
-    public function run(): void {}
+    public function run(): void {
+
+        session_destroy();
+
+        $this->router->redirect('/');
+    }
 }

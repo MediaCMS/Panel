@@ -10,7 +10,7 @@
 
 namespace MediaCMS\Panel\Controller\Tag;
 
-class Index extends \MediaCMS\Panel\Controller\Tag {
+class Index extends \MediaCMS\Panel\Controller {
 
     /**
      * Запускає виконання дії контролера
@@ -21,8 +21,25 @@ class Index extends \MediaCMS\Panel\Controller\Tag {
 
         $this->database->call('TagGetIndex', $this->filter);
 
-        $this->setItems();
+        $i = 1;
 
-        $this->setPagination();
+        $tagsNode = $this->node->addChild('tags');
+
+        while($tag = $this->database->getResult()) {
+
+            $tagNode = $tagsNode->addChild('tag');
+
+            $tag['position'] = $this->filter['_offset'] + $i;
+
+            $tag['edit'] = '/' . $this->router->getURI(0) . '/редагування/' . $tag['id'];
+
+            $this->view->setItem($tagNode, $tag);
+
+            $i ++;
+        }
+
+        $pages = ceil($this->database->getFoundRows() / $this->filter['_limit']);
+
+        $this->view->setPagination($this->page, $pages, $this->router->getURI(0));
     }
 }

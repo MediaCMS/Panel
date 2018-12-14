@@ -1,6 +1,6 @@
 <?php
 /**
- * Контролер для редагування статі
+ * Контролер для редагування базовий (шаблон)
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
@@ -8,13 +8,13 @@
  * @copyright   GNU General Public License v3
  */
 
-namespace MediaCMS\Panel\Controller\Article;
+namespace MediaCMS\Panel\Controller;
 
 use MediaCMS\Panel\Exception;
 use MediaCMS\Panel\System;
 use MediaCMS\Panel\Image;
 
-class Edit extends \MediaCMS\Panel\Controller {
+abstract class Edit extends \MediaCMS\Panel\Controller {
 
     /** @var array Підменю */
     protected $submenu = [['title' => 'Закрити', 'alias' => 'список']];

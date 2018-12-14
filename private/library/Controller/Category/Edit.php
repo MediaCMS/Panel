@@ -14,7 +14,7 @@ use MediaCMS\Panel\Exception;
 use MediaCMS\Panel\System;
 use MediaCMS\Panel\Image;
 
-class Edit extends \MediaCMS\Panel\Controller\Category {
+class Edit extends \MediaCMS\Panel\Controller {
 
     /** @var array Підменю */
     protected $submenu = [['title' => 'Закрити', 'alias' => 'список']];

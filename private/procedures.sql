@@ -173,6 +173,12 @@ BEGIN
   WHERE       `c`.`id` = _id;
 END;;
 
+DROP PROCEDURE IF EXISTS `CategoryGetImage`;;
+CREATE PROCEDURE `CategoryGetImage`(IN `_id` int)
+BEGIN
+  SELECT `image` FROM `category` WHERE `id` = _id;
+END;;
+
 DROP PROCEDURE IF EXISTS `CategoryGetIndex`;;
 CREATE PROCEDURE `CategoryGetIndex`(IN `params` json)
 BEGIN
@@ -518,13 +524,14 @@ BEGIN
   DECLARE _id INTEGER UNSIGNED DEFAULT NULL;
   DECLARE _token VARCHAR(32);
 
-
   SELECT `id` INTO _id FROM `user` WHERE `email` = _email AND `password` = _password;
 
   IF (_id IS NOT NULL) THEN
     SET _token = MD5(CONCAT(_id, NOW(), _email, _password));
     UPDATE `user` SET `token` = _token WHERE `id` = _id;
-    SELECT _id AS 'id', _token AS 'token';
+    SELECT `u`.`id`, `u`.`title`, `u`.`image`, `r`.`id` AS 'roleID', `r`.`title` AS 'roleTitle', `u`.`token`
+    FROM   `user` AS `u`, `role` AS `r`
+    WHERE  `u`.`role` = `r`.`id` AND `u`.`id` = _id;
   END IF;
 END;;
 
@@ -659,4 +666,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-12-04 21:30:50
+-- 2018-12-14 23:26:29

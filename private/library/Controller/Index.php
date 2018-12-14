@@ -1,6 +1,6 @@
 <?php
 /**
- * Контролер для виводу списка статей
+ * Контролер для виводу списка статей базовий (шаблон)
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
@@ -8,9 +8,9 @@
  * @copyright   GNU General Public License v3
  */
 
-namespace MediaCMS\Panel\Controller\Article;
+namespace MediaCMS\Panel\Controller;
 
-class Index extends \MediaCMS\Panel\Controller {
+abstract class Index extends \MediaCMS\Panel\Controller {
 
     /** @var array Можливі назви полів для сортування списку  */
     protected $orderFields = [
