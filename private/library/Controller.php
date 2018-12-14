@@ -21,6 +21,9 @@ abstract class Controller {
     /** @var View Вигляд (вид, представлення) сторінки */
     protected $view;
 
+    /** @var \SimpleXMLElement Поточний елемент сторінки у вигляді */
+    protected $node;
+
     /** @var API Прикладний програмний інтерфейс */
     protected $api;
 
@@ -79,7 +82,7 @@ abstract class Controller {
 
             $this->view->setTitle($this->router->getTitle());
 
-            $this->view->setNode($this->router->getController(), $this->router->getAction());
+            $this->node = $this->view->setNode($this->router->getController(), $this->router->getAction());
 
         } else {
 
@@ -90,9 +93,14 @@ abstract class Controller {
 
             $this->user = $_SESSION['user'];
 
-            $this->view->setUser($this->user);
+            if ($this->router->isView()) $this->view->setUser($this->user);
         }
     }
+
+    /**
+     * Запускає виконання дії контролера
+     */
+    abstract public function run(): void;
 
     /**
      * Створює та виводить фільтр списку
@@ -132,14 +140,14 @@ abstract class Controller {
     /**
      * Додає результат запиту до БД у вигляд
      *
-     * @param \SimpleXMLElement $node Елемент, в який необхідно додати колекцію
-     * @param string $item Назва дочірнього елемента
+     * @param string $node Назва елемента
+     * @param string $item Назва дочірніх елементів
      */
-    public function setItems(\SimpleXMLElement $node = null, string $item = 'item'): void {
+    public function setItems(string $node = 'items', string $item = 'item'): void {
 
         $i = 1;
 
-        $node = $node ?? $this->view->getNode();
+        $node = $this->node->addChild($node);
 
         while($row = $this->database->getResult()) {
 

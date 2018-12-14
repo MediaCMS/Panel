@@ -212,11 +212,13 @@ class View {
      * @param string $controller Назва контролера
      * @param string $action Назва дії контролера
      */
-    public function setNode(string $controller, string $action): void {
+    public function setNode(string $controller, string $action): \SimpleXMLElement {
 
         $node = $this->xml->main->addChild(lcfirst($controller));
 
         $this->node = $node->addChild(lcfirst($action));
+
+        return $this->node;
     }
 
     /**

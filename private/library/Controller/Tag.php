@@ -10,93 +10,10 @@
 
 namespace MediaCMS\Panel\Controller;
 
-use MediaCMS\Panel\Controller;
-use MediaCMS\Panel\Exception;
-use MediaCMS\Panel\System;
-
-class Tag extends Controller {
+class Tag extends \MediaCMS\Panel\Controller {
 
     /**
-     * Список міток
+     * Запускає виконання дії контролера
      */
-    public function IndexAction(): void {
-
-        $this->setFilter();
-
-        $this->database->call('TagGetIndex', $this->filter);
-
-        $node = $this->view->getNode();
-
-        $this->setItems($node->addChild('items'));
-
-        $this->setPagination();
-    }
-
-    /**
-     * Автозаповнення міток
-     */
-    public function AutocompleteAction(): void {
-
-        $title= $_GET['title'];
-
-        $exclude = $_GET['exclude'] ?? null;
-
-        $this->database->call('TagAutocomplete', $title, $exclude);
-
-        $tags = $this->database->getResults();
-
-        $this->api->setData($tags);
-
-        //$this->api->setDebug('$_GET', $_GET);
-
-        //$this->api->setDebug('queries', $this->database->getQueries());
-
-        //$this->api->setDebug('results', $tags);
-    }
-
-    /**
-     * Редагування мітки
-     */
-    public function EditAction(): void {
-
-        $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
-
-        $node = $this->view->getNode();
-
-        if (count($_POST) > 0) {
-
-            if (isset($_POST['_save'])) {
-
-                $_POST['alias'] = System::getAlias($_POST['title']);
-
-                $_POST['user'] = $this->user;
-
-                try {
-
-                    $this->database->call('TagSet', $_POST);
-
-                } catch (Exception $exception) {
-
-                    $this->view->setItem($node, $_POST);
-
-                    throw $exception;
-                }
-            }
-
-            if (isset($_POST['_delete']))
-
-                $this->database->call('TagUnset', $_POST['id']);
-
-            $this->router->redirect('/' . $this->router->getURI(0) . '/список');
-        }
-
-        $id = $this->router->getURI(2);
-
-        if (isset($id)) {
-
-            $this->database->call('TagGet', $id);
-
-            $this->view->setItem($node, $this->database->getResult());
-        }
-    }
+    public function run(): void {}
 }

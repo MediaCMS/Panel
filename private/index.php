@@ -23,13 +23,13 @@ try {
 
     $router = new Router();
 
-    $controllerTitle = '\MediaCMS\Panel\Controller\\' .$router->getController();
+    $controller = '\MediaCMS\Panel\Controller\\';
 
-    $controller = new $controllerTitle($router);
+    $controller .= $router->getController() . '\\' . $router->getAction();
 
-    $action = $router->getAction() . 'Action';
+    $controller = new $controller($router);
 
-    call_user_func([$controller, $action]);
+    call_user_func([$controller, 'run']);
 
 } catch (Exception $exception) {
 

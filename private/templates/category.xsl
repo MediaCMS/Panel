@@ -69,7 +69,21 @@
         <div class="form-group row">
             <label for="formImage" class="col-sm-4 col-form-label">Зображення</label>
             <div class="col-sm-8">
-                <input type="file" name="image" id="formImage" class="form-control" title="Зображення для категорії" />
+                <input type="file" name="image" id="formImage" class="form-control" title="Зображення для категорії">
+                <xsl:if test="@image">
+                    <xsl:attribute name="class">form-control d-none</xsl:attribute>
+                </xsl:if>
+                </input>
+                <xsl:if test="@image">
+                    <div class="image" title="Видалити зображення">
+                        <img src="/thumbnails/{substring(@image,1,1)}/{@image}.0320.jpg" />
+                        <input type="hidden" name="image" value="{@image}" />
+                        <svg height="100%" width="100%">
+                            <line x1="0" y1="0" x2="100%" y2="100%" style="stroke:#ccc;stroke-width:1" />
+                            <line x1="100%" y1="0" x2="0" y2="100%" style="stroke:#ccc;stroke-width:1" />
+                        </svg>
+                    </div>
+                </xsl:if>
             </div>
         </div>
     </xsl:template>
