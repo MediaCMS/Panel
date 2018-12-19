@@ -14,18 +14,22 @@ $(function(){
     let nodes = {};
     nodes.body = $('body');
 
+    // index items clickable
     $('main table.clickable').on('click', 'tbody tr', function() {
         window.location.href = $(this).data('edit');
     });
 
-    nodes.formImage =$('main form div.image');
+    // form image remove
+    nodes.formImage = $('main form div.image');
     if (nodes.formImage.length > 0) {
         nodes.formImage.on('click', function() {
             $(this).parent().find('input:file').removeClass('d-none');
             $(this).remove();
         });
     }
-    nodes.autocomplete =$('main div.autocomplete');
+
+    // form autocomplete
+    nodes.autocomplete = $('main div.autocomplete');
     if (nodes.autocomplete.length > 0) {
         nodes.autocomplete.on('keyup', 'input', function() {
             let exclude = [];

@@ -62,8 +62,12 @@
                                     </xsl:for-each>
                                 </ul>
                             </div>
-                            <div title="{user/@role}" class="text-light"><xsl:value-of select="(user/@title)" />
-                                <img src="{user/@image}" alt="Фото" style="width: 32px; margin-left: 8px;"/>
+                            <div title="{user/@roleTitle}" class="user text-light"><xsl:value-of select="(user/@title)" />
+                                <img src="/user.png" alt="Фото">
+                                    <xsl:if test="user/@image">
+                                        <xsl:attribute name="src">/thumbnails/<xsl:value-of select="substring(user/@image,1,1)" />/<xsl:value-of select="user/@image" />.0320.jpg</xsl:attribute>
+                                    </xsl:if>
+                                </img>
                             </div>
                         </nav>
                     </header>

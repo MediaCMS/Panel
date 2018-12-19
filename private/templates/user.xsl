@@ -22,7 +22,7 @@
                             <th scope="col">Назва</th>
                             <th scope="col">Телефон</th>
                             <th scope="col">Пошта</th>
-                            <th scope="col">Доступ</th>
+                            <th scope="col">Права</th>
                             <th scope="col">Дата</th>
                             <th scope="col">ID</th>
                         </tr>

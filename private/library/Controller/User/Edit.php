@@ -108,6 +108,8 @@ class Edit extends \MediaCMS\Panel\Controller {
             if (strlen($hash) > 0) $image->delete($hash);
         }
 
+        if (strlen($user['password']) == 0) unset($user['password']);
+
         $user['alias'] = System::getAlias($user['title']);
 
         $user['user'] = $this->user['id'];

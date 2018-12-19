@@ -174,17 +174,7 @@ class View {
      */
     public function setUser(array $user): void {
 
-        $userNode = $this->xml->addChild('user');
-
-        $userNode->addAttribute('id', $user['id']);
-
-        $userNode->addAttribute('title', $user['title']);
-
-        $image = isset($user['image']) ? $user['id'] . '.jpg' : 'user.png';
-
-        $userNode->addAttribute('image', '/' . $image);
-
-        $userNode->addAttribute('role', $user['roleTitle']);
+        $this->setItem($this->xml->addChild('user'), $user);
     }
 
     /**
