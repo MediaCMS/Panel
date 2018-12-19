@@ -84,7 +84,7 @@
                         <div class="row mt-5">
                             <h1 class="col"><xsl:value-of select="@title" /></h1>
                             <xsl:if test="submenu">
-                                <nav class="navbar sticky-top navbar-expand-md">
+                                <nav class="navbar navbar-expand-md">
                                     <ul class="col navbar-nav">
                                         <xsl:for-each select="submenu/item">
                                             <li class="nav-item">
