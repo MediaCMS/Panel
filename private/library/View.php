@@ -58,8 +58,10 @@ class View {
 
     /**
      * Конструктор класу
+     *
+     * @param boolean $editor Ознака завантаження WYSIWYG-редактора
      */
-    public function __construct() {
+    public function __construct(bool $editor = false) {
 
         $xml = '<?xml version="1.0" encoding="utf-8" ?><root><main /></root>';
 
@@ -88,6 +90,8 @@ class View {
         $this->xml->addAttribute('logo', TITLE);
 
         $this->xml->addAttribute('copyright', TITLE . ' @ ' . date('Y'));
+
+        $this->xml->addAttribute('editor', ($editor) ? 1 : 0);
 
         if (DEVELOPMENT) $this->xml->addChild('debug');
     }

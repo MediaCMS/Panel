@@ -19,6 +19,9 @@ class Edit extends \MediaCMS\Panel\Controller {
     /** @var array Підменю */
     protected $submenu = [['title' => 'Закрити', 'alias' => 'список']];
 
+    /** @var boolean Ознака завантаження WYSIWYG-редактора */
+    protected $editor = true;
+
 
     /**
      * Запускає виконання дії контролера

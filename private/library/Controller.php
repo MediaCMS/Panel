@@ -37,6 +37,9 @@ abstract class Controller {
         ['title' => 'Фільтр', 'modal' => '#filter']
     ];
 
+    /** @var boolean Ознака завантаження WYSIWYG-редактора */
+    protected $editor = false;
+
     /** @var array Дані поточного користувача */
     protected $user;
 
@@ -78,7 +81,7 @@ abstract class Controller {
 
         if ($this->router->isView()) {
 
-            $this->view = new View();
+            $this->view = new View($this->editor);
 
             $this->view->setTitle($this->router->getTitle());
 

@@ -10,7 +10,7 @@
 
 namespace MediaCMS\Panel\Controller\Tag;
 
-class Autocomplete extends \MediaCMS\Panel\Controller\Tag {
+class Autocomplete extends \MediaCMS\Panel\Controller {
 
     /**
      * Запускає виконання дії контролера

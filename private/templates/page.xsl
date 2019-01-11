@@ -108,80 +108,79 @@
     </xsl:template>
 
     <xsl:template match="main/page/edit">
-        <form action="" method="POST" enctype="multipart/form-data" class="mx-auto">
+        <form action="" method="POST" enctype="multipart/form-data" class="extended mx-auto">
             <div class="form-group row">
-                <label for="formTitle" class="col-sm-4 col-form-label">Назва</label>
-                <div class="col-sm-8">
+                <div class="col-sm-12">
                     <input type="text" name="title" value="{@title}" placeholder="Назва сторінки"
                            id="formTitle" class="form-control" title="Назва сторінки" />
                 </div>
             </div>
             <div class="form-group row">
-                <label for="formDescription" class="col-sm-4 col-form-label">Опис</label>
-                <div class="col-sm-8">
+                <div class="col-sm-12">
                     <textarea name="description" value="{@description}" id="formDescription"
                               placeholder="Опис сторінки" class="form-control"
                               title="Опис сторінки"><xsl:value-of select="@description" /></textarea>
                 </div>
             </div>
             <div class="form-group row">
-                <label for="formText" class="col-sm-4 col-form-label">Текст</label>
-                <div class="col-sm-8">
+                <div class="col-sm-12">
                     <textarea name="text" value="{@text}" id="formText"
-                              placeholder="Текст сторінки" class="form-control"
+                              placeholder="Текст сторінки" class="editor form-control"
                               title="Текст сторінки"><xsl:value-of select="@text" /></textarea>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="formImage" class="col-sm-4 col-form-label">Зображення</label>
-                <div class="col-sm-8">
-                    <input type="file" name="image" id="formImage" class="form-control" title="Зображення для сторінки">
+            <div class="standard mx-auto">
+                <div class="form-group row">
+                    <label for="formImage" class="col-sm-4 col-form-label">Зображення</label>
+                    <div class="col-sm-8">
+                        <input type="file" name="image" id="formImage" class="form-control" title="Зображення для сторінки">
+                            <xsl:if test="@image">
+                                <xsl:attribute name="class">form-control d-none</xsl:attribute>
+                            </xsl:if>
+                        </input>
                         <xsl:if test="@image">
-                            <xsl:attribute name="class">form-control d-none</xsl:attribute>
+                            <div class="image" title="Видалити зображення">
+                                <img src="/thumbnails/{substring(@image,1,1)}/{@image}.0320.jpg" />
+                                <input type="hidden" name="image" value="{@image}" />
+                                <svg height="100%" width="100%">
+                                    <line x1="0" y1="0" x2="100%" y2="100%" style="stroke:#ccc;stroke-width:1" />
+                                    <line x1="100%" y1="0" x2="0" y2="100%" style="stroke:#ccc;stroke-width:1" />
+                                </svg>
+                            </div>
                         </xsl:if>
-                    </input>
-                    <xsl:if test="@image">
-                        <div class="image" title="Видалити зображення">
-                            <img src="/thumbnails/{substring(@image,1,1)}/{@image}.0320.jpg" />
-                            <input type="hidden" name="image" value="{@image}" />
-                            <svg height="100%" width="100%">
-                                <line x1="0" y1="0" x2="100%" y2="100%" style="stroke:#ccc;stroke-width:1" />
-                                <line x1="100%" y1="0" x2="0" y2="100%" style="stroke:#ccc;stroke-width:1" />
-                            </svg>
+                    </div>
+                </div>
+                <xsl:if test="@id">
+                    <div class="form-group row">
+                        <label for="formAlias" class="col-sm-4 col-form-label">Псевдонім</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="alias" value="{@alias}" readonly="readonly"
+                                   id="formAlias" class="form-control" title="Псевдонім" />
                         </div>
-                    </xsl:if>
-                </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formUser" class="col-sm-4 col-form-label">Користувач</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="user" value="{@user}" readonly="readonly"
+                                   id="formUser" class="form-control" title="Користувач" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formTime" class="col-sm-4 col-form-label">Дата та час</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="time" value="{@time}" readonly="readonly"
+                                   id="formTime" class="form-control" title="Дата та час останньої модифікації" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="formID" class="col-sm-4 col-form-label">Ідентифікатор</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="id" value="{@id}" readonly="readonly"
+                                   id="formID" class="form-control" title="Ідентифікатор" />
+                        </div>
+                    </div>
+                </xsl:if>
             </div>
-            <xsl:if test="@id">
-                <div class="form-group row">
-                    <label for="formAlias" class="col-sm-4 col-form-label">Псевдонім</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="alias" value="{@alias}" readonly="readonly"
-                               id="formAlias" class="form-control" title="Псевдонім" />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="formUser" class="col-sm-4 col-form-label">Користувач</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="user" value="{@user}" readonly="readonly"
-                               id="formUser" class="form-control" title="Користувач" />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="formTime" class="col-sm-4 col-form-label">Дата та час</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="time" value="{@time}" readonly="readonly"
-                               id="formTime" class="form-control" title="Дата та час останньої модифікації" />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="formID" class="col-sm-4 col-form-label">Ідентифікатор</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="id" value="{@id}" readonly="readonly"
-                               id="formID" class="form-control" title="Ідентифікатор" />
-                    </div>
-                </div>
-            </xsl:if>
             <div class="form-group text-center py-5">
                 <input type="submit" name="_save" value="Зберегти" class="btn btn-primary mx-1" />
                 <xsl:if test="not(@id)">

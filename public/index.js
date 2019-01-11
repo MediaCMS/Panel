@@ -19,6 +19,16 @@ $(function(){
         window.location.href = $(this).data('edit');
     });
 
+    // form CKEditor
+    if (typeof ClassicEditor !== 'undefined') {
+        //ClassicEditor.config.set( 'resize.minHeight', 400 );
+        ClassicEditor
+            .create( document.querySelector( '.editor' ), {
+                language: 'uk', resize: {minHeight: '700', maxHeight: '800'}
+            } )
+            .catch( error => {console.error( error );} );
+    }
+
     // form image remove
     nodes.formImage = $('main form div.image');
     if (nodes.formImage.length > 0) {

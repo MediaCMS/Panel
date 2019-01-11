@@ -1,17 +1,21 @@
 @charset "UTF-8";
 /** Головний файл стилів  @author      Артем Висоцький <a.vysotsky@gmail.com> @package     MediaCMS\Panel @link        https://медіа.укр @copyright   GNU General Public License v3 */
+html body img { border-radius: 3%; }
 html body header nav a.navbar-brand img { width: 28px; border-radius: 3px; opacity: 0.5; margin-top: -3px; }
 html body header nav a.navbar-brand :hover { opacity: 0.9; }
 html body header nav div.navbar-collapse ul.navbar-nav li:last-child { padding-left: 15px; }
-html body header nav div.user { position: relative; padding-right: 38px; }
-html body header nav div.user img { width: 32px; margin-left: 8px; position: absolute; top: 0; right: 0; z-index: 9999; transition: width 1s; }
+html body header nav div.user { position: relative; padding-right: 43px; }
+html body header nav div.user img { width: 32px; margin-left: 8px; border-radius: 7% / 10%; position: absolute; top: 0; right: 0; z-index: 9999; transition: width 1s; }
 html body header nav div.user img:hover { width: 320px; }
 html body main { min-height: 80vh; }
 html body main div.body.action-index table tr { cursor: pointer; }
 html body main div.body.action-index table tr.disabled td { color: gray; }
 html body main div.body.action-edit form { max-width: 480px; }
+html body main div.body.action-edit form.extended { max-width: 720px; }
+html body main div.body.action-edit form.extended div.ck-content { height: 500px; }
+html body main div.body.action-edit form div.standard { border: solid 1px #ccc; padding: 20px 20px; }
 html body main div.body.action-edit form div.form-group.row div.image { position: relative; }
-html body main div.body.action-edit form div.form-group.row div.image img { max-width: 100%; }
+html body main div.body.action-edit form div.form-group.row div.image img { width: 100%; }
 html body main div.body.action-edit form div.form-group.row div.image img:hover { opacity: 0.15; cursor: pointer; }
 html body main div.body.action-edit form div.form-group.row div.image svg { width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: -1; }
 html body main div.body.controller-user.action-login { padding-top: 10vh; }
