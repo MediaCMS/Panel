@@ -96,6 +96,8 @@ class Edit extends \MediaCMS\Panel\Controller {
             if (strlen($hash) > 0) $image->delete($hash);
         }
 
+        $page['text'] = html_entity_decode($page['text'], ENT_QUOTES|ENT_HTML5);
+
         $page['alias'] = System::getAlias($page['title']);
 
         $page['user'] = $this->user['id'];

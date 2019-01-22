@@ -38,8 +38,8 @@
                     <script src='https://www.google.com/recaptcha/api.js' />
                 </xsl:if>
                 <xsl:if test="@editor">
-                    <script src='https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/ckeditor.js' />
-                    <script src="https://cdn.ckeditor.com/ckeditor5/11.2.0/classic/translations/uk.js" />
+                    <script src='/tinymce/tinymce.min.js' />
+                    <script src="/tinymce/jquery.tinymce.min.js" />
                 </xsl:if>
                 <script src="/index.js" type="application/javascript" />
             </head>

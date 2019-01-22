@@ -122,6 +122,10 @@ class Database {
 
                     $param = str_replace("\\\"", "\\\\\"", $param);
 
+                    $param = str_replace('\\n', '\\\n', $param);
+
+                    $param = str_replace('\\r', '\\\r', $param);
+
                     $param = sprintf("'%s'", $param);
 
                 } elseif (is_string($param)) {

@@ -125,7 +125,7 @@
             <div class="form-group row">
                 <div class="col-sm-12">
                     <textarea name="text" value="{@text}" id="formText"
-                              placeholder="Текст сторінки" class="editor form-control"
+                              placeholder="Текст сторінки" class="wysiwyg form-control"
                               title="Текст сторінки"><xsl:value-of select="@text" /></textarea>
                 </div>
             </div>

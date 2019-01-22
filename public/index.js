@@ -19,14 +19,23 @@ $(function(){
         window.location.href = $(this).data('edit');
     });
 
-    // form CKEditor
-    if (typeof ClassicEditor !== 'undefined') {
-        //ClassicEditor.config.set( 'resize.minHeight', 400 );
-        ClassicEditor
-            .create( document.querySelector( '.editor' ), {
-                language: 'uk', resize: {minHeight: '700', maxHeight: '800'}
-            } )
-            .catch( error => {console.error( error );} );
+    // form wysiwyg
+    nodes.wysiwyg = $('main form textarea.wysiwyg');
+    if (nodes.wysiwyg.length > 0) {
+        tinymce.init({
+            selector: '.wysiwyg',
+            schema: 'html5',
+            language: 'uk_UA',
+            //theme: 'modern',
+            //width: 600,
+            min_height: 500,
+            menubar: false,
+            toolbar: 'bold italic underline strikethrough| copy paste cut | undo redo | forecolor backcolor | subscript superscript removeformat | link image charmap code',
+            plugins: 'link image imagetools charmap code',
+            imagetools_toolbar: "rotateleft rotateright | flipv fliph | editimage imageoptions",
+            imagetools_cors_hosts: ['медіа', 'пк.медіа', 'фото.медіа'],
+            imagetools_proxy: 'proxy.php'
+        });
     }
 
     // form image remove
