@@ -24,6 +24,9 @@
     <xsl:template match="/*">
         <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html></xsl:text>
         <html xml:lang="uk" lang="uk" dir="ltr" id="root">
+            <xsl:if test="@editor">
+                <xsl:attribute name="data-host-photo"><xsl:value-of select="@hostPhoto" /></xsl:attribute>
+            </xsl:if>
             <xsl:if test="debug"><xsl:attribute name="data-debug">true</xsl:attribute></xsl:if>
             <head>
                 <title><xsl:value-of select="@title" /></title>
