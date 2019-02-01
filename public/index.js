@@ -6,12 +6,13 @@
  * @link        https://медіа.укр
  * @copyright   GNU General Public License v3
  */
-
+console.log('index.js loaded');
 $(function(){
 
     console.log('document ready');
 
     let nodes = {};
+    nodes.html = $('html');
     nodes.body = $('body');
 
     // index items clickable
@@ -19,31 +20,63 @@ $(function(){
         window.location.href = $(this).data('edit');
     });
 
-    // form wysiwyg
-    nodes.wysiwyg = $('main form textarea.wysiwyg');
-    let hostPhoto = $('html').data('host-photo');
-    if (nodes.wysiwyg.length > 0) {
-        tinymce.init({
-            selector: '.wysiwyg',
-            schema: 'html5',
-            language: 'uk_UA',
-            min_height: 500,
-            menubar: false,
-            toolbar: 'bold italic underline strikethrough| copy paste cut | undo redo | forecolor backcolor | subscript superscript removeformat | link image charmap code',
-            plugins: 'link image charmap code',
-            images_upload_url: hostPhoto + '/upload.php',
-            images_upload_base_path: hostPhoto + '/сховище',
-            images_upload_credentials: false
-        });
-    }
-
-    // form image remove
-    nodes.formImage = $('main form div.image');
-    if (nodes.formImage.length > 0) {
-        nodes.formImage.on('click', function() {
-            $(this).parent().find('input:file').removeClass('d-none');
-            $(this).remove();
-        });
+    nodes.form = $('main form');
+    if (nodes.form.length > 0) {
+        let photoHost = nodes.html.data('photo-host');
+        let photoPath = nodes.html.data('photo-path');
+        let image = new Image(photoHost);
+        // form wysiwyg
+        nodes.wysiwyg = nodes.form.find('textarea.wysiwyg');
+        if (nodes.wysiwyg.length > 0) {
+            tinymce.init({
+                selector: '.wysiwyg',
+                schema: 'html5',
+                language: 'uk_UA',
+                min_height: 500,
+                menubar: false,
+                toolbar: 'bold italic underline strikethrough| copy paste cut | undo redo | forecolor backcolor | subscript superscript removeformat | link image charmap code',
+                plugins: 'link image charmap code',
+                images_upload_url: photoHost + '/upload.php',
+                images_upload_base_path: photoPath,
+                images_upload_credentials: false
+            });
+        }
+        // form image upload
+        nodes.formImageUpload = nodes.form.find('#formImage');
+        nodes.formImage = nodes.form.find('div.image');
+        if (nodes.formImageUpload.length > 0) {
+            nodes.formImageUpload.on('change', function() {
+                console.log('form.image.upload.change');
+                image.upload($(this)[0].files[0], {
+                    done: function(response) {
+                        console.log('form.image.upload.done');
+                        let uri = photoHost + photoPath + response.uri;
+                        nodes.formImageUpload.val('').addClass('d-none');
+                        nodes.formImage.removeClass('d-none');
+                        nodes.formImage.prepend('<img src="' + uri + '" alt="Головне зображення"/>');
+                        nodes.formImage.find('input').attr('value', response.uri);
+                    },
+                    fail: function(error) { alert(error) }
+                });
+            });
+        }
+        // form image remove
+        if (nodes.formImage.length > 0) {
+            nodes.formImage.on('click', function() {
+                console.log('form.image.remove.click');
+                image.remove($(this).find('input').val(), {
+                    done: function() {
+                        console.log('form.image.remove.done');
+                        nodes.formImage.addClass('d-none');
+                        nodes.formImage.find('img').remove();
+                        nodes.formImage.find('input').removeAttr('value');
+                        nodes.formImage.parent().find('input:file').removeClass('d-none');
+                    },
+                    fail: function(error) { alert(error) }
+                });
+            });
+            nodes.formImage.find('');
+        }
     }
 
     // form autocomplete

@@ -70,7 +70,7 @@ class Edit extends \MediaCMS\Panel\Controller {
      * @param array $tag Дані мітки з форми
      */
     private function save(array $tag): void {
-
+/*
         $image = new Image();
 
         if (isset($tag['image'])) {
@@ -90,7 +90,7 @@ class Edit extends \MediaCMS\Panel\Controller {
 
             if (strlen($hash) > 0) $image->delete($hash);
         }
-
+*/
         $tag['alias'] = System::getAlias($tag['title']);
 
         $tag['user'] = $this->user['id'];

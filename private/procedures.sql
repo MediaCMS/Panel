@@ -1,4 +1,4 @@
--- Adminer 4.7.0 MySQL dump
+-- Adminer 4.7.1 MySQL dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -106,7 +106,7 @@ BEGIN
   DECLARE _title VARCHAR(32);
   DECLARE _description VARCHAR(128);
   DECLARE _text TEXT;
-  DECLARE _image VARCHAR(32);
+  DECLARE _image VARCHAR(48);
   DECLARE _alias VARCHAR(32);
   DECLARE _category TINYINT(3) UNSIGNED;
   DECLARE _tag SMALLINT(5) UNSIGNED;
@@ -213,7 +213,7 @@ BEGIN
   DECLARE _id TINYINT(3) UNSIGNED;
   DECLARE _title VARCHAR(32);
   DECLARE _description VARCHAR(128);
-  DECLARE _image VARCHAR(32);
+  DECLARE _image VARCHAR(48);
   DECLARE _alias VARCHAR(32);
   DECLARE _user TINYINT(3) UNSIGNED;
 
@@ -377,7 +377,7 @@ BEGIN
   DECLARE _title VARCHAR(32);
   DECLARE _description VARCHAR(128);
   DECLARE _text TEXT;
-  DECLARE _image VARCHAR(32);
+  DECLARE _image VARCHAR(48);
   DECLARE _alias VARCHAR(32);
   DECLARE _user TINYINT(3) UNSIGNED;
 
@@ -385,9 +385,7 @@ BEGIN
     SET _id = params->'$.id';
   END IF;
   SET _title = params->>'$.title';
-  IF (JSON_TYPE(params->'$.description') <> 'NULL') THEN
-    SET _description = params->>'$.description';
-  END IF;
+  SET _description = params->>'$.description';
   IF (JSON_TYPE(params->'$.text') <> 'NULL') THEN
     SET _text = params->>'$.text';
   END IF;
@@ -406,6 +404,7 @@ BEGIN
     INSERT INTO `page` (`title`, `description`, `text`, `image`, `alias`, `user`) 
       VALUES (_title, _description, _text, _image, _alias, _user);
   END IF;
+
 END;;
 
 DROP PROCEDURE IF EXISTS `PageUnset`;;
@@ -479,7 +478,7 @@ BEGIN
   DECLARE _id TINYINT(3) UNSIGNED;
   DECLARE _title VARCHAR(32);
   DECLARE _description VARCHAR(128);
-  DECLARE _image VARCHAR(32);
+  DECLARE _image VARCHAR(48);
   DECLARE _alias VARCHAR(32);
   DECLARE _user TINYINT(3) UNSIGNED;
 
@@ -593,14 +592,13 @@ DROP PROCEDURE IF EXISTS `UserSet`;;
 CREATE PROCEDURE `UserSet`(IN `params` json)
 BEGIN
   DECLARE _id INTEGER UNSIGNED;
-  #DECLARE _time DATETIME;
   DECLARE _title VARCHAR(32);
   DECLARE _description VARCHAR(128);
   DECLARE _phone VARCHAR(32);
   DECLARE _skype VARCHAR(32);
   DECLARE _email VARCHAR(32);
   DECLARE _password VARCHAR(32);
-  DECLARE _image VARCHAR(32);
+  DECLARE _image VARCHAR(48);
   DECLARE _role TINYINT(1) UNSIGNED;
   DECLARE _alias VARCHAR(32);
 
@@ -616,7 +614,7 @@ BEGIN
   IF (JSON_TYPE(params->'$.skype') <> 'NULL') THEN
     SET _skype = params->>'$.skype'; END IF;
   SET _email = params->>'$.email';
-  IF (JSON_TYPE(params->'$.password') <> 'NULL') THEN
+  IF (JSON_TYPE(params->'$.password') <> 'NULL' AND LENGTH(params->>'$.password') > 0) THEN
     SET _password = params->>'$.password'; END IF;
   IF (JSON_TYPE(params->'$.image') <> 'NULL') THEN
     SET _image = params->>'$.image'; END IF;
@@ -637,6 +635,7 @@ BEGIN
   IF (_password IS NOT NULL) THEN
     UPDATE `user` SET `password` = MD5(_password) WHERE `id` = _id;
   END IF;
+
 END;;
 
 DROP PROCEDURE IF EXISTS `UserUnset`;;
@@ -666,4 +665,4 @@ END;;
 
 DELIMITER ;
 
--- 2018-12-14 23:26:29
+-- 2019-02-01 21:34:44

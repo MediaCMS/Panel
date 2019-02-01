@@ -75,9 +75,11 @@ class View {
 
         $this->xml->addAttribute('hostIDN', $_SERVER['HTTP_HOST']);
 
-        $this->xml->addAttribute('hostMain', HOST_MAIN);
+        $this->xml->addAttribute('main', MAIN);
 
-        $this->xml->addAttribute('hostPhoto', HOST_PHOTO);
+        $this->xml->addAttribute('photoHost', PHOTO_HOST);
+
+        $this->xml->addAttribute('photoPath', PHOTO_PATH);
 
         $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 

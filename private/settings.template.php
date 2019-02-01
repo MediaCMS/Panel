@@ -14,12 +14,6 @@ define('TITLE', '');
 /** Адреса сайту */
 define('HOST', '');
 
-/** Адреса головного сайту */
-define('HOST_MAIN', '');
-
-/** Адреса фотосервера */
-define('HOST_PHOTO', '');
-
 /** Адреса сервера БД MySQL */
 define('DB_HOST', 'localhost');
 
@@ -31,6 +25,15 @@ define('DB_USER', '');
 
 /** Пароль користувача БД MySQL */
 define('DB_PASSWORD', '');
+
+/** Адреса головного сайту */
+define('MAIN', '');
+
+/** Адреса фотосервера */
+define('PHOTO_HOST', '');
+
+/** Шлях до файлів фотографій */
+define('PHOTO_PATH', '/');
 
 /** Адреса сервера Memcached */
 define('MEMCACHED_HOST', 'localhost');

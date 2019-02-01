@@ -70,7 +70,7 @@ class Edit extends \MediaCMS\Panel\Controller {
      * @param array $category Дані категорії з форми
      */
     private function save(array $category): void {
-
+/*
         $image = new Image();
 
         if (isset($category['image'])) {
@@ -90,7 +90,7 @@ class Edit extends \MediaCMS\Panel\Controller {
 
             if (strlen($hash) > 0) $image->delete($hash);
         }
-
+*/
         $category['alias'] = System::getAlias($category['title']);
 
         $category['user'] = $this->user['id'];

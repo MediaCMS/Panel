@@ -12,7 +12,6 @@ namespace MediaCMS\Panel\Controller\Page;
 
 use MediaCMS\Panel\Exception;
 use MediaCMS\Panel\System;
-use MediaCMS\Panel\Image;
 
 class Edit extends \MediaCMS\Panel\Controller {
 
@@ -75,26 +74,6 @@ class Edit extends \MediaCMS\Panel\Controller {
      * @param array $page Дані сторінки з форми
      */
     private function save(array $page): void {
-
-        $image = new Image();
-
-        if (isset($page['image'])) {
-
-            $image->exists($page['image']);
-
-        } else {
-
-            if ($_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
-
-                $page['image'] = $image->append($_FILES['image']);
-            }
-
-            $this->database->call('PageGet', $page['id']);
-
-            $hash = $this->database->getResultByName('image');
-
-            if (strlen($hash) > 0) $image->delete($hash);
-        }
 
         $page['text'] = html_entity_decode($page['text'], ENT_QUOTES|ENT_HTML5);
 

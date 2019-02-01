@@ -103,7 +103,7 @@ class Edit extends \MediaCMS\Panel\Controller {
      * @param array $article Дані статті з форми
      */
     private function save(array $article): void {
-
+/*
         $image = new Image();
 
         if (isset($article['image'])) {
@@ -123,7 +123,7 @@ class Edit extends \MediaCMS\Panel\Controller {
 
             if (strlen($hash) > 0) $image->delete($hash);
         }
-
+*/
         $article['tags'] = array_keys($article['tags']);
 
         $article['alias'] = System::getAlias($article['title']);

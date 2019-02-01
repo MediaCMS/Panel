@@ -87,7 +87,7 @@ class Edit extends \MediaCMS\Panel\Controller {
      * @param array $user Дані користувача з форми
      */
     private function save(array $user): void {
-
+/*
         $image = new Image();
 
         if (isset($user['image'])) {
@@ -107,7 +107,7 @@ class Edit extends \MediaCMS\Panel\Controller {
 
             if (strlen($hash) > 0) $image->delete($hash);
         }
-
+*/
         if (strlen($user['password']) == 0) unset($user['password']);
 
         $user['alias'] = System::getAlias($user['title']);

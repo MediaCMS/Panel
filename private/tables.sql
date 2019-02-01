@@ -1,4 +1,4 @@
--- Adminer 4.7.0 MySQL dump
+-- Adminer 4.7.1 MySQL dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
@@ -14,7 +14,7 @@ CREATE TABLE `article` (
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `text` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
+  `image` varchar(48) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` tinyint(3) unsigned NOT NULL,
   `user` tinyint(3) unsigned NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE `category` (
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
+  `image` varchar(48) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user` tinyint(3) unsigned NOT NULL,
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -79,7 +79,7 @@ CREATE TABLE `page` (
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `text` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
+  `image` varchar(48) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user` tinyint(3) unsigned NOT NULL,
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -104,7 +104,7 @@ CREATE TABLE `tag` (
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
+  `image` varchar(48) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user` tinyint(3) unsigned NOT NULL,
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -124,7 +124,7 @@ CREATE TABLE `user` (
   `skype` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `email` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
   `password` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
-  `image` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
+  `image` varchar(48) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `role` tinyint(1) unsigned NOT NULL,
   `token` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -136,4 +136,4 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- 2018-12-14 23:27:17
+-- 2019-02-01 21:35:33

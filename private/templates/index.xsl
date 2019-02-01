@@ -25,7 +25,8 @@
         <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html></xsl:text>
         <html xml:lang="uk" lang="uk" dir="ltr" id="root">
             <xsl:if test="@editor">
-                <xsl:attribute name="data-host-photo"><xsl:value-of select="@hostPhoto" /></xsl:attribute>
+                <xsl:attribute name="data-photo-host"><xsl:value-of select="@photoHost" /></xsl:attribute>
+                <xsl:attribute name="data-photo-path"><xsl:value-of select="@photoPath" /></xsl:attribute>
             </xsl:if>
             <xsl:if test="debug"><xsl:attribute name="data-debug">true</xsl:attribute></xsl:if>
             <head>
@@ -33,8 +34,8 @@
                 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
                 <link href="/index.css" rel="stylesheet" />
                 <link href="/bootstrap.min.css" rel="stylesheet" />
-                <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1" />
-                <script src="/jquery.min.js" type="application/javascript" />
+                <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+                <script src="/jquery-3.3.1.min.js" type="application/javascript" />
                 <script src="/popper.min.js" type="application/javascript" />
                 <script src="/bootstrap.min.js" type="application/javascript" />
                 <xsl:if test="not(debug)">
@@ -44,13 +45,14 @@
                     <script src='/tinymce/tinymce.min.js' />
                     <script src="/tinymce/jquery.tinymce.min.js" />
                 </xsl:if>
+                <script src="/image.js" type="application/javascript" />
                 <script src="/index.js" type="application/javascript" />
             </head>
             <body>
                 <xsl:if test="menu">
                     <header>
                         <nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
-                            <a class="navbar-brand" href="{@hostMain}" title="Головний сайт">
+                            <a class="navbar-brand" href="{@main}" title="Головний сайт">
                                 <img src="/logo.png" alt="{@logo}" />
                             </a>
                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -308,6 +310,30 @@
                 </li>
             </ul>
         </nav>
+    </xsl:template>
+
+    <xsl:template name="formImage">
+        <xsl:param name="title" />
+        <input type="file" name="image" id="formImage" class="form-control" title="{$title}">
+            <xsl:if test="string-length(@image) &gt; 0">
+                <xsl:attribute name="class">form-control d-none</xsl:attribute>
+            </xsl:if>
+        </input>
+        <div class="image" title="Видалити зображення">
+            <xsl:choose>
+                <xsl:when test="string-length(@image) = 0">
+                    <xsl:attribute name="class">image d-none</xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                    <img src="{/root/@photoHost}{/root/@photoPath}{substring(@image, 0, 40)}/0320.jpg" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <input type="hidden" name="image" value="{@image}" />
+            <svg height="100%" width="100%">
+                <line x1="0" y1="0" x2="100%" y2="100%" style="stroke:#ccc;stroke-width:1" />
+                <line x1="100%" y1="0" x2="0" y2="100%" style="stroke:#ccc;stroke-width:1" />
+            </svg>
+        </div>
     </xsl:template>
 
     <xsl:template match="pageNotFound">
