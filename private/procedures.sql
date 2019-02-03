@@ -20,12 +20,6 @@ BEGIN
   GROUP BY    `a`.`id`;
 END;;
 
-DROP PROCEDURE IF EXISTS `ArticleGetImage`;;
-CREATE PROCEDURE `ArticleGetImage`(IN `_id` int(10))
-BEGIN
-  SELECT `image` FROM `article` WHERE `id` = _id;
-END;;
-
 DROP PROCEDURE IF EXISTS `ArticleGetIndex`;;
 CREATE PROCEDURE `ArticleGetIndex`(IN `params` json)
 BEGIN
@@ -171,12 +165,6 @@ BEGIN
   FROM        `category` AS `c`
   INNER JOIN  `user` AS `u` ON `u`.`id` = `c`.`user`
   WHERE       `c`.`id` = _id;
-END;;
-
-DROP PROCEDURE IF EXISTS `CategoryGetImage`;;
-CREATE PROCEDURE `CategoryGetImage`(IN `_id` int)
-BEGIN
-  SELECT `image` FROM `category` WHERE `id` = _id;
 END;;
 
 DROP PROCEDURE IF EXISTS `CategoryGetIndex`;;
@@ -665,4 +653,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-02-01 21:34:44
+-- 2019-02-03 21:09:50

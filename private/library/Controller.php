@@ -103,7 +103,7 @@ abstract class Controller {
     /**
      * Запускає виконання дії контролера
      */
-    abstract public function run(): void;
+//    abstract public function run(): void;
 
     /**
      * Створює та виводить фільтр списку
@@ -146,7 +146,7 @@ abstract class Controller {
      * @param \SimpleXMLElement $node Елемент який потрібно зповнити
      * @param bool $index Ознака списку
      */
-    /*
+/*
     public function setItems(\SimpleXMLElement $node, bool $index = false): void {
 
         $i = 1;
@@ -171,13 +171,6 @@ abstract class Controller {
     }
 */
 
-    /**
-     * Створює та виводить пагінацію списку
-     */
-    /*
-    protected function setPagination(): void {
-    }
-*/
     /**
      * Створює та додає у вигляд виняток
      *

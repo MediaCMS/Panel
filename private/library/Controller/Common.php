@@ -1,6 +1,6 @@
 <?php
 /**
- * Контролер для відсутніх сторінок
+ * Контролер загальних дій
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
@@ -8,14 +8,14 @@
  * @copyright   GNU General Public License v3
  */
 
-namespace MediaCMS\Panel\Controller\Common;
+namespace MediaCMS\Panel\Controller;
 
 class Common extends \MediaCMS\Panel\Controller {
 
     /**
      * Запускає виконання дії контролера
      */
-    public function run(): void {
+    public function NotFound(): void {
 
         $alert = 'Невідома адреса ' . urldecode($_SERVER['REQUEST_URI']);
 

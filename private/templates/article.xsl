@@ -197,6 +197,13 @@
     </xsl:template>
 
     <xsl:template match="main/article/edit">
+        <!--
+        <xsl:variable name="form">
+            <xsl:call-template name="form" />
+        </xsl:variable>
+
+        <xsl:apply-templates select="$form" />
+        -->
         <form action="" method="POST" enctype="multipart/form-data" class="extended mx-auto">
             <div class="form-group row">
                 <div class="col-sm-12">
@@ -214,7 +221,7 @@
             <div class="form-group row">
                 <div class="col-sm-12">
                     <textarea name="text" value="{@text}" id="formText"
-                              placeholder="Текст статті" class="editor form-control"
+                              placeholder="Текст статті" class="wysiwyg form-control"
                               title="Текст сторінки"><xsl:value-of select="@text" /></textarea>
                 </div>
             </div>

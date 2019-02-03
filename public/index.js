@@ -20,7 +20,7 @@ $(function(){
         window.location.href = $(this).data('edit');
     });
 
-    nodes.form = $('main form');
+   nodes.form = $('main form');
     if (nodes.form.length > 0) {
         let photoHost = nodes.html.data('photo-host');
         let photoPath = nodes.html.data('photo-path');
@@ -37,10 +37,16 @@ $(function(){
                 toolbar: 'bold italic underline strikethrough| copy paste cut | undo redo | forecolor backcolor | subscript superscript removeformat | link image charmap code',
                 plugins: 'link image charmap code',
                 images_upload_url: photoHost + '/upload.php',
-                images_upload_base_path: photoPath,
-                images_upload_credentials: false
+                images_upload_base_path: photoHost + photoPath,
+                images_upload_credentials: false,
+                image_caption: true,
+                image_dimensions: false,
+                content_style: "img {max-width: 100%;}"
             });
         }
+
+
+
         // form image upload
         nodes.formImageUpload = nodes.form.find('#formImage');
         nodes.formImage = nodes.form.find('div.image');
