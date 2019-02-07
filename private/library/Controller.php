@@ -101,11 +101,6 @@ abstract class Controller {
     }
 
     /**
-     * Запускає виконання дії контролера
-     */
-//    abstract public function run(): void;
-
-    /**
      * Створює та виводить фільтр списку
      *
      * @param array $default Значення фільтру за налашуванням
@@ -141,6 +136,68 @@ abstract class Controller {
     }
 
     /**
+     * Отримання даних з форми
+     */
+    protected function getForm(): void {
+
+        if (count($_POST) > 0) {
+
+            try {
+
+                if (isset($_POST['_save'])) $this->set();
+
+                if (isset($_POST['_delete'])) $this->unset();
+
+                $this->router->redirect('/' . $this->router->getURI(0) . '/список');
+
+            } catch (Exception $exception) {
+
+                $this->setForm($_POST);
+
+                throw $exception;
+            }
+        }
+
+    }
+
+    /**
+     * Відправка даних для форми
+     *
+     * @param array $form Дані форми
+     */
+    protected function setForm(array $form): void {
+
+        if (isset($form['time']))
+
+            $form['time'] = date('Y-m-d H:i:s');
+
+        $this->view->setItem($this->node, $form);
+    }
+
+    /**
+     * Отримання даних з БД
+     */
+    protected function get(): void {}
+
+    /**
+     * Збереження даних в БД
+     */
+    protected function set(): void {
+
+        unset($_POST['_save']);
+
+        $this->database->call(get_class($this) . 'Set', $_POST);
+    }
+
+    /**
+     * Видалення даних з БД
+     */
+    protected function unset(): void {
+
+        $this->database->call(get_class($this) . 'Unset', $_POST['id']);
+    }
+
+    /**
      * Додає результат запиту до БД у вигляд
      *
      * @param \SimpleXMLElement $node Елемент який потрібно зповнити
@@ -170,6 +227,17 @@ abstract class Controller {
         }
     }
 */
+    /**
+     * Доступ заборонено
+     */
+    public function accessDenied(): void {
+
+        $alert = 'Доступ заборонено';
+
+        if (isset($this->user)) $alert .= ' (Права доступу: "' . $this->user['roleTitle'] .'"")';
+
+        $this->view->setAlert($alert, 'danger');
+    }
 
     /**
      * Створює та додає у вигляд виняток

@@ -18,7 +18,7 @@ class Category extends \MediaCMS\Panel\Controller {
     /**
      * Вивід списку категорій
      */
-    public function IndexAction(): void {
+    public function index(): void {
 
         $this->setFilter();
 
@@ -49,7 +49,7 @@ class Category extends \MediaCMS\Panel\Controller {
     /**
      * Редагування категорій
      */
-    public function EditAction(): void {
+    public function edit(): void {
 
         $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 

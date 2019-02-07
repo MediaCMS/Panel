@@ -17,7 +17,7 @@ class Comment extends \MediaCMS\Panel\Controller {
     /**
      * Вивід списка коментарів
      */
-    public function IndexAction(): void {
+    public function index(): void {
 
         unset($this->submenu[0]);
 
@@ -50,7 +50,7 @@ class Comment extends \MediaCMS\Panel\Controller {
     /**
      * Редагування коментаря
      */
-    public function EditAction(): void {
+    public function edit(): void {
 
         $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 

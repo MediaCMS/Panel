@@ -1,11 +1,29 @@
 {
-  "статті":     {"title": "Статті",     "controller": "Article", "default": true},
-  "категорії":  {"title": "Категорії",  "controller": "Category"},
-  "мітки":      {"title": "Мітки",      "controller": "Tag"},
-  "коментарі":  {"title": "Коментарі",  "controller": "Comment"},
-  "сторінки":   {"title": "Сторінки",   "controller": "Page"},
-  "користувачі":{"title": "Користувачі","controller": "User", "subsections": {
-    "вхід":     {"title": "Вхід",       "action": "Login"},
-    "вихід":    {"title": "Вихід",      "action": "Logout"}}
+  "Article":        {"title": "Статті",         "alias": "статті", "actions": {
+    "Index":        {"title": "Список",         "alias": "список"},
+    "Edit":         {"title": "Редагування",    "alias": "редагування"}
+  }},
+  "Category":       {"title": "Категорії",      "alias": "категорії", "actions": {
+    "Index":        {"title": "Список",         "alias": "список"},
+    "Edit":         {"title": "Редагування",    "alias": "редагування"}
+  }},
+  "Tag":            {"title": "Мітки",          "alias": "мітки", "actions": {
+    "Index":        {"title": "Список",         "alias": "список"},
+    "Edit":         {"title": "Редагування",    "alias": "редагування"},
+    "Autocomplete": {"title": "Автозаповнення", "alias": "автозаповнення", "isView": false}
+  }},
+  "Comment":        {"title": "Коментарі",      "alias": "коментарі", "actions": {
+    "Index":        {"title": "Список",         "alias": "список"},
+    "Edit":         {"title": "Редагування",    "alias": "редагування"}
+  }},
+  "Page":           {"title": "Сторінки",       "alias": "сторінки", "actions": {
+    "Index":        {"title": "Список",         "alias": "список"},
+    "Edit":         {"title": "Редагування",    "alias": "редагування"}
+  }},
+  "User":           {"title": "Користувачі",    "alias": "користувачі", "actions": {
+    "Index":        {"title": "Список",         "alias": "список"},
+    "Edit":         {"title": "Редагування",    "alias": "редагування"},
+    "Login":        {"title": "Вхід",           "alias": "вхід"},
+    "Logout":       {"title": "Вихід",          "alias": "вихід"}}
   }
 }

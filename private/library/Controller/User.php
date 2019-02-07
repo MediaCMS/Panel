@@ -20,7 +20,7 @@ class User extends \MediaCMS\Panel\Controller {
     /**
      * Ввивід списка користувачів
      */
-    public function IndexAction(): void {
+    public function index(): void {
 
         $this->orderFields = [
 
@@ -75,7 +75,7 @@ class User extends \MediaCMS\Panel\Controller {
     /**
      * Редагування користувача
      */
-    public function EditAction(): void {
+    public function edit(): void {
 
         $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 
@@ -142,7 +142,7 @@ class User extends \MediaCMS\Panel\Controller {
     /**
      * Авторизація користувача
      */
-    public function LoginAction(): void {
+    public function login(): void {
 
         $this->menu = false;
 
@@ -204,7 +204,7 @@ class User extends \MediaCMS\Panel\Controller {
     /**
      * Вихід користувача
      */
-    public function LogoutAction(): void {
+    public function logout(): void {
 
         session_destroy();
 

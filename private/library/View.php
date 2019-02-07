@@ -127,15 +127,17 @@ class View {
 
         $menuNode = $this->xml->addChild('menu');
 
-        foreach($schema as $alias => $section) {
+        foreach($schema as $controller) {
 
             $itemNode = $this->xml->menu->addChild('item');
 
-            $itemNode->addAttribute('title', $section['title']);
+            $itemNode->addAttribute('title', $controller['title']);
 
-            $itemNode->addAttribute('uri', '/' . $alias . '/' . key($section['subsections']));
+            $uri = '/' . $controller['alias'] . '/' . current($controller['actions'])['alias'];
 
-            if (isset($section['active']))
+            $itemNode->addAttribute('uri', $uri);
+
+            if (isset($controller['active']))
 
                 $itemNode->addAttribute('active', 1);
         }

@@ -18,7 +18,7 @@ class Article extends \MediaCMS\Panel\Controller {
     /**
      * Вивід списка статей
      */
-    public function IndexAction(): void {
+    public function index(): void {
 
         $this->orderFields = [
 
@@ -60,7 +60,9 @@ class Article extends \MediaCMS\Panel\Controller {
     /**
      * Редагування статей
      */
-    public function EditAction(): void {
+    public function edit(): void {
+
+        if ($this->user['roleID'] > 2) $this->accessDenied();
 
         $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 
@@ -142,5 +144,42 @@ class Article extends \MediaCMS\Panel\Controller {
                 }
             }
         }
+    }
+
+    /**
+     * Отримання даних з форми
+     */
+    protected function getForm(): void {
+
+    }
+
+    /**
+     * Відправка даних для форми
+     *
+     * @param array $form Дані форми
+     */
+    protected function setForm(array $form): void {
+
+    }
+
+    /**
+     * Отримання даних з БД
+     */
+    protected function get(): void {
+
+    }
+
+    /**
+     * Збереження даних в БД
+     */
+    protected function set(): void {
+
+    }
+
+    /**
+     * Видалення даних з БД
+     */
+    protected function unset(): void {
+
     }
 }

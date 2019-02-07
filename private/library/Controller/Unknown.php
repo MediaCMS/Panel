@@ -10,15 +10,19 @@
 
 namespace MediaCMS\Panel\Controller;
 
-class Common extends \MediaCMS\Panel\Controller {
+class Unknown extends \MediaCMS\Panel\Controller {
 
     /**
-     * Запускає виконання дії контролера
+     * Сторінка не знайдена
      */
-    public function NotFound(): void {
+    public function notFound(): void {
+
+        $this->submenu = [];
 
         $alert = 'Невідома адреса ' . urldecode($_SERVER['REQUEST_URI']);
 
         $this->view->setAlert($alert, 'danger');
+
+        header('HTTP/1.x 404 Not Found');
     }
 }

@@ -18,7 +18,7 @@ class Page extends \MediaCMS\Panel\Controller {
     /**
      * Вивід списка сторінок
      */
-    public function IndexAction(): void {
+    public function index(): void {
 
         $this->setFilter();
 
@@ -49,7 +49,7 @@ class Page extends \MediaCMS\Panel\Controller {
     /**
      * Редагування сторінок
      */
-    public function EditAction(): void {
+    public function edit(): void {
 
         $this->editor = true;
 

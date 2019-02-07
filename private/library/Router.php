@@ -12,22 +12,14 @@ namespace MediaCMS\Panel;
 
 class Router {
 
+    /** @var string Адреса файла схеми сайта */
+    protected $file = '/schema.json';
+
     /** @var array Перелік частин адреси сторінки */
     protected $uri;
 
-    /** @var string Адреса сторінки за налаштуванням */
-    protected $uriDefault;
-
     /** @var array Схема сайта */
     protected $schema;
-
-    /** @var array Типові підрозділи схеми */
-    protected $subsections = [
-
-        "список"         => ["title" => "Список", "action" => "Index"],
-        "редагування"    => ["title" => "Редагування", "action" => "Edit"],
-        "автозаповнення" => ["title" => "Автозаповнення", "action" => "Autocomplete", "isView" => false]
-    ];
 
     /** @var string Назва поточного контролера */
     protected $controller;
@@ -81,9 +73,21 @@ class Router {
 
             $this->setSchema();
 
-            if ($this->getURI(0) == '')
+            if (empty($this->getURI(0)))
 
-                $this->redirect($this->getURIDefault());
+                $this->redirect('/' . current($this->schema)['alias']);
+
+            $this->route();
+
+            if (!isset($this->controller)) {
+
+                $this->setController('Unknown');
+
+                $this->setAction('NotFound');
+
+                $this->setTitle('Сторінка не знайдена');
+
+            }
         }
     }
 
@@ -122,95 +126,15 @@ class Router {
     }
 
     /**
-     * Зберігає адресу сторінки сайту за налаштуванням
-     *
-     * @param string $uri Адреса сторінки
-     */
-    private function setURIDefault(string $uri): void {
-
-        $this->uriDefault = $uri;
-    }
-
-    /**
-     * Повертає елемент ідентифікатора сторінки
-     *
-     * @return string Назва елемента
-     */
-    public function getURIDefault(): string {
-
-        return $this->uriDefault;
-    }
-
-    /**
      * Отримує та зберігає схему сайта
      */
     private function setSchema(): void {
 
         $this->schema = json_decode(
 
-            file_get_contents(PATH_PRIVATE . '/schema.json'), true
+            file_get_contents(PATH_PRIVATE . $this->file), true
         );
-
-        foreach($this->schema as $sectionAlias => &$section) {
-
-            $subsections = (isset($section['subsections'])) ?
-
-                array_replace($this->subsections, $section['subsections']) : $this->subsections;
-
-            foreach($subsections as $subsectionAlias => $subsection) {
-
-                if (is_null($subsection)) {
-
-                    unset($subsections[$subsectionAlias]);
-
-                } else {
-
-                    $subsections[$subsectionAlias] = $subsection;
-                }
-
-                if (($sectionAlias == $this->getURI(0)) && ($subsectionAlias == $this->getURI(1))) {
-
-                    $this->setController($section['controller']);
-
-                    $this->setAction($subsection['action']);
-
-                    $this->setTitle($section['title'] . ' / ' . $subsection['title']);
-
-                    if (isset($subsection['isDatabase']))
-
-                        $this->setIsDatabase($subsection['isDatabase']);
-
-                    if (isset($subsection['isView']))
-
-                        $this->setIsView($subsection['isView']);
-
-                    $section['active'] = true;
-
-                    $subsections[$subsectionAlias]['active'] = true;
-                }
-             }
-
-            $section['subsections'] = $subsections;
-
-            if (isset($section['default'])) {
-
-                $uri = '/' . $sectionAlias . '/' . key($section['subsections']);
-
-                $this->setURIDefault($uri);
-            }
-
-            if (!isset($this->controller)) {
-
-                $this->setController('Common');
-
-                $this->setAction('NotFound');
-
-                $this->setTitle('Сторінку не знайдено');
-
-            }
-        }
     }
-
     /**
      * Повертає схему сайту
      *
@@ -219,6 +143,45 @@ class Router {
     public function getSchema(): array {
 
         return $this->schema;
+    }
+
+    /**
+     * Вибирає контролер та дію
+     */
+    private function route(): void {
+
+        foreach($this->schema as $controller => &$controllerOptions) {
+
+            if ($controllerOptions['alias'] != $this->getURI(0)) continue;
+
+            if (empty($this->getURI(1))) {
+
+                $actionAlias = current($controllerOptions['actions'])['alias'];
+
+                $this->redirect('/' . $controllerOptions['alias'] . '/' . $actionAlias);
+            }
+
+            $this->setController($controller);
+
+            $controllerOptions['active'] = true;
+
+            foreach($controllerOptions['actions'] as $action => $actionOptions) {
+
+                if ($actionOptions['alias'] != $this->getURI(1)) continue;
+
+                $this->setAction($action);
+
+                $this->setTitle($controllerOptions['title'] . ' / ' . $actionOptions['title']);
+
+                if (isset($actionOptions['isDatabase']))
+
+                    $this->setIsDatabase($actionOptions['isDatabase']);
+
+                if (isset($actionOptions['isView']))
+
+                    $this->setIsView($actionOptions['isView']);
+            }
+        }
     }
 
     /**

@@ -27,7 +27,7 @@ try {
 
     $controller = new $controller($router);
 
-    $action = ucfirst($router->getAction()) . 'Action';
+    $action = $router->getAction();
 
     call_user_func([$controller, $action]);
 
