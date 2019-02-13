@@ -18,9 +18,9 @@ use MediaCMS\Panel\Log;
 class User extends \MediaCMS\Panel\Controller {
 
     /**
-     * Ввивід списка користувачів
+     * Створює та виводить фільтр списка користувачів
      */
-    public function index(): void {
+    protected function filter(): void {
 
         $this->orderFields = [
 
@@ -29,7 +29,11 @@ class User extends \MediaCMS\Panel\Controller {
             ['title' => 'Час', 'field' => 'time']
         ];
 
-        $this->setFilter(['dateBegin' => '2018-01-01', 'dateEnd' => date('Y-m-d')]);
+        $this->filter['dateBegin'] = '2018-01-01';
+
+        $this->filter['dateEnd'] = date('Y-m-d');
+
+        parent::filter();
 
         $rolesNode = $this->node->filter->addChild('roles');
 
@@ -47,70 +51,12 @@ class User extends \MediaCMS\Panel\Controller {
 
             $this->view->setItem($roleNode, $role);
         }
-
-        $usersNode = $this->node->addChild('users');
-
-        $this->database->call('UserGetIndex', $this->filter);
-
-        $i = 1;
-
-        while($user = $this->database->getResult()) {
-
-            $userNode = $usersNode->addChild('user');
-
-            $user['position'] = $this->filter['_offset'] + $i;
-
-            $user['edit'] = '/користувачі/редагування/' . $user['id'];
-
-            $this->view->setItem($userNode, $user);
-
-            $i ++;
-        }
-
-        $pages = ceil($this->database->getFoundRows() / $this->filter['_limit']);
-
-        $this->view->setPagination($this->page, $pages, $this->router->getURI(0));
     }
 
     /**
-     * Редагування користувача
+     * Редагує користувача (додатково)
      */
-    public function edit(): void {
-
-        $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
-
-        if (count($_POST) > 0) {
-
-            try {
-
-                if (isset($_POST['_save'])) {
-
-                    if (strlen($_POST['password']) == 0) unset($_POST['password']);
-
-                    $_POST['alias'] = System::getAlias($_POST['title']);
-
-                    $_POST['user'] = $this->user['id'];
-
-                    unset($_POST['_save']);
-
-                    $this->database->call('UserSet', $_POST);
-                }
-
-                if (isset($_POST['_delete']))
-
-                    $this->database->call('UserUnset', $_POST['id']);
-
-                $this->router->redirect('/користувачі/список');
-
-            } catch (Exception $exception) {
-
-                $_POST['time'] = date('Y-m-d H:i:s');
-
-                $this->view->setItem($this->node, $_POST);
-
-                throw $exception;
-            }
-        }
+    public function editAdvanced(): void {
 
         $rolesNode = $this->node->addChild('roles');
 
@@ -123,20 +69,17 @@ class User extends \MediaCMS\Panel\Controller {
             $this->view->setItem($roleNode, $role);
         }
 
-        $userID = $this->router->getURI(2);
+        if (is_null($this->router->getURI(2)) && (count($_POST) == 0))
 
-        if (isset($userID)) {
+            $this->node->addAttribute('role', 3);
+    }
 
-            $this->database->call('UserGet', $userID);
+    /**
+     * Перевіряє доступ для редагування користувача
+     */
+    protected function access(): void {
 
-            $this->view->setItem($this->node, $this->database->getResult());
-
-        } else {
-
-            if (count($_POST) == 0)
-
-                $this->node->addAttribute('role', 3);
-        }
+        if ($this->user['roleID'] > 1) $this->denied();
     }
 
     /**

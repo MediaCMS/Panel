@@ -13,7 +13,7 @@
 
     <xsl:template match="main/user/index">
         <xsl:choose>
-            <xsl:when test="users/user">
+            <xsl:when test="items/item">
                 <table class="table clickable">
                     <caption>Список користувачів</caption>
                     <thead>
@@ -28,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <xsl:for-each select="users/user">
+                        <xsl:for-each select="items/item">
                             <tr data-edit="{@edit}">
                                 <xsl:if test="@status=0">
                                     <xsl:attribute name="class">disabled</xsl:attribute>

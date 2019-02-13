@@ -33,7 +33,7 @@
 
     <xsl:template match="main/article/index">
         <xsl:choose>
-            <xsl:when test="articles/article">
+            <xsl:when test="items/item">
                 <table class="table clickable">
                     <caption>Список статей</caption>
                     <thead>
@@ -48,7 +48,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <xsl:for-each select="articles/article">
+                        <xsl:for-each select="items/item">
                             <tr data-edit="{@edit}">
                                 <xsl:if test="@status=0">
                                     <xsl:attribute name="class">disabled</xsl:attribute>

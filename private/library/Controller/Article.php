@@ -10,15 +10,12 @@
 
 namespace MediaCMS\Panel\Controller;
 
-use MediaCMS\Panel\Exception;
-use MediaCMS\Panel\System;
-
 class Article extends \MediaCMS\Panel\Controller {
 
     /**
-     * Вивід списка статей
+     * Створює та виводить фільтр списка статей
      */
-    public function index(): void {
+    protected function filter(): void {
 
         $this->orderFields = [
 
@@ -29,85 +26,45 @@ class Article extends \MediaCMS\Panel\Controller {
             ['title' => 'Автор', 'field' => 'user']
         ];
 
+        $this->filter['dateBegin'] = '2018-01-01';
+
+        $this->filter['dateEnd'] = date('Y-m-d');
+
         $this->filter['_orderField'] = 'time';
 
-        $this->setFilter(['dateBegin' => '2018-01-01', 'dateEnd' => date('Y-m-d')]);
-
-        $this->database->call('ArticleGetIndex', $this->filter);
-
-        $articlesNode = $this->node->addChild('articles');
-
-        $i = 1;
-
-        while($article = $this->database->getResult()) {
-
-            $articleNode = $articlesNode->addChild('article');
-
-            $article['position'] = $this->filter['_offset'] + $i;
-
-            $article['edit'] = '/статті/редагування/' . $article['id'];
-
-            $this->view->setItem($articleNode, $article);
-
-            $i ++;
-        }
-
-        $pages = ceil($this->database->getFoundRows() / $this->filter['_limit']);
-
-        $this->view->setPagination($this->page, $pages, $this->router->getURI(0));
+        parent::filter();
     }
 
     /**
-     * Редагування статей
+     * Перевіряє доступ для редагування статті
+     *
+     * TODO: Modify access rules
      */
-    public function edit(): void {
+    protected function access(): void {
 
-        if ($this->user['roleID'] > 2) $this->accessDenied();
+        if ($this->user['roleID'] > 2) $this->denied();
+    }
 
-        $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
+    /**
+     * Повертає дані у форму
+     *
+     * @param array $article Дані форми
+     */
+    protected function submitRepeat(array $article): void {
 
-        if (count($_POST) > 0) {
+        $article['tags'] = [];
 
-            try {
+        foreach($_POST['tags'] as $id => $title)
 
-                if (isset($_POST['_save'])) {
+            $article['tags'][] = ['id' => $id, 'title' => $title];
 
-                    $_POST['text'] = html_entity_decode($_POST['text'], ENT_QUOTES|ENT_HTML5);
+        parent::submitRepeat($article);
+    }
 
-                    $_POST['tags'] = array_keys($_POST['tags']);
-
-                    $_POST['alias'] = System::getAlias($_POST['title']);
-
-                    $_POST['user'] = $this->user['id'];
-
-                    unset($_POST['_save']);
-
-                    $this->database->call('ArticleSet', $_POST);
-                }
-
-                if (isset($_POST['_delete']))
-
-                    $this->database->call('ArticleUnset', $_POST['id']);
-
-                $this->router->redirect('/статті/список');
-
-            } catch (Exception $exception) {
-
-                $article = $_POST;
-
-                $article['time'] = date('Y-m-d H:i:s');
-
-                $article['tags'] = [];
-
-                foreach($_POST['tags'] as $id => $title)
-
-                    $article['tags'][] = ['id' => $id, 'title' => $title];
-
-                $this->view->setItem($this->node, $article);
-
-                throw $exception;
-            }
-        }
+    /**
+     * Редагує (додатково)
+     */
+    public function editAdvanced(): void {
 
         $this->database->call('CategoryGetIndex', []);
 
@@ -119,67 +76,46 @@ class Article extends \MediaCMS\Panel\Controller {
 
             $this->view->setItem($categoryNode, $category);
         }
+    }
 
-        $articleID = $this->router->getURI(2);
+    /**
+     * Отримує статтю з БД
+     *
+     * @param integer $id Ідентифікатор статті
+     * @return array Дані статті
+     */
+    protected function get(int $id): array {
 
-        if (isset($articleID)) {
+        $article = parent::get($id);
 
-            $this->database->call('ArticleGet', $articleID);
+        if (strlen($article['tags']) > 0) {
 
-            $article = $this->database->getResult();
+            $this->database->call('TagGetByIDs', $article['tags']);
 
-            $this->view->setItem($this->node, $article);
+            $tagsNode = $this->node->addChild('tags');
 
-            if (strlen($article['tags']) > 0) {
+            while($tag = $this->database->getResult()) {
 
-                $this->database->call('TagGetByIDs', $article['tags']);
+                $tagNode = $tagsNode->addChild('tag');
 
-                $tagsNode = $this->node->addChild('tags');
-
-                while($tag = $this->database->getResult()) {
-
-                    $tagNode = $tagsNode->addChild('tag');
-
-                    $this->view->setItem($tagNode, $tag);
-                }
+                $this->view->setItem($tagNode, $tag);
             }
         }
+
+        return $article;
     }
 
     /**
-     * Отримання даних з форми
-     */
-    protected function getForm(): void {
-
-    }
-
-    /**
-     * Відправка даних для форми
+     * Зберігає статтю в БД
      *
-     * @param array $form Дані форми
+     * @param array $article Дані статті
      */
-    protected function setForm(array $form): void {
+    protected function set(array $article): void {
 
-    }
+        $article['text'] = html_entity_decode($article['text'], ENT_QUOTES|ENT_HTML5);
 
-    /**
-     * Отримання даних з БД
-     */
-    protected function get(): void {
+        $article['tags'] = array_keys($article['tags']);
 
-    }
-
-    /**
-     * Збереження даних в БД
-     */
-    protected function set(): void {
-
-    }
-
-    /**
-     * Видалення даних з БД
-     */
-    protected function unset(): void {
-
+        parent::set($article);
     }
 }

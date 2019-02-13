@@ -101,17 +101,48 @@ abstract class Controller {
     }
 
     /**
-     * Створює та виводить фільтр списку
-     *
-     * @param array $default Значення фільтру за налашуванням
+     * Виводить список
      */
-    protected function setFilter(array $default = []): void {
+    public function index(): void {
+
+        $this->filter();
+
+        $this->indexAdvanced();
+
+        $this->database->call($this->router->getController() . 'GetIndex', $this->filter);
+
+        $itemsNode = $this->node->addChild('items');
+
+        $i = 1;
+
+        while($item = $this->database->getResult()) {
+
+            $itemNode = $itemsNode->addChild('item');
+
+            $item['position'] = $this->filter['_offset'] + $i;
+
+            $item['edit'] = '/' . $this->router->getURI(0) . '/редагування/' . $item['id'];
+
+            $this->view->setItem($itemNode, $item);
+
+            $i ++;
+        }
+
+        $pages = ceil($this->database->getFoundRows() / $this->filter['_limit']);
+
+        $this->view->setPagination($this->page, $pages, $this->router->getURI(0));
+    }
+
+    /**
+     * Створює та виводить фільтр списку
+     */
+    protected function filter(): void {
 
         $title = strtolower($this->router->getController());
 
         if (!isset($_SESSION['filters'][$title])) $_SESSION['filters'][$title] = [];
 
-        $this->filter = array_replace($this->filter, $default, $_SESSION['filters'][$title]);
+        $this->filter = array_replace($this->filter, $_SESSION['filters'][$title]);
 
         if (count($_POST) > 0) {
 
@@ -136,36 +167,71 @@ abstract class Controller {
     }
 
     /**
-     * Отримання даних з форми
+     * Виводить список (додатково)
      */
-    protected function getForm(): void {
+    public function indexAdvanced(): void {}
+
+    /**
+     * Редагує дані
+     */
+    public function edit(): void {
+
+        $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
+
+        $this->access();
+
+        $this->submit();
+
+        $this->editAdvanced();
+
+        $id = $this->router->getURI(2);
+
+        if (isset($id)) $this->get($id);
+    }
+
+    /**
+     * Редагує дані (додатково)
+     */
+    public function editAdvanced(): void {}
+
+    /**
+     * Перевіряє доступ для редагування
+     */
+    protected function access(): void {
+
+        if ($this->user['roleID'] > 3) $this->denied();
+    }
+
+    /**
+     * Опрацьовує дані з форми
+     */
+    protected function submit(): void {
 
         if (count($_POST) > 0) {
 
             try {
 
-                if (isset($_POST['_save'])) $this->set();
+                if (isset($_POST['_save'])) $this->set($_POST);
 
-                if (isset($_POST['_delete'])) $this->unset();
+                if (isset($_POST['_delete'])) $this->unset($_POST['id']);
 
-                $this->router->redirect('/' . $this->router->getURI(0) . '/список');
+                $this->router->redirect('/' . $this->router->getURI(0));
 
             } catch (Exception $exception) {
 
-                $this->setForm($_POST);
+                $this->submitRepeat($_POST);
 
                 throw $exception;
             }
         }
-
     }
 
     /**
-     * Відправка даних для форми
+     * Повертає дані у форму
      *
      * @param array $form Дані форми
      */
-    protected function setForm(array $form): void {
+    protected function submitRepeat(array $form): void {
 
         if (isset($form['time']))
 
@@ -175,26 +241,48 @@ abstract class Controller {
     }
 
     /**
-     * Отримання даних з БД
+     * Отримує дані з БД
+     *
+     * @param integer $id Ідентифікатор набору даних
+     * @return array Дані
      */
-    protected function get(): void {}
+    protected function get(int $id): array {
 
-    /**
-     * Збереження даних в БД
-     */
-    protected function set(): void {
+        $this->database->call($this->router->getController() . 'Get', $id);
 
-        unset($_POST['_save']);
+        $data = $this->database->getResult();
 
-        $this->database->call(get_class($this) . 'Set', $_POST);
+        $this->view->setItem($this->node, $data);
+
+        return $data;
     }
 
     /**
-     * Видалення даних з БД
+     * Зберігає дані в БД
+     *
+     * @param array $form Дані форми
      */
-    protected function unset(): void {
+    protected function set(array $form): void {
 
-        $this->database->call(get_class($this) . 'Unset', $_POST['id']);
+        if (isset($form['alias']))
+
+            $form['alias'] = System::getAlias($form['title']);
+
+        $form['user'] = $this->user['id'];
+
+        unset($form['_save']);
+
+        $this->database->call($this->router->getController() . 'Set', $form);
+    }
+
+    /**
+     * Видаляє дані з БД
+     *
+     * @param integer $id Ідентифікатор набору даних
+     */
+    protected function unset(int $id): void {
+
+        $this->database->call($this->router->getController() . 'Unset', $id);
     }
 
     /**
@@ -230,11 +318,13 @@ abstract class Controller {
     /**
      * Доступ заборонено
      */
-    public function accessDenied(): void {
+    public function denied(): void {
 
         $alert = 'Доступ заборонено';
 
-        if (isset($this->user)) $alert .= ' (Права доступу: "' . $this->user['roleTitle'] .'"")';
+        if (isset($this->user))
+
+            $alert .= ' (Права доступу: "' . $this->user['roleTitle'] .'"")';
 
         $this->view->setAlert($alert, 'danger');
     }
@@ -244,7 +334,7 @@ abstract class Controller {
      *
      * @param \Exception $exception Виняток
      */
-    public function setException(\Exception $exception): void {
+    public function exception(\Exception $exception): void {
 
         if ($this->router->isView()) {
 

@@ -43,7 +43,7 @@ try {
 
     if (isset($controller) && is_object($controller) && ($router->isView())) {
 
-        call_user_func([$controller, 'setException'], $exception);
+        call_user_func([$controller, 'exception'], $exception);
 
     } else {
 

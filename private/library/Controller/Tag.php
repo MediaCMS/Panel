@@ -10,94 +10,20 @@
 
 namespace MediaCMS\Panel\Controller;
 
-use MediaCMS\Panel\Exception;
-use MediaCMS\Panel\System;
-
 class Tag extends \MediaCMS\Panel\Controller {
 
     /**
-     * Вивід списка міток
+     * Перевіряє доступ для редагування мітки
      */
-    public function index(): void {
+    protected function access(): void {
 
-        $this->setFilter();
-
-        $this->database->call('TagGetIndex', $this->filter);
-
-        $i = 1;
-
-        $tagsNode = $this->node->addChild('tags');
-
-        while($tag = $this->database->getResult()) {
-
-            $tagNode = $tagsNode->addChild('tag');
-
-            $tag['position'] = $this->filter['_offset'] + $i;
-
-            $tag['edit'] = '/мітки/редагування/' . $tag['id'];
-
-            $this->view->setItem($tagNode, $tag);
-
-            $i ++;
-        }
-
-        $pages = ceil($this->database->getFoundRows() / $this->filter['_limit']);
-
-        $this->view->setPagination($this->page, $pages, $this->router->getURI(0));
-    }
-
-    /**
-     * Редагування міток
-     */
-    public function edit(): void {
-
-        $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
-
-        if (count($_POST) > 0) {
-
-            try {
-
-                if (isset($_POST['_save'])) {
-
-                    $_POST['alias'] = System::getAlias($_POST['title']);
-
-                    $_POST['user'] = $this->user['id'];
-
-                    unset($_POST['_save']);
-
-                    $this->database->call('TagSet', $_POST);
-                }
-
-                if (isset($_POST['_delete']))
-
-                    $this->database->call('TagUnset', $_POST['id']);
-
-                $this->router->redirect('/мітки/список');
-
-            } catch (Exception $exception) {
-
-                $_POST['time'] = date('Y-m-d H:i:s');
-
-                $this->view->setItem($this->node, $_POST);
-
-                throw $exception;
-            }
-        }
-
-        $tagID = $this->router->getURI(2);
-
-        if (isset($tagID)) {
-
-            $this->database->call('TagGet', $tagID);
-
-            $this->view->setItem($this->node, $this->database->getResult());
-        }
+        if ($this->user['roleID'] > 2) $this->denied();
     }
 
     /**
      * Вивід міток для автозаповнення
      */
-    public function AutocompleteAction(): void {
+    public function autocomplete(): void {
 
         $exclude = $_GET['exclude'] ?? null;
 

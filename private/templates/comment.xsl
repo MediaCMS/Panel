@@ -13,7 +13,7 @@
 
     <xsl:template match="main/comment/index">
         <xsl:choose>
-            <xsl:when test="comments/comment">
+            <xsl:when test="items/item">
                 <table class="table clickable">
                     <caption>Список коментарів</caption>
                     <thead>
@@ -27,7 +27,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <xsl:for-each select="comments/comment">
+                        <xsl:for-each select="items/item">
                             <tr data-edit="{@edit}">
                                 <xsl:if test="@status=0">
                                     <xsl:attribute name="class">disabled</xsl:attribute>

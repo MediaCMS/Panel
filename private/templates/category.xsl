@@ -13,7 +13,7 @@
 
     <xsl:template match="main/category/index">
         <xsl:choose>
-            <xsl:when test="categories/category">
+            <xsl:when test="items/item">
                 <table class="table clickable">
                     <caption>Список категорій</caption>
                     <thead>
@@ -26,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <xsl:for-each select="categories/category">
+                        <xsl:for-each select="items/item">
                             <tr data-edit="{@edit}">
                                 <xsl:if test="@status=0">
                                     <xsl:attribute name="class">disabled</xsl:attribute>
