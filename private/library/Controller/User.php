@@ -75,11 +75,19 @@ class User extends \MediaCMS\Panel\Controller {
     }
 
     /**
-     * Перевіряє доступ для редагування користувача
+     * Зберігає користувача в БД
+     *
+     * @param array $user Дані користувача
      */
-    protected function access(): void {
+    protected function set(array $user): void {
 
-        if ($this->user['roleID'] > 1) $this->denied();
+        if (strlen($user['password']) > 0)
+
+            if ($user['password'] != $user['password2'])
+
+                throw new Exception('Паролі відрізняються');
+
+        parent::set($user);
     }
 
     /**

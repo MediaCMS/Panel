@@ -217,6 +217,13 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label for="formPassword" class="col-sm-4 col-form-label">Пароль (повторно)</label>
+                <div class="col-sm-8">
+                    <input type="password" name="password2" placeholder="Пароль користувача (повторно)"
+                           id="formPassword" class="form-control" title="Пароль користувача (повторно)" />
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="formImage" class="col-sm-4 col-form-label">Зображення</label>
                 <div class="col-sm-8">
                     <xsl:call-template name="formImage">

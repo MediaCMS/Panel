@@ -10,13 +10,4 @@
 
 namespace MediaCMS\Panel\Controller;
 
-class Category extends \MediaCMS\Panel\Controller {
-
-    /**
-     * Перевіряє доступ для редагування категорії
-     */
-    protected function access(): void {
-
-        if ($this->user['roleID'] > 2) $this->denied();
-    }
-}
+class Category extends \MediaCMS\Panel\Controller {}

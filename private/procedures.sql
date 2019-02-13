@@ -28,7 +28,8 @@ BEGIN
   DECLARE _title VARCHAR(32);
   DECLARE _category VARCHAR(32);
   DECLARE _tag VARCHAR(32);
-  DECLARE _user VARCHAR(32);
+  DECLARE _userID TINYINT(3);
+  DECLARE _userTitle VARCHAR(32);
   DECLARE _status TINYINT(1) UNSIGNED;
   DECLARE _orderField VARCHAR(32) DEFAULT 'id';
   DECLARE _orderDirection INTEGER DEFAULT 1;
@@ -45,8 +46,10 @@ BEGIN
     SET _category = params->>'$.category'; END IF;
   IF (JSON_TYPE(params->'$.tag') <> 'NULL') THEN
     SET _tag = params->>'$.tag'; END IF;
-  IF (JSON_TYPE(params->'$.user') <> 'NULL') THEN
-    SET _user = params->>'$.user'; END IF;
+  IF (JSON_TYPE(params->'$.userID') <> 'NULL') THEN
+    SET _userID = params->'$.userID'; END IF;
+  IF (JSON_TYPE(params->'$.userTitle') <> 'NULL') THEN
+    SET _userTitle = params->>'$.userTitle'; END IF;
   IF (JSON_TYPE(params->'$._status') <> 'NULL') THEN
     SET _status = params->'$._status'; END IF;
   SET _orderField = params->>'$._orderField';
@@ -67,6 +70,7 @@ BEGIN
               AND (_dateBegin IS NULL OR `time` >= _dateBegin)
               AND (_dateEnd   IS NULL OR `time` <= _dateEnd)
               AND (_title     IS NULL OR `title` LIKE CONCAT('%', _title, '%'))
+              AND (_userID    IS NULL OR `user` = _userID)
               AND (_status    IS NULL OR `status` = _status)
             LIMIT _rowsOffset, _rowsLimit 
         ) AS `a`
@@ -75,8 +79,8 @@ BEGIN
         LEFT JOIN `tag` AS `t` ON `t`.`id` = `at`.`tag`
         INNER JOIN `user` AS `u` ON `u`.`id` = `a`.`user`
         WHERE `a`.`id` > 0
-          AND (_category IS NULL OR `c`.`title` LIKE CONCAT('%', _category, '%'))
-          AND (_user     IS NULL OR `u`.`title` LIKE CONCAT('%', _user, '%'))
+          AND (_category  IS NULL OR `c`.`title` LIKE CONCAT('%', _category, '%'))
+          AND (_userTitle IS NULL OR `u`.`title` LIKE CONCAT('%', _userTitle, '%'))
         GROUP BY `a`.`id`
     ) AS `a`
     WHERE `id` > 0
@@ -511,7 +515,7 @@ BEGIN
   DECLARE _id INTEGER UNSIGNED DEFAULT NULL;
   DECLARE _token VARCHAR(32);
 
-  SELECT `id` INTO _id FROM `user` WHERE `email` = _email AND `password` = _password;
+  SELECT `id` INTO _id FROM `user` WHERE `role` < 5 AND `email` = _email AND `password` = _password;
 
   IF (_id IS NOT NULL) THEN
     SET _token = MD5(CONCAT(_id, NOW(), _email, _password));
@@ -596,16 +600,25 @@ BEGIN
   #SET _time = params->>'$.time';
   SET _title = params->>'$.title';
   IF (JSON_TYPE(params->'$.description') <> 'NULL') THEN
-    SET _description = params->>'$.description'; END IF;
+    SET _description = params->>'$.description';
+  END IF;
   IF (JSON_TYPE(params->'$.phone') <> 'NULL') THEN
-    SET _phone = params->>'$.phone'; END IF;
+    SET _phone = params->>'$.phone';
+  END IF;
   IF (JSON_TYPE(params->'$.skype') <> 'NULL') THEN
-    SET _skype = params->>'$.skype'; END IF;
+    SET _skype = params->>'$.skype';
+  END IF;
   SET _email = params->>'$.email';
   IF (JSON_TYPE(params->'$.password') <> 'NULL' AND LENGTH(params->>'$.password') > 0) THEN
-    SET _password = params->>'$.password'; END IF;
+    SET _password = params->>'$.password';
+    IF (LENGTH(_password) < 8) THEN
+      SIGNAL SQLSTATE '22001'
+         SET MESSAGE_TEXT = "Data too short for column '_password' at row 1 (LENGTH < 8)";
+    END IF;
+  END IF;
   IF (JSON_TYPE(params->'$.image') <> 'NULL') THEN
-    SET _image = params->>'$.image'; END IF;
+    SET _image = params->>'$.image';
+  END IF;
   SET _role = params->'$.role';
   SET _alias = params->>'$.alias';
 
@@ -653,4 +666,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-02-03 21:09:50
+-- 2019-02-13 23:40:36

@@ -90,12 +90,12 @@ class Database {
 
         $this->queries[] = ['string' => $query, 'time' => $time];
 
-        if ($this->result === false) {
+        if ($this->result === false)
 
-            $exception = sprintf('Помилка запиту "%s"', $this->connection->error);
+            throw new Exception(
 
-            throw new Exception($exception);
-        }
+                sprintf('Помилка запиту "%s [%d]"', $this->connection->error, $this->connection->errno)
+            );
     }
 
     /**

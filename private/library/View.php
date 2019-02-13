@@ -129,6 +129,10 @@ class View {
 
         foreach($schema as $controller) {
 
+            if (isset($controller['access'])
+
+                && ($controller['access'] < $_SESSION['user']['roleID'])) continue;
+
             $itemNode = $this->xml->menu->addChild('item');
 
             $itemNode->addAttribute('title', $controller['title']);
@@ -144,9 +148,11 @@ class View {
 
         $itemNode = $menuNode->addChild('item');
 
-        $itemNode->addAttribute('title', 'Вихід');
+        $itemNode->addAttribute('title', $schema['User']['actions']['Logout']['title']);
 
-        $itemNode->addAttribute('uri', '/користувачі/вихід');
+        $uri = $schema['User']['alias'] . '/' . $schema['User']['actions']['Logout']['alias'];
+
+        $itemNode->addAttribute('uri', '/'. $uri);
     }
 
     /**

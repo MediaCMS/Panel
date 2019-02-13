@@ -17,7 +17,7 @@ class Tag extends \MediaCMS\Panel\Controller {
      */
     protected function access(): void {
 
-        if ($this->user['roleID'] > 2) $this->denied();
+        if ($this->user['roleID'] > 3) $this->denied();
     }
 
     /**

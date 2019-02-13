@@ -32,17 +32,14 @@ class Article extends \MediaCMS\Panel\Controller {
 
         $this->filter['_orderField'] = 'time';
 
+        if ($_SESSION['user']['roleID'] == 4) {
+
+            $this->filter['userID'] = $_SESSION['user']['id'];
+
+            array_pop($this->orderFields);
+        }
+
         parent::filter();
-    }
-
-    /**
-     * Перевіряє доступ для редагування статті
-     *
-     * TODO: Modify access rules
-     */
-    protected function access(): void {
-
-        if ($this->user['roleID'] > 2) $this->denied();
     }
 
     /**

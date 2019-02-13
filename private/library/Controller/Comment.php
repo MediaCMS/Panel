@@ -50,12 +50,4 @@ class Comment extends \MediaCMS\Panel\Controller {
 
         parent::edit();
     }
-
-    /**
-     * Перевіряє доступ для редагування коментаря
-     */
-    protected function access(): void {
-
-        if ($this->user['roleID'] > 2) $this->denied();
-    }
 }

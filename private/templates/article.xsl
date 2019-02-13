@@ -118,13 +118,15 @@
                                            title="Фільтр за назвою мітки" id="formTag" class="form-control" />
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="formUser" class="col-sm-5 col-form-label">Автор</label>
-                                <div class="col-sm-7">
-                                    <input type="text" name="user" value="{@user}" placeholder="Фрагмент назви автора"
-                                           title="Фільтр за назвою автора" id="formUser" class="form-control" />
+                            <xsl:if test="/root/user/@roleID&lt;4">
+                                <div class="form-group row">
+                                    <label for="formUser" class="col-sm-5 col-form-label">Автор</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" name="userTitle" value="{@userTitle}" placeholder="Фрагмент назви автора"
+                                               title="Фільтр за назвою автора" id="formUser" class="form-control" />
+                                    </div>
                                 </div>
-                            </div>
+                            </xsl:if>
                             <div class="form-group row">
                                 <label for="filterStatus" class="col-sm-5 col-form-label">Статус</label>
                                 <div class="col-sm-7">

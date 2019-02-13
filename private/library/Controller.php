@@ -178,8 +178,6 @@ abstract class Controller {
 
         $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 
-        $this->access();
-
         $this->submit();
 
         $this->editAdvanced();
@@ -193,14 +191,6 @@ abstract class Controller {
      * Редагує дані (додатково)
      */
     public function editAdvanced(): void {}
-
-    /**
-     * Перевіряє доступ для редагування
-     */
-    protected function access(): void {
-
-        if ($this->user['roleID'] > 3) $this->denied();
-    }
 
     /**
      * Опрацьовує дані з форми
@@ -232,6 +222,8 @@ abstract class Controller {
      * @param array $form Дані форми
      */
     protected function submitRepeat(array $form): void {
+
+        $this->editAdvanced();
 
         if (isset($form['time']))
 
@@ -327,6 +319,12 @@ abstract class Controller {
             $alert .= ' (Права доступу: "' . $this->user['roleTitle'] .'"")';
 
         $this->view->setAlert($alert, 'danger');
+
+        //$this->router->redirect();
+
+        unset($this->node);
+
+        throw new Exception($alert);
     }
 
     /**

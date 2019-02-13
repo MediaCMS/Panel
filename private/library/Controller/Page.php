@@ -23,14 +23,6 @@ class Page extends \MediaCMS\Panel\Controller {
     }
 
     /**
-     * Перевіряє доступ для редагування сторінки
-     */
-    protected function access(): void {
-
-        if ($this->user['roleID'] > 2) $this->denied();
-    }
-
-    /**
      * Зберігає сторінку в БД
      *
      * @param array $page Дані сторінки

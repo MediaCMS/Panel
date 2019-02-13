@@ -1,29 +1,29 @@
 {
-  "Article":        {"title": "Статті",         "alias": "статті", "actions": {
+  "Article":        {"title": "Статті",         "alias": "статті",        "access": 4, "actions": {
     "Index":        {"title": "Список",         "alias": "список"},
     "Edit":         {"title": "Редагування",    "alias": "редагування"}
   }},
-  "Category":       {"title": "Категорії",      "alias": "категорії", "actions": {
+  "Category":       {"title": "Категорії",      "alias": "категорії",     "access": 2, "actions": {
     "Index":        {"title": "Список",         "alias": "список"},
     "Edit":         {"title": "Редагування",    "alias": "редагування"}
   }},
-  "Tag":            {"title": "Мітки",          "alias": "мітки", "actions": {
+  "Tag":            {"title": "Мітки",          "alias": "мітки",         "access": 3, "actions": {
     "Index":        {"title": "Список",         "alias": "список"},
     "Edit":         {"title": "Редагування",    "alias": "редагування"},
     "Autocomplete": {"title": "Автозаповнення", "alias": "автозаповнення", "isView": false}
   }},
-  "Comment":        {"title": "Коментарі",      "alias": "коментарі", "actions": {
+  "Comment":        {"title": "Коментарі",      "alias": "коментарі",     "access": 3, "actions": {
     "Index":        {"title": "Список",         "alias": "список"},
     "Edit":         {"title": "Редагування",    "alias": "редагування"}
   }},
-  "Page":           {"title": "Сторінки",       "alias": "сторінки", "actions": {
+  "Page":           {"title": "Сторінки",       "alias": "сторінки",      "access": 2, "actions": {
     "Index":        {"title": "Список",         "alias": "список"},
     "Edit":         {"title": "Редагування",    "alias": "редагування"}
   }},
-  "User":           {"title": "Користувачі",    "alias": "користувачі", "actions": {
+  "User":           {"title": "Користувачі",    "alias": "користувачі",   "access": 1, "actions": {
     "Index":        {"title": "Список",         "alias": "список"},
     "Edit":         {"title": "Редагування",    "alias": "редагування"},
-    "Login":        {"title": "Вхід",           "alias": "вхід"},
-    "Logout":       {"title": "Вихід",          "alias": "вихід"}}
+    "Login":        {"title": "Вхід",           "alias": "вхід",          "access": 4},
+    "Logout":       {"title": "Вихід",          "alias": "вихід",         "access": 4}}
   }
 }

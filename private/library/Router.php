@@ -154,6 +154,10 @@ class Router {
 
             if ($controllerOptions['alias'] != $this->getURI(0)) continue;
 
+            $access = (isset($controllerOptions['access'])
+
+                && ($controllerOptions['access'] >= $_SESSION['user']['roleID'])) ? true : false;
+
             if (empty($this->getURI(1))) {
 
                 $actionAlias = current($controllerOptions['actions'])['alias'];
@@ -168,6 +172,12 @@ class Router {
             foreach($controllerOptions['actions'] as $action => $actionOptions) {
 
                 if ($actionOptions['alias'] != $this->getURI(1)) continue;
+
+                if (isset($actionOptions['access']))
+
+                    $access = ($actionOptions['access'] >= $_SESSION['user']['roleID']) ? true : false;
+
+                if (!$access) throw new Exception('Доступ заборонено');
 
                 $this->setAction($action);
 
@@ -287,10 +297,10 @@ class Router {
     /**
      * Здійснює переадресацію
      *
-     * @param   string $uri Адреса сторінки сайту, на яку потрібно переадресувати
-     * @param   integer $code Код переадресації HTTP-протоколу
+     * @param string|null $uri Адреса сторінки сайту, на яку потрібно переадресувати
+     * @param integer $code Код переадресації HTTP-протоколу
      */
-    public function redirect(string $uri = '/', int $code = 303): void {
+    public function redirect($uri = '/', int $code = 303): void {
 
         $uri = ($uri) ?? urldecode($_SERVER['REQUEST_URI']);
 
