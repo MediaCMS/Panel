@@ -9,52 +9,23 @@
  * @copyright   GNU General Public License v3
  */
 -->
-<xsl:stylesheet version="1.0" exclude-result-prefixes="exslt"
+<xsl:stylesheet version="1.0" exclude-result-prefixes="exslt my"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:exslt="http://exslt.org/common">
+                xmlns:exslt="http://exslt.org/common"
+                xmlns:my="https://github.com/MediaCMS">
 
     <xsl:template name="index">
         <xsl:param name="title" />
         <xsl:param name="columns" />
-
-        <xsl:choose>
-            <xsl:when test="items/item">
-                <table class="table clickable">
-                    <caption><xsl:value-of select="$title" /></caption>
-                    <thead>
-                        <tr class="text-center">
-                            <xsl:for-each select="$columns/column">
-                                <th scope="col"><xsl:value-of select="@title" /></th>
-                            </xsl:for-each>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <xsl:for-each select="items/item">
-                            <xsl:variable name="item" select="." />
-                            <tr data-edit="{../../@edit}/{@id}">
-                                <xsl:if test="@status=0">
-                                    <xsl:attribute name="class">disabled</xsl:attribute>
-                                </xsl:if>
-                                <xsl:for-each select="$columns/column">
-                                    <xsl:variable name="name" select="@name" />
-                                    <xsl:choose>
-                                        <xsl:when test="$name='position'">
-                                            <th scope="row" class="text-{@align}"><xsl:value-of select="$item/@position" />.</th>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <td class="text-{@align}"><xsl:value-of select="$item/@*[name()=$name]" /></td>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:for-each>
-                            </tr>
-                        </xsl:for-each>
-                    </tbody>
-                </table>
-                <xsl:apply-templates select="pagination" />
-            </xsl:when>
-            <xsl:otherwise>Записів не знайдено</xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="filter" />
+        <xsl:variable name="index">
+            <my:index title="{$title}" edit="{@edit}">
+                <columns><xsl:copy-of select="$columns" /></columns>
+                <xsl:copy-of select="items" />
+                <xsl:copy-of select="pagination" />
+                <xsl:copy-of select="filter" />
+            </my:index>
+        </xsl:variable>
+        <xsl:apply-templates select="exslt:node-set($index)" />
     </xsl:template>
 
     <xsl:template match="pagination">

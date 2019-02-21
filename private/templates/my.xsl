@@ -14,6 +14,58 @@
     xmlns:exslt="http://exslt.org/common"
     xmlns:my="https://github.com/MediaCMS">
 
+    <xsl:template match="/my:index">
+        <xsl:choose>
+            <xsl:when test="items/item">
+                <table class="table clickable">
+                    <caption><xsl:value-of select="@title" /></caption>
+                    <thead>
+                        <tr class="text-center">
+                            <xsl:apply-templates select="columns/column" mode="header" />
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <xsl:apply-templates select="items/item">
+                            <xsl:with-param name="columns" select="columns" />
+                        </xsl:apply-templates>
+                    </tbody>
+                </table>
+                <xsl:apply-templates select="pagination" />
+            </xsl:when>
+            <xsl:otherwise>Записів не знайдено</xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates select="filter" />
+    </xsl:template>
+
+    <xsl:template match="/my:index/columns/column" mode="header">
+        <th scope="col"><xsl:value-of select="@title" /></th>
+    </xsl:template>
+
+    <xsl:template match="/my:index/columns/column">
+        <xsl:param name="item" />
+        <xsl:variable name="name" select="@name" />
+        <xsl:choose>
+            <xsl:when test="$name='position'">
+                <th scope="row" class="text-{@align}"><xsl:value-of select="$item/@position" />.</th>
+            </xsl:when>
+            <xsl:otherwise>
+                <td class="text-{@align}"><xsl:value-of select="$item/@*[name()=$name]" /></td>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="/my:index/items/item">
+        <xsl:param name="columns" />
+        <tr data-edit="{../../@edit}/{@id}">
+            <xsl:if test="@status=0">
+                <xsl:attribute name="class">disabled</xsl:attribute>
+            </xsl:if>
+            <xsl:apply-templates select="$columns/column">
+                <xsl:with-param name="item" select="." />
+            </xsl:apply-templates>
+        </tr>
+    </xsl:template>
+
     <xsl:template match="/my:form">
         <form action="" method="POST" enctype="multipart/form-data" class="mx-auto">
             <xsl:if test="@type='extended'">
