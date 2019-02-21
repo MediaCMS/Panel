@@ -5,39 +5,45 @@
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
- * @link        https://медіа.укр
+ * @link        https://github.com/MediaCMS
  * @copyright   GNU General Public License v3
  */
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-
-<!--
-    <patterns>
-        <forms>
-            <form id="article" title="" pagination="true">
-                <fields>
-                    <field id="title" title="" description="" type="" />
-                    <field id="description" title="" description="" type="" />
-
-                    <field id="status" title="" description="" type="" />
-                </fields>
-            </form>
-        </forms>
-        <tables>
-
-        </tables>
-    </patterns>
--->
-
+<xsl:stylesheet version="1.0" exclude-result-prefixes="exslt my"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:exslt="http://exslt.org/common"
+                xmlns:my="https://github.com/MediaCMS">
 
     <xsl:template match="main/article/index">
+
+        <xsl:variable name="table">
+            <table>
+                <rows>
+                    <row title="#" value="{@title}" align="center" />
+                    <row title="Дата" value="{@title}" align="center" />
+                    <row title="Назва" value="{@title}" align="center" />
+                    <row title="Категорія" value="{@title}" align="center" />
+                    <row title="Мітки" value="{@title}" align="center" />
+                    <row title="Автор" value="{@title}" align="center" />
+                    <row title="ID" value="{@title}" align="center" />
+                </rows>
+            </table>
+        </xsl:variable>
+
+        <xsl:call-template name="table">
+            <xsl:with-param name="params" select="$table" />
+        </xsl:call-template>
+<!--
+
         <xsl:choose>
             <xsl:when test="items/item">
                 <table class="table clickable">
                     <caption>Список статей</caption>
                     <thead>
                         <tr class="text-center">
+                            <xsl:for-each select="$params/table-rows/table-row">
+                                <th scope="col">#</th>
+                            </xsl:for-each>
                             <th scope="col">#</th>
                             <th scope="col">Дата</th>
                             <th scope="col">Назва</th>
@@ -69,6 +75,8 @@
             <xsl:otherwise>Записів не знайдено</xsl:otherwise>
         </xsl:choose>
         <xsl:apply-templates select="filter" />
+
+-->
     </xsl:template>
 
     <xsl:template match="main/article/index/filter">
@@ -199,13 +207,28 @@
     </xsl:template>
 
     <xsl:template match="main/article/edit">
-        <!--
-        <xsl:variable name="form">
-            <xsl:call-template name="form" />
+
+        <xsl:variable name="my:form">
+            <my:form type="extended">
+                <my:fields>
+                    <my:field type="title" value="{@title}" description="Назва статті" />
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <textarea name="description" value="{@description}" id="formDescription"
+                                      placeholder="Опис статті" class="form-control"
+                                      title="Опис сторінки"><xsl:value-of select="@description" /></textarea>
+                        </div>
+                    </div>
+                    <my:field type="description" value="{@description}" />
+                    <my:field type="text" value="{@text}" />
+                    <my:field type="image" value="{@image}" />
+                </my:fields>
+            </my:form>
         </xsl:variable>
 
-        <xsl:apply-templates select="$form" />
-        -->
+        <xsl:apply-templates select="exslt:node-set($my:form)" />
+
+        <!--
         <form action="" method="POST" enctype="multipart/form-data" class="extended mx-auto">
             <div class="form-group row">
                 <div class="col-sm-12">
@@ -319,6 +342,7 @@
                 </xsl:if>
             </div>
         </form>
+        -->
     </xsl:template>
 
 </xsl:stylesheet>

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/** Головний файл стилів  @author      Артем Висоцький <a.vysotsky@gmail.com> @package     MediaCMS\Panel @link        https://медіа.укр @copyright   GNU General Public License v3 */
+/** Головний файл стилів  @author      Артем Висоцький <a.vysotsky@gmail.com> @package     MediaCMS\Panel @link        https://github.com/MediaCMS @copyright   GNU General Public License v3 */
 html body img { border-radius: 3%; }
 html body header nav a.navbar-brand img { width: 28px; border-radius: 3px; opacity: 0.5; margin-top: -3px; }
 html body header nav a.navbar-brand :hover { opacity: 0.9; }

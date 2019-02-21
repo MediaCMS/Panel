@@ -5,11 +5,15 @@
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
- * @link        https://медіа.укр
+ * @link        https://github.com/MediaCMS
  * @copyright   GNU General Public License v3
  */
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" exclude-result-prefixes="exslt"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:exslt="http://exslt.org/common">
+
+    <xsl:output method="html" indent="no" encoding="UTF-8"  media-type="text/html" />
 
     <xsl:include href="article.xsl" />
     <xsl:include href="category.xsl" />
@@ -18,8 +22,7 @@
     <xsl:include href="page.xsl" />
     <xsl:include href="user.xsl" />
     <xsl:include href="common.xsl" />
-
-    <xsl:output method="html" indent="yes" encoding="UTF-8"  media-type="text/html" />
+    <xsl:include href="my.xsl" />
 
     <xsl:template match="/*">
         <xsl:text disable-output-escaping="yes">&lt;!DOCTYPE html></xsl:text>
@@ -71,12 +74,12 @@
                                     </xsl:for-each>
                                 </ul>
                             </div>
-                            <div title="{user/@roleTitle}" class="user text-light"><xsl:value-of select="(user/@title)" />
+                            <div title="{user/@roleTitle}" class="user text-light"><xsl:value-of select="user/@title" />
                                 <xsl:choose>
                                     <xsl:when test="string-length(user/@image) &gt; 0">
                                         <xsl:call-template name="image">
+                                            <xsl:with-param name="title" select="(user/@title)" />
                                             <xsl:with-param name="uri" select="user/@image" />
-                                            <xsl:with-param name="title" select="user/@title" />
                                         </xsl:call-template>
                                     </xsl:when>
                                     <xsl:otherwise><img src="/user.png" alt="{user/@title}" /></xsl:otherwise>
@@ -228,6 +231,44 @@
 
     <xsl:template match="test">
         <div id="test" />
+    </xsl:template>
+
+    <xsl:template name="table">
+        <xsl:param name="params" />
+
+        <xsl:choose>
+            <xsl:when test="items/item">
+                <table class="table clickable">
+                    <caption>Список статей</caption>
+                    <thead>
+                        <tr class="text-center">
+                            <xsl:for-each select="exslt:node-set($params)/table/rows/row">
+                                <th scope="col"><xsl:value-of select="@title" /></th>
+                            </xsl:for-each>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <xsl:for-each select="items/item">
+                            <tr data-edit="{@edit}">
+                                <xsl:if test="@status=0">
+                                    <xsl:attribute name="class">disabled</xsl:attribute>
+                                </xsl:if>
+                                <th scope="row" class="text-center"><xsl:value-of select="@position" />.</th>
+                                <td class="text-center"><xsl:value-of select="@time" /></td>
+                                <td class="text-center"><xsl:value-of select="@title" /></td>
+                                <td class="text-center"><xsl:value-of select="@category" /></td>
+                                <td class="text-center"><xsl:value-of select="@tags" /></td>
+                                <td class="text-center"><xsl:value-of select="@user" /></td>
+                                <td class="text-center"><xsl:value-of select="@id" /></td>
+                            </tr>
+                        </xsl:for-each>
+                    </tbody>
+                </table>
+                <xsl:apply-templates select="pagination" />
+            </xsl:when>
+            <xsl:otherwise>Записів не знайдено</xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates select="filter" />
     </xsl:template>
 
 <!--

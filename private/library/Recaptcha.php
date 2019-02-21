@@ -4,7 +4,7 @@
  *
  * @author      Артем Висоцький <a.vysotsky@gmail.com>
  * @package     MediaCMS\Panel
- * @link        https://медіа.укр
+ * @link        https://github.com/MediaCMS
  * @copyright   GNU General Public License v3
  */
 
