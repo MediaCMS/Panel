@@ -111,6 +111,8 @@ abstract class Controller {
 
         $this->database->call($this->router->getController() . 'GetIndex', $this->filter);
 
+        $this->node->addAttribute('edit', '/' . $this->router->getURI(0) . '/редагування');
+
         $itemsNode = $this->node->addChild('items');
 
         $i = 1;
@@ -120,8 +122,6 @@ abstract class Controller {
             $itemNode = $itemsNode->addChild('item');
 
             $item['position'] = $this->filter['_offset'] + $i;
-
-            $item['edit'] = '/' . $this->router->getURI(0) . '/редагування/' . $item['id'];
 
             $this->view->setItem($itemNode, $item);
 

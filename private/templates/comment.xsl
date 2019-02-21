@@ -9,44 +9,24 @@
  * @copyright   GNU General Public License v3
  */
 -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" exclude-result-prefixes="exslt my"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:exslt="http://exslt.org/common"
+                xmlns:my="https://github.com/MediaCMS">
 
     <xsl:template match="main/comment/index">
-        <xsl:choose>
-            <xsl:when test="items/item">
-                <table class="table clickable">
-                    <caption>Список коментарів</caption>
-                    <thead>
-                        <tr class="text-center">
-                            <th scope="col">#</th>
-                            <th scope="col">Дата</th>
-                            <th scope="col">Текст</th>
-                            <th scope="col">Стаття</th>
-                            <th scope="col">Автор</th>
-                            <th scope="col">ID</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <xsl:for-each select="items/item">
-                            <tr data-edit="{@edit}">
-                                <xsl:if test="@status=0">
-                                    <xsl:attribute name="class">disabled</xsl:attribute>
-                                </xsl:if>
-                                <th scope="row" class="text-center"><xsl:value-of select="@position" />.</th>
-                                <td class="text-center"><xsl:value-of select="@time" /></td>
-                                <td class="text-left"><xsl:value-of select="@text" /></td>
-                                <td class="text-left"><xsl:value-of select="@article" /></td>
-                                <td class="text-center"><xsl:value-of select="@user" /></td>
-                                <td class="text-center"><xsl:value-of select="@id" /></td>
-                            </tr>
-                        </xsl:for-each>
-                    </tbody>
-                </table>
-                <xsl:apply-templates select="pagination" />
-            </xsl:when>
-            <xsl:otherwise>Коментарів не знайдено</xsl:otherwise>
-        </xsl:choose>
-        <xsl:apply-templates select="filter" />
+        <xsl:variable name="columns">
+            <column name="position" title="#"           align="center" />
+            <column name="text"     title="Текст"       align="left" />
+            <column name="article"  title="Стаття"      align="left" />
+            <column name="user"     title="Користувач"  align="center" />
+            <column name="time"     title="Дата"        align="center" />
+            <column name="id"       title="ID"          align="center" />
+        </xsl:variable>
+        <xsl:call-template name="index">
+            <xsl:with-param name="title" select="'Список коментарів'" />
+            <xsl:with-param name="columns" select="exslt:node-set($columns)" />
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="main/comment/index/filter">
