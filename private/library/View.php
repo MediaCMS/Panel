@@ -83,19 +83,17 @@ class View {
 
         $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-        $this->xml->addAttribute('url', $url);
+        $this->xml->addAttribute('url', urldecode($url));
 
-        $this->xml->addAttribute('urlEncoded', urlencode($url));
+        $this->xml->addAttribute('urlEncoded', urldecode($url));
 
-        $this->xml->addAttribute('uri', $_SERVER['REQUEST_URI']);
+        $this->xml->addAttribute('uri', urldecode($_SERVER['REQUEST_URI']));
 
         $this->xml->addAttribute('logo', TITLE);
 
         $this->xml->addAttribute('copyright', TITLE . ' @ ' . date('Y'));
 
         $this->xml->addAttribute('editor', ($editor) ? 1 : 0);
-
-        if (DEVELOPMENT) $this->xml->addChild('debug');
     }
 
     /**
@@ -389,7 +387,19 @@ class View {
 
         $this->xml->addAttribute('timestamp', time());
 
+        $xml = $this->toArray($this->xml);
+
+        $xml = print_r((array) $xml, true);
+
+        $xml = preg_replace('/\s*(\(|\))\n/', "\n", $xml);
+
+        $xml = preg_replace('/[\n]{2,12}/', "\n", $xml);
+
+        $xml = preg_replace('/[ ]{2,8}/', "  ", $xml);
+
         $debugNode = $this->xml->addChild('debug');
+
+        $debugNode->addChild('xml', $xml);
 
         $debugNode->addAttribute('time', round(((microtime(true) - TIME) * 1000), 2));
 
@@ -493,5 +503,35 @@ class View {
         return $xslt->transformToXML($xml);
     }
 
+    /**
+     * Конвертує SimpleXMLElement в масив
+     *
+     * @param \SimpleXMLElement $object Елемент XML
+     * @param array|null $out Масив для наповнення
+     * return array Масив з даними
+     */
+
+    private function toArray(\SimpleXMLElement $object, $out = []): array {
+
+        foreach($object->attributes() as $key => $value)
+
+            $out['@' . $key] = (string) $value;
+
+        foreach ($object as $index => $node) {
+
+            if (is_object($node)) {
+
+                $out[$index][] = $this->toArray($node);
+
+            } else {
+
+                $out[$index] = $node;
+            }
+        }
+
+        //$out[$index] = (is_object($node)) ? self::xml2array($node) : print_r($node, true);
+
+        return $out;
+    }
 
 };

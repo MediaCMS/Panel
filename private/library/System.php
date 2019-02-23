@@ -42,7 +42,7 @@ class System {
      * @return string IP-адреса
      */
     public static function getAlias(string $string ): string {
-
+/*
         $chars = [
 
             'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'h', 'ґ' => 'g', 'д' => 'd', 'е' => 'e', 'є' => 'ie',
@@ -57,7 +57,7 @@ class System {
         $first = [' є' => ' ye', ' ї' => ' yi', ' й' => ' y', ' ю' => ' yu', ' я' => ' ya'];
 
         $combinations = ['зг' => 'zgh'];
-
+*/
         $alias = strip_tags($string);
 
         $alias = mb_strtolower($alias);

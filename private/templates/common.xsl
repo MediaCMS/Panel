@@ -14,10 +14,12 @@
                 xmlns:exslt="http://exslt.org/common"
                 xmlns:my="https://github.com/MediaCMS">
 
+    <xsl:output method="html" indent="no" encoding="UTF-8"  media-type="text/html" cdata-section-elements="comments" />
+
     <xsl:template name="index">
         <xsl:param name="filter" />
         <xsl:param name="columns" />
-        <xsl:copy-of select="filter" />
+        <!--<xsl:copy-of select="filter" />-->
         <xsl:variable name="index">
             <my:index edit="{@edit}">
                 <filter>
@@ -81,7 +83,7 @@
     </xsl:template>
 
     <xsl:template match="debug">
-        <div id="debug">
+        <div id="debug" class="text-center">
             <xsl:if test="database/queries/query">
                 <div class="container mapper">
                     <table class="table">
@@ -132,6 +134,9 @@
                     </table>
                 </div>
             </xsl:if>
+            <div class="xml text-left d-inline-block">
+                <pre><xsl:value-of select="xml" /></pre>
+            </div>
         </div>
     </xsl:template>
 
