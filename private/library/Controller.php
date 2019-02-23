@@ -44,7 +44,10 @@ abstract class Controller {
     protected $user;
 
     /** @var array Фільтр списку */
-    protected $filter = [
+    protected $filter = [];
+
+    /** @var array Фільтр списку за замовчуванням */
+    protected $filterDefault = [
 
         '_status' => 1, '_orderField' => 'title', '_orderDirection' => 1,
 
@@ -143,17 +146,21 @@ abstract class Controller {
 
         $title = strtolower($this->router->getController());
 
-        if (!isset($_SESSION['filters'][$title])) $_SESSION['filters'][$title] = [];
+        if (isset($_SESSION['filters'][$title]))
 
-        $this->filter = array_replace($this->filter, $_SESSION['filters'][$title]);
+            $this->filter = $_SESSION['filters'][$title];
 
-        if (count($_POST) > 0) {
+        else
 
-            $post = $_POST;
+            $this->filter = $this->filterDefault;
 
-            unset($post['submit']);
+        if (isset($_POST['_submit'])) {
 
-            $post = array_map(function($value) {return $value === "" ? NULL : $value;}, $post);
+            foreach ($_POST as $key => $value)
+
+                $post[$key] = ($value === '') ? null : $value;
+
+            unset($post['_submit']);
 
             $this->filter = array_replace($this->filter, $post);
         }
@@ -162,11 +169,11 @@ abstract class Controller {
 
         $this->filter['_offset'] = $this->filter['_limit'] * ($this->page - 1);
 
-        $_SESSION['filters'][$title] = $this->filter;
-
         if ($this->router->isView())
 
             $this->view->setFilter($this->filter, $this->orderFields, $this->router->getURI(0));
+
+        $_SESSION['filters'][$title] = $this->filter;
     }
 
     /**

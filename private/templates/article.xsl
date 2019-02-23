@@ -15,7 +15,6 @@
                 xmlns:my="https://github.com/MediaCMS">
 
     <xsl:template match="main/article/index">
-        <xsl:copy-of select="." />
         <xsl:variable name="filter">
             <item type="date"   name="dateBegin"    value="{filter/@dateBegin}" title="Початкова дата"  />
             <item type="date"   name="dateEnd"      value="{filter/@dateEnd}"   title="Кінцева дата" />

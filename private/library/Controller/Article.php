@@ -26,11 +26,9 @@ class Article extends \MediaCMS\Panel\Controller {
             ['title' => 'Автор',        'value' => 'user']
         ];
 
-        $this->filter['dateBegin'] = '2018-01-01';
-
-        $this->filter['dateEnd'] = date('Y-m-d');
-
-        $this->filter['_orderField'] = 'time';
+        $this->filterDefault['dateBegin']   = '2018-01-01';
+        $this->filterDefault['dateEnd']     = date('Y-m-d');
+        $this->filterDefault['_orderField'] = 'time';
 
         if ($_SESSION['user']['roleID'] == 4) {
 

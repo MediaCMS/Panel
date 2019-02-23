@@ -81,7 +81,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
-                            <input type="submit" name="submit" value="Фільтрувати" class="btn btn-primary" />
+                            <input type="submit" name="_submit" value="Фільтрувати" class="btn btn-primary" />
                         </div>
                     </form>
                 </div>
