@@ -24,9 +24,9 @@ class View {
     /** @var array Можливі стани записів списку */
     protected $statuses = [
 
-        ['title' => 'Всі статуси', 'value' => null],
-        ['title' => 'Діючий', 'value' => '1'],
-        ['title' => 'Видалений', 'value' => '0']
+        ['title' => 'Всі статуси',  'value' => null],
+        ['title' => 'Діючий',       'value' => '1'],
+        ['title' => 'Видалений',    'value' => '0']
     ];
 
     /** @var array Можливі напрямки сортування списку */
@@ -39,11 +39,11 @@ class View {
     /** @var array Моєлива кільткість записів в списку */
     protected $limits = [
 
-        ['title' => '3', 'value' => '3'],
-        ['title' => '5', 'value' => '5'],
-        ['title' => '7', 'value' => '7'],
-        ['title' => '11', 'value' => '11'],
-        ['title' => '13', 'value' => '13']
+        ['title' => '3',    'value' => '3'],
+        ['title' => '5',    'value' => '5'],
+        ['title' => '7',    'value' => '7'],
+        ['title' => '11',   'value' => '11'],
+        ['title' => '13',   'value' => '13']
     ];
 
     /** @var integer Максимальна кількість суміжних номерів сторінок пагінатора */

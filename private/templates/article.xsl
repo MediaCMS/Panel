@@ -15,6 +15,17 @@
                 xmlns:my="https://github.com/MediaCMS">
 
     <xsl:template match="main/article/index">
+        <xsl:copy-of select="." />
+        <xsl:variable name="filter">
+            <item type="date"   name="dateBegin"    value="{filter/@dateBegin}" title="Початкова дата"  />
+            <item type="date"   name="dateEnd"      value="{filter/@dateEnd}"   title="Кінцева дата" />
+            <item type="string" name="title"        value="{filter/@title}"     title="Назва" />
+            <item type="string" name="category"     value="{filter/@category}"  title="Категорія" />
+            <item type="string" name="tag"          value="{filter/@tag}"       title="Мітка" />
+            <xsl:if test="/root/user/@roleID&lt;4">
+                <item type="string" name="userTitle" value="{@userTitle}" title="Автор" />
+            </xsl:if>
+        </xsl:variable>
         <xsl:variable name="columns">
             <column name="position" title="#"           align="center" />
             <column name="time"     title="Дата"        align="center" />
@@ -25,136 +36,9 @@
             <column name="id"       title="ID"          align="center" />
         </xsl:variable>
         <xsl:call-template name="index">
-            <xsl:with-param name="title" select="'Список статей'" />
+            <xsl:with-param name="filter" select="exslt:node-set($filter)" />
             <xsl:with-param name="columns" select="exslt:node-set($columns)" />
         </xsl:call-template>
-    </xsl:template>
-
-    <xsl:template match="main/article/index/filter">
-        <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Фільтр</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&#215;</span>
-                        </button>
-                    </div>
-                    <form action="{@uri}" method="POST">
-                        <div class="modal-body">
-                            <div class="form-group row">
-                                <label for="formDateBegin" class="col-sm-5 col-form-label">Початкова дата</label>
-                                <div class="col-sm-7">
-                                    <input type="date" name="dateBegin" value="{@dateBegin}"
-                                           title="Фільтр за початковою датою" id="formDateBegin" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="formDateEnd" class="col-sm-5 col-form-label">Кінцева дата</label>
-                                <div class="col-sm-7">
-                                    <input type="date" name="dateEnd" value="{@dateEnd}"
-                                           title="Фільтр за кінцевою датою" id="formDateEnd" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="formTitle" class="col-sm-5 col-form-label">Назва</label>
-                                <div class="col-sm-7">
-                                    <input type="text" name="title" value="{@title}" placeholder="Фрагмент назви статті"
-                                           title="Фільтр за назвою статті" id="formTitle" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="formCategory" class="col-sm-5 col-form-label">Категорія</label>
-                                <div class="col-sm-7">
-                                    <input type="text" name="category" value="{@category}" placeholder="Фрагмент назви категорії"
-                                           title="Фільтр за назвою категорії" id="formCategory" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="formTag" class="col-sm-5 col-form-label">Мітка</label>
-                                <div class="col-sm-7">
-                                    <input type="text" name="tag" value="{@tag}" placeholder="Фрагмент назви мітки"
-                                           title="Фільтр за назвою мітки" id="formTag" class="form-control" />
-                                </div>
-                            </div>
-                            <xsl:if test="/root/user/@roleID&lt;4">
-                                <div class="form-group row">
-                                    <label for="formUser" class="col-sm-5 col-form-label">Автор</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" name="userTitle" value="{@userTitle}" placeholder="Фрагмент назви автора"
-                                               title="Фільтр за назвою автора" id="formUser" class="form-control" />
-                                    </div>
-                                </div>
-                            </xsl:if>
-                            <div class="form-group row">
-                                <label for="filterStatus" class="col-sm-5 col-form-label">Статус</label>
-                                <div class="col-sm-7">
-                                    <select name="_status" title="Фільтр за статусом" id="filterStatus" class="form-control">
-                                        <xsl:for-each select="statuses/item">
-                                            <option value="{@value}">
-                                                <xsl:if test="@value=../../@_status">
-                                                    <xsl:attribute name="selected">selected</xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:value-of select="@title" />
-                                            </option>
-                                        </xsl:for-each>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="filterOrderField" class="col-sm-5 col-form-label">Поле для сортування</label>
-                                <div class="col-sm-7">
-                                    <select name="_orderField" title="Поле для сортування" id="filterOrderField" class="form-control">
-                                        <xsl:for-each select="orderFields/item">
-                                            <option value="{@field}">
-                                                <xsl:if test="@field=../../@_orderField">
-                                                    <xsl:attribute name="selected">selected</xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:value-of select="@title" />
-                                            </option>
-                                        </xsl:for-each>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="filterOrderDirection" class="col-sm-5 col-form-label">Напрям сортування</label>
-                                <div class="col-sm-7">
-                                    <select name="_orderDirection" title="Напрямок сортування" id="filterOrderDirection" class="form-control">
-                                        <xsl:for-each select="orderDirections/item">
-                                            <option value="{@value}">
-                                                <xsl:if test="@value=../../@_orderDirection">
-                                                    <xsl:attribute name="selected">selected</xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:value-of select="@title" />
-                                            </option>
-                                        </xsl:for-each>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="filterLimit" class="col-sm-5 col-form-label">Записів на сторінку</label>
-                                <div class="col-sm-7">
-                                    <select name="_limit" title="Кількість записів на сторінку" id="filterLimit" class="form-control">
-                                        <xsl:for-each select="limits/item">
-                                            <option value="{@value}">
-                                                <xsl:if test="@value=../../@_limit">
-                                                    <xsl:attribute name="selected">selected</xsl:attribute>
-                                                </xsl:if>
-                                                <xsl:value-of select="@title" />
-                                            </option>
-                                        </xsl:for-each>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
-                            <input type="submit" name="submit" value="Фільтрувати" class="btn btn-primary" />
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
     </xsl:template>
 
     <xsl:template match="main/article/edit">

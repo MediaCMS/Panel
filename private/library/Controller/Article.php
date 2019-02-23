@@ -19,11 +19,11 @@ class Article extends \MediaCMS\Panel\Controller {
 
         $this->orderFields = [
 
-            ['title' => 'Час', 'field' => 'time'],
-            ['title' => 'Назва', 'field' => 'title'],
-            ['title' => 'Категорія', 'field' => 'category'],
-            ['title' => 'Мітка', 'field' => 'tag'],
-            ['title' => 'Автор', 'field' => 'user']
+            ['title' => 'Час',          'value' => 'time'],
+            ['title' => 'Назва',        'value' => 'title'],
+            ['title' => 'Категорія',    'value' => 'category'],
+            ['title' => 'Мітка',        'value' => 'tag'],
+            ['title' => 'Автор',        'value' => 'user']
         ];
 
         $this->filter['dateBegin'] = '2018-01-01';

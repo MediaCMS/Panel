@@ -18,7 +18,6 @@
         <xsl:choose>
             <xsl:when test="items/item">
                 <table class="table clickable">
-                    <caption><xsl:value-of select="@title" /></caption>
                     <thead>
                         <tr class="text-center">
                             <xsl:apply-templates select="columns/column" mode="header" />
@@ -65,6 +64,68 @@
             </xsl:apply-templates>
         </tr>
     </xsl:template>
+
+    <xsl:template match="/my:index/filter">
+        <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Фільтр</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#215;</span>
+                        </button>
+                    </div>
+                    <form action="" method="POST">
+                        <div class="modal-body">
+                            <xsl:apply-templates select="item" mode="common" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                            <input type="submit" name="submit" value="Фільтрувати" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </xsl:template>
+
+    <xsl:template match="/my:index/filter/item" mode="common">
+        <div class="form-group row">
+            <label for="filter-{@name}" class="col-sm-5 col-form-label"><xsl:value-of select="@title" /></label>
+            <div class="col-sm-7">
+                <xsl:apply-templates select="." />
+            </div>
+        </div>
+    </xsl:template>
+
+    <xsl:template match="/my:index/filter/item[@type='date']">
+        <input type="date" name="{@name}" value="{@value}"
+            title="Фільтр за датою" id="filter-{@name}" class="form-control" />
+    </xsl:template>
+
+    <xsl:template match="/my:index/filter/item[@type='string']">
+        <input type="text" name="{@name}" value="{@value}" placeholder="Ведіть фрагмент тексту"
+               title="Фільтр за фрагментом тексту" id="filter-{@name}" class="form-control" />
+    </xsl:template>
+
+    <xsl:template match="/my:index/filter/item[@type='list']">
+        <xsl:copy-of select="." />
+        <select name="{@name}" title="Фільтр за пунктом переліку" id="filter-{@name}" class="form-control">
+            <xsl:for-each select="items/item">
+                <option value="{@value}">
+                    <xsl:if test="@value=../../@value">
+                        <xsl:attribute name="selected">selected</xsl:attribute>
+                    </xsl:if>
+                    <xsl:value-of select="@title" />
+                </option>
+            </xsl:for-each>
+        </select>
+    </xsl:template>
+
+
+
+
+
 
     <xsl:template match="/my:form">
         <form action="" method="POST" enctype="multipart/form-data" class="mx-auto">

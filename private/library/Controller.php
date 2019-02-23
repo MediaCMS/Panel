@@ -51,7 +51,10 @@ abstract class Controller {
         '_offset' => 0, '_limit' => 7
     ];
 
-    /** @var array Можливі назви полів для сортування списку  */
+    /** @var array Можливі назви полів для сортування списку
+     *
+     * [['title' => '', 'value' => '']]
+     */
     protected $orderFields = [];
 
     /** @var integer Номер поточної сторінки списку */

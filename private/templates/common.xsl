@@ -15,14 +15,36 @@
                 xmlns:my="https://github.com/MediaCMS">
 
     <xsl:template name="index">
-        <xsl:param name="title" />
+        <xsl:param name="filter" />
         <xsl:param name="columns" />
         <xsl:variable name="index">
-            <my:index title="{$title}" edit="{@edit}">
+            <my:index edit="{@edit}">
+                <filter>
+                    <xsl:copy-of select="$filter" />
+                    <xsl:if test="filter/statuses">
+                        <item type="list" name="_status" value="{filter/@_status}" title="Статус">
+                            <items><xsl:copy-of select="filter/statuses/item" /></items>
+                        </item>
+                    </xsl:if>
+                    <xsl:if test="filter/orderFields">
+                        <item type="list" name="_orderField" value="{filter/@_orderField}" title="Поле сортування">
+                            <items><xsl:copy-of select="filter/orderFields/item" /></items>
+                        </item>
+                    </xsl:if>
+                    <xsl:if test="filter/orderDirections">
+                        <item type="list" name="_orderDirection" value="{filter/@_orderDirection}" title="Напрям сортування">
+                            <items><xsl:copy-of select="filter/orderDirections/item" /></items>
+                        </item>
+                    </xsl:if>
+                    <xsl:if test="filter/limits">
+                        <item type="list" name="_limit" value="{filter/@_limit}" title="Записів на сторінку">
+                            <items><xsl:copy-of select="filter/limits/item" /></items>
+                        </item>
+                    </xsl:if>
+                </filter>
                 <columns><xsl:copy-of select="$columns" /></columns>
                 <xsl:copy-of select="items" />
                 <xsl:copy-of select="pagination" />
-                <xsl:copy-of select="filter" />
             </my:index>
         </xsl:variable>
         <xsl:apply-templates select="exslt:node-set($index)" />
