@@ -24,33 +24,23 @@ class User extends \MediaCMS\Panel\Controller {
 
         $this->orderFields = [
 
-            ['title' => 'Назва', 'field' => 'title'],
-            ['title' => 'Доступ', 'field' => 'roleID'],
-            ['title' => 'Час', 'field' => 'time']
+            ['title' => 'Назва',    'field' => 'title'],
+            ['title' => 'Доступ',   'field' => 'roleID'],
+            ['title' => 'Час',      'field' => 'time']
         ];
 
-        $this->filter['dateBegin'] = '2018-01-01';
-
-        $this->filter['dateEnd'] = date('Y-m-d');
+        $this->filterDefault['dateBegin']   = '2018-01-01';
+        $this->filterDefault['dateEnd']     = date('Y-m-d');
 
         parent::filter();
 
-        $rolesNode = $this->node->filter->addChild('roles');
-
-        $roleNode = $rolesNode->addChild('role');
-
-        $roleNode->addAttribute('id', null);
-
-        $roleNode->addAttribute('title', 'Всі ролі');
-
         $this->database->call('RoleGetIndex');
 
-        while($role = $this->database->getResult()) {
+        $roles = $this->database->getResults();
 
-            $roleNode = $rolesNode->addChild('role');
+        array_unshift($roles, ['id' => null, 'title' => 'Всі ролі']);
 
-            $this->view->setItem($roleNode, $role);
-        }
+        $this->view->setItems($this->node->filter->addChild('roles'), $roles);
     }
 
     /**

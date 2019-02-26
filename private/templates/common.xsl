@@ -19,7 +19,6 @@
     <xsl:template name="index">
         <xsl:param name="filter" />
         <xsl:param name="columns" />
-        <!--<xsl:copy-of select="filter" />-->
         <xsl:variable name="index">
             <my:index edit="{@edit}">
                 <filter>

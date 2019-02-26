@@ -13,7 +13,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:exslt="http://exslt.org/common">
 
-    <xsl:output method="html" indent="no" encoding="UTF-8"  media-type="text/html" cdata-section-elements="cdata" />
+    <xsl:output method="html" indent="no" encoding="UTF-8"  media-type="text/html" />
 
     <xsl:include href="article.xsl" />
     <xsl:include href="category.xsl" />
