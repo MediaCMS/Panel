@@ -16,6 +16,43 @@
 
     <xsl:output method="html" indent="no" encoding="UTF-8"  media-type="text/html" cdata-section-elements="comments" />
 
+    <xsl:template name="image">
+        <xsl:param name="uri" />
+        <xsl:param name="title" />
+        <img src="{/root/@photoHost}{/root/@photoPath}{substring($uri, 0, 40)}/0320.jpg">
+            <xsl:if test="string-length($title) &gt; 0">
+                <xsl:attribute name="alt"><xsl:value-of select="$title" /></xsl:attribute>
+            </xsl:if>
+        </img>
+    </xsl:template>
+
+    <xsl:template name="formImage">
+        <xsl:param name="title" />
+        <input type="file" name="image" id="formImage" class="form-control" title="{$title}">
+            <xsl:if test="string-length(@image) &gt; 0">
+                <xsl:attribute name="class">form-control d-none</xsl:attribute>
+            </xsl:if>
+        </input>
+        <div class="image" title="Видалити зображення">
+            <xsl:choose>
+                <xsl:when test="string-length(@image) = 0">
+                    <xsl:attribute name="class">image d-none</xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="image">
+                        <xsl:with-param name="uri" select="@image" />
+                        <xsl:with-param name="title" select="$title" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+            <input type="hidden" name="image" value="{@image}" />
+            <svg height="100%" width="100%">
+                <line x1="0" y1="0" x2="100%" y2="100%" style="stroke:#ccc;stroke-width:1" />
+                <line x1="100%" y1="0" x2="0" y2="100%" style="stroke:#ccc;stroke-width:1" />
+            </svg>
+        </div>
+    </xsl:template>
+
     <xsl:template name="index">
         <xsl:param name="filter" />
         <xsl:param name="columns" />
@@ -52,8 +89,41 @@
         <xsl:apply-templates select="exslt:node-set($index)" />
     </xsl:template>
 
+    <xsl:template name="form">
+        <xsl:param name="elements" />
+        <xsl:param name="buttons" />
+        <xsl:variable name="form">
+            <my:form>
+                <xsl:if test="@id">
+                    <xsl:attribute name="id"><xsl:value-of select="@id" /></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$elements/element[@extended]">
+                    <xsl:attribute name="type">extended</xsl:attribute>
+                </xsl:if>
+                <elements><xsl:copy-of select="$elements" /></elements>
+                <buttons>
+                    <button name="_save" title="Зберегти" color="primary" />
+                    <xsl:choose>
+                        <xsl:when test="@id">
+                            <button name="_delete" title="Видалити" color="danger">
+                                <xsl:if test="@status=0">
+                                    <xsl:attribute name="value">Відновити</xsl:attribute>
+                                </xsl:if>
+                            </button>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <button name="_reset" title="Очистити" color="secondary" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:copy-of select="$buttons" />
+                </buttons>
+            </my:form>
+        </xsl:variable>
+        <xsl:apply-templates select="exslt:node-set($form)" />
+    </xsl:template>
+
     <xsl:template match="pagination">
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" class="mt-5">
             <ul class="pagination justify-content-center">
                 <li class="page-item">
                     <xsl:if test="@page = 1"><xsl:attribute name="class">page-item disabled</xsl:attribute></xsl:if>
@@ -148,43 +218,6 @@
 
     <xsl:template match="test">
         <div id="test" />
-    </xsl:template>
-
-    <xsl:template name="image">
-        <xsl:param name="uri" />
-        <xsl:param name="title" />
-        <img src="{/root/@photoHost}{/root/@photoPath}{substring($uri, 0, 40)}/0320.jpg">
-            <xsl:if test="string-length($title) &gt; 0">
-                <xsl:attribute name="alt"><xsl:value-of select="$title" /></xsl:attribute>
-            </xsl:if>
-        </img>
-    </xsl:template>
-
-    <xsl:template name="formImage">
-        <xsl:param name="title" />
-        <input type="file" name="image" id="formImage" class="form-control" title="{$title}">
-            <xsl:if test="string-length(@image) &gt; 0">
-                <xsl:attribute name="class">form-control d-none</xsl:attribute>
-            </xsl:if>
-        </input>
-        <div class="image" title="Видалити зображення">
-            <xsl:choose>
-                <xsl:when test="string-length(@image) = 0">
-                    <xsl:attribute name="class">image d-none</xsl:attribute>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="image">
-                        <xsl:with-param name="uri" select="@image" />
-                        <xsl:with-param name="title" select="$title" />
-                    </xsl:call-template>
-                </xsl:otherwise>
-            </xsl:choose>
-            <input type="hidden" name="image" value="{@image}" />
-            <svg height="100%" width="100%">
-                <line x1="0" y1="0" x2="100%" y2="100%" style="stroke:#ccc;stroke-width:1" />
-                <line x1="100%" y1="0" x2="0" y2="100%" style="stroke:#ccc;stroke-width:1" />
-            </svg>
-        </div>
     </xsl:template>
 
 </xsl:stylesheet>

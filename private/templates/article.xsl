@@ -41,26 +41,29 @@
     </xsl:template>
 
     <xsl:template match="main/article/edit">
-
-        <xsl:variable name="my:form">
-            <my:form type="extended">
-                <my:fields>
-                    <my:field type="title" value="{@title}" description="Назва статті" />
-                    <div class="form-group row">
-                        <div class="col-sm-12">
-                            <textarea name="description" value="{@description}" id="formDescription"
-                                      placeholder="Опис статті" class="form-control"
-                                      title="Опис сторінки"><xsl:value-of select="@description" /></textarea>
-                        </div>
-                    </div>
-                    <my:field type="description" value="{@description}" />
-                    <my:field type="text" value="{@text}" />
-                    <my:field type="image" value="{@image}" />
-                </my:fields>
-            </my:form>
+        <xsl:variable name="elements">
+            <element type="string" name="title" value="{@title}" title="Назва" extended="true" />
+            <element type="text" name="description" value="{@description}" title="Опис" extended="true" />
+            <element type="wysiwyg" name="text" title="Текст" extended="true">
+                <value><xsl:value-of select="@text" /></value>
+            </element>
+            <element type="image" name="image" value="{@image}" title="Зображення" />
+            <element type="list" name="category" title="Категорія">
+                <items><xsl:copy-of select="categories/item" /></items>
+            </element>
+            <element type="autocomplete" name="tags" title="Мітки" uri="/мітки/автозаповнення">
+                <items><xsl:copy-of select="tags/item" /></items>
+            </element>
+            <xsl:if test="@id">
+                <element type="string" name="alias" value="{@alias}" title="Псевдонім" readonly="true" />
+                <element type="string" name="user" value="{@user}" title="Користувач" readonly="true" />
+                <element type="string" name="time" value="{@time}" title="Дата та час" readonly="true" />
+                <element type="string" name="id" value="{@id}" title="Ідентифікатор" readonly="true" />
+            </xsl:if>
         </xsl:variable>
-
-        <xsl:apply-templates select="exslt:node-set($my:form)" />
+        <xsl:call-template name="form">
+            <xsl:with-param name="elements" select="exslt:node-set($elements)" />
+        </xsl:call-template>
 
         <!--
         <form action="" method="POST" enctype="multipart/form-data" class="extended mx-auto">

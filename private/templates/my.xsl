@@ -129,65 +129,70 @@
 
     <xsl:template match="/my:form">
         <form action="" method="POST" enctype="multipart/form-data" class="mx-auto">
-            <xsl:if test="@type='extended'">
-                <xsl:attribute name="class">mx-auto extended</xsl:attribute>
-            </xsl:if>
-            <xsl:apply-templates>
-                <xsl:with-param name="formType" select="@type" />
-            </xsl:apply-templates>
+            <xsl:choose>
+                <xsl:when test="@type='extended'">
+                    <xsl:attribute name="class">mx-auto extended</xsl:attribute>
+                    <xsl:apply-templates select="elements/element[@extended]" mode="common" />
+                    <div class="standard mx-auto">
+                        <xsl:apply-templates select="elements/element[not(@extended)]" mode="common" />
+                    </div>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="elements/element" mode="common" />
+                </xsl:otherwise>
+            </xsl:choose>
+            <div class="form-group text-center py-5">
+                <xsl:apply-templates select="buttons/button" />
+             </div>
         </form>
     </xsl:template>
 
-    <xsl:template match="/my:form/my:fields">
-        <xsl:param name="formType" select="standard" />
-        <div>
-            <xsl:for-each select="*">
-                <xsl:choose>
-                    <xsl:when test="self::my:field">
-                        <xsl:apply-templates select=".">
-                            <xsl:with-param name="formType" select="$formType" />
-                        </xsl:apply-templates>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:copy-of select="." />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each>
-
-        </div>
-    </xsl:template>
-
-    <xsl:template match="my:field[@type='title']">
-        <xsl:param name="formType" select="standard" />
+    <xsl:template match="/my:form/elements/element[not(@extended)]" mode="common">
         <div class="form-group row">
-            <xsl:if test="$formType='standard'">
-                <label for="formTitle" class="col-sm-4 col-form-label">Назва</label>
-            </xsl:if>
+            <label for="form-{@name}" class="col-sm-4 col-form-label"><xsl:value-of select="@title" /></label>
             <div class="col-sm-8">
-                <xsl:if test="$formType='extended'">
-                    <xsl:attribute name="class">col-sm-12</xsl:attribute>
-                </xsl:if>
-                <input type="text" name="title" value="{@value}" placeholder="{@description}"
-                       id="formTitle" class="form-control" title="{@description}" />
+                <xsl:apply-templates select="(.)[@type='string']" />
             </div>
         </div>
     </xsl:template>
 
-    <xsl:template match="my:field[@type='description']">
-        <xsl:param name="formType" select="standard" />
+    <xsl:template match="/my:form/elements/element[@extended]" mode="common">
         <div class="form-group row">
-            <xsl:if test="$formType='standard'">
-                <label for="formDescription" class="col-sm-4 col-form-label">Опис</label>
-            </xsl:if>
-            <div class="col-sm-8">
-                <xsl:if test="$formType='extended'">
-                    <xsl:attribute name="class">col-sm-12</xsl:attribute>
-                </xsl:if>
-               <textarea name="description" value="{@description}" id="formDescription"
-                          placeholder="Опис статті" class="form-control"
-                          title="{@description}"><xsl:value-of select="@value" /></textarea>
-            </div>
+            <div class="col-sm-12"><xsl:apply-templates select="." /></div>
         </div>
+    </xsl:template>
+
+    <xsl:template match="/my:form/elements/element[@type='string']">
+        <input type="text" name="{@name}" value="{@value}" placeholder="{@title}"
+               id="form-{@name}" class="form-control" title="{@title}">
+            <xsl:if test="not(@extended)">
+                <xsl:attribute name="id">form-<xsl:value-of select="@name" /></xsl:attribute>
+            </xsl:if>
+            <xsl:if test="@readonly">
+                <xsl:attribute name="readonly">readonly</xsl:attribute>
+            </xsl:if>
+        </input>
+    </xsl:template>
+
+    <xsl:template match="/my:form/elements/element[@type='text']">
+        <textarea name="{@name}" placeholder="{@title}"
+               id="form-{@name}" class="form-control" title="{@title}"><xsl:value-of select="@value" /></textarea>
+    </xsl:template>
+
+    <xsl:template match="/my:form/elements/element[@type='wysiwyg']">
+        <textarea name="{@name}" id="form-{@name}"
+                  placeholder="Введіть текст" class="wysiwyg form-control"
+                  title="{@title}"><xsl:value-of select="value" /></textarea>
+    </xsl:template>
+
+
+
+    <xsl:template match="/my:form/buttons/button">
+        <input type="submit" name="{@name}" value="{@title}" class="btn btn-{@color} mx-1">
+            <xsl:if test="name='_reset'">
+                <xsl:attribute name="type">reset</xsl:attribute>
+            </xsl:if>
+        </input>
     </xsl:template>
 
 </xsl:stylesheet>
