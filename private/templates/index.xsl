@@ -15,6 +15,8 @@
 
     <xsl:output method="html" indent="no" encoding="UTF-8"  media-type="text/html" />
 
+    <xsl:variable name="imagePath" select="concat(/root/@photoHost, /root/@photoPath)" />
+
     <xsl:include href="article.xsl" />
     <xsl:include href="category.xsl" />
     <xsl:include href="tag.xsl" />

@@ -48,11 +48,19 @@
                 <value><xsl:value-of select="@text" /></value>
             </element>
             <element type="image" name="image" value="{@image}" title="Зображення" />
-            <element type="list" name="category" title="Категорія">
-                <items><xsl:copy-of select="categories/item" /></items>
+            <element type="list" name="category" value="{@category}" title="Категорія">
+                <items>
+                    <xsl:for-each select="categories/category">
+                        <item title="{@title}" value="{@id}" />
+                    </xsl:for-each>
+                </items>
             </element>
             <element type="autocomplete" name="tags" title="Мітки" uri="/мітки/автозаповнення">
-                <items><xsl:copy-of select="tags/item" /></items>
+                <items>
+                    <xsl:for-each select="tags/tag">
+                        <item title="{@title}" value="{@id}" />
+                    </xsl:for-each>
+                </items>
             </element>
             <xsl:if test="@id">
                 <element type="string" name="alias" value="{@alias}" title="Псевдонім" readonly="true" />

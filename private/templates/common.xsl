@@ -14,12 +14,10 @@
                 xmlns:exslt="http://exslt.org/common"
                 xmlns:my="https://github.com/MediaCMS">
 
-    <xsl:output method="html" indent="no" encoding="UTF-8"  media-type="text/html" cdata-section-elements="comments" />
-
     <xsl:template name="image">
         <xsl:param name="uri" />
         <xsl:param name="title" />
-        <img src="{/root/@photoHost}{/root/@photoPath}{substring($uri, 0, 40)}/0320.jpg">
+        <img src="{$imagePath}{substring($uri, 0, 40)}/0320.jpg">
             <xsl:if test="string-length($title) &gt; 0">
                 <xsl:attribute name="alt"><xsl:value-of select="$title" /></xsl:attribute>
             </xsl:if>

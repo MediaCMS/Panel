@@ -63,14 +63,7 @@ class Article extends \MediaCMS\Panel\Controller {
 
         $this->database->call('CategoryGetIndex', []);
 
-        $categoriesNode = $this->node->addChild('categories');
-
-        while($category = $this->database->getResult()) {
-
-            $categoryNode = $categoriesNode->addChild('category');
-
-            $this->view->setItem($categoryNode, $category);
-        }
+        $this->setItems('categories', 'category');
     }
 
     /**
@@ -87,14 +80,7 @@ class Article extends \MediaCMS\Panel\Controller {
 
             $this->database->call('TagGetByIDs', $article['tags']);
 
-            $tagsNode = $this->node->addChild('tags');
-
-            while($tag = $this->database->getResult()) {
-
-                $tagNode = $tagsNode->addChild('tag');
-
-                $this->view->setItem($tagNode, $tag);
-            }
+            $this->setItems('tags', 'tag');
         }
 
         return $article;

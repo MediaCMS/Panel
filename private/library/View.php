@@ -94,6 +94,8 @@ class View {
         $this->xml->addAttribute('copyright', TITLE . ' @ ' . date('Y'));
 
         $this->xml->addAttribute('editor', ($editor) ? 1 : 0);
+
+        if (DEVELOPMENT) $this->xml->addChild('debug');
     }
 
     /**
@@ -397,7 +399,7 @@ class View {
 
         $xml = preg_replace('/[ ]{2,8}/', "  ", $xml);
 
-        $debugNode = $this->xml->addChild('debug');
+        $debugNode = $this->xml->debug;
 
         $debugNode->addChild('xml', $xml);
 

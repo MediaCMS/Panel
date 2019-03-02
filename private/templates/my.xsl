@@ -10,9 +10,9 @@
  */
 -->
 <xsl:stylesheet version="1.0" exclude-result-prefixes="exslt my"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:exslt="http://exslt.org/common"
-    xmlns:my="https://github.com/MediaCMS">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:exslt="http://exslt.org/common"
+                xmlns:my="https://github.com/MediaCMS">
 
     <xsl:template match="/my:index">
         <xsl:choose>
@@ -65,6 +65,7 @@
         </tr>
     </xsl:template>
 
+
     <xsl:template match="/my:index/filter">
         <div class="modal fade" id="filter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -109,7 +110,6 @@
     </xsl:template>
 
     <xsl:template match="/my:index/filter/item[@type='list']">
-        <xsl:copy-of select="." />
         <select name="{@name}" title="Фільтр за пунктом переліку" id="filter-{@name}" class="form-control">
             <xsl:for-each select="items/item">
                 <option value="{@value}">
@@ -151,7 +151,7 @@
         <div class="form-group row">
             <label for="form-{@name}" class="col-sm-4 col-form-label"><xsl:value-of select="@title" /></label>
             <div class="col-sm-8">
-                <xsl:apply-templates select="(.)[@type='string']" />
+                <xsl:apply-templates select="." />
             </div>
         </div>
     </xsl:template>
@@ -185,7 +185,66 @@
                   title="{@title}"><xsl:value-of select="value" /></textarea>
     </xsl:template>
 
+    <xsl:template match="/my:form/elements/element[@type='image']">
+        <input type="file" name="image" id="form-{@name}" class="form-control" title="{@title}">
+            <xsl:if test="string-length(@value) &gt; 0">
+                <xsl:attribute name="class">form-control d-none</xsl:attribute>
+            </xsl:if>
+        </input>
+        <div class="image" title="Видалити зображення">
+            <xsl:choose>
+                <xsl:when test="string-length(@value) = 0">
+                    <xsl:attribute name="class">image d-none</xsl:attribute>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="image">
+                        <xsl:with-param name="uri" select="@value" />
+                        <xsl:with-param name="title" select="@title" />
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
+            <input type="hidden" name="image" value="{@value}" />
+            <svg height="25px" width="25px">
+                <line x1="0" y1="0" x2="100%" y2="100%" style="stroke:#ccc;stroke-width:1" />
+                <line x1="100%" y1="0" x2="0" y2="100%" style="stroke:#ccc;stroke-width:1" />
+            </svg>
+        </div>
+    </xsl:template>
 
+    <xsl:template match="/my:form/elements/element[@type='list']">
+        <select name="{@name}" title="{@title}" id="filter-{@name}" class="form-control">
+            <xsl:for-each select="items/item">
+                <option value="{@value}">
+                    <xsl:if test="@value=../../@value">
+                        <xsl:attribute name="selected">selected</xsl:attribute>
+                    </xsl:if>
+                    <xsl:value-of select="@title" />
+                </option>
+            </xsl:for-each>
+        </select>
+    </xsl:template>
+
+    <xsl:template match="/my:form/elements/element[@type='autocomplete']">
+        <xsl:attribute name="class">autocomplete col-sm-8</xsl:attribute>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><img src="/search.png" alt="Пошук" /></span>
+            </div>
+            <input type="text" list="formTagList" autocomplete="off"
+                   data-api="/мітки/автозаповнення" placeholder="Введіть літери для пошуку.."
+                   id="formTag" class="autocomplete-input form-control" title="Мітки для статті" />
+        </div>
+        <xsl:if test="items">
+            <div class="autocomplete-selected">
+                <xsl:for-each select="items/item">
+                    <button type="button" class="btn btn-outline-secondary">
+                        <xsl:value-of select="@title" />
+                        <input type="hidden" name="tags[{@value}]" value="{@title}" />
+                    </button>
+                </xsl:for-each>
+            </div>
+        </xsl:if>
+    </xsl:template>
 
     <xsl:template match="/my:form/buttons/button">
         <input type="submit" name="{@name}" value="{@title}" class="btn btn-{@color} mx-1">

@@ -46,9 +46,9 @@ $(function(){
         }
 
 
-
+        console.log(nodes.form.find('#form-image'));
         // form image upload
-        nodes.formImageUpload = nodes.form.find('#formImage');
+        nodes.formImageUpload = nodes.form.find('#form-image');
         nodes.formImage = nodes.form.find('div.image');
         if (nodes.formImageUpload.length > 0) {
             nodes.formImageUpload.on('change', function() {

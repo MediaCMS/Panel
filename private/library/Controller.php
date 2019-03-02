@@ -288,35 +288,23 @@ abstract class Controller {
     }
 
     /**
-     * Додає результат запиту до БД у вигляд
+     * Додає у вигляд результат запиту з БД
      *
-     * @param \SimpleXMLElement $node Елемент який потрібно зповнити
-     * @param bool $index Ознака списку
+     * @param string $itemsTitle Назва загального елемента
+     * @param string $itemTitle Назва дочірніх елементів
      */
-/*
-    public function setItems(\SimpleXMLElement $node, bool $index = false): void {
+    public function setItems(string $itemsTitle = 'items', string $itemTitle = 'item'): void {
 
-        $i = 1;
+        $parentNode = $this->node->addChild($itemsTitle);
 
         while($row = $this->database->getResult()) {
 
-            $childNode = $node->addChild('item');
-
-            if ($index) {
-
-                $childNode->addAttribute('position', $this->filter['_offset'] + $i);
-
-                $uri = '/' . $this->router->getURI(0) . '/редагування/' . $row['id'];
-
-                $childNode->addAttribute('edit', $uri);
-
-                $i ++;
-            }
+            $childNode = $parentNode->addChild($itemTitle);
 
             $this->view->setItem($childNode, $row);
         }
     }
-*/
+
     /**
      * Доступ заборонено
      */
