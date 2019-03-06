@@ -13,14 +13,6 @@ namespace MediaCMS\Panel\Controller;
 class Tag extends \MediaCMS\Panel\Controller {
 
     /**
-     * Перевіряє доступ для редагування мітки
-     */
-    protected function access(): void {
-
-        if ($this->user['roleID'] > 3) $this->denied();
-    }
-
-    /**
      * Вивід міток для автозаповнення
      */
     public function autocomplete(): void {

@@ -16,7 +16,7 @@
 
     <xsl:template match="main/page/index">
         <xsl:variable name="filter">
-            <item type="string" name="title" value="{filter/@title}" title="Назва" />
+            <element type="string" name="title" value="{filter/@title}" title="Назва" />
         </xsl:variable>
         <xsl:variable name="columns">
             <column name="position" title="#"           align="center" />
@@ -32,81 +32,23 @@
     </xsl:template>
 
     <xsl:template match="main/page/edit">
-        <form action="" method="POST" enctype="multipart/form-data" class="extended mx-auto">
-            <div class="form-group row">
-                <div class="col-sm-12">
-                    <input type="text" name="title" value="{@title}" placeholder="Назва сторінки"
-                           id="formTitle" class="form-control" title="Назва сторінки" />
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-12">
-                    <textarea name="description" value="{@description}" id="formDescription"
-                              placeholder="Опис сторінки" class="form-control"
-                              title="Опис сторінки"><xsl:value-of select="@description" /></textarea>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-12">
-                    <textarea name="text" value="{@text}" id="formText"
-                              placeholder="Текст сторінки" class="wysiwyg form-control"
-                              title="Текст сторінки"><xsl:value-of select="@text" /></textarea>
-                </div>
-            </div>
-            <div class="standard mx-auto">
-                <div class="form-group row">
-                    <label for="formImage" class="col-sm-4 col-form-label">Зображення</label>
-                    <div class="col-sm-8">
-                        <xsl:call-template name="formImage">
-                            <xsl:with-param name="title" select="'Зображення для сторінки'" />
-                        </xsl:call-template>
-                    </div>
-                </div>
-                <xsl:if test="@id">
-                    <div class="form-group row">
-                        <label for="formAlias" class="col-sm-4 col-form-label">Псевдонім</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="alias" value="{@alias}" readonly="readonly"
-                                   id="formAlias" class="form-control" title="Псевдонім" />
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="formUser" class="col-sm-4 col-form-label">Користувач</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="user" value="{@user}" readonly="readonly"
-                                   id="formUser" class="form-control" title="Користувач" />
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="formTime" class="col-sm-4 col-form-label">Дата та час</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="time" value="{@time}" readonly="readonly"
-                                   id="formTime" class="form-control" title="Дата та час останньої модифікації" />
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="formID" class="col-sm-4 col-form-label">Ідентифікатор</label>
-                        <div class="col-sm-8">
-                            <input type="text" name="id" value="{@id}" readonly="readonly"
-                                   id="formID" class="form-control" title="Ідентифікатор" />
-                        </div>
-                    </div>
-                </xsl:if>
-            </div>
-            <div class="form-group text-center py-5">
-                <input type="submit" name="_save" value="Зберегти" class="btn btn-primary mx-1" />
-                <xsl:if test="not(@id)">
-                    <input type="reset" name="_reset" value="Очистити" class="btn btn-secondary mx-1" />
-                </xsl:if>
-                <xsl:if test="@id">
-                    <input type="submit" name="_delete" value="Видалити" class="btn btn-danger mx-1">
-                        <xsl:if test="@status=0">
-                            <xsl:attribute name="value">Відновити</xsl:attribute>
-                        </xsl:if>
-                    </input>
-                </xsl:if>
-            </div>
-        </form>
+        <xsl:variable name="elements">
+            <element type="string"  name="title"        value="{@title}"        title="Назва"   extended="true" />
+            <element type="text"    name="description"  value="{@description}"  title="Опис"    extended="true" />
+            <element type="wysiwyg" name="text" title="Текст" extended="true">
+                <value><xsl:value-of select="@text" /></value>
+            </element>
+            <element type="image" name="image" value="{@image}" title="Зображення" />
+            <xsl:if test="@id">
+                <element type="string" name="alias" value="{@alias}"    title="Псевдонім"       readonly="true" />
+                <element type="string" name="user"  value="{@user}"     title="Користувач"      readonly="true" />
+                <element type="string" name="time"  value="{@time}"     title="Дата та час"     readonly="true" />
+                <element type="string" name="id"    value="{@id}"       title="Ідентифікатор"   readonly="true" />
+            </xsl:if>
+        </xsl:variable>
+        <xsl:call-template name="form">
+            <xsl:with-param name="elements" select="exslt:node-set($elements)" />
+        </xsl:call-template>
     </xsl:template>
 
 </xsl:stylesheet>

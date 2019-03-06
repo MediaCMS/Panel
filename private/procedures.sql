@@ -529,7 +529,11 @@ END;;
 DROP PROCEDURE IF EXISTS `UserGet`;;
 CREATE PROCEDURE `UserGet`(IN `_id` tinyint unsigned)
 BEGIN 
-  SELECT * FROM `user` WHERE `id` = _id;
+  SELECT     `u1`.`id`, `u1`.`time`, `u1`.`title`, `u1`.`description`, `u1`.`phone`, `u1`.`skype`,
+             `u1`.`email`, `u1`.`image`, `u1`.`role`, `u1`.`alias`, `u2`.`title` AS 'user' 
+  FROM       `user` AS `u1`
+  INNER JOIN `user` AS `u2` ON `u1`.`user` = `u2`.`id`  
+  WHERE      `u1`.`id` = _id;
 END;;
 
 DROP PROCEDURE IF EXISTS `UserGetIndex`;;
@@ -666,4 +670,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-02-13 23:40:36
+-- 2019-03-06 20:38:04

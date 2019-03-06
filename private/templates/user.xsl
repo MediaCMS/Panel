@@ -16,16 +16,16 @@
 
     <xsl:template match="main/user/index">
         <xsl:variable name="filter">
-            <item type="date"   name="dateBegin"    value="{filter/@dateBegin}" title="Початкова дата"  />
-            <item type="date"   name="dateEnd"      value="{filter/@dateEnd}"   title="Кінцева дата" />
-            <item type="string" name="title"        value="{filter/@title}"     title="Назва" />
-            <item type="list"   name="roleID"       value="{filter/@roleID}"    title="Роль">
+            <element type="date"   name="dateBegin"    value="{filter/@dateBegin}" title="Початкова дата"  />
+            <element type="date"   name="dateEnd"      value="{filter/@dateEnd}"   title="Кінцева дата" />
+            <element type="string" name="title"        value="{filter/@title}"     title="Назва" />
+            <element type="list"   name="roleID"       value="{filter/@roleID}"    title="Роль">
                 <items>
                     <xsl:for-each select="filter/roles/item">
                         <item title="{@title}" value="{@id}" />
                     </xsl:for-each>
                 </items>
-            </item>
+            </element>
         </xsl:variable>
         <xsl:variable name="columns">
             <column name="position" title="#"       align="center" />
@@ -43,124 +43,32 @@
      </xsl:template>
 
     <xsl:template match="main/user/edit">
-        <form action="" method="POST" enctype="multipart/form-data" class="mx-auto">
-            <div class="form-group row">
-                <label for="formTitle" class="col-sm-4 col-form-label">Назва</label>
-                <div class="col-sm-8">
-                    <input type="text" name="title" value="{@title}" placeholder="Прізвище Імя По-батькові"
-                           id="formTitle" class="form-control" title="Прізвище Імя По-батькові" />
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="formDescription" class="col-sm-4 col-form-label">Опис</label>
-                <div class="col-sm-8">
-                    <textarea name="description" value="{@description}" id="formDescription"
-                              placeholder="Опис користувача" class="form-control"
-                              title="Опис користувача"><xsl:value-of select="@description" /></textarea>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="formPhone" class="col-sm-4 col-form-label">Телефон</label>
-                <div class="col-sm-8">
-                    <input type="text" name="phone" value="{@phone}" placeholder="Номер мобільного телефону"
-                           id="formPhone" class="form-control" title="Номер мобільного телефону" />
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="formSkype" class="col-sm-4 col-form-label">Skype</label>
-                <div class="col-sm-8">
-                    <input type="text" name="skype" value="{@skype}" placeholder="Адреса Skype"
-                           id="formSkype" class="form-control" title="Адреса Skype" />
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="formEmail" class="col-sm-4 col-form-label">Пошта</label>
-                <div class="col-sm-8">
-                    <input type="text" name="email" value="{@email}" placeholder="Адреса електронної пошти"
-                           id="formEmail" class="form-control" title="Адреса електронної пошти" />
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="formPassword" class="col-sm-4 col-form-label">Пароль</label>
-                <div class="col-sm-8">
-                    <input type="password" name="password" placeholder="Пароль користувача"
-                           id="formPassword" class="form-control" title="Пароль користувача" />
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="formPassword" class="col-sm-4 col-form-label">Пароль (повторно)</label>
-                <div class="col-sm-8">
-                    <input type="password" name="password2" placeholder="Пароль користувача (повторно)"
-                           id="formPassword" class="form-control" title="Пароль користувача (повторно)" />
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="formImage" class="col-sm-4 col-form-label">Зображення</label>
-                <div class="col-sm-8">
-                    <xsl:call-template name="formImage">
-                        <xsl:with-param name="title" select="'Зображення для користувача'" />
-                    </xsl:call-template>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="formRole" class="col-sm-4 col-form-label">Роль</label>
-                <div class="col-sm-8">
-                    <select name="role" title="Права доступу" id="formRole" class="form-control">
-                        <xsl:for-each select="roles/role">
-                            <option value="{@id}">
-                                <xsl:if test="@id=../../@role">
-                                    <xsl:attribute name="selected">selected</xsl:attribute>
-                                </xsl:if>
-                                <xsl:value-of select="@title" />
-                            </option>
-                        </xsl:for-each>
-                    </select>
-                </div>
-            </div>
+        <xsl:variable name="elements">
+            <element type="string"      name="title"        value="{@title}"        title="Назва" />
+            <element type="text"        name="description"  value="{@description}"  title="Опис" />
+            <element type="image"       name="image"        value="{@image}"        title="Зображення" />
+            <element type="string"      name="phone"        value="{@phone}"        title="Телефон" />
+            <element type="string"      name="skype"        value="{@skype}"        title="Skype" />
+            <element type="string"      name="email"        value="{@email}"        title="Пошта" />
+            <element type="password"    name="password"     value="{@password}"     title="Пароль" />
+            <element type="password"    name="password2"    value="{@password2}"    title="Пароль (повторно)" />
+            <element type="list"        name="role"         value="{@role}"         title="Роль">
+                <items>
+                    <xsl:for-each select="roles/role">
+                        <item title="{@title}" value="{@id}" />
+                    </xsl:for-each>
+                </items>
+            </element>
             <xsl:if test="@id">
-                <div class="form-group row">
-                    <label for="formAlias" class="col-sm-4 col-form-label">Псевдонім</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="alias" value="{@alias}" readonly="readonly"
-                               id="formAlias" class="form-control" title="Псевдонім" />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="formUser" class="col-sm-4 col-form-label">Користувач</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="user" value="{@user}" readonly="readonly"
-                               id="formUser" class="form-control" title="Користувач" />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="formTime" class="col-sm-4 col-form-label">Дата та час</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="time" value="{@time}" readonly="readonly"
-                               id="formTime" class="form-control" title="Дата та час останньої модифікації" />
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="formID" class="col-sm-4 col-form-label">Ідентифікатор</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="id" value="{@id}" readonly="readonly"
-                               id="formID" class="form-control" title="Ідентифікатор" />
-                    </div>
-                </div>
+                <element type="string" name="alias" value="{@alias}"    title="Псевдонім"       readonly="true" />
+                <element type="string" name="user"  value="{@user}"     title="Користувач"      readonly="true" />
+                <element type="string" name="time"  value="{@time}"     title="Дата та час"     readonly="true" />
+                <element type="string" name="id"    value="{@id}"       title="Ідентифікатор"   readonly="true" />
             </xsl:if>
-            <div class="form-group text-center py-5">
-                <input type="submit" name="_save" value="Зберегти" class="btn btn-primary mx-1" />
-                <xsl:if test="not(@id)">
-                    <input type="reset" name="_reset" value="Очистити" class="btn btn-secondary mx-1" />
-                </xsl:if>
-                <xsl:if test="@id">
-                    <input type="submit" name="_delete" value="Видалити" class="btn btn-danger mx-1">
-                        <xsl:if test="@status=0">
-                            <xsl:attribute name="value">Відновити</xsl:attribute>
-                        </xsl:if>
-                    </input>
-                </xsl:if>
-            </div>
-        </form>
+        </xsl:variable>
+        <xsl:call-template name="form">
+            <xsl:with-param name="elements" select="exslt:node-set($elements)" />
+        </xsl:call-template>
     </xsl:template>
 
     <xsl:template match="main/user/login">

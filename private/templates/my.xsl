@@ -78,7 +78,7 @@
                     </div>
                     <form action="" method="POST">
                         <div class="modal-body">
-                            <xsl:apply-templates select="item" mode="common" />
+                            <xsl:apply-templates select="elements/element" mode="common" />
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
@@ -90,7 +90,7 @@
         </div>
     </xsl:template>
 
-    <xsl:template match="/my:index/filter/item" mode="common">
+    <xsl:template match="/my:index/filter/elements/element" mode="common">
         <div class="form-group row">
             <label for="filter-{@name}" class="col-sm-5 col-form-label"><xsl:value-of select="@title" /></label>
             <div class="col-sm-7">
@@ -98,33 +98,6 @@
             </div>
         </div>
     </xsl:template>
-
-    <xsl:template match="/my:index/filter/item[@type='date']">
-        <input type="date" name="{@name}" value="{@value}"
-            title="Фільтр за датою" id="filter-{@name}" class="form-control" />
-    </xsl:template>
-
-    <xsl:template match="/my:index/filter/item[@type='string']">
-        <input type="text" name="{@name}" value="{@value}" placeholder="Ведіть фрагмент тексту"
-               title="Фільтр за фрагментом тексту" id="filter-{@name}" class="form-control" />
-    </xsl:template>
-
-    <xsl:template match="/my:index/filter/item[@type='list']">
-        <select name="{@name}" title="Фільтр за пунктом переліку" id="filter-{@name}" class="form-control">
-            <xsl:for-each select="items/item">
-                <option value="{@value}">
-                    <xsl:if test="@value=../../@value">
-                        <xsl:attribute name="selected">selected</xsl:attribute>
-                    </xsl:if>
-                    <xsl:value-of select="@title" />
-                </option>
-            </xsl:for-each>
-        </select>
-    </xsl:template>
-
-
-
-
 
 
     <xsl:template match="/my:form">
@@ -162,11 +135,20 @@
         </div>
     </xsl:template>
 
-    <xsl:template match="/my:form/elements/element[@type='string']">
+
+    <xsl:template match="elements/element[@type='date']">
+        <input type="date" name="{@name}" value="{@value}"
+               title="Фільтр за датою" id="filter-{@name}" class="form-control" />
+    </xsl:template>
+
+    <xsl:template match="elements/element[@type='string']">
         <input type="text" name="{@name}" value="{@value}" placeholder="{@title}"
                id="form-{@name}" class="form-control" title="{@title}">
             <xsl:if test="not(@extended)">
                 <xsl:attribute name="id">form-<xsl:value-of select="@name" /></xsl:attribute>
+            </xsl:if>
+            <xsl:if test="name(../..)='filter'">
+                <xsl:attribute name="placeholder">Ведіть фрагмент тексту</xsl:attribute>
             </xsl:if>
             <xsl:if test="@readonly">
                 <xsl:attribute name="readonly">readonly</xsl:attribute>
@@ -174,18 +156,35 @@
         </input>
     </xsl:template>
 
-    <xsl:template match="/my:form/elements/element[@type='text']">
+    <xsl:template match="elements/element[@type='password']">
+        <input type="password" name="{@name}" value="{@value}" id="form-{@name}" class="form-control" title="{@title}" />
+    </xsl:template>
+
+    <xsl:template match="elements/element[@type='text']">
         <textarea name="{@name}" placeholder="{@title}"
                id="form-{@name}" class="form-control" title="{@title}"><xsl:value-of select="@value" /></textarea>
     </xsl:template>
 
-    <xsl:template match="/my:form/elements/element[@type='wysiwyg']">
+    <xsl:template match="elements/element[@type='list']">
+        <select name="{@name}" title="{@title}" id="filter-{@name}" class="form-control">
+            <xsl:for-each select="items/item">
+                <option value="{@value}">
+                    <xsl:if test="@value=../../@value">
+                        <xsl:attribute name="selected">selected</xsl:attribute>
+                    </xsl:if>
+                    <xsl:value-of select="@title" />
+                </option>
+            </xsl:for-each>
+        </select>
+    </xsl:template>
+
+    <xsl:template match="elements/element[@type='wysiwyg']">
         <textarea name="{@name}" id="form-{@name}"
                   placeholder="Введіть текст" class="wysiwyg form-control"
                   title="{@title}"><xsl:value-of select="value" /></textarea>
     </xsl:template>
 
-    <xsl:template match="/my:form/elements/element[@type='image']">
+    <xsl:template match="elements/element[@type='image']">
         <input type="file" name="image" id="form-{@name}" class="form-control" title="{@title}">
             <xsl:if test="string-length(@value) &gt; 0">
                 <xsl:attribute name="class">form-control d-none</xsl:attribute>
@@ -211,20 +210,7 @@
         </div>
     </xsl:template>
 
-    <xsl:template match="/my:form/elements/element[@type='list']">
-        <select name="{@name}" title="{@title}" id="filter-{@name}" class="form-control">
-            <xsl:for-each select="items/item">
-                <option value="{@value}">
-                    <xsl:if test="@value=../../@value">
-                        <xsl:attribute name="selected">selected</xsl:attribute>
-                    </xsl:if>
-                    <xsl:value-of select="@title" />
-                </option>
-            </xsl:for-each>
-        </select>
-    </xsl:template>
-
-    <xsl:template match="/my:form/elements/element[@type='autocomplete']">
+    <xsl:template match="elements/element[@type='autocomplete']">
         <xsl:attribute name="class">autocomplete col-sm-8</xsl:attribute>
         <div class="input-group">
             <div class="input-group-prepend">

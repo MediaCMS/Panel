@@ -48,16 +48,9 @@ class User extends \MediaCMS\Panel\Controller {
      */
     public function editAdvanced(): void {
 
-        $rolesNode = $this->node->addChild('roles');
-
         $this->database->call('RoleGetIndex');
 
-        while($role = $this->database->getResult()) {
-
-            $roleNode = $rolesNode->addChild('role');
-
-            $this->view->setItem($roleNode, $role);
-        }
+        $this->setItems('roles', 'role');
 
         if (is_null($this->router->getURI(2)) && (count($_POST) == 0))
 
