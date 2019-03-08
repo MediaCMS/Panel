@@ -156,6 +156,8 @@ abstract class Controller {
 
         if (isset($_POST['_submit'])) {
 
+            $post = [];
+
             foreach ($_POST as $key => $value)
 
                 $post[$key] = ($value === '') ? null : $value;
@@ -266,7 +268,7 @@ abstract class Controller {
      */
     protected function set(array $form): void {
 
-        if (isset($form['alias']))
+        if (isset($form['title']))
 
             $form['alias'] = System::getAlias($form['title']);
 
