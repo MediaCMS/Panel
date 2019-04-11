@@ -10,12 +10,13 @@
 
 namespace MediaCMS\Panel\Controller;
 
+use MediaCMS\Panel\Controller;
 use MediaCMS\Panel\Exception;
 use MediaCMS\Panel\Recaptcha;
 use MediaCMS\Panel\System;
 use MediaCMS\Panel\Log;
 
-class User extends \MediaCMS\Panel\Controller {
+class User extends Controller {
 
     /**
      * Створює та виводить фільтр списка користувачів

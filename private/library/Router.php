@@ -302,11 +302,9 @@ class Router {
      */
     public function redirect($uri = '/', int $code = 303): void {
 
-        $uri = ($uri) ?? urldecode($_SERVER['REQUEST_URI']);
-
         header('HTTP/1.x '. $code . ' ' . $this->redirects[$code]);
 
-        header('Location: '. HOST . $uri);
+        header('Location: '. HOST . urldecode($uri));
 
         exit($code);
     }
