@@ -31,7 +31,7 @@
             <column name="position" title="#"       align="center" />
             <column name="title"    title="Назва"   align="left" />
             <column name="phone"    title="Телефон" align="left" />
-            <column name="email"    title="Пошта"   align="left" />
+            <column name="email"    title="Пошта"   align="center" />
             <column name="role"     title="Права"   align="center" />
             <column name="time"     title="Дата"    align="center" />
             <column name="id"       title="ID"      align="center" />

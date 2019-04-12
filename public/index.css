@@ -4,9 +4,9 @@ html body img { border-radius: 3%; }
 html body header nav a.navbar-brand img { width: 28px; border-radius: 3px; opacity: 0.5; margin-top: -3px; }
 html body header nav a.navbar-brand :hover { opacity: 0.9; }
 html body header nav div.navbar-collapse ul.navbar-nav li:last-child { padding-left: 15px; }
-html body header nav div.user { padding-right: 2em; position: relative; }
-html body header nav div.user img { height: 1.5em; border-radius: 7% / 10%; transition: height 0.7s; position: absolute; top: 0; right: 0; z-index: 9999; }
-html body header nav div.user:hover img { height: 10em; }
+html body header nav div.user { padding-right: 42px; position: relative; }
+html body header nav div.user img { width: 28px; height: 28px; border-radius: 7% / 10%; transition: width 0.7s, height 0.7s; position: absolute; top: 0; right: 0; z-index: 9999; }
+html body header nav div.user img:hover { width: 160px; height: 160px; }
 html body main { min-height: 80vh; }
 html body main div.body.action-index table tr { cursor: pointer; }
 html body main div.body.action-index table tr.disabled td { color: gray; }
