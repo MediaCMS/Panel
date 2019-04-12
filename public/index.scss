@@ -22,12 +22,11 @@ html {
             li:last-child {padding-left: 15px;}
           }
         }
-        div.user { position: relative; padding-right: 43px;
-          img {
-            max-width: 32px; max-height: 100%; margin-left: 8px; border-radius: 7% / 10%;
-            position: absolute; top: 0; right: 0; z-index: 9999; transition: width 1s;
-            &:hover {width: 320px;}
+        div.user {padding-right: 2em; position: relative;
+          img {height: 1.5em; border-radius: 7% / 10%; transition: height 0.7s;
+            position: absolute; top: 0; right: 0; z-index: 9999;
           }
+          &:hover img {height: 10em;}
         }
       }
     }
