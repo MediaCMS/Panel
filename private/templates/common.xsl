@@ -107,7 +107,7 @@
                         <xsl:when test="@id">
                             <button name="_delete" title="Видалити" color="danger">
                                 <xsl:if test="@status=0">
-                                    <xsl:attribute name="value">Відновити</xsl:attribute>
+                                    <xsl:attribute name="title">Відновити</xsl:attribute>
                                 </xsl:if>
                             </button>
                         </xsl:when>

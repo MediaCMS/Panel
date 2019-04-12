@@ -456,13 +456,11 @@ class View {
 
         $alert = $exception->getMessage();
 
-        if (!is_null($exception->getFile()))
-
-            $alert .= sprintf(' [%s, %s]', $exception->getFile(), $exception->getLine());
-
-        $this->setAlert($alert, 'danger');
-
         if (DEVELOPMENT) {
+
+            if (!is_null($exception->getFile()))
+
+                $alert .= sprintf(' [%s, %s]', $exception->getFile(), $exception->getLine());
 
             $traceNode = $this->xml->debug->addChild('trace');
 
@@ -479,6 +477,8 @@ class View {
                 $itemNode->addAttribute('function', $item['function']);
             }
         }
+
+        $this->setAlert($alert, 'danger');
     }
 
     /**

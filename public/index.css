@@ -5,7 +5,7 @@ html body header nav a.navbar-brand img { width: 28px; border-radius: 3px; opaci
 html body header nav a.navbar-brand :hover { opacity: 0.9; }
 html body header nav div.navbar-collapse ul.navbar-nav li:last-child { padding-left: 15px; }
 html body header nav div.user { position: relative; padding-right: 43px; }
-html body header nav div.user img { width: 32px; margin-left: 8px; border-radius: 7% / 10%; position: absolute; top: 0; right: 0; z-index: 9999; transition: width 1s; }
+html body header nav div.user img { max-width: 32px; max-height: 100%; margin-left: 8px; border-radius: 7% / 10%; position: absolute; top: 0; right: 0; z-index: 9999; transition: width 1s; }
 html body header nav div.user img:hover { width: 320px; }
 html body main { min-height: 80vh; }
 html body main div.body.action-index table tr { cursor: pointer; }

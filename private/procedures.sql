@@ -308,15 +308,20 @@ CREATE PROCEDURE `CommentSet`(IN `params` json)
 BEGIN
   DECLARE _id INT(3) UNSIGNED;
   DECLARE _text VARCHAR(256);
+  DECLARE _article INT(10) UNSIGNED;
+  DECLARE _user TINYINT(3) UNSIGNED;
 
   IF (JSON_TYPE(params->'$.id') <> 'NULL') THEN
-    SET _id = params->'$.id'; END IF;
+    SET _id = params->'$.id';
+  END IF;
   SET _text = params->>'$.text';
+  SET _article = params->'$.article';
+  SET _user = params->'$.user';
 
   IF (_id IS NOT NULL) THEN
-    UPDATE `comment` SET `text` = _text WHERE `id` = _id AND `status` = 1;
+    UPDATE `comment` SET `text` = _text, `article` = _article, `user` = _user WHERE `id` = _id AND `status` = 1;
   ELSE
-    INSERT INTO `comment` (`text`) VALUES (_text);
+    INSERT INTO `comment` (`text`, `user`) VALUES (_text, _user);
   END IF;
 END;;
 
@@ -530,7 +535,7 @@ DROP PROCEDURE IF EXISTS `UserGet`;;
 CREATE PROCEDURE `UserGet`(IN `_id` tinyint unsigned)
 BEGIN 
   SELECT     `u1`.`id`, `u1`.`time`, `u1`.`title`, `u1`.`description`, `u1`.`phone`, `u1`.`skype`,
-             `u1`.`email`, `u1`.`image`, `u1`.`role`, `u1`.`alias`, `u2`.`title` AS 'user' 
+             `u1`.`email`, `u1`.`image`, `u1`.`role`, `u1`.`alias`, `u2`.`title` AS 'user', `u1`.`status` 
   FROM       `user` AS `u1`
   INNER JOIN `user` AS `u2` ON `u1`.`user` = `u2`.`id`  
   WHERE      `u1`.`id` = _id;
@@ -597,6 +602,7 @@ BEGIN
   DECLARE _image VARCHAR(48);
   DECLARE _role TINYINT(1) UNSIGNED;
   DECLARE _alias VARCHAR(32);
+  DECLARE _user TINYINT(3) UNSIGNED;
 
   IF (JSON_TYPE(params->'$.id') <> 'NULL') THEN
     SET _id = params->'$.id';
@@ -625,15 +631,16 @@ BEGIN
   END IF;
   SET _role = params->'$.role';
   SET _alias = params->>'$.alias';
+  SET _user = params->'$.user';
 
   IF (_id IS NOT NULL) THEN
     UPDATE  `user` 
       SET   `title` = _title, `description` = _description, `phone` = _phone, `skype` = _skype,
-            `email` = _email, `image` = _image, `role` = _role, `alias` = _alias
+            `email` = _email, `image` = _image, `role` = _role, `alias` = _alias, `user` = _user
       WHERE `id` = _id AND `status` = 1;
   ELSE
-    INSERT INTO `user` (`title`, `description`, `phone`, `skype`, `email`, `image`, `role`, `alias`) 
-      VALUES (_title, _description, _phone, _skype, _email,  _image, _role, _alias);
+    INSERT INTO `user` (`title`, `description`, `phone`, `skype`, `email`, `image`, `role`, `alias`, `user`) 
+      VALUES (_title, _description, _phone, _skype, _email,  _image, _role, _alias, _user);
     SET _id = LAST_INSERT_ID();
   END IF;
 
@@ -670,4 +677,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-03-06 20:38:04
+-- 2019-04-12 15:21:20
