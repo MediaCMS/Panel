@@ -22,7 +22,7 @@ html {
             li:last-child {padding-left: 15px;}
           }
         }
-        div.user {padding-right: 42px; position: relative;
+        div.user {height: 28px;line-height: 28px;padding-right: 42px; position: relative;
           img {width: 28px; height: 28px; border-radius: 7% / 10%; transition: width 0.7s, height 0.7s;
             position: absolute; top: 0; right: 0; z-index: 9999; object-fit: cover;
             &:hover {width: 160px; height: 160px;}
