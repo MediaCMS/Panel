@@ -132,8 +132,10 @@ CREATE TABLE `user` (
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `role` (`role`),
-  CONSTRAINT `user_ibfk_3` FOREIGN KEY (`role`) REFERENCES `role` (`id`) ON UPDATE CASCADE
+  KEY `user` (`user`),
+  CONSTRAINT `user_ibfk_7` FOREIGN KEY (`role`) REFERENCES `role` (`id`),
+  CONSTRAINT `user_ibfk_8` FOREIGN KEY (`user`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- 2019-04-12 15:13:28
+-- 2019-04-12 16:05:01
