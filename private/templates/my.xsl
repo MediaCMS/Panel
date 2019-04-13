@@ -162,7 +162,12 @@
 
     <xsl:template match="elements/element[@type='text']">
         <textarea name="{@name}" placeholder="{@title}"
-               id="form-{@name}" class="form-control" title="{@title}"><xsl:value-of select="@value" /></textarea>
+               id="form-{@name}" class="form-control" title="{@title}" rows="4">
+            <xsl:if test="@rows">
+                <xsl:attribute name="rows"><xsl:value-of select="@value" /></xsl:attribute>
+            </xsl:if>
+            <xsl:value-of select="@value" />
+        </textarea>
     </xsl:template>
 
     <xsl:template match="elements/element[@type='list']">
