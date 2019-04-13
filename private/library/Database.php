@@ -72,10 +72,9 @@ class Database {
 
             $params = is_array($params) ? $params : [$params];
 
-            foreach($params as $key => $param) {
+            foreach($params as $key => $param)
 
                 $params[$key] = $this->protect($param);
-            }
 
             $query = vsprintf($query, $params);
         }
@@ -117,6 +116,8 @@ class Database {
                 } elseif (is_array($param) || is_object($param)) {
 
                     $param = json_encode($param, JSON_UNESCAPED_UNICODE);
+
+                    $param = str_replace("'", "\'", $param);
 
                     $param = str_replace(",", ", ", $param);
 
