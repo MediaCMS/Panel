@@ -10,11 +10,11 @@ SET NAMES utf8mb4;
 CREATE TABLE `article` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `text` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(48) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
-  `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `alias` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` tinyint(3) unsigned NOT NULL,
   `user` tinyint(3) unsigned NOT NULL,
   `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
@@ -42,7 +42,7 @@ CREATE TABLE `category` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image` varchar(48) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user` tinyint(3) unsigned NOT NULL,
@@ -72,7 +72,7 @@ CREATE TABLE `page` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `text` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(48) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE `page` (
 CREATE TABLE `role` (
   `id` tinyint(1) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -96,7 +96,7 @@ CREATE TABLE `tag` (
   `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(48) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `alias` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `user` tinyint(3) unsigned NOT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE `user` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `title` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(128) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(12) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `skype` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci DEFAULT NULL,
   `email` varchar(32) CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL,
@@ -130,4 +130,4 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- 2019-04-12 16:09:09
+-- 2019-04-16 19:50:48
