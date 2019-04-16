@@ -56,7 +56,7 @@ $(function(){
                 image.upload($(this)[0].files[0], {
                     done: function(response) {
                         console.log('form.image.upload.done');
-                        let uri = photoHost + photoPath + response.uri;
+                        let uri = photoHost + photoPath + response.uri.slice(0, -8) + '0320.jpg';
                         nodes.formImageUpload.val('').addClass('d-none');
                         nodes.formImage.removeClass('d-none');
                         nodes.formImage.prepend('<img src="' + uri + '" alt="Головне зображення"/>');
