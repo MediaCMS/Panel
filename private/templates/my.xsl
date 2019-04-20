@@ -76,7 +76,7 @@
                             <span aria-hidden="true">&#215;</span>
                         </button>
                     </div>
-                    <form action="" method="POST">
+                    <form action="{@index}" method="POST">
                         <div class="modal-body">
                             <xsl:apply-templates select="elements/element" mode="common" />
                         </div>

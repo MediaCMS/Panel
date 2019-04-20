@@ -117,6 +117,8 @@ abstract class Controller {
 
         $this->database->call($this->router->getController() . 'GetIndex', $this->filter);
 
+        $this->node->addAttribute('index', '/' . $this->router->getURI(0) . '/список');
+
         $this->node->addAttribute('edit', '/' . $this->router->getURI(0) . '/редагування');
 
         $itemsNode = $this->node->addChild('items');

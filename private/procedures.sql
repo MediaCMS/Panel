@@ -57,43 +57,35 @@ BEGIN
   SET _rowsOffset = params->'$._offset';
   SET _rowsLimit = params->'$._limit';
 
-  SELECT SQL_CALC_FOUND_ROWS * 
-    FROM (
-      SELECT 
-        `a`.`id`, `a`.`time`, `a`.`title`, `a`.`status`,
-        `c`.`title` AS 'category', `u`.`title` AS 'user',
-        GROUP_CONCAT(DISTINCT `t`.`title` ORDER BY `t`.`title` ASC SEPARATOR ', ') AS 'tags'
-        FROM (
-          SELECT *
-            FROM `article`
-            WHERE `id` > 0
-              AND (_dateBegin IS NULL OR `time` >= _dateBegin)
-              AND (_dateEnd   IS NULL OR `time` <= _dateEnd)
-              AND (_title     IS NULL OR `title` LIKE CONCAT('%', _title, '%'))
-              AND (_userID    IS NULL OR `user` = _userID)
-              AND (_status    IS NULL OR `status` = _status)
-            LIMIT _rowsOffset, _rowsLimit 
-        ) AS `a`
-        INNER JOIN `category` AS `c` ON `c`.`id` = `a`.`category`
-        LEFT JOIN `article_tag` AS `at` ON `at`.`article` = `a`.`id`
-        LEFT JOIN `tag` AS `t` ON `t`.`id` = `at`.`tag`
-        INNER JOIN `user` AS `u` ON `u`.`id` = `a`.`user`
-        WHERE `a`.`id` > 0
-          AND (_category  IS NULL OR `c`.`title` LIKE CONCAT('%', _category, '%'))
-          AND (_userTitle IS NULL OR `u`.`title` LIKE CONCAT('%', _userTitle, '%'))
-        GROUP BY `a`.`id`
-    ) AS `a`
-    WHERE `id` > 0
-      AND (_tag IS NULL OR `tags` LIKE CONCAT('%', _tag, '%'))
+  SELECT SQL_CALC_FOUND_ROWS 
+         `a`.`id`, `a`.`time`, `a`.`title`, `a`.`status`,
+         `c`.`title` AS 'category', `u`.`title` AS 'user',
+         GROUP_CONCAT(DISTINCT `t`.`title` ORDER BY `t`.`title` ASC SEPARATOR ', ') AS 'tags'
+    FROM `article` AS `a`
+    INNER JOIN `category` AS `c` ON `c`.`id` = `a`.`category`
+    LEFT JOIN `article_tag` AS `at` ON `at`.`article` = `a`.`id`
+    LEFT JOIN `tag` AS `t` ON `t`.`id` = `at`.`tag`
+    INNER JOIN `user` AS `u` ON `u`.`id` = `a`.`user`
+    WHERE `a`.`id` > 0
+      AND (_tag       IS NULL OR 'tags' LIKE CONCAT('%', _tag, '%'))
+      AND (_dateBegin IS NULL OR `a`.`time` >= _dateBegin)
+      AND (_dateEnd   IS NULL OR `a`.`time` <= _dateEnd)
+      AND (_title     IS NULL OR `a`.`title` LIKE CONCAT('%', _title, '%'))
+      AND (_userID    IS NULL OR `a`.`user` = _userID)
+      AND (_status    IS NULL OR `a`.`status` = _status)
+      AND (_category  IS NULL OR `c`.`title` LIKE CONCAT('%', _category, '%'))
+      AND (_userTitle IS NULL OR `u`.`title` LIKE CONCAT('%', _userTitle, '%'))
+    GROUP BY `a`.`id`
     ORDER BY
-      CASE WHEN _orderField = 'time'     AND _orderDirection = 1 THEN `time`  END ASC,
-      CASE WHEN _orderField = 'time'     AND _orderDirection = 0 THEN `time`  END DESC,
-      CASE WHEN _orderField = 'title'    AND _orderDirection = 1 THEN `title` END ASC,
-      CASE WHEN _orderField = 'title'    AND _orderDirection = 0 THEN `title` END DESC,
-      CASE WHEN _orderField = 'category' AND _orderDirection = 1 THEN `category` END ASC,
-      CASE WHEN _orderField = 'category' AND _orderDirection = 0 THEN `category` END DESC,
-      CASE WHEN _orderField = 'user'     AND _orderDirection = 1 THEN `user` END ASC,
-      CASE WHEN _orderField = 'user'     AND _orderDirection = 0 THEN `user` END DESC;
+      CASE WHEN _orderField = 'time'     AND _orderDirection = 1 THEN `a`.`time`  END ASC,
+      CASE WHEN _orderField = 'time'     AND _orderDirection = 0 THEN `a`.`time`  END DESC,
+      CASE WHEN _orderField = 'title'    AND _orderDirection = 1 THEN `a`.`title` END ASC,
+      CASE WHEN _orderField = 'title'    AND _orderDirection = 0 THEN `a`.`title` END DESC,
+      CASE WHEN _orderField = 'category' AND _orderDirection = 1 THEN `a`.`category` END ASC,
+      CASE WHEN _orderField = 'category' AND _orderDirection = 0 THEN `a`.`category` END DESC,
+      CASE WHEN _orderField = 'user'     AND _orderDirection = 1 THEN `a`.`user` END ASC,
+      CASE WHEN _orderField = 'user'     AND _orderDirection = 0 THEN `a`.`user` END DESC
+    LIMIT _rowsOffset, _rowsLimit;
 END;;
 
 DROP PROCEDURE IF EXISTS `ArticleSet`;;
@@ -138,6 +130,7 @@ BEGIN
   ELSE
     INSERT INTO `article` (`title`, `description`, `text`, `image`, `alias`, `category`, `user`) 
       VALUES (_title, _description, _text, _image, _alias, _category, _user);
+    SELECT LAST_INSERT_ID() INTO _id;
   END IF;
 
   IF (JSON_TYPE(params->'$.tags') <> 'NULL') THEN
@@ -677,4 +670,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-04-16 19:48:36
+-- 2019-04-20 15:17:41

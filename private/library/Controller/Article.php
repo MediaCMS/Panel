@@ -10,7 +10,10 @@
 
 namespace MediaCMS\Panel\Controller;
 
-class Article extends \MediaCMS\Panel\Controller {
+use MediaCMS\Panel\Controller;
+use MediaCMS\Panel\Exception;
+
+class Article extends Controller {
 
     /**
      * Створює та виводить фільтр списка статей
@@ -47,11 +50,14 @@ class Article extends \MediaCMS\Panel\Controller {
      */
     protected function submitRepeat(array $article): void {
 
-        $article['tags'] = [];
+        if (isset($article['tags'])) {
 
-        foreach($_POST['tags'] as $id => $title)
+            $article['tags'] = [];
 
-            $article['tags'][] = ['id' => $id, 'title' => $title];
+            foreach($_POST['tags'] as $id => $title)
+
+                $article['tags'][] = ['id' => $id, 'title' => $title];
+        }
 
         parent::submitRepeat($article);
     }
@@ -94,6 +100,10 @@ class Article extends \MediaCMS\Panel\Controller {
     protected function set(array $article): void {
 
         $article['text'] = html_entity_decode($article['text'], ENT_QUOTES|ENT_HTML5);
+
+        if (!isset($article['tags']))
+
+            throw new Exception('Відсутні мітки');
 
         $article['tags'] = array_keys($article['tags']);
 

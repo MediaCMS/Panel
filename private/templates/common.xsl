@@ -56,7 +56,7 @@
         <xsl:param name="columns" />
         <xsl:variable name="index">
             <my:index edit="{@edit}">
-                <filter>
+                <filter index="{@index}">
                     <elements>
                         <xsl:copy-of select="$filter" />
                         <xsl:if test="filter/statuses">
