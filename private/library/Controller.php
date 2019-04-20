@@ -219,7 +219,7 @@ abstract class Controller {
 
                 if (isset($_POST['_delete'])) $this->unset($_POST['id']);
 
-                //$this->router->redirect('/' . $this->router->getURI(0));
+                $this->router->redirect('/' . $this->router->getURI(0));
 
             } catch (Exception $exception) {
 
