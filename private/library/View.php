@@ -419,7 +419,7 @@ class View {
 
                 foreach($queries as $key => $query) {
 
-                    $string = $query['string'];
+                    $string = htmlspecialchars(htmlspecialchars($query['string']));
 
                     $string = preg_replace("/\t/", "", $string);
 

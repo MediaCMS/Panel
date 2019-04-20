@@ -119,13 +119,11 @@ class Database {
 
                     $param = str_replace("'", "\'", $param);
 
+                    $param = str_replace('\\"', '\\\"', $param);
+
+                    $param = str_replace(["\\r", "\\n", "\\t"], ['\\\r', '\\\n', '\\\t'], $param);
+
                     $param = str_replace("\",\"", "\", \"", $param);
-
-                    $param = str_replace("\\\"", "\\\\\"", $param);
-
-                    $param = str_replace('\\n', '\\\n', $param);
-
-                    $param = str_replace('\\r', '\\\r', $param);
 
                     $param = sprintf("'%s'", $param);
 
@@ -152,14 +150,14 @@ class Database {
     }
 
     /**
-     * Захищає додаткові параметри sql-запиту від sql-ін`єкцій
+     * Захищає параметри sql-запиту від sql-ін`єкцій
      *
-     * @param   string $string Додатковий параметр sql-запиту
-     * @return  string Захищений додатковий параметр sql-запиту
+     * @param   string $value Параметр sql-запиту
+     * @return  string Захищений параметр sql-запиту
      */
-    private function protect(string &$string): string {
+    private function protect(&$value = null): string {
 
-        return $this->connection->real_escape_string($string);
+        return (is_null($value)) ? null : $this->connection->real_escape_string($value);
     }
 
     /**
