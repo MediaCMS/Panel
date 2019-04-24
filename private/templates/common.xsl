@@ -17,13 +17,13 @@
     <xsl:template name="image">
         <xsl:param name="uri" />
         <xsl:param name="title" />
-        <img src="{$imagePath}{substring($uri, 0, 40)}/0320.jpg">
+        <img data-uri="{$uri}">
             <xsl:if test="string-length($title) &gt; 0">
                 <xsl:attribute name="alt"><xsl:value-of select="$title" /></xsl:attribute>
             </xsl:if>
         </img>
     </xsl:template>
-
+<!--
     <xsl:template name="formImage">
         <xsl:param name="title" />
         <input type="file" name="image" id="formImage" class="form-control" title="{$title}">
@@ -50,7 +50,7 @@
             </svg>
         </div>
     </xsl:template>
-
+-->
     <xsl:template name="index">
         <xsl:param name="filter" />
         <xsl:param name="columns" />

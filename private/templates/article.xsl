@@ -44,7 +44,7 @@
         <xsl:variable name="elements">
             <element type="string"  name="title"        value="{@title}"        title="Назва"   extended="true" />
             <element type="text"    name="description"  value="{@description}"  title="Опис"    extended="true" />
-            <element type="wysiwyg" name="text" title="Текст" extended="true">
+            <element type="wysiwyg" name="text" title="Текст"   extended="true">
                 <value><xsl:value-of select="@text" /></value>
             </element>
             <element type="image"   name="image"    value="{@image}"    title="Зображення" />

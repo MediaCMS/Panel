@@ -14,17 +14,26 @@ $(function(){
     let nodes = {};
     nodes.html = $('html');
     nodes.body = $('body');
+    let photo = {
+        host: nodes.html.data('photo-host'),
+        path: nodes.html.data('photo-path')
+    };
+
+    // create images
+    $('html img[data-uri]').each(function(){
+        let width = ($(this).parent().width() < 400) ? '0320' : '0480';
+        let uri = $(this).data('uri').slice(0, -8) + width + '.jpg';
+        $(this).attr('src', photo.host + photo.path + uri);
+    });
 
     // index items clickable
     $('main table.clickable').on('click', 'tbody tr', function() {
         window.location.href = $(this).data('edit');
     });
 
-   nodes.form = $('main form');
+    nodes.form = $('main form');
     if (nodes.form.length > 0) {
-        let photoHost = nodes.html.data('photo-host');
-        let photoPath = nodes.html.data('photo-path');
-        let image = new Image(photoHost);
+        let image = new Image(photo.host);
         // form wysiwyg
         nodes.wysiwyg = nodes.form.find('textarea.wysiwyg');
         if (nodes.wysiwyg.length > 0) {
@@ -36,8 +45,8 @@ $(function(){
                 menubar: false,
                 toolbar: 'bold italic underline strikethrough| copy paste cut | undo redo | forecolor backcolor | subscript superscript removeformat | link image charmap code',
                 plugins: 'link image charmap code',
-                images_upload_url: photoHost + '/upload.php',
-                images_upload_base_path: photoHost + photoPath,
+                images_upload_url: photo.host + '/upload.php',
+                images_upload_base_path: photo.host + photo.path,
                 images_upload_credentials: false,
                 image_caption: true,
                 image_dimensions: false,
@@ -45,8 +54,6 @@ $(function(){
             });
         }
 
-
-        console.log(nodes.form.find('#form-image'));
         // form image upload
         nodes.formImageUpload = nodes.form.find('#form-image');
         nodes.formImage = nodes.form.find('div.image');
@@ -56,7 +63,7 @@ $(function(){
                 image.upload($(this)[0].files[0], {
                     done: function(response) {
                         console.log('form.image.upload.done');
-                        let uri = photoHost + photoPath + response.uri.slice(0, -8) + '0320.jpg';
+                        let uri = photo.host + photo.path + response.uri.slice(0, -8) + '0320.jpg';
                         nodes.formImageUpload.val('').addClass('d-none');
                         nodes.formImage.removeClass('d-none');
                         nodes.formImage.prepend('<img src="' + uri + '" alt="Головне зображення"/>');
@@ -66,6 +73,7 @@ $(function(){
                 });
             });
         }
+
         // form image remove
         if (nodes.formImage.length > 0) {
             nodes.formImage.on('click', function() {
