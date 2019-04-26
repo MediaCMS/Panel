@@ -30,7 +30,6 @@
             <column name="time"     title="Дата"        align="center" />
             <column name="title"    title="Назва"       align="left" />
             <column name="category" title="Категорія"   align="center" />
-            <column name="tags"     title="Мітки"       align="center" />
             <column name="user"     title="Користувач"  align="center" />
             <column name="id"       title="ID"          align="center" />
         </xsl:variable>
