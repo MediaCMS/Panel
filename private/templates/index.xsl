@@ -37,12 +37,12 @@
             <head>
                 <title><xsl:value-of select="@title" /></title>
                 <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-                <link href="/index.css" rel="stylesheet" />
-                <link href="/bootstrap.min.css" rel="stylesheet" />
+                <link href="/index.css?v=1" rel="stylesheet" />
+                <link href="/bootstrap.min.css?v=1" rel="stylesheet" />
                 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
                 <script src="/jquery-3.3.1.min.js" type="application/javascript" />
                 <script src="/popper.min.js" type="application/javascript" />
-                <script src="/bootstrap.min.js" type="application/javascript" />
+                <script src="/bootstrap.min.js?v=1" type="application/javascript" />
                 <xsl:if test="not(debug)">
                     <script src='https://www.google.com/recaptcha/api.js' />
                 </xsl:if>
@@ -50,8 +50,8 @@
                     <script src='/tinymce/tinymce.min.js' />
                     <script src="/tinymce/jquery.tinymce.min.js" />
                 </xsl:if>
-                <script src="/image.js" type="application/javascript" />
-                <script src="/index.js" type="application/javascript" />
+                <script src="/image.js?v=1" type="application/javascript" />
+                <script src="/index.js?v=1" type="application/javascript" />
             </head>
             <body>
                 <xsl:if test="menu">
