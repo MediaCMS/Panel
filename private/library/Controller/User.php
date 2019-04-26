@@ -46,14 +46,16 @@ class User extends Controller {
 
     /**
      * Редагує користувача (додатково)
+     *
+     * @param integer|null $id Ідентифікатор об'єкта
      */
-    public function editAdvanced(): void {
+    public function editAdvanced(int $id = null): void {
 
         $this->database->call('RoleGetIndex');
 
         $this->setItems('roles', 'role');
 
-        if (is_null($this->router->getURI(2)) && (count($_POST) == 0))
+        if (isset($id) && (count($_POST) == 0))
 
             $this->node->addAttribute('role', 3);
     }

@@ -190,21 +190,23 @@ abstract class Controller {
      */
     public function edit(): void {
 
+        $id = $this->router->getURI(2);
+
         $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 
         $this->submit();
 
-        $this->editAdvanced();
-
-        $id = $this->router->getURI(2);
+        $this->editAdvanced($id);
 
         if (isset($id)) $this->get($id);
     }
 
     /**
      * Редагує дані (додатково)
+     *
+     * @param integer|null $id Ідентифікатор об'єкта
      */
-    public function editAdvanced(): void {}
+    public function editAdvanced(int $id = null): void {}
 
     /**
      * Опрацьовує дані з форми
@@ -239,7 +241,7 @@ abstract class Controller {
 
         $this->editAdvanced();
 
-        if (isset($form['time']))
+        if (isset($form['time']) && is_null($form['time']))
 
             $form['time'] = date('Y-m-d H:i:s');
 

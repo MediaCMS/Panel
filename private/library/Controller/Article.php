@@ -64,12 +64,18 @@ class Article extends Controller {
 
     /**
      * Редагує (додатково)
+     *
+     * @param integer|null $id Ідентифікатор об'єкта
      */
-    public function editAdvanced(): void {
+    public function editAdvanced(int $id = null): void {
 
         $this->database->call('CategoryGetIndex', []);
 
         $this->setItems('categories', 'category');
+
+        if (!isset($id))
+
+            $this->node->addAttribute('time', date('Y-m-d\TH:i'));
     }
 
     /**
@@ -82,12 +88,19 @@ class Article extends Controller {
 
         $article = parent::get($id);
 
+        $article['time'] = substr($article['time'], 0, -3);
+
+        $article['time'] = str_replace(' ', 'T', $article['time']);
+
+        $this->node->attributes()->time = $article['time'];
+
         if (strlen($article['tags']) > 0) {
 
             $this->database->call('TagGetByIDs', $article['tags']);
 
             $this->setItems('tags', 'tag');
         }
+
 
         return $article;
     }

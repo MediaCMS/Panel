@@ -135,10 +135,9 @@
         </div>
     </xsl:template>
 
-
-    <xsl:template match="elements/element[@type='date']">
-        <input type="date" name="{@name}" value="{@value}"
-               title="Фільтр за датою" id="filter-{@name}" class="form-control" />
+    <xsl:template match="elements/element[@type='datetime']">
+        <input type="datetime-local" name="{@name}" value="{@value}"
+               title="{@title}" id="form-{@name}" class="form-control" />
     </xsl:template>
 
     <xsl:template match="elements/element[@type='string']">

@@ -46,8 +46,8 @@
             <element type="wysiwyg" name="text" title="Текст"   extended="true">
                 <value><xsl:value-of select="@text" /></value>
             </element>
-            <element type="image"   name="image"    value="{@image}"    title="Зображення" />
-            <element type="list"    name="category" value="{@category}" title="Категорія">
+            <element type="image" name="image"    value="{@image}"    title="Зображення" />
+            <element type="list"  name="category" value="{@category}" title="Категорія">
                 <items>
                     <xsl:for-each select="categories/category">
                         <item title="{@title}" value="{@id}" />
@@ -61,11 +61,11 @@
                     </xsl:for-each>
                 </items>
             </element>
+            <element type="datetime" name="time" value="{@time}" title="Дата та час" />
             <xsl:if test="@id">
-                <element type="string" name="alias" value="{@alias}"    title="Псевдонім"       readonly="true" />
-                <element type="string" name="user"  value="{@user}"     title="Користувач"      readonly="true" />
-                <element type="string" name="time"  value="{@time}"     title="Дата та час"     readonly="true" />
-                <element type="string" name="id"    value="{@id}"       title="Ідентифікатор"   readonly="true" />
+                <element type="string" name="alias" value="{@alias}" title="Псевдонім"     readonly="true" />
+                <element type="string" name="user"  value="{@user}"  title="Користувач"    readonly="true" />
+                <element type="string" name="id"    value="{@id}"    title="Ідентифікатор" readonly="true" />
             </xsl:if>
         </xsl:variable>
         <xsl:call-template name="form">

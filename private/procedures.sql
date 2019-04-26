@@ -93,6 +93,7 @@ CREATE PROCEDURE `ArticleSet`(IN `params` json)
 BEGIN
   DECLARE _i TINYINT(3) DEFAULT 0;
   DECLARE _id TINYINT(3) UNSIGNED;
+  DECLARE _time DATETIME;
   DECLARE _title VARCHAR(128);
   DECLARE _description VARCHAR(256);
   DECLARE _text TEXT;
@@ -107,6 +108,7 @@ BEGIN
   IF (JSON_TYPE(params->'$.id') <> 'NULL') THEN
     SET _id = params->'$.id';
   END IF;
+  SET _time = params->>'$.time';
   SET _title = params->>'$.title';
   IF (JSON_TYPE(params->'$.description') <> 'NULL') THEN
     SET _description = params->>'$.description';
@@ -123,13 +125,13 @@ BEGIN
 
   IF (_id IS NOT NULL) THEN
     UPDATE  `article` 
-      SET   `title` = _title, `description` = _description, `text` = _text,
+      SET   `time` = _time, `title` = _title, `description` = _description, `text` = _text,
             `image` = _image, `alias` = _alias, `category` = _category, `user` = _user
       WHERE `id` = _id AND `status` = 1;
     DELETE FROM `article_tag` WHERE `article` = _id;
   ELSE
-    INSERT INTO `article` (`title`, `description`, `text`, `image`, `alias`, `category`, `user`) 
-      VALUES (_title, _description, _text, _image, _alias, _category, _user);
+    INSERT INTO `article` (`time`, `title`, `description`, `text`, `image`, `alias`, `category`, `user`) 
+      VALUES (_time, _title, _description, _text, _image, _alias, _category, _user);
     SELECT LAST_INSERT_ID() INTO _id;
   END IF;
 
@@ -670,4 +672,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-04-20 15:17:41
+-- 2019-04-26 16:51:50
