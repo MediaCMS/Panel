@@ -59,11 +59,10 @@ $(function(){
         nodes.formImage = nodes.form.find('div.image');
         if (nodes.formImageUpload.length > 0) {
             nodes.formImageUpload.on('change', function() {
-                console.log('form.image.upload.change');
                 image.upload($(this)[0].files[0], {
                     done: function(response) {
-                        console.log('form.image.upload.done');
-                        let uri = photo.host + photo.path + response.uri.slice(0, -8) + '0320.jpg';
+                        let width = (nodes.formImageUpload.parent().width() < 400) ? '0320' : '0480';
+                        let uri = photo.host + photo.path + response.uri.slice(0, -8) + width + '.jpg';
                         nodes.formImageUpload.val('').addClass('d-none');
                         nodes.formImage.removeClass('d-none');
                         nodes.formImage.prepend('<img src="' + uri + '" alt="Головне зображення"/>');
@@ -80,7 +79,6 @@ $(function(){
                 console.log('form.image.remove.click');
                 image.remove($(this).find('input').val(), {
                     done: function() {
-                        console.log('form.image.remove.done');
                         nodes.formImage.addClass('d-none');
                         nodes.formImage.find('img').remove();
                         nodes.formImage.find('input').removeAttr('value');
