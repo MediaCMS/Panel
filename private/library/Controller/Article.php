@@ -29,9 +29,10 @@ class Article extends Controller {
             ['title' => 'Автор',        'value' => 'user']
         ];
 
-        $this->filterDefault['dateBegin']   = '2018-01-01';
-        $this->filterDefault['dateEnd']     = date('Y-m-d');
-        $this->filterDefault['_orderField'] = 'time';
+        $this->filterDefault['dateBegin']       = '2018-01-01';
+        $this->filterDefault['dateEnd']         = date('Y-m-d');
+        $this->filterDefault['_orderField']     = 'time';
+        $this->filterDefault['_orderDirection'] = 0;
 
         if ($_SESSION['user']['roleID'] == 4) {
 
