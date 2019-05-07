@@ -194,6 +194,12 @@ BEGIN
     LIMIT _rowsOffset, _rowsLimit; 
 END;;
 
+DROP PROCEDURE IF EXISTS `CategoryGetList`;;
+CREATE PROCEDURE `CategoryGetList`()
+BEGIN
+  SELECT * FROM `category` WHERE `status` > 0 ORDER BY `title`;
+END;;
+
 DROP PROCEDURE IF EXISTS `CategorySet`;;
 CREATE PROCEDURE `CategorySet`(IN `params` json)
 BEGIN
@@ -672,4 +678,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-04-26 16:51:50
+-- 2019-05-07 18:59:12
