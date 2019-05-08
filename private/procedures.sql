@@ -58,7 +58,7 @@ BEGIN
   SET _rowsLimit = params->'$._limit';
 
   SELECT SQL_CALC_FOUND_ROWS 
-         `a`.`id`, `a`.`time`, `a`.`title`, `a`.`status`,
+         `a`.`id`, `a`.`time`, `a`.`title`, `a`.`description`, `a`.`image`, `a`.`alias`, `a`.`status`,
          `c`.`title` AS 'category', `u`.`title` AS 'user',
          GROUP_CONCAT(DISTINCT `t`.`title` ORDER BY `t`.`title` ASC SEPARATOR ', ') AS 'tags'
     FROM `article` AS `a`
@@ -678,4 +678,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-05-07 18:59:12
+-- 2019-05-08 13:20:07
