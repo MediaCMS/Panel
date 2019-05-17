@@ -23,7 +23,8 @@ END;;
 DROP PROCEDURE IF EXISTS `ArticleGetByAlias`;;
 CREATE PROCEDURE `ArticleGetByAlias`(IN `_alias` varchar(128))
 BEGIN
-  SELECT      `a`.*, `u`.`title` AS `user`, GROUP_CONCAT(DISTINCT `t`.`title` SEPARATOR ',') AS 'tags'
+  SELECT      `a`.*, `u`.`title` AS `userTitle`, `u`.`alias` AS `userAlias`,
+              GROUP_CONCAT(DISTINCT CONCAT(`t`.`title`, '/', `t`.`alias`) SEPARATOR ',') AS 'tags'
   FROM        `article` AS `a`
   INNER JOIN  `article_tag` AS `at` ON `at`.`article` = `a`.`id`
   INNER JOIN  `tag` AS `t` ON `t`.`id` = `at`.`tag`
@@ -38,10 +39,15 @@ BEGIN
   DECLARE _dateBegin DATETIME;
   DECLARE _dateEnd DATETIME;
   DECLARE _title VARCHAR(32);
-  DECLARE _category VARCHAR(32);
-  DECLARE _tag VARCHAR(32);
+  DECLARE _categoryID TINYINT(3);
+  DECLARE _categoryTitle VARCHAR(32);
+  DECLARE _categoryAlias VARCHAR(32);
+  DECLARE _tagID SMALLINT(5);
+  DECLARE _tagTitle VARCHAR(32);
+  DECLARE _tagAlias VARCHAR(32);
   DECLARE _userID TINYINT(3);
   DECLARE _userTitle VARCHAR(32);
+  DECLARE _userAlias VARCHAR(32);
   DECLARE _status TINYINT(1) UNSIGNED;
   DECLARE _orderField VARCHAR(32) DEFAULT 'id';
   DECLARE _orderDirection INTEGER DEFAULT 1;
@@ -54,10 +60,10 @@ BEGIN
     SET _dateEnd = CONCAT(params->>'$.dateEnd', ' 23:59:59'); END IF;
   IF (JSON_TYPE(params->'$.title') <> 'NULL') THEN
     SET _title = params->>'$.title'; END IF;
-  IF (JSON_TYPE(params->'$.category') <> 'NULL') THEN
-    SET _category = params->>'$.category'; END IF;
-  IF (JSON_TYPE(params->'$.tag') <> 'NULL') THEN
-    SET _tag = params->>'$.tag'; END IF;
+  IF (JSON_TYPE(params->'$.categoryTitle') <> 'NULL') THEN
+    SET _categoryTitle = params->>'$.categoryTitle'; END IF;
+  IF (JSON_TYPE(params->'$.tagTitle') <> 'NULL') THEN
+    SET _tagTitle = params->>'$.tagTitle'; END IF;
   IF (JSON_TYPE(params->'$.userID') <> 'NULL') THEN
     SET _userID = params->'$.userID'; END IF;
   IF (JSON_TYPE(params->'$.userTitle') <> 'NULL') THEN
@@ -79,24 +85,24 @@ BEGIN
     LEFT JOIN `tag` AS `t` ON `t`.`id` = `at`.`tag`
     INNER JOIN `user` AS `u` ON `u`.`id` = `a`.`user`
     WHERE `a`.`id` > 0
-      AND (_tag       IS NULL OR 'tags' LIKE CONCAT('%', _tag, '%'))
-      AND (_dateBegin IS NULL OR `a`.`time` >= _dateBegin)
-      AND (_dateEnd   IS NULL OR `a`.`time` <= _dateEnd)
-      AND (_title     IS NULL OR `a`.`title` LIKE CONCAT('%', _title, '%'))
-      AND (_userID    IS NULL OR `a`.`user` = _userID)
-      AND (_status    IS NULL OR `a`.`status` = _status)
-      AND (_category  IS NULL OR `c`.`title` LIKE CONCAT('%', _category, '%'))
-      AND (_userTitle IS NULL OR `u`.`title` LIKE CONCAT('%', _userTitle, '%'))
+      AND (_tagTitle      IS NULL OR 'tags' LIKE CONCAT('%', _tagTitle, '%'))
+      AND (_dateBegin     IS NULL OR `a`.`time` >= _dateBegin)
+      AND (_dateEnd       IS NULL OR `a`.`time` <= _dateEnd)
+      AND (_title         IS NULL OR `a`.`title` LIKE CONCAT('%', _title, '%'))
+      AND (_userID        IS NULL OR `a`.`user` = _userID)
+      AND (_status        IS NULL OR `a`.`status` = _status)
+      AND (_categoryTitle IS NULL OR `c`.`title` LIKE CONCAT('%', _categoryTitle, '%'))
+      AND (_userTitle     IS NULL OR `u`.`title` LIKE CONCAT('%', _userTitle, '%'))
     GROUP BY `a`.`id`
     ORDER BY
-      CASE WHEN _orderField = 'time'     AND _orderDirection = 1 THEN `a`.`time`  END ASC,
-      CASE WHEN _orderField = 'time'     AND _orderDirection = 0 THEN `a`.`time`  END DESC,
-      CASE WHEN _orderField = 'title'    AND _orderDirection = 1 THEN `a`.`title` END ASC,
-      CASE WHEN _orderField = 'title'    AND _orderDirection = 0 THEN `a`.`title` END DESC,
+      CASE WHEN _orderField = 'time'     AND _orderDirection = 1 THEN `a`.`time`     END ASC,
+      CASE WHEN _orderField = 'time'     AND _orderDirection = 0 THEN `a`.`time`     END DESC,
+      CASE WHEN _orderField = 'title'    AND _orderDirection = 1 THEN `a`.`title`    END ASC,
+      CASE WHEN _orderField = 'title'    AND _orderDirection = 0 THEN `a`.`title`    END DESC,
       CASE WHEN _orderField = 'category' AND _orderDirection = 1 THEN `a`.`category` END ASC,
       CASE WHEN _orderField = 'category' AND _orderDirection = 0 THEN `a`.`category` END DESC,
-      CASE WHEN _orderField = 'user'     AND _orderDirection = 1 THEN `a`.`user` END ASC,
-      CASE WHEN _orderField = 'user'     AND _orderDirection = 0 THEN `a`.`user` END DESC
+      CASE WHEN _orderField = 'user'     AND _orderDirection = 1 THEN `a`.`user`     END ASC,
+      CASE WHEN _orderField = 'user'     AND _orderDirection = 0 THEN `a`.`user`     END DESC
     LIMIT _rowsOffset, _rowsLimit;
 END;;
 
@@ -184,6 +190,12 @@ BEGIN
   SELECT * FROM `category` WHERE `status` > 0 ORDER BY `title`;
 END;;
 
+DROP PROCEDURE IF EXISTS `CategoryGetByAlias`;;
+CREATE PROCEDURE `CategoryGetByAlias`(IN `_alias` varchar(128))
+BEGIN
+  SELECT * FROM `category` WHERE `alias` = _alias;
+END;;
+
 DROP PROCEDURE IF EXISTS `CategoryGetIndex`;;
 CREATE PROCEDURE `CategoryGetIndex`(IN `params` json)
 BEGIN
@@ -202,7 +214,7 @@ BEGIN
     SET _rowsLimit = params->'$._limit'; END IF;
 
   SELECT SQL_CALC_FOUND_ROWS
-         `c`.`id`, `c`.`time`, `c`.`title`, `u`.`title` AS 'user', `c`.`status`
+         `c`.`id`, `c`.`time`, `c`.`title`, `c`.`alias`, `u`.`title` AS 'user', `c`.`status`
     FROM `category` AS `c`
     INNER JOIN `user` AS `u` ON `u`.`id` = `c`.`user`
     WHERE `c`.`id` > 0
@@ -354,6 +366,12 @@ BEGIN
   WHERE       `p`.`id` = _id;
 END;;
 
+DROP PROCEDURE IF EXISTS `PageGetByAlias`;;
+CREATE PROCEDURE `PageGetByAlias`(IN `_alias` varchar(32))
+BEGIN
+  SELECT * FROM `page` WHERE `alias` = _alias;
+END;;
+
 DROP PROCEDURE IF EXISTS `PageGetIndex`;;
 CREATE PROCEDURE `PageGetIndex`(IN `params` json)
 BEGIN
@@ -370,7 +388,7 @@ BEGIN
   SET _rowsLimit = params->'$._limit';
 
   SELECT SQL_CALC_FOUND_ROWS
-         `p`.`id`, `p`.`time`, `p`.`title`, `u`.`title` AS 'user', `p`.`status`
+         `p`.`id`, `p`.`time`, `p`.`title`, `p`.`alias`, `u`.`title` AS 'user', `p`.`status`
     FROM `page` AS `p`
     INNER JOIN `user` AS `u` ON `u`.`id` = `p`.`user`
     WHERE `p`.`id` > 0
@@ -450,6 +468,12 @@ BEGIN
   WHERE       `t`.`id` = _id;
 END;;
 
+DROP PROCEDURE IF EXISTS `TagGetByAlias`;;
+CREATE PROCEDURE `TagGetByAlias`(IN `_alias` varchar(32))
+BEGIN
+  SELECT * FROM `tag` WHERE `alias` = _alias;
+END;;
+
 DROP PROCEDURE IF EXISTS `TagGetByIDs`;;
 CREATE PROCEDURE `TagGetByIDs`(IN `_ids` varchar(32) CHARACTER SET 'utf8mb4')
 BEGIN
@@ -472,7 +496,7 @@ BEGIN
   SET _rowsLimit = params->'$._limit';
 
   SELECT SQL_CALC_FOUND_ROWS
-         `t`.`id`, `t`.`time`, `t`.`title`, `u`.`title` AS 'user', `t`.`status`
+         `t`.`id`, `t`.`time`, `t`.`title`, `t`.`alias`, `u`.`title` AS 'user', `t`.`status`
     FROM `tag` AS `t`
     INNER JOIN `user` AS `u` ON `u`.`id` = `t`.`user`
     WHERE `t`.`id` > 0
@@ -554,6 +578,12 @@ BEGIN
   WHERE      `u1`.`id` = _id;
 END;;
 
+DROP PROCEDURE IF EXISTS `UserGetByAlias`;;
+CREATE PROCEDURE `UserGetByAlias`(IN `_alias` varchar(32))
+BEGIN
+  SELECT * FROM `user` WHERE `alias` = _alias;
+END;;
+
 DROP PROCEDURE IF EXISTS `UserGetIndex`;;
 CREATE PROCEDURE `UserGetIndex`(IN `params` json)
 BEGIN
@@ -583,7 +613,7 @@ BEGIN
   SET _rowsLimit = params->'$._limit';
 
   SELECT SQL_CALC_FOUND_ROWS
-         `u`.`id`, `u`.`time`, `u`.`title`, `u`.`phone`, `u`.`email`, `r`.`title` AS 'role', `u`.`status`
+         `u`.`id`, `u`.`time`, `u`.`title`, `u`.`phone`, `u`.`email`, `u`.`alias`, `r`.`title` AS 'role', `u`.`status`
     FROM `user` AS `u`
     INNER JOIN `role` AS `r` ON `r`.`id` = `u`.`role`
     WHERE `u`.`id` > 0
@@ -690,4 +720,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-05-17 11:10:31
+-- 2019-05-17 20:31:52
