@@ -16,11 +16,11 @@
 
     <xsl:template match="main/article/index">
         <xsl:variable name="filter">
-            <element type="date"   name="dateBegin"    value="{filter/@dateBegin}" title="Початкова дата"  />
-            <element type="date"   name="dateEnd"      value="{filter/@dateEnd}"   title="Кінцева дата" />
-            <element type="string" name="title"        value="{filter/@title}"     title="Назва" />
-            <element type="string" name="category"     value="{filter/@category}"  title="Категорія" />
-            <element type="string" name="tag"          value="{filter/@tag}"       title="Мітка" />
+            <element type="date"   name="dateBegin"     value="{filter/@dateBegin}"     title="Початкова дата"  />
+            <element type="date"   name="dateEnd"       value="{filter/@dateEnd}"       title="Кінцева дата" />
+            <element type="string" name="title"         value="{filter/@title}"         title="Назва" />
+            <element type="string" name="categoryTitle" value="{filter/@categoryTitle}" title="Категорія" />
+            <element type="string" name="tagTitle"      value="{filter/@tagTitle}"      title="Мітка" />
             <xsl:if test="/root/user/@roleID&lt;4">
                 <element type="string" name="userTitle" value="{@userTitle}" title="Автор" />
             </xsl:if>

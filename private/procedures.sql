@@ -41,13 +41,10 @@ BEGIN
   DECLARE _title VARCHAR(32);
   DECLARE _categoryID TINYINT(3);
   DECLARE _categoryTitle VARCHAR(32);
-  DECLARE _categoryAlias VARCHAR(32);
   DECLARE _tagID SMALLINT(5);
   DECLARE _tagTitle VARCHAR(32);
-  DECLARE _tagAlias VARCHAR(32);
   DECLARE _userID TINYINT(3);
   DECLARE _userTitle VARCHAR(32);
-  DECLARE _userAlias VARCHAR(32);
   DECLARE _status TINYINT(1) UNSIGNED;
   DECLARE _orderField VARCHAR(32) DEFAULT 'id';
   DECLARE _orderDirection INTEGER DEFAULT 1;
@@ -60,8 +57,12 @@ BEGIN
     SET _dateEnd = CONCAT(params->>'$.dateEnd', ' 23:59:59'); END IF;
   IF (JSON_TYPE(params->'$.title') <> 'NULL') THEN
     SET _title = params->>'$.title'; END IF;
+  IF (JSON_TYPE(params->'$.categoryID') <> 'NULL') THEN
+    SET _categoryID = params->'$.categoryID'; END IF;
   IF (JSON_TYPE(params->'$.categoryTitle') <> 'NULL') THEN
     SET _categoryTitle = params->>'$.categoryTitle'; END IF;
+  IF (JSON_TYPE(params->'$.tagID') <> 'NULL') THEN
+    SET _tagID = params->'$.tagID'; END IF;
   IF (JSON_TYPE(params->'$.tagTitle') <> 'NULL') THEN
     SET _tagTitle = params->>'$.tagTitle'; END IF;
   IF (JSON_TYPE(params->'$.userID') <> 'NULL') THEN
@@ -85,14 +86,16 @@ BEGIN
     LEFT JOIN `tag` AS `t` ON `t`.`id` = `at`.`tag`
     INNER JOIN `user` AS `u` ON `u`.`id` = `a`.`user`
     WHERE `a`.`id` > 0
-      AND (_tagTitle      IS NULL OR 'tags' LIKE CONCAT('%', _tagTitle, '%'))
       AND (_dateBegin     IS NULL OR `a`.`time` >= _dateBegin)
       AND (_dateEnd       IS NULL OR `a`.`time` <= _dateEnd)
       AND (_title         IS NULL OR `a`.`title` LIKE CONCAT('%', _title, '%'))
-      AND (_userID        IS NULL OR `a`.`user` = _userID)
-      AND (_status        IS NULL OR `a`.`status` = _status)
+      AND (_categoryID    IS NULL OR `a`.`category` = _categoryID)
       AND (_categoryTitle IS NULL OR `c`.`title` LIKE CONCAT('%', _categoryTitle, '%'))
+      AND (_tagID         IS NULL OR `at`.`tag` = _tagID)
+      AND (_tagTitle      IS NULL OR `t`.`title` LIKE CONCAT('%', _tagTitle, '%'))
+      AND (_userID        IS NULL OR `a`.`user` = _userID)
       AND (_userTitle     IS NULL OR `u`.`title` LIKE CONCAT('%', _userTitle, '%'))
+      AND (_status        IS NULL OR `a`.`status` = _status)
     GROUP BY `a`.`id`
     ORDER BY
       CASE WHEN _orderField = 'time'     AND _orderDirection = 1 THEN `a`.`time`     END ASC,
@@ -720,4 +723,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-05-17 20:31:52
+-- 2019-05-17 21:27:57
