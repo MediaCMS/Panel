@@ -20,6 +20,18 @@ BEGIN
   GROUP BY    `a`.`id`;
 END;;
 
+DROP PROCEDURE IF EXISTS `ArticleGetByAlias`;;
+CREATE PROCEDURE `ArticleGetByAlias`(IN `_alias` varchar(128))
+BEGIN
+  SELECT      `a`.*, `u`.`title` AS `user`, GROUP_CONCAT(DISTINCT `t`.`title` SEPARATOR ',') AS 'tags'
+  FROM        `article` AS `a`
+  INNER JOIN  `article_tag` AS `at` ON `at`.`article` = `a`.`id`
+  INNER JOIN  `tag` AS `t` ON `t`.`id` = `at`.`tag`
+  INNER JOIN  `user` AS `u` ON `u`.`id` = `a`.`user`
+  WHERE       `a`.`alias` = _alias
+  GROUP BY    `a`.`id`;
+END;;
+
 DROP PROCEDURE IF EXISTS `ArticleGetIndex`;;
 CREATE PROCEDURE `ArticleGetIndex`(IN `params` json)
 BEGIN
@@ -166,6 +178,12 @@ BEGIN
   WHERE       `c`.`id` = _id;
 END;;
 
+DROP PROCEDURE IF EXISTS `CategoryGetAll`;;
+CREATE PROCEDURE `CategoryGetAll`()
+BEGIN
+  SELECT * FROM `category` WHERE `status` > 0 ORDER BY `title`;
+END;;
+
 DROP PROCEDURE IF EXISTS `CategoryGetIndex`;;
 CREATE PROCEDURE `CategoryGetIndex`(IN `params` json)
 BEGIN
@@ -192,12 +210,6 @@ BEGIN
       AND (_status IS NULL OR `c`.`status` = _status)
     ORDER BY `c`.`title`
     LIMIT _rowsOffset, _rowsLimit; 
-END;;
-
-DROP PROCEDURE IF EXISTS `CategoryGetList`;;
-CREATE PROCEDURE `CategoryGetList`()
-BEGIN
-  SELECT * FROM `category` WHERE `status` > 0 ORDER BY `title`;
 END;;
 
 DROP PROCEDURE IF EXISTS `CategorySet`;;
@@ -678,4 +690,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-05-08 13:20:07
+-- 2019-05-17 11:10:31
