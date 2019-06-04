@@ -55,7 +55,7 @@ class User extends Controller {
 
         $this->setItems('roles', 'role');
 
-        if (isset($id) && (count($_POST) == 0))
+        if (!isset($id) && (count($_POST) == 0))
 
             $this->node->addAttribute('role', 3);
     }
