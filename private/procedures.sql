@@ -80,7 +80,7 @@ BEGIN
 
   SELECT SQL_CALC_FOUND_ROWS 
          `a`.`id`, `a`.`time`, `a`.`title`, `a`.`description`, `a`.`image`, `a`.`alias`, `a`.`status`,
-         `c`.`title` AS 'category', `u`.`title` AS 'user',
+         `c`.`title` AS 'categoryTitle', `c`.`alias` AS 'categoryAlias', `u`.`title` AS 'userTitle', `u`.`alias` AS 'userAlias',
          GROUP_CONCAT(DISTINCT `t`.`title` ORDER BY `t`.`title` ASC SEPARATOR ', ') AS 'tags'
     FROM `article` AS `a`
     INNER JOIN `category` AS `c` ON `c`.`id` = `a`.`category`
@@ -727,4 +727,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-06-05 17:01:09
+-- 2019-06-05 21:20:08
