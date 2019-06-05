@@ -26,12 +26,12 @@
             </xsl:if>
         </xsl:variable>
         <xsl:variable name="columns">
-            <column name="position" title="#"           align="center" />
-            <column name="time"     title="Дата"        align="center" />
-            <column name="title"    title="Назва"       align="left" />
-            <column name="category" title="Категорія"   align="center" />
-            <column name="user"     title="Користувач"  align="center" />
-            <column name="id"       title="ID"          align="center" />
+            <column name="position"      title="#"           align="center" />
+            <column name="time"          title="Дата"        align="center" />
+            <column name="title"         title="Назва"       align="left" />
+            <column name="categoryTitle" title="Категорія"   align="center" />
+            <column name="userTitle"     title="Користувач"  align="center" />
+            <column name="id"            title="ID"          align="center" />
         </xsl:variable>
         <xsl:call-template name="index">
             <xsl:with-param name="filter" select="exslt:node-set($filter)" />
