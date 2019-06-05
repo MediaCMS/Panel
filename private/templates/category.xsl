@@ -23,6 +23,7 @@
             <column name="title"    title="Назва"       align="left" />
             <column name="user"     title="Користувач"  align="center" />
             <column name="time"     title="Дата"        align="center" />
+            <column name="order"    title="Порядок"     align="center" />
             <column name="id"       title="ID"          align="center" />
         </xsl:variable>
         <xsl:call-template name="index">
@@ -36,6 +37,7 @@
             <element type="string"  name="title"        value="{@title}"        title="Назва" />
             <element type="text"    name="description"  value="{@description}"  title="Опис" />
             <element type="image"   name="image"        value="{@image}"        title="Зображення" />
+            <element type="string"  name="order"        value="{@order}"        title="Порядок" />
             <xsl:if test="@id">
                 <element type="string" name="alias" value="{@alias}"    title="Псевдонім"       readonly="true" />
                 <element type="string" name="user"  value="{@user}"     title="Користувач"      readonly="true" />

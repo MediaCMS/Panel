@@ -10,4 +10,6 @@
 
 namespace MediaCMS\Panel\Controller;
 
-class Category extends \MediaCMS\Panel\Controller {}
+use MediaCMS\Panel\Controller;
+
+class Category extends Controller {}

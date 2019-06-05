@@ -5,6 +5,8 @@ SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
+USE `media`;
+
 SET NAMES utf8mb4;
 
 DELIMITER ;;
@@ -147,7 +149,7 @@ BEGIN
   IF (_id IS NOT NULL) THEN
     UPDATE  `article` 
       SET   `time` = _time, `title` = _title, `description` = _description, `text` = _text,
-            `image` = _image, `alias` = _alias, `category` = _category, `user` = _user
+            `image` = _image, `alias` = _alias, `category` = _category/*, `user` = _user*/
       WHERE `id` = _id AND `status` = 1;
     DELETE FROM `article_tag` WHERE `article` = _id;
   ELSE
@@ -190,7 +192,7 @@ END;;
 DROP PROCEDURE IF EXISTS `CategoryGetAll`;;
 CREATE PROCEDURE `CategoryGetAll`()
 BEGIN
-  SELECT * FROM `category` WHERE `status` > 0 ORDER BY `title`;
+  SELECT * FROM `category` WHERE `status` > 0 ORDER BY `order`;
 END;;
 
 DROP PROCEDURE IF EXISTS `CategoryGetByAlias`;;
@@ -217,13 +219,13 @@ BEGIN
     SET _rowsLimit = params->'$._limit'; END IF;
 
   SELECT SQL_CALC_FOUND_ROWS
-         `c`.`id`, `c`.`time`, `c`.`title`, `c`.`alias`, `u`.`title` AS 'user', `c`.`status`
+         `c`.`id`, `c`.`time`, `c`.`title`, `c`.`alias`, `c`.`image`, `u`.`title` AS 'user', `c`.`order`, `c`.`status`
     FROM `category` AS `c`
     INNER JOIN `user` AS `u` ON `u`.`id` = `c`.`user`
     WHERE `c`.`id` > 0
       AND (_title  IS NULL OR `c`.`title` LIKE CONCAT('%', _title, '%'))
       AND (_status IS NULL OR `c`.`status` = _status)
-    ORDER BY `c`.`title`
+    ORDER BY `c`.`order`
     LIMIT _rowsOffset, _rowsLimit; 
 END;;
 
@@ -235,6 +237,7 @@ BEGIN
   DECLARE _description VARCHAR(256);
   DECLARE _image VARCHAR(48);
   DECLARE _alias VARCHAR(32);
+  DECLARE _order TINYINT(3) UNSIGNED;
   DECLARE _user TINYINT(3) UNSIGNED;
 
   IF (JSON_TYPE(params->'$.id') <> 'NULL') THEN
@@ -245,15 +248,16 @@ BEGIN
   IF (JSON_TYPE(params->'$.image') <> 'NULL') THEN
     SET _image = params->>'$.image'; END IF;
   SET _alias = params->>'$.alias';
+  SET _order = params->'$.order';
   SET _user = params->'$.user';
 
   IF (_id IS NOT NULL) THEN
     UPDATE  `category` 
-      SET   `title` = _title, `description` = _description, `image` = _image, `alias` = _alias, `user` = _user
+      SET   `title` = _title, `description` = _description, `image` = _image, `alias` = _alias, `order` = _order, `user` = _user
       WHERE `id` = _id AND `status` = 1;
   ELSE
-    INSERT INTO `category` (`title`, `description`, `image`, `alias`, `user`) 
-      VALUES (_title, _description, _image, _alias, _user);
+    INSERT INTO `category` (`title`, `description`, `image`, `alias`, `order`, `user`) 
+      VALUES (_title, _description, _image, _alias, _order, _user);
   END IF;
 END;;
 
@@ -391,7 +395,7 @@ BEGIN
   SET _rowsLimit = params->'$._limit';
 
   SELECT SQL_CALC_FOUND_ROWS
-         `p`.`id`, `p`.`time`, `p`.`title`, `p`.`alias`, `u`.`title` AS 'user', `p`.`status`
+         `p`.`id`, `p`.`time`, `p`.`title`, `p`.`alias`, `p`.`image`, `u`.`title` AS 'user', `p`.`status`
     FROM `page` AS `p`
     INNER JOIN `user` AS `u` ON `u`.`id` = `p`.`user`
     WHERE `p`.`id` > 0
@@ -499,7 +503,7 @@ BEGIN
   SET _rowsLimit = params->'$._limit';
 
   SELECT SQL_CALC_FOUND_ROWS
-         `t`.`id`, `t`.`time`, `t`.`title`, `t`.`alias`, `u`.`title` AS 'user', `t`.`status`
+         `t`.`id`, `t`.`time`, `t`.`title`, `t`.`alias`, `t`.`image`, `u`.`title` AS 'user', `t`.`status`
     FROM `tag` AS `t`
     INNER JOIN `user` AS `u` ON `u`.`id` = `t`.`user`
     WHERE `t`.`id` > 0
@@ -616,7 +620,7 @@ BEGIN
   SET _rowsLimit = params->'$._limit';
 
   SELECT SQL_CALC_FOUND_ROWS
-         `u`.`id`, `u`.`time`, `u`.`title`, `u`.`phone`, `u`.`email`, `u`.`alias`, `r`.`title` AS 'role', `u`.`status`
+         `u`.`id`, `u`.`time`, `u`.`title`, `u`.`phone`, `u`.`email`, `u`.`alias`, `u`.`image`, `r`.`title` AS 'role', `u`.`status`
     FROM `user` AS `u`
     INNER JOIN `role` AS `r` ON `r`.`id` = `u`.`role`
     WHERE `u`.`id` > 0
@@ -723,4 +727,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-05-17 21:27:57
+-- 2019-06-05 17:01:09

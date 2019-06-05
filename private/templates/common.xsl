@@ -125,9 +125,9 @@
     </xsl:template>
 
     <xsl:template match="debug">
-        <div id="debug" class="text-center">
+        <div id="debug" class="container text-center">
             <xsl:if test="database/queries/query">
-                <div class="container mapper">
+                <div class="mapper">
                     <table class="table">
                         <caption>Запити</caption>
                         <thead>
