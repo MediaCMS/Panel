@@ -10,7 +10,9 @@
 
 namespace MediaCMS\Panel\Controller;
 
-class Page extends \MediaCMS\Panel\Controller {
+use MediaCMS\Panel\Controller;
+
+class Page extends Controller {
 
     /**
      * Редагує сторінку

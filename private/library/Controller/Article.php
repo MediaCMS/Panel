@@ -36,7 +36,7 @@ class Article extends Controller {
 
         if ($_SESSION['user']['roleID'] == 4) {
 
-            $this->filter['userID'] = $_SESSION['user']['id'];
+            $this->filterDefault['userID'] = $_SESSION['user']['id'];
 
             array_pop($this->orderFields);
         }
@@ -87,13 +87,21 @@ class Article extends Controller {
      */
     protected function get(int $id): array {
 
-        $article = parent::get($id);
+        $this->database->call('ArticleGet', $id);
+
+        $article = $this->database->getResult();
+
+        if ($this->user['roleID'] == 4)
+
+            if ($article['user'] != $this->user['id'])
+
+                $this->denied();
 
         $article['time'] = substr($article['time'], 0, -3);
 
         $article['time'] = str_replace(' ', 'T', $article['time']);
 
-        $this->node->attributes()->time = $article['time'];
+        $this->view->setItem($this->node, $article);
 
         if (strlen($article['tags']) > 0) {
 
@@ -101,7 +109,6 @@ class Article extends Controller {
 
             $this->setItems('tags', 'tag');
         }
-
 
         return $article;
     }

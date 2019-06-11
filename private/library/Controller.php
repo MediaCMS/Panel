@@ -181,7 +181,7 @@ abstract class Controller {
     }
 
     /**
-     * Виводить список (додатково)
+     * Виводить список (розширення)
      */
     public function indexAdvanced(): void {}
 
@@ -194,7 +194,7 @@ abstract class Controller {
 
         $this->submenu = [['title' => 'Закрити', 'alias' => 'список']];
 
-        $this->submit();
+        if (count($_POST) > 0) $this->submit();
 
         $this->editAdvanced($id);
 
@@ -213,22 +213,19 @@ abstract class Controller {
      */
     protected function submit(): void {
 
-        if (count($_POST) > 0) {
+        try {
 
-            try {
+            if (isset($_POST['_save'])) $this->set($_POST);
 
-                if (isset($_POST['_save'])) $this->set($_POST);
+            if (isset($_POST['_delete'])) $this->unset($_POST['id']);
 
-                if (isset($_POST['_delete'])) $this->unset($_POST['id']);
+            $this->router->redirect('/' . $this->router->getURI(0));
 
-                $this->router->redirect('/' . $this->router->getURI(0));
+        } catch (Exception $exception) {
 
-            } catch (Exception $exception) {
+            $this->submitRepeat($_POST);
 
-                $this->submitRepeat($_POST);
-
-                throw $exception;
-            }
+            throw $exception;
         }
     }
 
@@ -317,10 +314,6 @@ abstract class Controller {
     public function denied(): void {
 
         $alert = 'Доступ заборонено';
-
-        if (isset($this->user))
-
-            $alert .= ' (Права доступу: "' . $this->user['roleTitle'] .'"")';
 
         $this->view->setAlert($alert, 'danger');
 

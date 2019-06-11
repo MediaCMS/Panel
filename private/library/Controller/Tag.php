@@ -10,7 +10,9 @@
 
 namespace MediaCMS\Panel\Controller;
 
-class Tag extends \MediaCMS\Panel\Controller {
+use MediaCMS\Panel\Controller;
+
+class Tag extends Controller {
 
     /**
      * Вивід міток для автозаповнення

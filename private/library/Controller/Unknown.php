@@ -10,7 +10,9 @@
 
 namespace MediaCMS\Panel\Controller;
 
-class Unknown extends \MediaCMS\Panel\Controller {
+use MediaCMS\Panel\Controller;
+
+class Unknown extends Controller {
 
     /**
      * Сторінка не знайдена

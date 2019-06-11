@@ -10,9 +10,10 @@
 
 namespace MediaCMS\Panel\Controller;
 
-use  MediaCMS\Panel\Exception;
+use MediaCMS\Panel\Controller;
+use MediaCMS\Panel\Exception;
 
-class Comment extends \MediaCMS\Panel\Controller {
+class Comment extends Controller {
 
     /**
      * Створює та виводить фільтр списка коментарів

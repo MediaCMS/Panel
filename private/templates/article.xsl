@@ -63,9 +63,9 @@
             </element>
             <element type="datetime" name="time" value="{@time}" title="Дата та час" />
             <xsl:if test="@id">
-                <element type="string" name="alias" value="{@alias}" title="Псевдонім"     readonly="true" />
-                <element type="string" name="user"  value="{@user}"  title="Користувач"    readonly="true" />
-                <element type="string" name="id"    value="{@id}"    title="Ідентифікатор" readonly="true" />
+                <element type="string" name="alias" value="{@alias}"     title="Псевдонім"     readonly="true" />
+                <element type="string" name="user"  value="{@userTitle}" title="Користувач"    readonly="true" />
+                <element type="string" name="id"    value="{@id}"        title="Ідентифікатор" readonly="true" />
             </xsl:if>
         </xsl:variable>
         <xsl:call-template name="form">
