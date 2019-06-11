@@ -14,7 +14,7 @@ DELIMITER ;;
 DROP PROCEDURE IF EXISTS `ArticleGet`;;
 CREATE PROCEDURE `ArticleGet`(IN `_id` int unsigned)
 BEGIN
-  SELECT      `a`.*, `u`.`title` AS `user`, GROUP_CONCAT(DISTINCT `at`.`tag` SEPARATOR ',') AS 'tags'
+  SELECT      `a`.*, `u`.`id` AS `userID`, `u`.`title` AS `userTitle`, GROUP_CONCAT(DISTINCT `at`.`tag` SEPARATOR ',') AS 'tags'
   FROM        `article` AS `a`
   INNER JOIN  `user` AS `u` ON `u`.`id` = `a`.`user`
   INNER JOIN  `article_tag` AS `at` ON `at`.`article` = `a`.`id`
@@ -727,4 +727,4 @@ END;;
 
 DELIMITER ;
 
--- 2019-06-05 21:20:08
+-- 2019-06-11 21:14:31
