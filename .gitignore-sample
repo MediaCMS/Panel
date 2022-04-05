@@ -1,0 +1,8 @@
+.git
+dist/index.js
+dist/index.js.LICENSE.txt
+node_modules
+src/settings.js
+.gitignore
+settings.js
+package-lock.json
