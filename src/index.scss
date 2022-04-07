@@ -1,0 +1,21 @@
+html {min-height: 100%; font-size: calc(12px + 0.5vw);
+  body {
+    min-height: 100vh; color: #303030; line-height: calc(130% + 0.5vw); background-color: #ffffff;
+    padding: 0; margin: 0; position: relative;
+    header, footer {
+      a {
+        &.active { /*pointer-events: none;cursor: default; */ text-decoration: none; color: black; }
+      }
+    }
+    img {border-radius: 1%;}
+
+    main {
+      .box {max-width: 768px; font-weight: 300; margin: 50px auto;}
+      .screen {min-width: 100vw; height: 50vh;text-align: center;vertical-align: middle; display: table-cell;}
+    }
+
+    footer {
+      div.alert {max-width: 768px; margin: 20px auto;}
+    }
+  }
+}
