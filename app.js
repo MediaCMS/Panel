@@ -41,19 +41,20 @@ app.use(function (request, response, next) {
 });
 
 for (const [routeName, route] of Object.entries(routes)) {
-    console.log(routeName, decodeURI(settings.uri + route.uri))
     const uri = encodeURI(settings.uri + route.uri);
     const controller = controllers[routeName];
+    console.log(routeName, "    \t", decodeURI(uri));
+    if (route?.actions) {
+        for (const [actionName, action] of Object.entries(route.actions)) {
+            console.log(" ", actionName, "\t", decodeURI(uri + action.uri));
+            router[action.method](uri + encodeURI(action.uri), controller[actionName]);
+        }
+    }
     router.get(uri,  controller['find']);
     router.get(uri + '/:id',  controller['findOne']);
     router.post(uri,  controller['insert']);
     router.put(uri + '/:id',  controller['update']);
     router.delete(uri + '/:id',  controller['remove']);
-    if (route?.actions) {
-        for (const [actionName, action] of Object.entries(route.actions)) {
-            router[action.method](action.uri,  controller[actionName]);
-        }
-    }
 }
 
 app.use('/', router);

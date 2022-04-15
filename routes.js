@@ -15,5 +15,9 @@ export default {
     },
     User: {
         uri: "/користувачі",
+        actions: {
+            login: { uri: '/вхід', method: 'get' },
+            logout: { uri: '/вихід', method: 'get' }
+        }
     }
 }
