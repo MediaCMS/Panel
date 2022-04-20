@@ -3,7 +3,8 @@
 import express from "express";
 import process from "process";
 import { MongoClient } from 'mongodb';
-//import cors from "cors";
+import cookieSession from "cookie-session";
+import jwt from "jsonwebtoken";
 import routes from "./routes.js";
 import settings from "./settings.js";
 
@@ -16,6 +17,7 @@ const client = new MongoClient(settings.db);
 await client.connect();
 const db = client.db();
 const router = express.Router();
+const session = cookieSession(settings.session);
 
 const controllers = {};
 for (const [controllerName, controller] of Object.entries(routes)) {
@@ -23,20 +25,33 @@ for (const [controllerName, controller] of Object.entries(routes)) {
         await import('./controllers/' + controllerName + '.js')
     ).default(db, controller);
 }
-//console.log(controllers)
 
-//app.use(cors(settings.cors));
+app.use(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
+    session.secure = true;
 }
 
 app.use(function (request, response, next) {
     //console.log(decodeURI(request.originalUrl));
-    //console.log(decodeURI(request.path), request.params, request.query);
-    //console.log(request.headers['x-api-key']);
+    console.log(decodeURI(request.path), request.params, request.query);
+    console.log(request.headers);
+    if (typeof request.session.token === 'undefined') {
+        console.log(decodeURI(request.path), routes.User.actions.login.uri, (decodeURI(request.path) === routes.User.actions.login.uri))
+        if (decodeURI(request.path) === routes.User.actions.login.uri) next();
+        return response.sendStatus(401);
+    }
+    const user = jwt.verify(request.session.token, settings.key);
+    console.log(user);
+    if (user?._id) {
+        //request.user = user
+        //next(request)
+    } else {
+        return response.sendStatus(401);
+    }
     next();
 });
 
