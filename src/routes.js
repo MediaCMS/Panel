@@ -1,16 +1,16 @@
 "use strict"
 
-import Article from "./Routes/Article.js"
-import Category from "./Routes/Category.js"
-import Tag from "./Routes/Tag.js"
-import Page from "./Routes/Page.js"
-import User from "./Routes/User.js"
+import Article from "./controllers/Article.js"
+import Category from "./controllers/Category.js"
+import Tag from "./controllers/Tag.js"
+import Page from "./controllers/Page.js"
+import User from "./controllers/User.js"
 
 export default {
     Article: {
         uri: "/статті",
         module: Article,
-        subRoutes: {
+        actions: {
             Index: { title: "Статті" },
             Edit: { alias: ":id?" }
         }
@@ -18,7 +18,7 @@ export default {
     Category: {
         uri: "/категорії",
         module: Category,
-        subRoutes: {
+        actions: {
             Index: { title: "Категорії" },
             View: { alias: ":id?" },
         }
@@ -26,7 +26,7 @@ export default {
     Tag: {
         uri: "/мітки",
         module: Tag,
-        subRoutes: {
+        actions: {
             Index: { title: "Мітки" },
             View: { alias: ":id?" }
         }
@@ -34,7 +34,7 @@ export default {
     User: {
         uri: "/користувачі",
         module: User,
-        subRoutes: {
+        actions: {
             Index: { title: "Автори" },
             View: { alias: ":id?" }
         }
@@ -42,7 +42,7 @@ export default {
     Page: {
         uri: "/сторінки",
         module: Page,
-        subRoutes: {
+        actions: {
             Index: { title: "Сторінки" },
             View: { alias: ":id?" }
         }

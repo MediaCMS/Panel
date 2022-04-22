@@ -53,7 +53,7 @@ export default function (props) {
     }, [])
 
     useEffect(() => {
-        setTitle(props.subRoute?.title ?? null)
+        setTitle(props.action?.title ?? null)
         setMessage(null)
     }, [props])
 
@@ -62,11 +62,11 @@ export default function (props) {
             <header>
                 <Navigation />
             </header>
-            <main id={(props.route.name + '-' + props.subRoute.name).toLowerCase()} className="container">
+            <main id={(props.controller.name + '-' + props.action.name).toLowerCase()} className="container">
                 <h1 className="my-5">{title}</h1>
                 {message ? (<div className="box alert alert-danger text-center">{message}</div>) : null}
                 {React.createElement(
-                    props.route.module[props.subRoute.name], 
+                    props.controller.module[props.action.name], 
                     { ...props, api, setTitle, setMessage })
                 }
             </main>

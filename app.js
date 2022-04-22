@@ -26,6 +26,9 @@ for (const [controllerName, controller] of Object.entries(routes)) {
     ).default(db, controller);
 }
 
+const allowed = [];
+allowed.push(settings.uri + routes.User.uri + routes.User.actions.login.uri);
+
 app.use(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,19 +40,16 @@ if (app.get('env') === 'production') {
 
 app.use(function (request, response, next) {
     //console.log(decodeURI(request.originalUrl));
-    console.log(decodeURI(request.path), request.params, request.query);
-    console.log(request.headers);
+    //console.log(decodeURI(request.path), request.params, request.query);
+    //console.log(request.headers);
     if (typeof request.session.token === 'undefined') {
-        console.log(decodeURI(request.path), routes.User.actions.login.uri, (decodeURI(request.path) === routes.User.actions.login.uri))
-        if (decodeURI(request.path) === routes.User.actions.login.uri) next();
+        if (allowed.indexOf(decodeURI(request.path)) > -1) return next();
         return response.sendStatus(401);
     }
+    // move to Layout
     const user = jwt.verify(request.session.token, settings.key);
-    console.log(user);
-    if (user?._id) {
-        //request.user = user
-        //next(request)
-    } else {
+    //console.log('user', user);
+    if (!user?._id) {
         return response.sendStatus(401);
     }
     next();
