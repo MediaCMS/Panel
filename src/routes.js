@@ -5,6 +5,7 @@ import Category from "./controllers/Category.js"
 import Tag from "./controllers/Tag.js"
 import Page from "./controllers/Page.js"
 import User from "./controllers/User.js"
+import Access from "./controllers/Access.js"
 
 export default {
     Article: {
@@ -45,6 +46,14 @@ export default {
         actions: {
             Index: { title: "Сторінки" },
             View: { alias: ":id?" }
+        }
+    },
+    Access: {
+        uri: "/доступ",
+        module: Access,
+        actions: {
+            Login: { alias: "вхід", title: "Вхід", layout: false },
+            Logout: { alias: "вихід", title: "Вихід" }
         }
     },
 }

@@ -39,19 +39,14 @@ if (app.get('env') === 'production') {
 app.use(function (request, response, next) {
     //console.log(decodeURI(request.originalUrl));
     //console.log(decodeURI(request.path), request.params, request.query);
-    console.log(request.cookies);
-    if (!request.headers?.authorization) {
+    //console.log('app.use.request.cookies', request.cookies);
+    if (!request.cookies?.token) {
+        if (decodeURI(request.path) === loginURI) return next();
         return response.status(401).end('Відсутня авторизація');
     }
-    //console.log(request.headers.authorization);
-    if (decodeURI(request.path) === loginURI) return next();
-    const token = Buffer.from(request.headers.authorization.split(' ')[1], 'base64').toString();
-    //console.log('token', token);
     try {
-        response.locals.user = jwt.verify(token, settings.key);
-        //console.log(response.locals.user);
+        response.locals.user = jwt.verify(request.cookies.token, settings.key);
     } catch (error) {
-        //console.log(error.message);
         return response.status(401).end(error.message);
     }
     next();

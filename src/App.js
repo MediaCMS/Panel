@@ -3,7 +3,6 @@
 import React from "react"
 import { Routes, Route } from "react-router-dom"
 import routes from "./routes.js"
-import User from "./controllers/User.js"
 import Layout from "./Layout.js"
 
 export default function () {
@@ -25,8 +24,6 @@ export default function () {
                     ))}
                 </Route>
             )}
-            <Route path={encodeURI('/вхід')} key="login" element={React.createElement(User.Login)} />
-            <Route path={encodeURI('/вихід')} key="logout" element={React.createElement(User.Logout)} />
         </Routes>
     )
 }

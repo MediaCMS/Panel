@@ -3,17 +3,13 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 import axios from "axios"
-//import routes from "./routes.js"
+import routes from "./routes.js"
 import settings from "./settings.js"
-//import routesAPI from "../routes.js"
 import menu from "./menu.js"
 
 const api = axios.create({
     baseURL: settings.api.url,
-    timeout: settings.api.timeout,
-    headers: {
-        'X-API-Key': settings.api.key
-    }
+    timeout: settings.api.timeout
 })
 
 api.interceptors.request.use(function (config) {
@@ -31,7 +27,10 @@ api.interceptors.request.use(function (config) {
 
 export default function (props) {
 
+    const navigate = useNavigate()
+
     const [title, setTitle] = useState()
+    const [user, setUser] = useState()
     const [message, setMessage] = useState()
 
     useMemo(() => {
@@ -44,6 +43,9 @@ export default function (props) {
             }
             if (error?.response) {
                 console.log('api.response.error.response', error.response)
+                if (error.response.status === 401) {
+                    navigate(routes.Access.uri + '/' + routes.Access.actions.Login.alias, { replace: true })
+                }
                 if (error.response?.data?.message) {
                     setMessage(error.response.data.message)
                 }
@@ -57,7 +59,7 @@ export default function (props) {
         setMessage(null)
     }, [props])
 
-    return (
+    return ((typeof props.action.layout === 'undefined') || (props.action?.layout === true)) ? (
         <>
             <header>
                 <Navigation />
@@ -82,7 +84,9 @@ export default function (props) {
                 </p>
             </footer>
         </>
-    )
+    ) : (
+        React.createElement(props.controller.module[props.action.name], { ...props, api, setUser })
+    );
 }
 
 function Navigation() {
@@ -109,6 +113,7 @@ function Navigation() {
                         ))}
                     </ul>
                 </div>
+                <div>User</div>
             </div>
         </nav>
     )
