@@ -30,8 +30,9 @@ export default function (props) {
     const navigate = useNavigate()
 
     const [title, setTitle] = useState()
-    const [user, setUser] = useState()
     const [message, setMessage] = useState()
+
+    const loginURL = routes.Access.uri + '/' + routes.Access.actions.Login.alias;
 
     useMemo(() => {
         api.interceptors.response.use(function (response) {
@@ -44,7 +45,7 @@ export default function (props) {
             if (error?.response) {
                 console.log('api.response.error.response', error.response)
                 if (error.response.status === 401) {
-                    navigate(routes.Access.uri + '/' + routes.Access.actions.Login.alias, { replace: true })
+                    navigate(loginURL, { replace: true })
                 }
                 if (error.response?.data?.message) {
                     setMessage(error.response.data.message)
@@ -55,6 +56,9 @@ export default function (props) {
     }, [])
 
     useEffect(() => {
+        if (!localStorage.getItem('user')) {
+             navigate(loginURL, { replace: true })
+        }
         setTitle(props.action?.title ?? null)
         setMessage(null)
     }, [props])
@@ -85,11 +89,13 @@ export default function (props) {
             </footer>
         </>
     ) : (
-        React.createElement(props.controller.module[props.action.name], { ...props, api, setUser })
+        React.createElement(props.controller.module[props.action.name], { ...props, api, loginURL })
     );
 }
 
 function Navigation() {
+
+    const [user] = useState(JSON.parse(localStorage.getItem('user')))
 
     return (
         <nav className="navbar navbar-expand-sm navbar-light bg-light">
@@ -103,7 +109,7 @@ function Navigation() {
                     <span className="navbar-toggler-icon" />
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul className="navbar-nav me-auto mb-lg-0">
                         {menu.map((item, index) => (
                             <li className="nav-item" key={index} title={item.description}>
                                 <NavLink to={encodeURI(item.url)} className="nav-link" >
@@ -113,7 +119,15 @@ function Navigation() {
                         ))}
                     </ul>
                 </div>
-                <div>User</div>
+                {user ? (
+                    <div title={user.role + ' ' + user.description}>
+                        {user.title}
+                        {user.image 
+                            ? (<img src={settings.images.url + user.image} height="36px" className="rounded-3 ms-3" />) 
+                            : null}
+                    </div>
+                ) : null}
+                
             </div>
         </nav>
     )

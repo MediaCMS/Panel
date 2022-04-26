@@ -23,7 +23,6 @@ export function Login(props) {
                 headers: { 'Authorization': `Basic ${authorization}}` }
             })
             localStorage.setItem('user', JSON.stringify(user))
-            // ToDo: props.setUser(user)
             navigate(routes.Article.uri, { replace: true })
         } catch (error) {
             if (error.response.status === 401) {
@@ -60,7 +59,7 @@ export function Logout(props) {
     useEffect(async () => {
         await props.api.get(routesAPI.User.uri + routesAPI.User.actions.logout.uri)
         localStorage.removeItem('user')
-        navigate(routes.Access.uri + '/' + routes.Access.actions.Login.alias, { replace: true })
+        navigate(props.loginURL, { replace: true })
     }, [])
 
     return null

@@ -53,7 +53,7 @@ export default {
         module: Access,
         actions: {
             Login: { alias: "вхід", title: "Вхід", layout: false },
-            Logout: { alias: "вихід", title: "Вихід" }
+            Logout: { alias: "вихід", title: "Вихід", layout: false }
         }
     },
 }
