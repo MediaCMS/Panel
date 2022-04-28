@@ -13,7 +13,7 @@ export default {
         module: Article,
         actions: {
             Index: { title: "Статті" },
-            Edit: { alias: ":id?" }
+            Edit: { alias: ":id" }
         }
     },
     Category: {
@@ -21,7 +21,7 @@ export default {
         module: Category,
         actions: {
             Index: { title: "Категорії" },
-            View: { alias: ":id?" },
+            View: { alias: ":id" },
         }
     },
     Tag: {
@@ -29,7 +29,7 @@ export default {
         module: Tag,
         actions: {
             Index: { title: "Мітки" },
-            View: { alias: ":id?" }
+            View: { alias: ":id" }
         }
     },
     User: {
@@ -37,7 +37,7 @@ export default {
         module: User,
         actions: {
             Index: { title: "Автори" },
-            View: { alias: ":id?" }
+            View: { alias: ":id" }
         }
     },
     Page: {
@@ -45,7 +45,7 @@ export default {
         module: Page,
         actions: {
             Index: { title: "Сторінки" },
-            View: { alias: ":id?" }
+            View: { alias: ":id" }
         }
     },
     Access: {

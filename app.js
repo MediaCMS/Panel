@@ -38,7 +38,7 @@ if (app.get('env') === 'production') {
 
 app.use(function (request, response, next) {
     //console.log(decodeURI(request.originalUrl));
-    //console.log(decodeURI(request.path), request.params, request.query);
+    console.log(decodeURI(request.path), request.params, request.query);
     //console.log('app.use.request.cookies', request.cookies);
     if (!request.cookies?.token) {
         if (decodeURI(request.path) === loginURI) return next();
@@ -62,8 +62,8 @@ for (const [routeName, route] of Object.entries(routes)) {
             router[action.method](uri + encodeURI(action.uri), controller[actionName]);
         }
     }
-    router.get(uri,  controller['find']);
-    router.get(uri + '/:id',  controller['findOne']);
+    router.get(uri,  controller['findMany']);
+    router.get(uri + '/:id',  controller['find']);
     router.post(uri,  controller['insert']);
     router.put(uri + '/:id',  controller['update']);
     router.delete(uri + '/:id',  controller['remove']);
