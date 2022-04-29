@@ -17,13 +17,13 @@ export function Login(props) {
         const email = event.target.email.value
         const password = MD5(event.target.password.value).toString()
         const authorization = Buffer.from(`${email}:${password}`, 'utf8').toString('base64')
-        const api = settings.api.url + routesAPI.User.uri + routesAPI.User.actions.login.uri
+        const api = settings.api.url + routesAPI.User.path + routesAPI.User.actions.login.path
         try {
             const user = await props.api.get(api, { 
                 headers: { 'Authorization': `Basic ${authorization}}` }
             })
             localStorage.setItem('user', JSON.stringify(user))
-            navigate(routes.Article.uri, { replace: true })
+            navigate(routes.Article.path + '/' + routes.Article.actions.Index.path, { replace: true })
         } catch (error) {
             if (error.response.status === 401) {
                 alert('Неправильний логін та пароль');
@@ -57,7 +57,7 @@ export function Logout(props) {
     const navigate = useNavigate()
 
     useEffect(async () => {
-        await props.api.get(routesAPI.User.uri + routesAPI.User.actions.logout.uri)
+        await props.api.get(routesAPI.User.path + routesAPI.User.actions.logout.path)
         localStorage.removeItem('user')
         navigate(props.loginURL, { replace: true })
     }, [])

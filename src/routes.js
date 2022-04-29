@@ -9,51 +9,57 @@ import Access from "./controllers/Access.js"
 
 export default {
     Article: {
-        uri: "/статті",
-        module: Article,
+        title: "Статті",
+        path: "/статті",
+        element: Article,
         actions: {
-            Index: { title: "Статті" },
-            Edit: { alias: ":id" }
+            Index: { path: "список", title: "Список" },
+            Edit: { path: "редактор/:id", title: "Редагувати" },
+            Edit: { path: "редактор", title: "Створити" }
         }
     },
     Category: {
-        uri: "/категорії",
-        module: Category,
+        title: "Категорії",
+        path: "/категорії",
+        element: Category,
         actions: {
-            Index: { title: "Категорії" },
-            View: { alias: ":id" },
+            Index: { path: "список", title: "Список" },
+            View: { path: "редактор/:id", title: "Редактор" },
         }
     },
     Tag: {
-        uri: "/мітки",
-        module: Tag,
+        title: "Мітки",
+        path: "/мітки",
+        element: Tag,
         actions: {
-            Index: { title: "Мітки" },
-            View: { alias: ":id" }
+            Index: { path: "список", title: "Список" },
+            View: { path: "редактор/:id", title: "Редактор" }
         }
     },
     User: {
-        uri: "/користувачі",
-        module: User,
+        title: "Автори",
+        path: "/користувачі",
+        element: User,
         actions: {
-            Index: { title: "Автори" },
-            View: { alias: ":id" }
+            Index: { path: "список", title: "Список" },
+            View: { path: "редактор/:id", title: "Редактор" }
         }
     },
     Page: {
-        uri: "/сторінки",
-        module: Page,
+        title: "Сторінки",
+        path: "/сторінки",
+        element: Page,
         actions: {
-            Index: { title: "Сторінки" },
-            View: { alias: ":id" }
+            Index: { path: "список", title: "Список" },
+            View: { path: "редактор/:id", title: "Редактор" }
         }
     },
     Access: {
-        uri: "/доступ",
-        module: Access,
+        path: "/доступ",
+        element: Access,
         actions: {
-            Login: { alias: "вхід", title: "Вхід", layout: false },
-            Logout: { alias: "вихід", title: "Вихід", layout: false }
+            Login: { path: "вхід", title: "Вхід", layout: false },
+            Logout: { path: "вихід", title: "Вихід", layout: false }
         }
     },
 }

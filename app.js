@@ -25,7 +25,7 @@ for (const [controllerName, controller] of Object.entries(routes)) {
         await import('./controllers/' + controllerName + '.js')
     ).default(db, controller);
 }
-const loginURI = settings.uri + routes.User.uri + routes.User.actions.login.uri;
+const loginURI = settings.path + routes.User.path + routes.User.actions.login.path;
 
 app.use(cookieParser());
 app.use(express.json());
@@ -53,20 +53,20 @@ app.use(function (request, response, next) {
 });
 
 for (const [routeName, route] of Object.entries(routes)) {
-    const uri = encodeURI(settings.uri + route.uri);
+    const path = encodeURI(settings.path + route.path);
     const controller = controllers[routeName];
-    console.log(routeName, "    \t", decodeURI(uri));
+    console.log(routeName, "    \t", decodeURI(path));
     if (route?.actions) {
         for (const [actionName, action] of Object.entries(route.actions)) {
-            console.log(" ", actionName, "\t", decodeURI(uri + action.uri));
-            router[action.method](uri + encodeURI(action.uri), controller[actionName]);
+            console.log(" ", actionName, "\t", decodeURI(path + action.path));
+            router[action.method](path + encodeURI(action.path), controller[actionName]);
         }
     }
-    router.get(uri,  controller['findMany']);
-    router.get(uri + '/:id',  controller['find']);
-    router.post(uri,  controller['insert']);
-    router.put(uri + '/:id',  controller['update']);
-    router.delete(uri + '/:id',  controller['remove']);
+    router.get(path,  controller['findMany']);
+    router.get(path + '/:id',  controller['find']);
+    router.post(path,  controller['insert']);
+    router.put(path + '/:id',  controller['update']);
+    router.delete(path + '/:id',  controller['remove']);
 }
 
 app.use('/', router);

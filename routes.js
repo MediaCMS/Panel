@@ -2,22 +2,22 @@
 
 export default {
     Article: { 
-        uri: "/статті",
+        path: "/статті",
     }, 
     Category: {
-        uri: "/категорії",
+        path: "/категорії",
     },
     Tag: {
-        uri: "/мітки",
+        path: "/мітки",
     },
     Page: {
-        uri: "/сторінки",
+        path: "/сторінки",
     },
     User: {
-        uri: "/користувачі",
+        path: "/користувачі",
         actions: {
-            login: { uri: '/вхід', method: 'get' },
-            logout: { uri: '/вихід', method: 'get' }
+            login: { path: '/вхід', method: 'get' },
+            logout: { path: '/вихід', method: 'get' }
         }
     }
 }

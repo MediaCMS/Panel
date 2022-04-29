@@ -32,7 +32,7 @@ export default function (props) {
     const [title, setTitle] = useState()
     const [message, setMessage] = useState()
 
-    const loginURL = routes.Access.uri + '/' + routes.Access.actions.Login.alias;
+    const loginURL = routes.Access.path + '/' + routes.Access.actions.Login.path;
 
     useMemo(() => {
         api.interceptors.response.use(function (response) {
@@ -59,7 +59,7 @@ export default function (props) {
         if (!localStorage.getItem('user')) {
              navigate(loginURL, { replace: true })
         }
-        setTitle(props.action?.title ?? null)
+        setTitle(props.controller.title + '.' + (props.action?.title ?? null))
         setMessage(null)
     }, [props])
 
@@ -68,13 +68,15 @@ export default function (props) {
             <header>
                 <Navigation />
             </header>
-            <main id={(props.controller.name + '-' + props.action.name).toLowerCase()} className="container">
+            <main className="container" >
                 <h1 className="my-5">{title}</h1>
                 {message ? (<div className="box alert alert-danger text-center">{message}</div>) : null}
-                {React.createElement(
-                    props.controller.module[props.action.name], 
-                    { ...props, api, setTitle, setMessage })
-                }
+                <div id="body" className={(props.controller.name + ' ' + props.action.name).toLowerCase()}>
+                    {React.createElement(
+                        props.controller.element[props.action.name], 
+                        { ...props, api, setTitle, setMessage })
+                    }
+                </div>
             </main>
             <footer className="text-center mt-5">
                 <div
@@ -89,7 +91,7 @@ export default function (props) {
             </footer>
         </>
     ) : (
-        React.createElement(props.controller.module[props.action.name], { ...props, api, loginURL })
+        React.createElement(props.controller.element[props.action.name], { ...props, api, loginURL })
     );
 }
 
