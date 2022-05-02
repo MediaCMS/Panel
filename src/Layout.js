@@ -1,9 +1,8 @@
 "use strict"
 
 import React, { useState, useEffect, useMemo } from "react"
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import axios from "axios"
-import routes from "./routes.js"
 import settings from "./settings.js"
 import menu from "./menu.js"
 
@@ -14,7 +13,7 @@ const api = axios.create({
 
 api.interceptors.request.use(function (config) {
     if (Array.isArray(config.url)) {
-        config.url = config.url.join('/')
+        config.url = '/' + config.url.join('/')
     }
     return config
 }, function (error) {
@@ -28,11 +27,8 @@ api.interceptors.request.use(function (config) {
 export default function (props) {
 
     const navigate = useNavigate()
-
     const [title, setTitle] = useState()
     const [message, setMessage] = useState()
-
-    const loginURL = routes.Access.path + '/' + routes.Access.actions.Login.path;
 
     useMemo(() => {
         api.interceptors.response.use(function (response) {
@@ -44,8 +40,12 @@ export default function (props) {
             }
             if (error?.response) {
                 console.log('api.response.error.response', error.response)
-                if (error.response.status === 401) {
-                    navigate(loginURL, { replace: true })
+                if (error.response?.status) {
+                    if (error.response.status === 401) {
+                        navigate(encodeURI('/доступ/вхід'), { replace: true })
+                    }
+                } else {
+                    console.log('Перевищенно час очікування відповіді сервера')
                 }
                 if (error.response?.data?.message) {
                     setMessage(error.response.data.message)
@@ -57,13 +57,12 @@ export default function (props) {
 
     useEffect(() => {
         if (!localStorage.getItem('user')) {
-             navigate(loginURL, { replace: true })
+             navigate('/доступ/вхід', { replace: true })
         }
-        setTitle(props.controller.title + '.' + (props.action?.title ?? null))
         setMessage(null)
     }, [props])
 
-    return ((typeof props.action.layout === 'undefined') || (props.action?.layout === true)) ? (
+    return props.template ? (
         <>
             <header>
                 <Navigation />
@@ -71,12 +70,7 @@ export default function (props) {
             <main className="container" >
                 <h1 className="my-5">{title}</h1>
                 {message ? (<div className="box alert alert-danger text-center">{message}</div>) : null}
-                <div id="body" className={(props.controller.name + ' ' + props.action.name).toLowerCase()}>
-                    {React.createElement(
-                        props.controller.element[props.action.name], 
-                        { ...props, api, setTitle, setMessage })
-                    }
-                </div>
+                <Outlet context={{api, setTitle, setMessage}} />
             </main>
             <footer className="text-center mt-5">
                 <div
@@ -90,9 +84,7 @@ export default function (props) {
                 </p>
             </footer>
         </>
-    ) : (
-        React.createElement(props.controller.element[props.action.name], { ...props, api, loginURL })
-    );
+    ) : <Outlet context={{api}} />
 }
 
 function Navigation() {

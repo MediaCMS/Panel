@@ -1,30 +1,29 @@
 "use strict"
 
 import React, { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useOutletContext } from "react-router-dom"
 import { Buffer } from "buffer"
 import MD5 from "crypto-js/md5.js"
-import routes from "../routes.js"
-import routesAPI from "../../routes.js"
 import settings from "../settings.js"
 
-export function Login(props) {
+export function Login() {
 
     const navigate = useNavigate()
+    const context = useOutletContext()
 
     const handleLogin = async event => {
         event.preventDefault()
         const email = event.target.email.value
         const password = MD5(event.target.password.value).toString()
         const authorization = Buffer.from(`${email}:${password}`, 'utf8').toString('base64')
-        const api = settings.api.url + routesAPI.User.path + routesAPI.User.actions.login.path
         try {
-            const user = await props.api.get(api, { 
+            const user = await context.api.get('/користувачі/вхід', { 
                 headers: { 'Authorization': `Basic ${authorization}}` }
             })
             localStorage.setItem('user', JSON.stringify(user))
-            navigate(routes.Article.path + '/' + routes.Article.actions.Index.path, { replace: true })
+            navigate('/статті/список', { replace: true })
         } catch (error) {
+            console.log(error)
             if (error.response.status === 401) {
                 alert('Неправильний логін та пароль');
             } else {
@@ -53,13 +52,15 @@ export function Login(props) {
     </main>
 }
 
-export function Logout(props) {
+export function Logout() {
+
     const navigate = useNavigate()
+    const context = useOutletContext()
 
     useEffect(async () => {
-        await props.api.get(routesAPI.User.path + routesAPI.User.actions.logout.path)
+        await context.api.get('/користувачі/вихід')
         localStorage.removeItem('user')
-        navigate(props.loginURL, { replace: true })
+        navigate('/доступ/вхід', { replace: true })
     }, [])
 
     return null
