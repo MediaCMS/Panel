@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useMemo } from "react"
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import axios from "axios"
-import settings from "./settings.js"
-import menu from "./menu.js"
+import settings from "../settings.js"
+import menu from "../menu.js"
 
 const api = axios.create({
     baseURL: settings.api.url,

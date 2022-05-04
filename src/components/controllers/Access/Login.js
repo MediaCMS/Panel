@@ -1,12 +1,12 @@
 "use strict"
 
-import React, { useEffect } from "react"
+import React from "react"
 import { useNavigate, useOutletContext } from "react-router-dom"
 import { Buffer } from "buffer"
 import MD5 from "crypto-js/md5.js"
-import settings from "../settings.js"
+import settings from "../../../settings.js"
 
-export function Login() {
+export default function Login() {
 
     const navigate = useNavigate()
     const context = useOutletContext()
@@ -51,19 +51,3 @@ export function Login() {
         </div>
     </main>
 }
-
-export function Logout() {
-
-    const navigate = useNavigate()
-    const context = useOutletContext()
-
-    useEffect(async () => {
-        await context.api.get('/користувачі/вихід')
-        localStorage.removeItem('user')
-        navigate('/доступ/вхід', { replace: true })
-    }, [])
-
-    return null
-}
-
-export default { Login, Logout }
