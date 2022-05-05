@@ -1,44 +1,38 @@
 "use strict"
 
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 
-export default function Form() {
-
-    const [fields, setFields] = useState(props.fields)
+export default function Form(props) {
 
     const handleChange = event => {
-        console.log(event.target.name, event.target.value)
-        setArticle(article => (
-            { ...article, ...{ [event.target.name]: event.target.value }}
+        props.setData(data => (
+            { ...data, ...{ [event.target.name]: event.target.value }}
         ))
     }
 
     const handleSubmit = event => {
-        console.log(event.target.name, event.target.value)
         props.submit(new FormData(event.target))
     }
 
     useEffect(async () => {
-        console.log(fields)
+        console.log('Form.useEffect', props)
     }, [])
 
     return (
-        <form onSubmit={handleSubmit}>
-            {fields.map(field => (
+        <form onSubmit={handleSubmit}>{React.Children.map(props.children, child => {
+            const id = 'formControl' + child.props.name.charAt(0).toUpperCase() + child.props.name.slice(1)
+            return (
                 <div className="row my-3">
                     <div className="col-lg-2">
-                        <label htmlFor="formControlTime" className="form-label">Дата</label>
+                        <label htmlFor={id} className="form-label">{child.props.title}</label>
                     </div>
                     <div className="col-lg-10">
-                        <input type="datetime-local" name="time" value={item}
-                            onChange={handleChange} className="form-control" id="formControlTime" />
+                        {React.cloneElement(child, {
+                            onChange: handleChange, className: 'form-control', id: id
+                        })}
                     </div>
                 </div>
-            ))}
-        </form>
-     )
-}
-
-function Field() {
-    return <></>
+            )
+        })}</form>
+    )
 }

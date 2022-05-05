@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { useParams, useOutletContext } from "react-router-dom"
+import Form from "../../Form.js"
 
 export default function Editor() {
 
@@ -11,11 +12,8 @@ export default function Editor() {
     })
     const context = useOutletContext()
 
-    const handleChange = event => {
-        console.log(event.target.name, event.target.value)
-        setArticle(article => (
-            { ...article, ...{ [event.target.name]: event.target.value }}
-        ))
+    const handleSubmit = data => {
+        console.log('Editor.handleSubmit', Object.fromEntries(data))
     }
 
     useEffect(async () => {
@@ -31,35 +29,24 @@ export default function Editor() {
 
     return (
         <div id="body" className="article edit">
-            <form>
-                <div className="row my-3">
-                    <div className="col-lg-2">
-                        <label htmlFor="formControlTime" className="form-label">Дата</label>
-                    </div>
-                    <div className="col-lg-10">
-                        <input type="datetime-local" name="time" value={article.time.slice(0, 16)}
-                            onChange={handleChange} className="form-control" id="formControlTime" />
-                    </div>
-                </div>
-                <div className="row my-3">
-                    <div className="col-lg-2">
-                        <label htmlFor="formControlTitle" className="form-label">Заголовок</label>
-                    </div>
-                    <div className="col-lg-10">
-                        <input type="text" name="title" value={article.title} onChange={handleChange}
-                            className="form-control" id="formControlTitle" placeholder="Заголовок статті ..." />
-                    </div>
-                </div>
-                <div className="row my-3">
-                    <div className="col-lg-2">
-                        <label htmlFor="formControlDescription" className="form-label">Опис</label>
-                    </div>
-                    <div className="col-lg-10">
-                        <textarea name="description" className="form-control" onChange={handleChange}
-                        id="formControlDescription" rows="3" placeholder="Опис статті ..." value={article.description} />
-                    </div>
-                </div>
-            </form>
+            <Form setData={setArticle} onSubmit={handleSubmit}>
+                <input type="datetime-local"
+                    name="time"
+                    value={article.time.slice(0, 16)}
+                    title="Час" />
+                <input type="text"
+                    name="title"
+                    value={article.title}
+                    pattern=".*"
+                    title="Заголовок"
+                    placeholder="Заголовок статті ..." />
+                <textarea name="description" 
+                    value={article.description}
+                    pattern=".*"
+                    rows="3"
+                    title="Опис"
+                    placeholder="Опис статті ..." />
+            </Form>
         </div>
      )
 }
