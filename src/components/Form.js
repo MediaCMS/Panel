@@ -25,7 +25,11 @@ export default function Form(props) {
                         </div>
                         <div className="col-lg-10">
                             {React.cloneElement(child, {
-                                onChange: handleChange, className: 'form-control', id: 'formControl' + index
+                                onChange: handleChange,
+                                className: 'form-'
+                                    + ((child.type === 'select') ? 'select' : 'control') 
+                                    + (child.props?.className ? ' ' + child.props.className : ''),
+                                id: 'formControl' + child.props.title[0].toUpperCase() + child.props.title.slice(1)
                             })}
                         </div>
                     </div>
@@ -39,4 +43,10 @@ export default function Form(props) {
             </div>
         </form>
     )
+}
+
+export function Image(props) {
+
+    return <input type={props.type} name={props.name} value={props.value} title={props.title}
+        onChange={props.onChange} className={props.className} id={props.id} />
 }

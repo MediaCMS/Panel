@@ -2,14 +2,16 @@
 
 import React, { useState, useEffect } from "react"
 import { useParams, useOutletContext } from "react-router-dom"
-import Form from "../../Form.js"
+import Form, { Image } from "../../Form.js"
 
 export default function Editor() {
 
     const params = useParams()
     const [article, setArticle] = useState({
-        time: new Date().toISOString(), title: '', description: ''
+        time: new Date().toISOString(), title: '', description: '', body: '', image: '', category: { _id: '' }, status: false
     })
+    const [categories, setCategories] = useState()
+    const [tags, setTags] = useState()
     const context = useOutletContext()
 
     const handleSave = data => {
@@ -22,6 +24,7 @@ export default function Editor() {
 
     useEffect(async () => {
         context.setTitle('Статті (редактор)')
+        setCategories(await context.api.get('/категорії'))
         if (!params?.id) return
         const article = await context.api.get(['статті', params.id])
         console.log(article)
@@ -34,22 +37,20 @@ export default function Editor() {
     return (
         <div id="body" className="article edit">
             <Form setData={setArticle} onSave={handleSave} onDelete={handleDelete} id={article?._id}>
-                <input type="datetime-local"
-                    name="time"
-                    value={article.time.slice(0, 16)}
-                    title="Час" />
-                <input type="text"
-                    name="title"
-                    value={article.title}
-                    pattern=".*"
-                    title="Заголовок"
-                    placeholder="Заголовок статті ..." />
-                <textarea name="description" 
-                    value={article.description}
-                    pattern=".*"
-                    rows="3"
-                    title="Опис"
-                    placeholder="Опис статті ..." />
+                <input type="datetime-local" name="time" value={article.time.slice(0, 16)}
+                    title="Час" className="w-auto" />
+                <input type="text" name="title" value={article.title} pattern=".*"
+                    title="Заголовок" placeholder="Заголовок статті ..." />
+                <textarea name="description" value={article.description} pattern=".*" rows="3"
+                    title="Опис" placeholder="Опис статті ..." />
+                <textarea name="body" value={article.body} pattern=".*" rows="6"
+                    title="Текст" placeholder="Текст статті ..." />
+                <Image name="image" value={article.image} title="Зображення" />
+                <select name="category" value={article?.category?._id} title="Категорія" className="w-auto">
+                    {categories?.map(category => (
+                        <option value={category._id} key={category._id}>{category.title}</option>
+                    ))}
+                </select>
             </Form>
         </div>
      )

@@ -25,7 +25,10 @@ export default class Article extends Controller {
         response.json(await (await this.db.collection('articles').aggregate([
             { $lookup: { from: "categories", localField: "category", foreignField: "_id", as: "category" } },
             { $lookup: { from: "tags", localField: "tags", foreignField: "_id", as: "tags" } },
-            { $lookup: { from: "users", localField: "user", foreignField: "_id", as: "user" } },
+            { $project: {
+                time: 1, title: 1, description: 1, body: 1, image: 1, alias: 1,
+                category: { $arrayElemAt: ["$category", 0] }, tags: 1, status: 1
+            }},
             { $match: { _id: ObjectId(request.params.id) } }
         ])).next());
     }
