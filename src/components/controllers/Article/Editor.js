@@ -12,8 +12,12 @@ export default function Editor() {
     })
     const context = useOutletContext()
 
-    const handleSubmit = data => {
-        console.log('Editor.handleSubmit', Object.fromEntries(data))
+    const handleSave = data => {
+        console.log('Editor.handleSave', data)
+    }
+
+    const handleDelete = () => {
+        console.log('Editor.handleDelete', article._id)
     }
 
     useEffect(async () => {
@@ -29,7 +33,7 @@ export default function Editor() {
 
     return (
         <div id="body" className="article edit">
-            <Form setData={setArticle} onSubmit={handleSubmit}>
+            <Form setData={setArticle} onSave={handleSave} onDelete={handleDelete} id={article?._id}>
                 <input type="datetime-local"
                     name="time"
                     value={article.time.slice(0, 16)}

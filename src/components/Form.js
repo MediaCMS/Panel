@@ -1,6 +1,6 @@
 "use strict"
 
-import React, { useEffect } from "react"
+import React from "react"
 
 export default function Form(props) {
 
@@ -11,28 +11,32 @@ export default function Form(props) {
     }
 
     const handleSubmit = event => {
-        props.submit(new FormData(event.target))
+        props.onSave(Object.fromEntries(new FormData(event.target)))
+        event.preventDefault()
     }
 
-    useEffect(async () => {
-        console.log('Form.useEffect', props)
-    }, [])
-
     return (
-        <form onSubmit={handleSubmit}>{React.Children.map(props.children, child => {
-            const id = 'formControl' + child.props.name.charAt(0).toUpperCase() + child.props.name.slice(1)
-            return (
-                <div className="row my-3">
-                    <div className="col-lg-2">
-                        <label htmlFor={id} className="form-label">{child.props.title}</label>
+        <form onSubmit={handleSubmit}>
+            {React.Children.map(props.children, (child, index) => {
+                return (
+                    <div className="row my-3">
+                        <div className="col-lg-2">
+                            <label htmlFor={'formControl' + index} className="form-label">{child.props.title}</label>
+                        </div>
+                        <div className="col-lg-10">
+                            {React.cloneElement(child, {
+                                onChange: handleChange, className: 'form-control', id: 'formControl' + index
+                            })}
+                        </div>
                     </div>
-                    <div className="col-lg-10">
-                        {React.cloneElement(child, {
-                            onChange: handleChange, className: 'form-control', id: id
-                        })}
-                    </div>
-                </div>
-            )
-        })}</form>
+                )
+            })}
+            <div className="text-center my-5">
+                <button type="submit" className="btn btn-primary mx-1">Зберегти</button>
+                {props?.id ? (
+                    <button type="submit" onClick={props.onDelete} className="btn btn-danger mx-1">Видалити</button>
+                ) : null}
+            </div>
+        </form>
     )
 }
