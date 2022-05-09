@@ -2,16 +2,16 @@
 
 import React, { useState, useEffect } from "react"
 import { useParams, useOutletContext } from "react-router-dom"
-import Form, { Image } from "../../Form.js"
+import Form, { Image, Autocomplete } from "../../Form.js"
 
 export default function Editor() {
 
     const params = useParams()
     const [article, setArticle] = useState({
-        time: new Date().toISOString(), title: '', description: '', body: '', image: '', category: { _id: '' }, status: false
+        time: new Date().toISOString(), title: '', description: '', body: '', 
+        image: '', category: { _id: '' }, tags: null, status: false
     })
     const [categories, setCategories] = useState()
-    const [tags, setTags] = useState()
     const context = useOutletContext()
 
     const handleSave = data => {
@@ -46,11 +46,13 @@ export default function Editor() {
                 <textarea name="body" value={article.body} pattern=".*" rows="6"
                     title="Текст" placeholder="Текст статті ..." />
                 <Image name="image" value={article.image} title="Зображення" />
-                <select name="category" value={article?.category?._id} title="Категорія" className="w-auto">
+                <select name="category" value={article?.category?._id} title="Категорія"
+                    className="form-select w-auto">
                     {categories?.map(category => (
                         <option value={category._id} key={category._id}>{category.title}</option>
                     ))}
                 </select>
+                <Autocomplete name="tags" value={article.tags} title="Мітки" />
             </Form>
         </div>
      )
