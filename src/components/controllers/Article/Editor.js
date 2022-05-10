@@ -38,7 +38,7 @@ export default function Editor() {
         <div id="body" className="article edit">
             <Form setData={setArticle} onSave={handleSave} onDelete={handleDelete} id={article?._id}>
                 <input type="datetime-local" name="time" value={article.time.slice(0, 16)}
-                    title="Час" className="w-auto" />
+                    title="Час" className="form-control w-auto" />
                 <input type="text" name="title" value={article.title} pattern=".*"
                     title="Заголовок" placeholder="Заголовок статті ..." />
                 <textarea name="description" value={article.description} pattern=".*" rows="3"

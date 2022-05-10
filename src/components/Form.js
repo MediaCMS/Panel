@@ -1,6 +1,6 @@
 "use strict"
 
-import React from "react"
+import React, { useState } from "react"
 import { useOutletContext } from "react-router-dom"
 import axios from "axios"
 import settings from "../settings.js"
@@ -25,7 +25,7 @@ export default function Form(props) {
     return (
         <form onSubmit={handleSubmit}>
             {React.Children.map(props.children, (child, index) => {
-                console.log(child)
+                //console.log(child)
                 return (
                     <div className="row my-3">
                         <div className="col-lg-2">
@@ -35,7 +35,7 @@ export default function Form(props) {
                             {React.cloneElement(child, {
                                 onChange: (typeof props.type === 'string') ? handleChange : setField,
                                 className: child.props?.className ? child.props.className : 'form-control',
-                                id: 'formControl' + child.props.title[0].toUpperCase() + child.props.title.slice(1)
+                                id: 'formControl' + child.props.name[0].toUpperCase() + child.props.name.slice(1)
                             })}
                         </div>
                     </div>
@@ -52,7 +52,7 @@ export default function Form(props) {
 }
 
 export function Image(props) {
-
+console.log(props)
     const handlUpload = async event => {
         console.log('Form.Image.handleChange.event.target.value', event.target.value)
         const formData = new FormData()
@@ -72,23 +72,22 @@ export function Image(props) {
     }
 
     return (
-        <div id={props.id}>
-            <input type="file" title={props.title} onChange={handlUpload}
-                className={props.className} />
-            (!props?.value ? (
-                <img src={settings.images.url + props.value} />
-            ) : (
-                <button onClick={handleDelete} />
-            ))
+        <div id={props.id} className="image">
+            <input type="file" name={props.name} title={props.title}
+                onChange={handlUpload} className={props.className} />
+            {props?.value ? (
+                <img src={settings.images.url + props.value} onClick={handleDelete}
+                    title="Видалити" className="w-100 my-3" />
+            ) : null}
         </div>
         )
 }
 
 export function Autocomplete(props) {
-
+console.log(props)
     const [items, setItems] = useState()
     const context = useOutletContext()
-
+console.log(items)
     const handleChange = async event => {
         console.log('Form.Autocomplete.handleChange.event.target.value', event.target.value)
         const response = await context.api.get(props.api, {params: {query: event.target.value}})
@@ -102,30 +101,31 @@ export function Autocomplete(props) {
     }
 
     return (
-        <div id={props.id}>
+        <div id={props.id} className="autocomplete">
             <input type="text" onChange={handleChange} className={props.className} />
-            (response ? (
+            {items ? (
                 <datalist>
-                    {items.map(item => (
+                    {items?.map(item => (
                         <p dataValue={item._id} onClick={handleSelect}>{item.title}</p>
                     ))}
                 </datalist>
-            ) : null)
-            (selected ? (
-                <div>
-                    {selected.map(item => {
+            ) : null}
+            {props?.value ? (
+                <div className="my-3">
+                    {props?.value.map(item => {
                         const id = props.id + item._id
                         return (
-                            <p>
-                                <input type="checkbox" class="btn-check" id={id} autocomplete="off" />
-                                <label class="btn btn-outline-primary" for={id} onClick={handleSelect}>
+                            <span key={id} className="me-2">
+                                <input type="checkbox" className="btn-check" id={id} autoComplete="off" />
+                                <label className="btn btn-outline-success" htmlFor={id}
+                                    onClick={handleSelect} title="Видалити мітку">
                                     {item.title}
                                 </label>
-                            </p>
+                            </span>
                         )
                     })}
                 </div>
-            ) : null)
+            ) : null}
         </div>
     )
 }

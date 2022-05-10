@@ -10,7 +10,20 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
     img {border-radius: 1%;}
 
     main {
-      #body.edit {max-width: 960px; margin: 5rem auto;}
+      #body.edit {max-width: 960px; margin: 5rem auto;
+        form {
+          div.image {
+            img {
+              &:hover {opacity: 0.3; cursor: pointer;}
+            }
+          }
+          div.autocomplete {
+            label {
+              &:hover {color: #fff; border-color: #dc3545; background-color: #dc3545;}
+            }
+          }
+        }
+      }
       .box {max-width: 768px; font-weight: 300; margin: 50px auto;}
       .screen {min-width: 100vw; height: 50vh;text-align: center;vertical-align: middle; display: table-cell;}
     }
