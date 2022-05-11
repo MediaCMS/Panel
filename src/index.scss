@@ -12,6 +12,8 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
     main {
       #body.edit {max-width: 960px; margin: 5rem auto;
         form {
+          input[type='datetime-local'], select {width: auto;}
+          input[type='datetime-local'], select {width: auto;}
           div.image {
             img {
               &:hover {opacity: 0.3; cursor: pointer;}
@@ -21,6 +23,7 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
             label {
               &:hover {color: #fff; border-color: #dc3545; background-color: #dc3545;}
             }
+            input[type='text'] {width: 150px;}
           }
         }
       }

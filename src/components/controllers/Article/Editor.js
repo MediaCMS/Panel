@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import { useParams, useOutletContext } from "react-router-dom"
-import Form, { Image, Autocomplete } from "../../Form.js"
+import Form, { Image, Autocomplete, Switch } from "../../Form.js"
 
 export default function Editor() {
 
@@ -13,7 +13,7 @@ export default function Editor() {
     })
     const [categories, setCategories] = useState()
     const context = useOutletContext()
-
+    
     const handleSave = data => {
         console.log('Editor.handleSave', data)
     }
@@ -37,8 +37,7 @@ export default function Editor() {
     return (
         <div id="body" className="article edit">
             <Form setData={setArticle} onSave={handleSave} onDelete={handleDelete} id={article?._id}>
-                <input type="datetime-local" name="time" value={article.time.slice(0, 16)}
-                    title="Час" className="form-control w-auto" />
+                <input type="datetime-local" name="time" value={article.time.slice(0, 16)} title="Час" />
                 <input type="text" name="title" value={article.title} pattern=".*"
                     title="Заголовок" placeholder="Заголовок статті ..." />
                 <textarea name="description" value={article.description} pattern=".*" rows="3"
@@ -46,14 +45,15 @@ export default function Editor() {
                 <textarea name="body" value={article.body} pattern=".*" rows="6"
                     title="Текст" placeholder="Текст статті ..." />
                 <Image name="image" value={article.image} title="Зображення" />
-                <select name="category" value={article?.category?._id} title="Категорія"
-                    className="form-select w-auto">
+                <select name="category" value={article?.category?._id} title="Категорія">
                     {categories?.map(category => (
                         <option value={category._id} key={category._id}>{category.title}</option>
                     ))}
                 </select>
                 <Autocomplete name="tags" value={article.tags} title="Мітки" />
+                <Switch name="status" value={article.status} title="Статус" description="Видимість публікації" />
             </Form>
         </div>
      )
+
 }
