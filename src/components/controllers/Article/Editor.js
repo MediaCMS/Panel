@@ -13,9 +13,9 @@ export default function Editor() {
     })
     const [categories, setCategories] = useState()
     const context = useOutletContext()
-    
+   
     const handleSave = data => {
-        console.log('Editor.handleSave', data)
+        console.log('Editor.handleSave', article)
     }
 
     const handleDelete = () => {

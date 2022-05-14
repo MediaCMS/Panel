@@ -14,10 +14,8 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
         form {
           input[type='datetime-local'], select {width: auto;}
           input[type='datetime-local'], select {width: auto;}
-          div.image {
-            img {
-              &:hover {opacity: 0.3; cursor: pointer;}
-            }
+          img {
+            &:hover {opacity: 0.3; cursor: pointer;}
           }
           div.autocomplete {
             label {

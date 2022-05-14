@@ -76,29 +76,42 @@ export function Image(props) {
         const formData = new FormData()
         formData.append('image', event.target.files[0])
         const response = await axios.post(settings.images.api, formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'x-api-key': settings.images.key
+            }
         })
-        console.log('Form.Image.handlUpload.response', response)
-        props.onChange(props.name, response)
+        if (response.status !== 200) {
+            console.error(response)
+            return alert('Під час збереження зображення виникла помилка')
+        }
+        props.onChange(props.name, response.data)
     }
 
     const handleDelete = async () => {
-        console.log('Form.Image.handleDelete')
-        const response = await axios.delete(settings.images.api + props.value)
-        console.log('Form.Image.handleDelete.response', response)
+        console.log('Form.Image.handleDelete.props.value', settings.images.api + props.value.substr(7, 32))
+        const response = await axios.delete(
+            settings.images.api + props.value.substr(7, 32),
+            { headers: { 'x-api-key': settings.images.key } }
+        )
+        if (response.status !== 200) {
+            console.error(response)
+            return alert('Під час видалення зображення виникла помилка')
+        }
         props.onChange(props.name, null)
+        console.log('Form.Image.handleDelete.response', response)
     }
 
-    return (
-        <div id={props.id} className="image">
+    return (<>
+        {props?.value ? (
+            <img src={settings.images.url + props.value} onClick={handleDelete}
+                title="Видалити зображення" className="w-100 my-3" />
+        ) : (
             <input type="file" name={props.name} title={props.title}
                 onChange={handlUpload} className={props.className} />
-            {props?.value ? (
-                <img src={settings.images.url + props.value} onClick={handleDelete}
-                    title="Видалити" className="w-100 my-3" />
-            ) : null}
-        </div>
-        )
+        )}
+    </>)
+        
 }
 
 export function Autocomplete(props) {
