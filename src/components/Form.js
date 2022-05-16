@@ -6,7 +6,7 @@ import axios from "axios"
 import settings from "../settings.js"
 
 export default function Form(props) {
-console.log('Form.props', props)
+//console.log('Form.props', props)
     const setField = async (name, value) => {
         console.log('Form.setField.name,value', name, value)
         await props.setData(data => (
@@ -15,7 +15,7 @@ console.log('Form.props', props)
     }
 
     const handleChange = event => {
-        console.log('Form.handleChange.event.target', event.target)
+        //console.log('Form.handleChange.event.target', event.target)
         setField(event.target.name, event.target.value)
     }
 
@@ -70,9 +70,8 @@ export function Switch(props) {
 }
 
 export function Image(props) {
-//console.log('Form.Image.props', props)
+
     const handlUpload = async event => {
-        console.log('Form.Image.handlUpload.event.target.value', event.target.value)
         const formData = new FormData()
         formData.append('image', event.target.files[0])
         const response = await axios.post(settings.images.api, formData, {
@@ -89,7 +88,6 @@ export function Image(props) {
     }
 
     const handleDelete = async () => {
-        console.log('Form.Image.handleDelete.props.value', settings.images.api + props.value.substr(7, 32))
         const response = await axios.delete(
             settings.images.api + props.value.substr(7, 32),
             { headers: { 'x-api-key': settings.images.key } }
@@ -99,7 +97,6 @@ export function Image(props) {
             return alert('Під час видалення зображення виникла помилка')
         }
         props.onChange(props.name, null)
-        console.log('Form.Image.handleDelete.response', response)
     }
 
     return (<>
@@ -115,40 +112,65 @@ export function Image(props) {
 }
 
 export function Autocomplete(props) {
-//console.log('Form.Autocomplete.props', props)
-    const [items, setItems] = useState()
+console.log('Form.Autocomplete.props', props)
+    const [data, setData] = useState({ items: [] })
     const context = useOutletContext()
 //console.log('Form.Autocomplete.items', items)
     const handleChange = async event => {
         console.log('Form.Autocomplete.handleChange.event.target.value', event.target.value)
-        const response = await context.api.get(props.api, {params: {query: event.target.value}})
+        setData({ items: [] })
+        if (!event.target.value.length) return
+        const params = { string: event.target.value }
+        if (props.value.length) {
+            params.exclude = props.value.map(item => item._id).join(',')
+        }
+        const response = await context.api.get(props.api, { params: params })
         console.log(response)
-        setItems(response)
+        if (!response) return
+        setData({ items: response })
     }
 
-    const handleSelect = event => {
-        console.log('Form.Autocomplete.handleSelect.event.target.value', event.target.value)
-        props.onChange(props.name, {...props.value, ...{ [event.target.dataValue]: event.target.innerHTML}})
+    const handleSelect = async event => {
+        console.log('Form.Autocomplete.handleSelect.event.target', event.target)
+        await props.onChange(props.name, [...props.value, {
+            _id: event.target.value, title: event.target.label
+        }])
+        console.log(props.value)
+        //setData({ items: [] })
+        setData(dataPrev => ({
+            items: dataPrev.items.filter(item => item._id !== event.target.value)
+        }))
+        //handleChange()
+    }
+
+    const handleRemove = async event => {
+        console.log('Form.Autocomplete.handleRemove.event.target', event.target.dataset.id)
+        await props.onChange(props.name, props.value.filter(item => item._id !== event.target.dataset.id))
+        console.log(props.value)
+        //setData({ items: [] })
     }
 
     return (
         <div id={props.id} className="autocomplete">
-            <input type="text" onChange={handleChange} className={'d-inline-block me-2 ' + props.className} />
-            {items ? (
-                <datalist>
-                    {items?.map(item => (
-                        <p dataValue={item._id} onClick={handleSelect}>{item.title}</p>
-                    ))}
-                </datalist>
-            ) : null}
+            <div className="d-inline-block me-2 position-relative">
+                <input type="text" onChange={handleChange} className="form-control" />
+                {data.items.length ? (
+                    <select id={props.id + 'List'} className="form-select mt-1 position-absolute"
+                        size={data.items.length ? ((data.items.length > 7) ? 7 : data.items.length) : 1}>
+                        {data.items.map(item => (
+                            <option value={item._id} onClick={handleSelect} key={item._id} label={item.title} />
+                        ))}
+                    </select>
+                ) : null}
+            </div>
             {props?.value ? 
                 props.value.map(item => {
                     const id = props.id + item._id
                     return (
-                        <span key={id} className="me-2">
+                        <span key={id} className="m-1 d-inline-block">
                             <input type="checkbox" className="btn-check" id={id} autoComplete="off" />
                             <label className="btn btn-outline-success" htmlFor={id}
-                                onClick={handleSelect} title="Видалити мітку">
+                                onClick={handleRemove} title="Видалити мітку" data-id={item._id}>
                                 {item.title}
                             </label>
                         </span>

@@ -9,6 +9,9 @@ export default {
     },
     Tag: {
         path: "/мітки",
+        actions: {
+            autocomplete: { path: '/автозаповнення' }
+        }
     },
     Page: {
         path: "/сторінки",
@@ -16,8 +19,8 @@ export default {
     User: {
         path: "/користувачі",
         actions: {
-            login: { path: '/вхід', method: 'get' },
-            logout: { path: '/вихід', method: 'get' }
+            login: { path: '/вхід' },
+            logout: { path: '/вихід' }
         }
     }
 }

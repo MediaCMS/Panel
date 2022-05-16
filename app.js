@@ -59,7 +59,7 @@ for (const [routeName, route] of Object.entries(routes)) {
     if (route?.actions) {
         for (const [actionName, action] of Object.entries(route.actions)) {
             console.log(" ", actionName, "\t", decodeURI(path + action.path));
-            router[action.method](path + encodeURI(action.path), controller[actionName]);
+            router[action?.method ?? 'get'](path + encodeURI(action.path), controller[actionName]);
         }
     }
     router.get(path,  controller['findMany']);

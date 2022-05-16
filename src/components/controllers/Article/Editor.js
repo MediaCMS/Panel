@@ -50,7 +50,7 @@ export default function Editor() {
                         <option value={category._id} key={category._id}>{category.title}</option>
                     ))}
                 </select>
-                <Autocomplete name="tags" value={article.tags} title="Мітки" />
+                <Autocomplete name="tags" value={article.tags} title="Мітки" api="/мітки/автозаповнення" />
                 <Switch name="status" value={article.status} title="Статус" description="Видимість публікації" />
             </Form>
         </div>
