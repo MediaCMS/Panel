@@ -9,7 +9,7 @@ export default function Editor() {
     const params = useParams()
     const [article, setArticle] = useState({
         time: new Date().toISOString(), title: '', description: '', body: '', 
-        image: '', category: { _id: '' }, tags: null, status: false
+        image: '', category: '', tags: null, status: false
     })
     const [categories, setCategories] = useState()
     const context = useOutletContext()
@@ -24,10 +24,14 @@ export default function Editor() {
 
     useEffect(async () => {
         context.setTitle('Статті (редактор)')
-        setCategories(await context.api.get('/категорії'))
-        if (!params?.id) return
+        const categories = await context.api.get('/категорії')
+        setCategories(categories)
+        if (!params?.id) {
+            return setArticle(article => (
+            { ...article, ...{ category: categories[0]._id } }
+        ))
+        }
         const article = await context.api.get(['статті', params.id])
-        console.log(article)
         if (!article) {
             return context.setMessage('Стаття не знайдена')
         }
@@ -45,7 +49,7 @@ export default function Editor() {
                 <textarea name="body" value={article.body} pattern=".*" rows="6"
                     title="Текст" placeholder="Текст статті ..." />
                 <Image name="image" value={article.image} title="Зображення" />
-                <select name="category" value={article?.category?._id} title="Категорія">
+                <select name="category" value={article?.category} title="Категорія">
                     {categories?.map(category => (
                         <option value={category._id} key={category._id}>{category.title}</option>
                     ))}

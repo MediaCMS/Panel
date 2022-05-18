@@ -6,16 +6,14 @@ import axios from "axios"
 import settings from "../settings.js"
 
 export default function Form(props) {
-//console.log('Form.props', props)
+
     const setField = async (name, value) => {
-        console.log('Form.setField.name,value', name, value)
         await props.setData(data => (
             { ...data, ...{ [name]: value }}
         ))
     }
 
     const handleChange = event => {
-        //console.log('Form.handleChange.event.target', event.target)
         setField(event.target.name, event.target.value)
     }
 
@@ -27,11 +25,12 @@ export default function Form(props) {
     return (
         <form onSubmit={handleSubmit}>
             {React.Children.map(props.children, (child, index) => {
-                //console.log('Form.child', child)
                 return (
                     <div className="row my-3">
                         <div className="col-lg-2">
-                            <label htmlFor={'formControl' + index} className="form-label">{child.props.title}</label>
+                            <label htmlFor={'formControl' + index} className="form-label">
+                                {child.props.title}
+                            </label>
                         </div>
                         <div className="col-lg-10">
                             {React.cloneElement(child, {
@@ -46,7 +45,9 @@ export default function Form(props) {
             <div className="text-center my-5">
                 <button type="submit" className="btn btn-primary mx-1">Зберегти</button>
                 {props?.id ? (
-                    <button type="submit" onClick={props.onDelete} className="btn btn-danger mx-1">Видалити</button>
+                    <button type="submit" onClick={props.onDelete} className="btn btn-danger mx-1">
+                        Видалити
+                    </button>
                 ) : null}
             </div>
         </form>
@@ -112,59 +113,52 @@ export function Image(props) {
 }
 
 export function Autocomplete(props) {
-console.log('Form.Autocomplete.props', props)
+
     const [data, setData] = useState({ items: [] })
     const context = useOutletContext()
-//console.log('Form.Autocomplete.items', items)
+
     const handleChange = async event => {
-        console.log('Form.Autocomplete.handleChange.event.target.value', event.target.value)
         setData({ items: [] })
         if (!event.target.value.length) return
         const params = { string: event.target.value }
-        if (props.value.length) {
+        if (props?.value && props.value.length) {
             params.exclude = props.value.map(item => item._id).join(',')
         }
         const response = await context.api.get(props.api, { params: params })
-        console.log(response)
         if (!response) return
         setData({ items: response })
     }
 
     const handleSelect = async event => {
-        console.log('Form.Autocomplete.handleSelect.event.target', event.target)
-        await props.onChange(props.name, [...props.value, {
+        await props.onChange(props.name, [...(props.value ?? []), {
             _id: event.target.value, title: event.target.label
         }])
-        console.log(props.value)
-        //setData({ items: [] })
         setData(dataPrev => ({
             items: dataPrev.items.filter(item => item._id !== event.target.value)
         }))
-        //handleChange()
     }
 
     const handleRemove = async event => {
-        console.log('Form.Autocomplete.handleRemove.event.target', event.target.dataset.id)
-        await props.onChange(props.name, props.value.filter(item => item._id !== event.target.dataset.id))
-        console.log(props.value)
-        //setData({ items: [] })
+        await props.onChange(props.name, props.value.filter(
+            item => item._id !== event.target.dataset.id
+        ))
     }
 
     return (
         <div id={props.id} className="autocomplete">
             <div className="d-inline-block me-2 position-relative">
-                <input type="text" onChange={handleChange} className="form-control" />
+                <input type="search" size="8" onChange={handleChange} className="form-control" />
                 {data.items.length ? (
-                    <select id={props.id + 'List'} className="form-select mt-1 position-absolute"
-                        size={data.items.length ? ((data.items.length > 7) ? 7 : data.items.length) : 1}>
+                    <select id={props.id + 'List'} className="form-select mt-1 position-absolute" multiple
+                        size={(data.items.length > 1) ? ((data.items.length > 7) ? 7 : data.items.length) : 1}>
                         {data.items.map(item => (
                             <option value={item._id} onClick={handleSelect} key={item._id} label={item.title} />
                         ))}
                     </select>
                 ) : null}
             </div>
-            {props?.value ? 
-                props.value.map(item => {
+            {//props?.value ? 
+                (props?.value ?? []).map(item => {
                     const id = props.id + item._id
                     return (
                         <span key={id} className="m-1 d-inline-block">
@@ -176,7 +170,7 @@ console.log('Form.Autocomplete.props', props)
                         </span>
                     )
                 })
-            : null}
+            /*: null*/}
         </div>
     )
 }

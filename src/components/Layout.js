@@ -29,6 +29,7 @@ export default function (props) {
     const navigate = useNavigate()
     const [title, setTitle] = useState()
     const [message, setMessage] = useState()
+    const [submenu, setSubmenu] = useState({items: []})
 
     useMemo(() => {
         api.interceptors.response.use(function (response) {
@@ -68,9 +69,20 @@ export default function (props) {
                 <Navigation />
             </header>
             <main className="container" >
-                <h1 className="my-5">{title}</h1>
+                <div id="header" className="my-5 d-flex">
+                    <h1 className="me-auto">{title}</h1>
+                    <ul className="nav">
+                        {submenu.items.map(item => (
+                            <li className="nav-item" key={item.url}>
+                                <NavLink to={encodeURI(item.url)} className="nav-link" >
+                                    {item.title}
+                                </NavLink>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
                 {message ? (<div className="box alert alert-danger text-center">{message}</div>) : null}
-                <Outlet context={{api, setTitle, setMessage}} />
+                <Outlet context={{api, setTitle, setSubmenu, setMessage}} />
             </main>
             <footer className="text-center mt-5">
                 <div

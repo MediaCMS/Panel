@@ -14,6 +14,9 @@ export default function Index() {
 
     useEffect(async () => {
         context.setTitle('Статті (cписок)')
+        context.setSubmenu({items: [
+            { title: 'Створити', url: '/статті/редактор' }
+        ]})
         setArticles({ list: await context.api.get('/статті') })
     }, [searchParams])
 
@@ -31,7 +34,11 @@ export default function Index() {
                 <tbody>
                     {articles?.list.map((article, index) => (
                         <tr key={article._id} role="button" onClick={() => 
-                            navigate(generatePath(encodeURI('/статті/редактор/:id'), { id: article._id }))}>
+                            navigate(
+                                generatePath(
+                                    encodeURI('/статті/редактор/:id'), { id: article._id }
+                                )
+                            )}>
                             <th scope="row">{index + 1}</th>
                             <td className="text-nowrap">{article.time.split('T')[0]}</td>
                             <td>{article.title}</td>
