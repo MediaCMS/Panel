@@ -9,17 +9,33 @@ export default function Editor() {
     const params = useParams()
     const [article, setArticle] = useState({
         time: new Date().toISOString(), title: '', description: '', body: '', 
-        image: '', category: '', tags: null, status: false
+        image: null, category: '', tags: null, status: false
     })
     const [categories, setCategories] = useState()
     const context = useOutletContext()
-   
-    const handleSave = data => {
-        console.log('Editor.handleSave', article)
+
+    const handleSave = async data => {
+        console.log('article', article, data)
+        const articleExport = { ...article }
+        /*
+        for (const [name, value] of Object.entries(article)) {
+            if ([null, ""].indexOf(value) < 0) articleExport[name] = value
+        }
+        */
+        if (articleExport?.tags) {
+            articleExport.tags = articleExport.tags.map(tag => tag._id)
+        }
+        console.log('articleExport', articleExport)
+        const response = article?._id
+            ? await context.api.put(['статті', params.id], articleExport)
+            : await context.api.post('/статті', articleExport)
+        console.log('response', response)
     }
 
-    const handleDelete = () => {
-        console.log('Editor.handleDelete', article._id)
+    const handleDelete = async () => {
+        console.log('ArticleEditor.handleDelete', article._id)
+        const response = await context.api.delete(['статті', params.id])
+        console.log('ArticleEditor.handleDelete.response', response)
     }
 
     useEffect(async () => {
@@ -43,7 +59,7 @@ export default function Editor() {
             <Form setData={setArticle} onSave={handleSave} onDelete={handleDelete} id={article?._id}>
                 <input type="datetime-local" name="time" value={article.time.slice(0, 16)} title="Час" />
                 <input type="text" name="title" value={article.title} pattern=".*"
-                    title="Заголовок" placeholder="Заголовок статті ..." />
+                    title="Заголовок" placeholder="Заголовок статті ..." required />
                 <textarea name="description" value={article.description} pattern=".*" rows="3"
                     title="Опис" placeholder="Опис статті ..." />
                 <textarea name="body" value={article.body} pattern=".*" rows="6"

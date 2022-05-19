@@ -62,8 +62,8 @@ export function Switch(props) {
 
     return (
         <div className="form-check form-switch">
-            <input className="form-check-input" type="checkbox" id={props.id}
-                checked={props?.value} onChange={handleChange} />
+            <input type="checkbox" name={props.name} className="form-check-input"
+                id={props.id} checked={props?.value} onChange={handleChange} />
             <label className="form-check-label" htmlFor={props.id}>{props.description}</label>
         </div>
     )
@@ -157,20 +157,18 @@ export function Autocomplete(props) {
                     </select>
                 ) : null}
             </div>
-            {//props?.value ? 
-                (props?.value ?? []).map(item => {
-                    const id = props.id + item._id
-                    return (
-                        <span key={id} className="m-1 d-inline-block">
-                            <input type="checkbox" className="btn-check" id={id} autoComplete="off" />
-                            <label className="btn btn-outline-success" htmlFor={id}
-                                onClick={handleRemove} title="Видалити мітку" data-id={item._id}>
-                                {item.title}
-                            </label>
-                        </span>
-                    )
-                })
-            /*: null*/}
+            {(props?.value ?? []).map(item => {
+                const id = props.id + item._id
+                return (
+                    <span key={id} className="m-1 d-inline-block">
+                        <input type="checkbox" name={`${props.name}[${item._id}]`} className="btn-check" id={id} />
+                        <label className="btn btn-outline-success" htmlFor={id}
+                            onClick={handleRemove} title="Видалити мітку" data-id={item._id}>
+                            {item.title}
+                        </label>
+                    </span>
+                )
+            })}
         </div>
     )
 }

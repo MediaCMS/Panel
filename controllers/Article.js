@@ -32,9 +32,18 @@ export default class Article extends Controller {
         );
     }
 
-    insert = async (request, response) => {}
+    insert = async (request, response) => {
+        console.log('insert', request.body);
+        response.end();
+    }
 
-    update = async (request, response) => {}
+    update = async (request, response) => {
+        console.log('update', request.params, request.body);
+        response.end();
+    }
 
-    remove = async (request, response) => {}
+    remove = async (request, response) => {
+        console.log('remove', request.params, request.body);
+        response.end();
+    }
 }
