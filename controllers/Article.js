@@ -5,7 +5,7 @@ import Controller from "../Controller.js";
 
 export default class Article extends Controller {
 
-    find = async (request, response) => {
+    findOne = async (request, response) => {
         response.json(await (await this.db.collection('articles').aggregate([
             { $lookup: { from: "tags", localField: "tags", foreignField: "_id", as: "tags" } },
             { $project: {
@@ -32,18 +32,27 @@ export default class Article extends Controller {
         );
     }
 
-    insert = async (request, response) => {
+    insertOne = async (request, response) => {
         console.log('insert', request.body);
-        response.end();
+        const result = await this.db.collection('articles')
+            .insertOne(request.body);
+        console.log('result', result, result.insertedId.toString());
+        response.end(result.insertedId.toString());
     }
 
-    update = async (request, response) => {
+    replaceOne = async (request, response) => {
         console.log('update', request.params, request.body);
+        const id = new ObjectId(request.params.id);
+        const result = await this.db.collection('articles')
+            .replaceOne({ _id: id }, { ...request.body, ...{ _id: id } });
+        console.log('result', result);
         response.end();
     }
 
-    remove = async (request, response) => {
-        console.log('remove', request.params, request.body);
+    deleteOne = async (request, response) => {
+        console.log('delete', request.params, request.body);
+        await this.db.collection('articles')
+            .deleteOne({ _id: new ObjectId(request.params.id) })
         response.end();
     }
 }

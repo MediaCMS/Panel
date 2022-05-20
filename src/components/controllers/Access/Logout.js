@@ -11,7 +11,7 @@ export default function Logout() {
     useEffect(async () => {
         await context.api.get('/користувачі/вихід')
         localStorage.removeItem('user')
-        navigate('/доступ/вхід', { replace: true })
+        navigate('/доступ/вхід')
     }, [])
 
     return null

@@ -7,6 +7,13 @@ import settings from "../settings.js";
 
 export default class User extends Controller {
 
+    findOne = async (request, response) => {
+        response.json(await (
+            await this.db.collection('users')
+                .find({ alias: request.params.alias, status: true })
+        ).next());
+    }
+
     findMany = async (request, response) => {
         response.json(await (
             await this.db.collection('users')
@@ -15,36 +22,37 @@ export default class User extends Controller {
         ).toArray());
     }
 
-    find = async (request, response) => {
-        response.json(await (
-            await this.db.collection('users').find({ alias: request.params.alias, status: true })
-        ).next());
-    }
+    insertOne = async (request, response) => {}
 
-    insert = async (request, response) => {}
+    replaceOne = async (request, response) => {}
 
-    update = async (request, response) => {}
-
-    remove = async (request, response) => {}
+    deleteOne = async (request, response) => {}
 
     login = async (request, response) => {
-        const [email, password] =
-            Buffer.from(request.headers.authorization.split(' ')[1], 'base64').toString().split(':');
+        const [email, password] = Buffer
+            .from(request.headers.authorization.split(' ')[1], 'base64')
+            .toString().split(':');
         const [user] = await (
             await this.db.collection('users').aggregate([
-                { $lookup: { from: "roles", localField: "role", foreignField: "_id", as: "role" } },
+                { $lookup: {
+                    from: "roles", localField: "role", foreignField: "_id", as: "role"
+                } },
                 { $project: {
                     title: 1, description: 1, image: 1, email: 1, password: 1, alias: 1, status: 1, 
                     role: { $arrayElemAt: [ "$role.title", 0 ] }
                 } },
-                { $match: { email: email, password: password, status: true }},
+                { $match: {
+                    email: email, password: password, status: true
+                }},
             ])
         ).toArray();
         if (!user) return response.sendStatus(401);
         delete user.email;
         delete user.password;
         delete user.status;
-        response.cookie('token', jwt.sign(user, settings.key), { maxAge: settings.cookie.maxAge, httpOnly: true });
+        response.cookie('token', jwt.sign(user, settings.key), {
+            maxAge: settings.cookie.maxAge, httpOnly: true
+        });
         delete user._id;
         response.json(user);
     }

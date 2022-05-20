@@ -63,10 +63,10 @@ for (const [routeName, route] of Object.entries(routes)) {
         }
     }
     router.get(path,  controller['findMany']);
-    router.get(path + '/:id',  controller['find']);
-    router.post(path,  controller['insert']);
-    router.put(path + '/:id',  controller['update']);
-    router.delete(path + '/:id',  controller['remove']);
+    router.get(path + '/:id',  controller['findOne']);
+    router.post(path,  controller['insertOne']);
+    router.put(path + '/:id',  controller['replaceOne']);
+    router.delete(path + '/:id',  controller['deleteOne']);
 }
 
 app.use('/', router);

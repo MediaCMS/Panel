@@ -1,7 +1,7 @@
 "use strict"
 
 import React, { useState, useEffect, useMemo } from "react"
-import { NavLink, Outlet, useNavigate } from "react-router-dom"
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom"
 import axios from "axios"
 import settings from "../settings.js"
 import menu from "../menu.js"
@@ -27,9 +27,15 @@ api.interceptors.request.use(function (config) {
 export default function (props) {
 
     const navigate = useNavigate()
+    const location = useLocation()
     const [title, setTitle] = useState()
     const [message, setMessage] = useState()
-    const [submenu, setSubmenu] = useState({items: []})
+    const [submenu, setSubmenu] = useState({ items: [] })
+
+    const setHeader = (title, submenu = []) => {
+        setTitle(title)
+        setSubmenu({ items: submenu })
+    }
 
     useMemo(() => {
         api.interceptors.response.use(function (response) {
@@ -43,7 +49,7 @@ export default function (props) {
                 console.log('api.response.error.response', error.response)
                 if (error.response?.status) {
                     if (error.response.status === 401) {
-                        navigate(encodeURI('/доступ/вхід'), { replace: true })
+                        navigate(encodeURI('/доступ/вхід'))
                     }
                 } else {
                     console.log('Перевищенно час очікування відповіді сервера')
@@ -58,10 +64,10 @@ export default function (props) {
 
     useEffect(() => {
         if (!localStorage.getItem('user')) {
-             navigate('/доступ/вхід', { replace: true })
+             navigate('/доступ/вхід')
         }
         setMessage(null)
-    }, [props])
+   }, [location])
 
     return props.template ? (
         <>
@@ -82,7 +88,7 @@ export default function (props) {
                     </ul>
                 </div>
                 {message ? (<div className="box alert alert-danger text-center">{message}</div>) : null}
-                <Outlet context={{api, setTitle, setSubmenu, setMessage}} />
+                <Outlet context={{api, setHeader, setMessage}} />
             </main>
             <footer className="text-center mt-5">
                 <div
@@ -101,7 +107,9 @@ export default function (props) {
 
 function Navigation() {
 
-    const [user] = useState(JSON.parse(localStorage.getItem('user')))
+    const [user] = useState(
+        JSON.parse(localStorage.getItem('user'))
+    )
 
     return (
         <nav className="navbar navbar-expand-sm navbar-light bg-light">
@@ -129,7 +137,8 @@ function Navigation() {
                     <div title={user.role + ' ' + user.description}>
                         {user.title}
                         {user.image 
-                            ? (<img src={settings.images.url + user.image} height="36px" className="rounded-3 ms-3" />) 
+                            ? (<img src={settings.images.url + user.image}
+                                    height="36px" className="rounded-3 ms-3" />) 
                             : null}
                     </div>
                 ) : null}

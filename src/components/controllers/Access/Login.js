@@ -21,7 +21,7 @@ export default function Login() {
                 headers: { 'Authorization': `Basic ${authorization}}` }
             })
             localStorage.setItem('user', JSON.stringify(user))
-            navigate('/статті/список', { replace: true })
+            navigate('/статті/список')
         } catch (error) {
             console.log(error)
             if (error.response.status === 401) {

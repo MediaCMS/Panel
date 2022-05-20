@@ -45,7 +45,7 @@ export default function Form(props) {
             <div className="text-center my-5">
                 <button type="submit" className="btn btn-primary mx-1">Зберегти</button>
                 {props?.id ? (
-                    <button type="submit" onClick={props.onDelete} className="btn btn-danger mx-1">
+                    <button type="button" onClick={props.onDelete} className="btn btn-danger mx-1">
                         Видалити
                     </button>
                 ) : null}

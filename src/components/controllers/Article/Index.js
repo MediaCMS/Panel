@@ -13,10 +13,9 @@ export default function Index() {
     const context = useOutletContext()
 
     useEffect(async () => {
-        context.setTitle('Статті (cписок)')
-        context.setSubmenu({items: [
+        context.setHeader('Статті (cписок)', [
             { title: 'Створити', url: '/статті/редактор' }
-        ]})
+        ])
         setArticles({ list: await context.api.get('/статті') })
     }, [searchParams])
 

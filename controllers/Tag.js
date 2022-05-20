@@ -5,6 +5,16 @@ import Controller from "../Controller.js";
 
 export default class Tag extends Controller {
 
+    findOne = async (request, response) => {
+        response.json(
+            await (
+                await this.db.collection('tags').find(
+                    { alias: request.params.alias, status: true }
+                )
+            ).next()
+        )
+    }
+
     findMany = async (request, response) => {
         const filter = this.getFilter(
             { ['сортування-поле']: 'title', ...request.query }
@@ -18,16 +28,6 @@ export default class Tag extends Controller {
                     { $limit: filter.limit }
                 ])
             ).toArray()
-        )
-    }
-
-    find = async (request, response) => {
-        response.json(
-            await (
-                await this.db.collection('tags').find(
-                    { alias: request.params.alias, status: true }
-                )
-            ).next()
         )
     }
 
@@ -49,9 +49,9 @@ export default class Tag extends Controller {
         )
     }
 
-    insert = async (request, response) => {}
+    insertOne = async (request, response) => {}
 
-    update = async (request, response) => {}
+    replaceOne = async (request, response) => {}
 
-    remove = async (request, response) => {}
+    deleteOne = async (request, response) => {}
 }

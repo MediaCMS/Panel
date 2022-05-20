@@ -1,10 +1,10 @@
 "use strict"
 
 import React, { useState, useEffect } from "react"
-import { useParams, useOutletContext } from "react-router-dom"
+import { useParams, useOutletContext, useNavigate } from "react-router-dom"
 import Form, { Image, Autocomplete, Switch } from "../../Form.js"
 
-export default function Editor() {
+export default function Editor(props) {
 
     const params = useParams()
     const [article, setArticle] = useState({
@@ -13,9 +13,10 @@ export default function Editor() {
     })
     const [categories, setCategories] = useState()
     const context = useOutletContext()
+    const navigate = useNavigate()
 
     const handleSave = async data => {
-        console.log('article', article, data)
+        console.log('ArticleEditor.handleSave', article, data)
         const articleExport = { ...article }
         /*
         for (const [name, value] of Object.entries(article)) {
@@ -26,20 +27,25 @@ export default function Editor() {
             articleExport.tags = articleExport.tags.map(tag => tag._id)
         }
         console.log('articleExport', articleExport)
-        const response = article?._id
-            ? await context.api.put(['статті', params.id], articleExport)
-            : await context.api.post('/статті', articleExport)
-        console.log('response', response)
+        if (article?._id) {
+            await context.api.put(['статті', params.id], articleExport)
+        } else {
+            navigate(
+                '/статті/редактор/'
+                    + await context.api.post('/статті', articleExport)
+            )
+        }
     }
 
     const handleDelete = async () => {
-        console.log('ArticleEditor.handleDelete', article._id)
-        const response = await context.api.delete(['статті', params.id])
-        console.log('ArticleEditor.handleDelete.response', response)
+        await context.api.delete(['статті', params.id])
+        navigate('/статті/список')
     }
 
     useEffect(async () => {
-        context.setTitle('Статті (редактор)')
+        context.setHeader('Статті (редактор)', [
+            { title: 'Закрити', url: '/статті/список' }
+        ])
         const categories = await context.api.get('/категорії')
         setCategories(categories)
         if (!params?.id) {
@@ -59,11 +65,11 @@ export default function Editor() {
             <Form setData={setArticle} onSave={handleSave} onDelete={handleDelete} id={article?._id}>
                 <input type="datetime-local" name="time" value={article.time.slice(0, 16)} title="Час" />
                 <input type="text" name="title" value={article.title} pattern=".*"
-                    title="Заголовок" placeholder="Заголовок статті ..." required />
+                    title="Заголовок" placeholder="Заголовок ..." required />
                 <textarea name="description" value={article.description} pattern=".*" rows="3"
-                    title="Опис" placeholder="Опис статті ..." />
+                    title="Опис" placeholder="Опис ..." />
                 <textarea name="body" value={article.body} pattern=".*" rows="6"
-                    title="Текст" placeholder="Текст статті ..." />
+                    title="Текст" placeholder="Текст ..." />
                 <Image name="image" value={article.image} title="Зображення" />
                 <select name="category" value={article?.category} title="Категорія">
                     {categories?.map(category => (
