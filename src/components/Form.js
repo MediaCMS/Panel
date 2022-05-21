@@ -22,6 +22,12 @@ export default function Form(props) {
         event.preventDefault()
     }
 
+    const handleDelete = () => {
+        if(window.confirm('Ви впевненні?')) {
+            props.onDelete()
+        }
+    }
+
     return (
         <form onSubmit={handleSubmit}>
             {React.Children.map(props.children, (child, index) => {
@@ -45,7 +51,7 @@ export default function Form(props) {
             <div className="text-center my-5">
                 <button type="submit" className="btn btn-primary mx-1">Зберегти</button>
                 {props?.id ? (
-                    <button type="button" onClick={props.onDelete} className="btn btn-danger mx-1">
+                    <button type="button" onClick={handleDelete} className="btn btn-danger mx-1">
                         Видалити
                     </button>
                 ) : null}

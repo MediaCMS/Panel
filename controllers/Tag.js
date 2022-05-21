@@ -51,7 +51,7 @@ export default class Tag extends Controller {
 
     insertOne = async (request, response) => {}
 
-    replaceOne = async (request, response) => {}
+    updateOne = async (request, response) => {}
 
     deleteOne = async (request, response) => {}
 }

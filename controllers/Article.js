@@ -6,6 +6,7 @@ import Controller from "../Controller.js";
 export default class Article extends Controller {
 
     findOne = async (request, response) => {
+        // ToDo: access control
         response.json(await (await this.db.collection('articles').aggregate([
             { $lookup: { from: "tags", localField: "tags", foreignField: "_id", as: "tags" } },
             { $project: {
@@ -21,8 +22,12 @@ export default class Article extends Controller {
         response.json(
             await (
                 await this.db.collection('articles').aggregate([
-                    { $lookup: { from: "users", localField: "user", foreignField: "_id", as: "user" } },
-                    { $project: { time: 1, title: 1, status: 1, user: { $arrayElemAt: ["$user.title", 0] } } },
+                    { $lookup: 
+                        { from: "users", localField: "user", foreignField: "_id", as: "user" }
+                    },
+                    { $project:
+                        { time: 1, title: 1, status: 1, user: { $arrayElemAt: ["$user.title", 0] } }
+                    },
                     { $match: filter.match },
                     { $sort: { [filter.order.field]: filter.order.direction } },
                     { $skip: filter.skip },
@@ -33,26 +38,46 @@ export default class Article extends Controller {
     }
 
     insertOne = async (request, response) => {
-        console.log('insert', request.body);
+        // ToDo: access control
         const result = await this.db.collection('articles')
-            .insertOne(request.body);
-        console.log('result', result, result.insertedId.toString());
+            .insertOne(
+                this.toObjectId(
+                    { ...request.body, ...{ user: response.locals.user._id } }
+                )
+            );
         response.end(result.insertedId.toString());
     }
 
-    replaceOne = async (request, response) => {
-        console.log('update', request.params, request.body);
-        const id = new ObjectId(request.params.id);
-        const result = await this.db.collection('articles')
-            .replaceOne({ _id: id }, { ...request.body, ...{ _id: id } });
-        console.log('result', result);
+    updateOne = async (request, response, next) => {
+        // ToDo: access control
+        if (request.params.id !== request.body._id) {
+            return next(new Error('Помилковий ідентифікатор статті'));
+        }
+        await this.db.collection('articles')
+            .updateOne(
+                { _id: ObjectId(request.params.id) }, { $set: this.toObjectId(request.body) }
+            );
         response.end();
     }
 
     deleteOne = async (request, response) => {
-        console.log('delete', request.params, request.body);
+        // ToDo: access control
         await this.db.collection('articles')
-            .deleteOne({ _id: new ObjectId(request.params.id) })
+            .deleteOne({ _id: new ObjectId(request.params.id) });
         response.end();
+    }
+
+    toObjectId(article) {
+        if (article?._id) {
+            article._id = ObjectId(article._id);
+        }
+        article.category = ObjectId(article.category)
+        if (article?.tags) {
+            article.tags = article.tags.map(tag => ObjectId(tag));
+        }
+        if (article?.user) {
+            article.user = ObjectId(article.user);
+        }
+        return article;
     }
 }

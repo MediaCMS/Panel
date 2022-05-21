@@ -1,7 +1,7 @@
 "use strict"
 
 import React, { useState, useEffect, useMemo } from "react"
-import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom"
+import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import axios from "axios"
 import settings from "../settings.js"
 import menu from "../menu.js"
@@ -27,7 +27,6 @@ api.interceptors.request.use(function (config) {
 export default function (props) {
 
     const navigate = useNavigate()
-    const location = useLocation()
     const [title, setTitle] = useState()
     const [message, setMessage] = useState()
     const [submenu, setSubmenu] = useState({ items: [] })
@@ -35,6 +34,7 @@ export default function (props) {
     const setHeader = (title, submenu = []) => {
         setTitle(title)
         setSubmenu({ items: submenu })
+        setMessage(null)
     }
 
     useMemo(() => {
@@ -61,13 +61,6 @@ export default function (props) {
             return Promise.reject(error)
         })
     }, [])
-
-    useEffect(() => {
-        if (!localStorage.getItem('user')) {
-             navigate('/доступ/вхід')
-        }
-        setMessage(null)
-   }, [location])
 
     return props.template ? (
         <>
@@ -134,7 +127,7 @@ function Navigation() {
                     </ul>
                 </div>
                 {user ? (
-                    <div title={user.role + ' ' + user.description}>
+                    <div title={user.role.title + ' ' + user.description}>
                         {user.title}
                         {user.image 
                             ? (<img src={settings.images.url + user.image}

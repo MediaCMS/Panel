@@ -24,7 +24,7 @@ export default class User extends Controller {
 
     insertOne = async (request, response) => {}
 
-    replaceOne = async (request, response) => {}
+    updateOne = async (request, response) => {}
 
     deleteOne = async (request, response) => {}
 
@@ -39,7 +39,7 @@ export default class User extends Controller {
                 } },
                 { $project: {
                     title: 1, description: 1, image: 1, email: 1, password: 1, alias: 1, status: 1, 
-                    role: { $arrayElemAt: [ "$role.title", 0 ] }
+                    role: { $arrayElemAt: ["$role", 0] }
                 } },
                 { $match: {
                     email: email, password: password, status: true

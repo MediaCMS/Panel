@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import { useParams, useOutletContext, useNavigate } from "react-router-dom"
 import Form, { Image, Autocomplete, Switch } from "../../Form.js"
 
-export default function Editor(props) {
+export default function Editor() {
 
     const params = useParams()
     const [article, setArticle] = useState({
@@ -16,7 +16,6 @@ export default function Editor(props) {
     const navigate = useNavigate()
 
     const handleSave = async data => {
-        console.log('ArticleEditor.handleSave', article, data)
         const articleExport = { ...article }
         /*
         for (const [name, value] of Object.entries(article)) {
@@ -26,14 +25,12 @@ export default function Editor(props) {
         if (articleExport?.tags) {
             articleExport.tags = articleExport.tags.map(tag => tag._id)
         }
-        console.log('articleExport', articleExport)
         if (article?._id) {
             await context.api.put(['статті', params.id], articleExport)
         } else {
-            navigate(
-                '/статті/редактор/'
-                    + await context.api.post('/статті', articleExport)
-            )
+            const id = await context.api.post('/статті', articleExport)
+            setArticle(article => ({...article, ...{ _id: id } }))
+            navigate('/статті/редактор/' + id)
         }
     }
 
@@ -50,10 +47,11 @@ export default function Editor(props) {
         setCategories(categories)
         if (!params?.id) {
             return setArticle(article => (
-            { ...article, ...{ category: categories[0]._id } }
-        ))
+                { ...article, ...{ category: categories[0]._id } }
+            ))
         }
         const article = await context.api.get(['статті', params.id])
+        console.log(article)
         if (!article) {
             return context.setMessage('Стаття не знайдена')
         }
@@ -81,5 +79,4 @@ export default function Editor(props) {
             </Form>
         </div>
      )
-
 }
