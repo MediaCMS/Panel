@@ -6,7 +6,6 @@ import Controller from "../Controller.js";
 export default class Article extends Controller {
 
     findOne = async (request, response) => {
-        // ToDo: access control
         response.json(await (await this.db.collection('articles').aggregate([
             { $lookup: { from: "tags", localField: "tags", foreignField: "_id", as: "tags" } },
             { $project: {
@@ -38,7 +37,6 @@ export default class Article extends Controller {
     }
 
     insertOne = async (request, response) => {
-        // ToDo: access control
         const result = await this.db.collection('articles')
             .insertOne(
                 this.toObjectId(
@@ -49,19 +47,27 @@ export default class Article extends Controller {
     }
 
     updateOne = async (request, response, next) => {
-        // ToDo: access control
+        if ((response.locals.user.role.level === 3)
+            && (response.locals.user._id !== request.body.user)) {
+            return response.sendStatus(403);
+        }
         if (request.params.id !== request.body._id) {
-            return next(new Error('Помилковий ідентифікатор статті'));
+            return next(
+                new Error('Помилковий ідентифікатор статті')
+            );
         }
         await this.db.collection('articles')
             .updateOne(
-                { _id: ObjectId(request.params.id) }, { $set: this.toObjectId(request.body) }
+                { _id: ObjectId(request.params.id) },
+                { $set: this.toObjectId(request.body) }
             );
         response.end();
     }
 
     deleteOne = async (request, response) => {
-        // ToDo: access control
+        if ((response.locals.user.role.level <= 2)) {
+            return response.sendStatus(403);
+        }
         await this.db.collection('articles')
             .deleteOne({ _id: new ObjectId(request.params.id) });
         response.end();

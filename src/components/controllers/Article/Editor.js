@@ -17,16 +17,12 @@ export default function Editor() {
 
     const handleSave = async data => {
         const articleExport = { ...article }
-        /*
-        for (const [name, value] of Object.entries(article)) {
-            if ([null, ""].indexOf(value) < 0) articleExport[name] = value
-        }
-        */
         if (articleExport?.tags) {
             articleExport.tags = articleExport.tags.map(tag => tag._id)
         }
         if (article?._id) {
             await context.api.put(['статті', params.id], articleExport)
+            navigate('/статті/список')
         } else {
             const id = await context.api.post('/статті', articleExport)
             setArticle(article => ({...article, ...{ _id: id } }))

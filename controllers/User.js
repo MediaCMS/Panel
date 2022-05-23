@@ -46,7 +46,12 @@ export default class User extends Controller {
                 }},
             ])
         ).toArray();
-        if (!user) return response.sendStatus(401);
+        if (!user) {
+            return response.sendStatus(401);
+        }
+        if (user.role.level >= 3) {
+            return response.sendStatus(403);
+        }
         delete user.email;
         delete user.password;
         delete user.status;
