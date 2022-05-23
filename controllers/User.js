@@ -49,7 +49,7 @@ export default class User extends Controller {
         if (!user) {
             return response.sendStatus(401);
         }
-        if (user.role.level >= 3) {
+        if (user.role.level > 3) {
             return response.sendStatus(403);
         }
         delete user.email;

@@ -28,7 +28,7 @@ export default class Article extends Controller {
                         { time: 1, title: 1, status: 1, user: { $arrayElemAt: ["$user.title", 0] } }
                     },
                     { $match: filter.match },
-                    { $sort: { [filter.order.field]: filter.order.direction } },
+                    { $sort: filter.sort },
                     { $skip: filter.skip },
                     { $limit: filter.limit }
                 ])
@@ -39,7 +39,7 @@ export default class Article extends Controller {
     insertOne = async (request, response) => {
         const result = await this.db.collection('articles')
             .insertOne(
-                this.toObjectId(
+                this.prepare(
                     { ...request.body, ...{ user: response.locals.user._id } }
                 )
             );
@@ -59,13 +59,13 @@ export default class Article extends Controller {
         await this.db.collection('articles')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
-                { $set: this.toObjectId(request.body) }
+                { $set: this.prepare(request.body) }
             );
         response.end();
     }
 
     deleteOne = async (request, response) => {
-        if ((response.locals.user.role.level <= 2)) {
+        if ((response.locals.user.role.level > 2)) {
             return response.sendStatus(403);
         }
         await this.db.collection('articles')
@@ -73,10 +73,11 @@ export default class Article extends Controller {
         response.end();
     }
 
-    toObjectId(article) {
+    prepare(article) {
         if (article?._id) {
             article._id = ObjectId(article._id);
         }
+        article.time = new Date(article.time);
         article.category = ObjectId(article.category)
         if (article?.tags) {
             article.tags = article.tags.map(tag => ObjectId(tag));

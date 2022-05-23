@@ -51,6 +51,9 @@ export default function (props) {
                     if (error.response.status === 401) {
                         navigate(encodeURI('/доступ/вхід'))
                     }
+                    if (error.response.status === 403) {
+                        alert('Недостатній рівень доступу')
+                    }
                 } else {
                     console.log('Перевищенно час очікування відповіді сервера')
                 }

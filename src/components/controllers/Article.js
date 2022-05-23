@@ -1,10 +1,57 @@
 "use strict"
 
 import React, { useState, useEffect } from "react"
-import { useParams, useOutletContext, useNavigate } from "react-router-dom"
-import Form, { Image, Autocomplete, Switch } from "../../Form.js"
+import {
+    useParams, useSearchParams, useNavigate, useOutletContext, generatePath
+} from "react-router-dom"
+import Form, { Image, Autocomplete, Switch } from "../Form.js"
 
-export default function Editor() {
+export function Index() {
+
+    const navigate = useNavigate()
+    const [articles, setArticles] = useState()
+    const [searchParams] = useSearchParams()
+    const context = useOutletContext()
+
+    useEffect(async () => {
+        context.setHeader('Статті (cписок)', [
+            { title: 'Створити', url: '/статті/редактор' }
+        ])
+        setArticles({ list: await context.api.get('/статті') })
+    }, [searchParams])
+
+    return (
+        <div id="body" className="article view">
+            <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Заголовок</th>
+                        <th scope="col">Автор</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {articles?.list.map((article, index) => (
+                        <tr key={article._id} role="button" onClick={() => 
+                            navigate(
+                                generatePath(
+                                    encodeURI('/статті/редактор/:id'), { id: article._id }
+                                )
+                            )}>
+                            <th scope="row">{index + 1}</th>
+                            <td className="text-nowrap">{article.time.split('T')[0]}</td>
+                            <td>{article.title}</td>
+                            <td>{article.user}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+export function Editor() {
 
     const params = useParams()
     const [article, setArticle] = useState({
@@ -22,12 +69,10 @@ export default function Editor() {
         }
         if (article?._id) {
             await context.api.put(['статті', params.id], articleExport)
-            navigate('/статті/список')
         } else {
-            const id = await context.api.post('/статті', articleExport)
-            setArticle(article => ({...article, ...{ _id: id } }))
-            navigate('/статті/редактор/' + id)
+            await context.api.post('/статті', articleExport)
         }
+        navigate('/статті/список')
     }
 
     const handleDelete = async () => {
@@ -47,7 +92,6 @@ export default function Editor() {
             ))
         }
         const article = await context.api.get(['статті', params.id])
-        console.log(article)
         if (!article) {
             return context.setMessage('Стаття не знайдена')
         }
@@ -76,3 +120,5 @@ export default function Editor() {
         </div>
      )
 }
+
+export default {Index, Editor}
