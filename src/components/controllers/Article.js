@@ -8,23 +8,33 @@ import Form, { Image, Autocomplete, Switch } from "../Form.js"
 
 export function Index() {
 
-    const navigate = useNavigate()
-    const [articles, setArticles] = useState()
+    const [articles, setArticles] = useState({ items: [] })
     const [searchParams] = useSearchParams()
     const context = useOutletContext()
+    const navigate = useNavigate()
+
+    const handleClick = id => {
+        navigate(
+            generatePath(
+                encodeURI('/статті/редактор/:id'), { id: id }
+            )
+        )
+    }
 
     useEffect(async () => {
         context.setHeader('Статті (cписок)', [
             { title: 'Створити', url: '/статті/редактор' }
         ])
-        setArticles({ list: await context.api.get('/статті') })
+        setArticles({ items:
+            await context.api.get('/статті')
+        })
     }, [searchParams])
 
     return (
         <div id="body" className="article view">
             <table className="table table-hover">
                 <thead>
-                    <tr>
+                    <tr className="text-center">
                         <th scope="col">#</th>
                         <th scope="col">Дата</th>
                         <th scope="col">Заголовок</th>
@@ -32,13 +42,8 @@ export function Index() {
                     </tr>
                 </thead>
                 <tbody>
-                    {articles?.list.map((article, index) => (
-                        <tr key={article._id} role="button" onClick={() => 
-                            navigate(
-                                generatePath(
-                                    encodeURI('/статті/редактор/:id'), { id: article._id }
-                                )
-                            )}>
+                    {articles.items.map((article, index) => (
+                        <tr key={article._id} role="button" onClick={() => handleClick(article._id)}>
                             <th scope="row">{index + 1}</th>
                             <td className="text-nowrap">{article.time.split('T')[0]}</td>
                             <td>{article.title}</td>
@@ -86,16 +91,17 @@ export function Editor() {
         ])
         const categories = await context.api.get('/категорії')
         setCategories(categories)
-        if (!params?.id) {
-            return setArticle(article => (
+        if (params?.id) {
+            const article = await context.api.get(['статті', params.id])
+            if (!article) {
+                return context.setMessage('Стаття не знайдена')
+            }
+            setArticle(article)
+        } else {
+            setArticle(article => (
                 { ...article, ...{ category: categories[0]._id } }
             ))
         }
-        const article = await context.api.get(['статті', params.id])
-        if (!article) {
-            return context.setMessage('Стаття не знайдена')
-        }
-        setArticle(article)
     }, [])
 
     return (

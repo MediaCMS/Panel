@@ -78,6 +78,7 @@ export default class Article extends Controller {
             article._id = ObjectId(article._id);
         }
         article.time = new Date(article.time);
+        article.alias = this.toAlias(article.title);
         article.category = ObjectId(article.category)
         if (article?.tags) {
             article.tags = article.tags.map(tag => ObjectId(tag));

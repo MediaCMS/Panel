@@ -4,8 +4,8 @@ import React from "react"
 import { Routes, Route } from "react-router-dom"
 import Layout from "./Layout.js"
 import Article from "./controllers/Article.js"
-/*
 import Category from "./controllers/Category.js"
+/*
 import Tag from "./controllers/Tag.js"
 import Page from "./controllers/Page.js"
 */
@@ -24,6 +24,11 @@ export default function () {
                     <Route path={encodeURI('список')} element={<Article.Index />} />
                     <Route path={encodeURI('редактор')} element={<Article.Editor />} />
                     <Route path={encodeURI('редактор/:id')} element={<Article.Editor />} />
+                </Route>
+                <Route path={encodeURI('категорії')}>
+                    <Route path={encodeURI('список')} element={<Category.Index />} />
+                    <Route path={encodeURI('редактор')} element={<Category.Editor />} />
+                    <Route path={encodeURI('редактор/:id')} element={<Category.Editor />} />
                 </Route>
             </Route>
         </Routes>
