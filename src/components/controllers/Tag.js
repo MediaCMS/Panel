@@ -1,80 +1,114 @@
 "use strict"
 
 import React, { useState, useEffect } from "react"
-import { useParams, useSearchParams } from "react-router-dom"
-import routes from "../routes.js"
-import routesAPI from "../../routes.js"
+import {
+    useParams, useSearchParams, useNavigate, useOutletContext, generatePath
+} from "react-router-dom"
+import Form, { Image, Switch } from "../Form.js"
 
-export function Index(props) {
+export function Index() {
 
-    const [tags, setTags] = useState()
+    const [tags, setTags] = useState({ items: [] })
     const [searchParams] = useSearchParams()
+    const context = useOutletContext()
+    const navigate = useNavigate()
+
+    const handleClick = id => {
+        navigate(
+            generatePath(
+                encodeURI('/мітки/редактор/:id'), { id: id }
+            )
+        )
+    }
 
     useEffect(async () => {
-        setTags({ list: 
-            await props.api.get(routesAPI.Tag.uri)
+        context.setParams({
+            title: 'Мітки (cписок)',
+            router: ['tag', 'index'],
+            submenu: [
+                { title: 'Створити', url: '/мітки/редактор' }
+            ]
+        })
+        setTags({ items:
+            await context.api.get('/мітки')
         })
     }, [searchParams])
 
     return (
-        <>
-            <div className="row row-cols-1 row-cols-md-3 g-4">
-                {tags?.list.map(tag => (
-                    <div className="col" key={tag._id}>
-                        <Card
-                            title={tag.title}
-                            description={tag.description}
-                            image={tag.image}
-                            uri={routes.Tag.uri + '/' + tag.alias}
-                        />
-                    </div>
-                ))}                
-            </div>
-        </>
+        <div id="body" className="tag view">
+            <table className="table table-hover">
+                <thead>
+                    <tr className="text-center">
+                        <th scope="col">#</th>
+                        <th scope="col">Заголовок</th>
+                        <th scope="col">Посилання</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tags.items.map((tag, index) => (
+                        <tr key={tag._id} role="button" onClick={() => handleClick(tag._id)}
+                            className={'text-center' + (!tag.status ? ' text-muted' : '') }>
+                            <th scope="row">{index + 1}</th>
+                            <td>{tag.title}</td>
+                            <td>{tag.alias}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
     )
 }
 
-export function Edit(props) {
+export function Editor() {
 
-    const [articles, setArticles] = useState()
-    const [searchParams] = useSearchParams()
     const params = useParams()
+    const [tag, setTag] = useState({
+        title: '', description: '', image: null, status: false
+    })
+    const context = useOutletContext()
+    const navigate = useNavigate()
+
+    const handleSave = async () => {
+        if (tag?._id) {
+            await context.api.put(['мітки', params.id], tag)
+        } else {
+            await context.api.post('/мітки', tag)
+        }
+        navigate('/мітки/список')
+    }
+
+    const handleDelete = async () => {
+        await context.api.delete(['мітки', params.id])
+        navigate('/мітки/список')
+    }
 
     useEffect(async () => {
-        const tag = await props.api.get([routesAPI.Tag.uri, params.alias])
-        if (!tag) {
-            return props.setMessage('Мітка не знайдена')
-        }
-        props.setTitle(tag.title)
-        setArticles({ list: 
-            await props.api.get(routesAPI.Article.uri, { params: { 'мітка': tag._id } })
+        context.setParams({
+            title: 'Мітки (редактор)',
+            router: ['tag', 'editor'],
+            submenu: [
+                { title: 'Закрити', url: '/мітки/список' }
+            ]
         })
-    }, [searchParams])
+        if (params?.id) {
+            const tag = await context.api.get(['мітки', params.id])
+            if (!tag) {
+                return context.setMessage('Мітка не знайдена')
+            }
+            setTag(tag)
+        }
+    }, [])
 
     return (
-        <>
-            <div className="row row-cols-1 row-cols-md-3 g-4">
-                {articles?.list.map(article => (
-                    <div className="col" key={article._id}>
-                        <Card
-                            title={article.title}
-                            subTitle={{
-                                title: article.user.title,
-                                uri: routes.User.uri + '/' + article.user.alias
-                            }}
-                            description={article.description}
-                            image={article.image}
-                            uri={routes.Article.uri + '/' + article.alias}
-                            button={{
-                                title: article.category.title,
-                                uri: routes.Category.uri + '/' + article.category.alias
-                            }}
-                        />
-                    </div>
-                ))}
-            </div>
-        </>
-    )
+        <Form setData={setTag} onSave={handleSave} onDelete={handleDelete} id={tag?._id}>
+            <input type="text" name="title" value={tag.title} pattern=".*"
+                title="Заголовок" placeholder="Заголовок ..." required />
+            <textarea name="description" value={tag.description} pattern=".*" rows="3"
+                title="Опис" placeholder="Опис ..." />
+            <Image name="image" value={tag.image} title="Зображення" />
+            <Switch name="status" value={tag.status} title="Статус" description="Видимість мітки" />
+        </Form>
+     )
 }
 
-export default { Index, Edit }
+export default { Index, Editor }

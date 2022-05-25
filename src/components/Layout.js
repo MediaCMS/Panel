@@ -27,13 +27,13 @@ api.interceptors.request.use(function (config) {
 export default function (props) {
 
     const navigate = useNavigate()
-    const [title, setTitle] = useState()
+    const [params, setParams] = useState(
+        {title: '', router: ['', ''], submenu: []}
+    )
     const [message, setMessage] = useState()
-    const [submenu, setSubmenu] = useState({ items: [] })
 
-    const setHeader = (title, submenu = []) => {
-        setTitle(title)
-        setSubmenu({ items: submenu })
+    const setHeader = (params) => {
+        setParams(params)
         setMessage(null)
     }
 
@@ -72,9 +72,9 @@ export default function (props) {
             </header>
             <main className="container" >
                 <div id="header" className="my-5 d-flex">
-                    <h1 className="me-auto">{title}</h1>
+                    <h1 className="me-auto">{params.title}</h1>
                     <ul className="nav">
-                        {submenu.items.map(item => (
+                        {params.submenu.map(item => (
                             <li className="nav-item" key={item.url}>
                                 <NavLink to={encodeURI(item.url)} className="nav-link" >
                                     {item.title}
@@ -84,7 +84,9 @@ export default function (props) {
                     </ul>
                 </div>
                 {message ? (<div className="box alert alert-danger text-center">{message}</div>) : null}
-                <Outlet context={{api, setHeader, setMessage}} />
+                <div id="body" className={params.router[0] + ' ' + params.router[1]}>
+                    <Outlet context={{api, setParams, setMessage}} />
+                </div>
             </main>
             <footer className="text-center mt-5">
                 <div

@@ -29,10 +29,10 @@ export default class Controller {
             filter.match['user._id'] = new ObjectId(query['автор']);
         } 
         if (typeof query['сортування-поле'] !== 'undefined') {
-            filter.order.field = query['сортування-поле'];
-        }
-        if (typeof query['сортування-напрям'] !== 'undefined') {
-            filter.order.direction = parseInt(query['сортування-напрям']);
+            const direction = (typeof query['сортування-напрям'] !== 'undefined')
+                ? parseInt(query['сортування-напрям'])
+                : 1;
+            filter.sort = { [query['сортування-поле']] : direction};
         }
         if (typeof query['обмеження'] !== 'undefined') {
             filter.limit = parseInt(query['обмеження']);

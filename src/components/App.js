@@ -5,10 +5,8 @@ import { Routes, Route } from "react-router-dom"
 import Layout from "./Layout.js"
 import Article from "./controllers/Article.js"
 import Category from "./controllers/Category.js"
-/*
 import Tag from "./controllers/Tag.js"
-import Page from "./controllers/Page.js"
-*/
+//import Page from "./controllers/Page.js"
 import User from "./controllers/User.js"
 
 export default function () {
@@ -29,6 +27,11 @@ export default function () {
                     <Route path={encodeURI('список')} element={<Category.Index />} />
                     <Route path={encodeURI('редактор')} element={<Category.Editor />} />
                     <Route path={encodeURI('редактор/:id')} element={<Category.Editor />} />
+                </Route>
+                <Route path={encodeURI('мітки')}>
+                    <Route path={encodeURI('список')} element={<Tag.Index />} />
+                    <Route path={encodeURI('редактор')} element={<Tag.Editor />} />
+                    <Route path={encodeURI('редактор/:id')} element={<Tag.Editor />} />
                 </Route>
             </Route>
         </Routes>

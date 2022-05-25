@@ -22,37 +22,40 @@ export function Index() {
     }
 
     useEffect(async () => {
-        context.setHeader('Статті (cписок)', [
-            { title: 'Створити', url: '/статті/редактор' }
-        ])
+        context.setParams({
+            title: 'Статті (cписок)',
+            router: ['article', 'index'],
+            submenu: [
+                { title: 'Створити', url: '/статті/редактор' }
+            ]
+        })
         setArticles({ items:
             await context.api.get('/статті')
         })
     }, [searchParams])
 
     return (
-        <div id="body" className="article view">
-            <table className="table table-hover">
-                <thead>
-                    <tr className="text-center">
-                        <th scope="col">#</th>
-                        <th scope="col">Дата</th>
-                        <th scope="col">Заголовок</th>
-                        <th scope="col">Автор</th>
+        <table className="table table-hover">
+            <thead>
+                <tr className="text-center">
+                    <th scope="col">#</th>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Заголовок</th>
+                    <th scope="col">Автор</th>
+                </tr>
+            </thead>
+            <tbody>
+                {articles.items.map((article, index) => (
+                    <tr key={article._id} role="button" onClick={() => handleClick(article._id)}
+                        className={'text-center' + (!article.status ? ' text-muted' : '') }>
+                        <th scope="row">{index + 1}</th>
+                        <td className="text-nowrap">{article.time.split('T')[0]}</td>
+                        <td>{article.title}</td>
+                        <td>{article.user}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {articles.items.map((article, index) => (
-                        <tr key={article._id} role="button" onClick={() => handleClick(article._id)}>
-                            <th scope="row">{index + 1}</th>
-                            <td className="text-nowrap">{article.time.split('T')[0]}</td>
-                            <td>{article.title}</td>
-                            <td>{article.user}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+                ))}
+            </tbody>
+        </table>
     )
 }
 
@@ -86,9 +89,13 @@ export function Editor() {
     }
 
     useEffect(async () => {
-        context.setHeader('Статті (редактор)', [
-            { title: 'Закрити', url: '/статті/список' }
-        ])
+        context.setParams({
+            title: 'Статті (редактор)',
+            router: ['article', 'editor'],
+            submenu: [
+                { title: 'Закрити', url: '/статті/список' }
+            ]
+        })
         const categories = await context.api.get('/категорії')
         setCategories(categories)
         if (params?.id) {
@@ -105,25 +112,23 @@ export function Editor() {
     }, [])
 
     return (
-        <div id="body" className="article edit">
-            <Form setData={setArticle} onSave={handleSave} onDelete={handleDelete} id={article?._id}>
-                <input type="datetime-local" name="time" value={article.time.slice(0, 16)} title="Час" />
-                <input type="text" name="title" value={article.title} pattern=".*"
-                    title="Заголовок" placeholder="Заголовок ..." required />
-                <textarea name="description" value={article.description} pattern=".*" rows="3"
-                    title="Опис" placeholder="Опис ..." />
-                <textarea name="body" value={article.body} pattern=".*" rows="6"
-                    title="Текст" placeholder="Текст ..." />
-                <Image name="image" value={article.image} title="Зображення" />
-                <select name="category" value={article?.category} title="Категорія">
-                    {categories?.map(category => (
-                        <option value={category._id} key={category._id}>{category.title}</option>
-                    ))}
-                </select>
-                <Autocomplete name="tags" value={article.tags} title="Мітки" api="/мітки/автозаповнення" />
-                <Switch name="status" value={article.status} title="Статус" description="Видимість публікації" />
-            </Form>
-        </div>
+        <Form setData={setArticle} onSave={handleSave} onDelete={handleDelete} id={article?._id}>
+            <input type="datetime-local" name="time" value={article.time.slice(0, 16)} title="Час" />
+            <input type="text" name="title" value={article.title} pattern=".*"
+                title="Заголовок" placeholder="Заголовок ..." required />
+            <textarea name="description" value={article.description} pattern=".*" rows="3"
+                title="Опис" placeholder="Опис ..." />
+            <textarea name="body" value={article.body} pattern=".*" rows="6"
+                title="Текст" placeholder="Текст ..." />
+            <Image name="image" value={article.image} title="Зображення" />
+            <select name="category" value={article?.category} title="Категорія">
+                {categories?.map(category => (
+                    <option value={category._id} key={category._id}>{category.title}</option>
+                ))}
+            </select>
+            <Autocomplete name="tags" value={article.tags} title="Мітки" api="/мітки/автозаповнення" />
+            <Switch name="status" value={article.status} title="Статус" description="Видимість публікації" />
+        </Form>
      )
 }
 

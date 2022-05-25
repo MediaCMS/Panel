@@ -37,12 +37,16 @@ export default class Article extends Controller {
     }
 
     insertOne = async (request, response) => {
+        const article = { ...request.body };
+        article.time = new Date().toISOString();
+        article.alias = this.toAlias(article.title);
+        article.order = parseInt(article.order);
+         if (article?.tags) {
+            article.tags = article.tags.map(tag => ObjectId(tag));
+        }
+       article.user = response.locals.user._id;
         const result = await this.db.collection('articles')
-            .insertOne(
-                this.prepare(
-                    { ...request.body, ...{ user: response.locals.user._id } }
-                )
-            );
+            .insertOne(article);
         response.end(result.insertedId.toString());
     }
 
@@ -51,15 +55,19 @@ export default class Article extends Controller {
             && (response.locals.user._id !== request.body.user)) {
             return response.sendStatus(403);
         }
-        if (request.params.id !== request.body._id) {
-            return next(
-                new Error('Помилковий ідентифікатор статті')
-            );
+        const article = { ...request.body };
+        article.time = new Date(article.time);
+        article.alias = this.toAlias(article.title);
+        article.category = ObjectId(article.category);
+        if (article?.tags) {
+            article.tags = article.tags.map(tag => ObjectId(tag));
         }
+        delete article._id;
+        delete article.user;
         await this.db.collection('articles')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
-                { $set: this.prepare(request.body) }
+                { $set: article }
             );
         response.end();
     }
@@ -71,21 +79,5 @@ export default class Article extends Controller {
         await this.db.collection('articles')
             .deleteOne({ _id: new ObjectId(request.params.id) });
         response.end();
-    }
-
-    prepare(article) {
-        if (article?._id) {
-            article._id = ObjectId(article._id);
-        }
-        article.time = new Date(article.time);
-        article.alias = this.toAlias(article.title);
-        article.category = ObjectId(article.category)
-        if (article?.tags) {
-            article.tags = article.tags.map(tag => ObjectId(tag));
-        }
-        if (article?.user) {
-            article.user = ObjectId(article.user);
-        }
-        return article;
     }
 }

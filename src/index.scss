@@ -10,10 +10,9 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
     img {border-radius: 1%;}
 
     main {
-      #body.edit {max-width: 960px; margin: 5rem auto;
+      #body.editor {max-width: 960px; margin: 5rem auto;
         form {
-          input[type='datetime-local'], select {width: auto;}
-          input[type='number'], select {width: auto;}
+          input[type='datetime-local'], input[type='number'], select {width: auto;}
           img {
             &:hover {opacity: 0.3; cursor: pointer;}
           }

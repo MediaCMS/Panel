@@ -20,12 +20,13 @@ export default class Category extends Controller {
     }
 
     insertOne = async (request, response) => {
+        const category = { ...request.body };
+        category.time = new Date().toISOString();
+        category.alias = this.toAlias(category.title);
+        category.order = parseInt(category.order);
+        category.user = response.locals.user._id;
         const result = await this.db.collection('categories')
-            .insertOne(
-                this.prepare(
-                    { ...request.body, ...{ user: response.locals.user._id } }
-                )
-            );
+            .insertOne(category);
         response.end(result.insertedId.toString());
     }
 
@@ -33,15 +34,15 @@ export default class Category extends Controller {
         if ((response.locals.user.role.level > 1)) {
             return response.sendStatus(403);
         }
-        if (request.params.id !== request.body._id) {
-            return next(
-                new Error('Помилковий ідентифікатор категорії')
-            );
-        }
+        const category = { ...request.body };
+        category.alias = this.toAlias(category.title);
+        category.order = parseInt(category.order);
+        delete category._id;
+        delete category.user;
         await this.db.collection('categories')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
-                { $set: this.prepare(request.body) }
+                { $set: category }
             );
         response.end();
     }
@@ -53,18 +54,5 @@ export default class Category extends Controller {
         await this.db.collection('categories')
             .deleteOne({ _id: new ObjectId(request.params.id) });
         response.end();
-    }
-
-    prepare(category) {
-        if (category?._id) {
-            category._id = ObjectId(category._id);
-        }
-        category.time = new Date(category.time);
-        category.alias = this.toAlias(category.title);
-        category.order = parseInt(category.order);
-        if (category?.user) {
-            category.user = ObjectId(category.user);
-        }
-        return category;
     }
 }
