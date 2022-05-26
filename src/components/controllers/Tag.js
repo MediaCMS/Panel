@@ -35,27 +35,25 @@ export function Index() {
     }, [searchParams])
 
     return (
-        <div id="body" className="tag view">
-            <table className="table table-hover">
-                <thead>
-                    <tr className="text-center">
-                        <th scope="col">#</th>
-                        <th scope="col">Заголовок</th>
-                        <th scope="col">Посилання</th>
+        <table className="table table-hover">
+            <thead>
+                <tr className="text-center">
+                    <th scope="col">#</th>
+                    <th scope="col">Заголовок</th>
+                    <th scope="col">Посилання</th>
+                </tr>
+            </thead>
+            <tbody>
+                {tags.items.map((tag, index) => (
+                    <tr key={tag._id} role="button" onClick={() => handleClick(tag._id)}
+                        className={'text-center' + (!tag.status ? ' text-muted' : '') }>
+                        <th scope="row">{index + 1}</th>
+                        <td>{tag.title}</td>
+                        <td>{tag.alias}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {tags.items.map((tag, index) => (
-                        <tr key={tag._id} role="button" onClick={() => handleClick(tag._id)}
-                            className={'text-center' + (!tag.status ? ' text-muted' : '') }>
-                            <th scope="row">{index + 1}</th>
-                            <td>{tag.title}</td>
-                            <td>{tag.alias}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+                ))}
+            </tbody>
+        </table>
     )
 }
 

@@ -47,7 +47,7 @@ export function Index() {
             <tbody>
                 {articles.items.map((article, index) => (
                     <tr key={article._id} role="button" onClick={() => handleClick(article._id)}
-                        className={'text-center' + (!article.status ? ' text-muted' : '') }>
+                        className={!article.status ? 'text-muted' : ''}>
                         <th scope="row">{index + 1}</th>
                         <td className="text-nowrap">{article.time.split('T')[0]}</td>
                         <td>{article.title}</td>
