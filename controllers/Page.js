@@ -6,15 +6,22 @@ import Controller from "../Controller.js";
 export default class Page extends Controller {
 
     findOne = async (request, response) => {
-        response.json(await (
-            await this.db.collection('pages')
-                .find({ _id: ObjectId(request.params.id) })
-        ).next())
+        response.json(
+            await (
+                await this.db
+                    .collection('pages')
+                    .find(
+                        { _id: ObjectId(request.params.id) }
+                    )
+            ).next()
+        )
     }
 
     findMany = async (request, response) => {
-        response.json(await (
-                await this.db.collection('pages')
+        response.json(
+            await (
+                await this.db
+                    .collection('pages')
                     .find().sort({ title: 1 })
             ).toArray()
         )
@@ -28,12 +35,13 @@ export default class Page extends Controller {
         page.time = new Date().toISOString();
         page.alias = this.toAlias(page.title);
         page.user = response.locals.user._id;
-        const result = await this.db.collection('pages')
+        const result = await this.db
+            .collection('pages')
             .insertOne(page);
         response.end(result.insertedId.toString());
     }
 
-    updateOne = async (request, response, next) => {
+    updateOne = async (request, response) => {
         if ((response.locals.user.role.level > 2)) {
             return response.sendStatus(403);
         }
@@ -41,7 +49,8 @@ export default class Page extends Controller {
         page.alias = this.toAlias(page.title);
         delete page._id;
         delete page.user;
-        await this.db.collection('pages')
+        await this.db
+            .collection('pages')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
                 { $set: page }
@@ -53,8 +62,11 @@ export default class Page extends Controller {
         if ((response.locals.user.role.level > 2)) {
             return response.sendStatus(403);
         }
-        await this.db.collection('pages')
-            .deleteOne({ _id: new ObjectId(request.params.id) });
+        await this.db
+            .collection('pages')
+            .deleteOne(
+                { _id: new ObjectId(request.params.id) }
+            );
         response.end();
     }
 }

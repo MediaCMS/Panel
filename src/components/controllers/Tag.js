@@ -88,13 +88,12 @@ export function Editor() {
                 { title: 'Закрити', url: '/мітки/список' }
             ]
         })
-        if (params?.id) {
-            const tag = await context.api.get(['мітки', params.id])
-            if (!tag) {
-                return context.setMessage('Мітка не знайдена')
-            }
-            setTag(tag)
+        if (!params?.id) return
+        const tag = await context.api.get(['мітки', params.id])
+        if (!tag) {
+            return context.setMessage('Мітка не знайдена')
         }
+        setTag(tagPrev => ({ ...tagPrev, ...tag }))
     }, [])
 
     return (

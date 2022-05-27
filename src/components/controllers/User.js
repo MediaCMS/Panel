@@ -2,76 +2,149 @@
 
 import React, { useState, useEffect } from "react"
 import {
-    useParams, useSearchParams, useNavigate, useOutletContext
+    useParams, useSearchParams, useNavigate, useOutletContext, generatePath
 } from "react-router-dom"
+import Form, { Image, Switch } from "../Form.js"
 import { Buffer } from "buffer"
 import MD5 from "crypto-js/md5.js"
-import settings from "../../settings.js"
 
-export function Index(props) {
-/*
-    const [users, setUsers] = useState()
+export function Index() {
 
-    useEffect(async () => {
-        setUsers({ list:
-            await props.api.get(routesAPI.User.uri)
-        })
-    }, [])
-
-    return (
-        <div className="row row-cols-1 row-cols-md-3 g-4">
-            {users?.list.map(user => (
-                <div className="col" key={user._id}>
-                    <Card
-                        title={user.title}
-                        description={user.description}
-                        image={user.image}
-                        uri={routes.User.uri + '/' + user.alias}
-                    />
-                </div>
-            ))}
-        </div>
-    )
-*/
-    return null
-}
-
-export function Edit(props) {
-/*
-    const [articles, setArticles] = useState()
+    const [users, setUsers] = useState({ items: [] })
     const [searchParams] = useSearchParams()
-    const params = useParams()
+    const context = useOutletContext()
+    const navigate = useNavigate()
+
+    const handleClick = id => {
+        navigate(
+            generatePath(
+                encodeURI('/користувачі/редактор/:id'), { id: id }
+            )
+        )
+    }
 
     useEffect(async () => {
-        const user = await props.api.get([routesAPI.User.uri, params.alias])
-        if (!user) {
-            return props.setMessage('Автор не знайдений')
-        }
-        props.setTitle(user.title)
-        setArticles({ list: 
-            await props.api.get(routesAPI.Article.uri, { params: { 'автор': user._id } })
+        context.setParams({
+            title: 'Користувачі (cписок)',
+            router: ['user', 'index'],
+            submenu: [
+                { title: 'Створити', url: '/користувачі/редактор' }
+            ]
+        })
+        setUsers({ items:
+            await context.api.get('/користувачі')
         })
     }, [searchParams])
 
     return (
-        <>
-            <div className="row row-cols-1 row-cols-md-3 g-4">
-                {articles?.list.map(article => (
-                    <div className="col" key={article._id}>
-                        <Card
-                            title={article.title}
-                            description={article.description}
-                            image={article.image}
-                            uri={routes.Article.uri + '/' + article.alias}
-                            button={{ title: article.category.title, uri: routes.Category.uri + '/' + article.category.alias }}
-                        />
-                    </div>
+        <table className="table table-hover">
+            <thead>
+                <tr className="text-center">
+                    <th scope="col">#</th>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Заголовок</th>
+                    <th scope="col">Роль</th>
+                </tr>
+            </thead>
+            <tbody>
+                {users.items.map((user, index) => (
+                    <tr key={user._id} role="button" onClick={() => handleClick(user._id)}
+                        className={!user.status ? ' text-muted' : ''}>
+                        <th scope="row" className="text-center">{index + 1}</th>
+                        <td className="text-nowrap">{user.time.split('T')[0]}</td>
+                        <td>{user.title}</td>
+                        <td className="text-center">{user.role}</td>
+                    </tr>
                 ))}
-            </div>
-        </>
+            </tbody>
+        </table>
     )
-    */
-    return null
+}
+
+export function Editor() {
+
+    const params = useParams()
+    const [user, setUser] = useState({
+        title: '', description: '', phone: '', skype: '', email: '',
+        image: null, status: false
+    })
+    const [roles, setRoles] = useState()
+    const context = useOutletContext()
+    const navigate = useNavigate()
+
+    const handleSave = async () => {
+        const userExport = { ...user }
+        if (userExport?.password) {
+            if (!userExport?.password2) {
+                return context.setMessage('Відсутній повторний пароль')
+            }
+            if (userExport.password !== userExport.password2) {
+                return context.setMessage('Пароль відрізняється від повторного пароля')
+            }
+            userExport.password = MD5(userExport.password).toString()
+        }
+        if (userExport?._id) {
+            await context.api.put(['користувачі', params.id], userExport)
+        } else {
+            await context.api.post('/користувачі', userExport)
+        }
+        setUser(user => { 
+            delete user.password
+            delete user.password2
+            return user
+        })
+        navigate('/користувачі/список')
+    }
+
+    const handleDelete = async () => {
+        await context.api.delete(['користувачі', params.id])
+        navigate('/користувачі/список')
+    }
+
+    useEffect(async () => {
+        context.setParams({
+            title: 'Користувачі (редактор)',
+            router: ['user', 'editor'],
+            submenu: [
+                { title: 'Закрити', url: '/користувачі/список' }
+            ]
+        })
+        const roles = await context.api.get('/ролі')
+        setRoles(roles)
+        if (params?.id) {
+            const user = await context.api.get(['користувачі', params.id])
+            if (!user) {
+                return context.setMessage('Користувач не знайдений')
+            }
+        } else {
+            const user = { ...user, ...{ role: roles[5]._id } }
+        }
+        setUser(userPrev => ({ ...userPrev, ...user }))
+    }, [])
+
+    return (
+        <Form setData={setUser} onSave={handleSave} onDelete={handleDelete} id={user?._id}>
+            <input type="text" name="title" value={user.title} pattern=".*"
+                title="Заголовок" placeholder="Заголовок ..." required />
+            <textarea name="description" value={user.description} pattern=".*" rows="3"
+                title="Опис" placeholder="Опис ..." />
+            <input type="text" name="phone" value={user.phone} pattern=".*"
+                title="Телефон" placeholder="+380 67 123-45-67" />
+            <input type="text" name="skype" value={user.skype} pattern=".*"
+                title="Skype" placeholder="skype ..." required />
+            <input type="email" name="email" value={user.email} pattern=".*"
+                title="Пошта" placeholder="example@domain.com" required />
+            <input type="password" name="password" pattern=".*{8,32}" title="Пароль" />
+            <input type="password" name="password2" pattern=".*{8,32}" title="Пароль (повторно)" />
+            <Image name="image" value={user.image} title="Зображення" />
+            <select name="role" value={user?.role} title="Роль">
+                {roles?.map(role => (
+                    <option value={role._id} key={role._id}>{role.title}</option>
+                ))}
+            </select>
+            <Switch name="status" value={user.status} title="Статус" description="Видимість користувача" />
+        </Form>
+     )
 }
 
 export function Login() {
@@ -134,4 +207,4 @@ export function Logout() {
     return null
 }
 
-export default { Index, Edit, Login, Logout }
+export default { Index, Editor, Login, Logout }

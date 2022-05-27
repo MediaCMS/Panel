@@ -6,6 +6,8 @@ import axios from "axios"
 import settings from "../settings.js"
 import menu from "../menu.js"
 
+const user = JSON.parse(localStorage.getItem('user'))
+
 const api = axios.create({
     baseURL: settings.api.url,
     timeout: settings.api.timeout
@@ -26,11 +28,11 @@ api.interceptors.request.use(function (config) {
 
 export default function (props) {
 
-    const navigate = useNavigate()
     const [params, setParams] = useState(
         {title: '', router: ['', ''], submenu: []}
     )
     const [message, setMessage] = useState()
+    const navigate = useNavigate()
 
     const setHeader = (params) => {
         setParams(params)
@@ -105,10 +107,6 @@ export default function (props) {
 
 function Navigation() {
 
-    const [user] = useState(
-        JSON.parse(localStorage.getItem('user'))
-    )
-
     return (
         <nav className="navbar navbar-expand-sm navbar-light bg-light">
             <div className="container-fluid">
@@ -123,41 +121,42 @@ function Navigation() {
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-lg-0">
                         {menu.map((item, index) => (
-                            <li className="nav-item" key={index} title={item.description}>
-                                <NavLink to={encodeURI(item.url)} className="nav-link" >
-                                    {item.title}
-                                </NavLink>
-                            </li>
+                            (item.access >= user.role.level) ? (
+                                <li className="nav-item" key={index} title={item.description}>
+                                    <NavLink to={encodeURI(item.url)} className="nav-link" >
+                                        {item.title}
+                                    </NavLink>
+                                </li>
+                            ) : null
                         ))}
                     </ul>
                 </div>
-                {user ? (
-                    <div title={user.role.title + ' ' + user.description}>
-                        {user.title}
-                        {user.image 
-                            ? (<img src={settings.images.url + user.image}
-                                    height="36px" className="rounded-3 ms-3" />) 
-                            : null}
-                    </div>
-                ) : null}
-                
+                {<div title={user.role.title + ' ' + user.description}>
+                    {user.title}
+                    {user.image ? (
+                        <img src={settings.images.url + user.image} height="36px" className="rounded-3 ms-3" />
+                    ) : null}
+                </div>}
             </div>
         </nav>
     )
 }
 
 function Menu() {
+
     return (
         <ul className="nav justify-content-center">
             {menu.map((item, index) => (
-                <li className="nav-item" key={index}>
-                    <NavLink
-                        to={encodeURI(item.url)}
-                        className="nav-link small p-2"
-                        title={item.description}>
-                        {item.title}
-                    </NavLink>
-                </li>
+                (item.access >= user.role.level) ? (
+                    <li className="nav-item" key={index}>
+                        <NavLink
+                            to={encodeURI(item.url)}
+                            className="nav-link small p-2"
+                            title={item.description}>
+                            {item.title}
+                        </NavLink>
+                    </li>
+                ) : null
             ))}
         </ul>
     )

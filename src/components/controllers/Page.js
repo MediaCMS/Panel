@@ -88,13 +88,12 @@ export function Editor() {
                 { title: 'Закрити', url: '/сторінки/список' }
             ]
         })
-        if (params?.id) {
-            const page = await context.api.get(['сторінки', params.id])
-            if (!page) {
-                return context.setMessage('Сторінка не знайдена')
-            }
-            setPage(page)
+        if (!params?.id) return
+        const page = await context.api.get(['сторінки', params.id])
+        if (!page) {
+            return context.setMessage('Сторінка не знайдена')
         }
+        setPage(pagePrev => ({ ...pagePrev, ...page }))
     }, [])
 
     return (

@@ -3,13 +3,13 @@
 import { ObjectId } from "mongodb";
 import Controller from "../Controller.js";
 
-export default class Category extends Controller {
+export default class Role extends Controller {
 
     findOne = async (request, response) => {
         response.json(
             await (
                 await this.db
-                    .collection('categories')
+                    .collection('roles')
                     .find(
                         { _id: ObjectId(request.params.id) }
                     )
@@ -21,51 +21,46 @@ export default class Category extends Controller {
         response.json(
             await (
                 await this.db
-                    .collection('categories')
-                    .find().sort({ order: 1 })
+                    .collection('roles')
+                    .find().sort({ level: 1 })
             ).toArray()
         );
     }
 
     insertOne = async (request, response) => {
-        if ((response.locals.user.role.level > 2)) {
+        if ((response.locals.user.role.level > 1)) {
             return response.sendStatus(403);
         }
-        const category = { ...request.body };
-        category.time = new Date().toISOString();
-        category.alias = this.toAlias(category.title);
-        category.order = parseInt(category.order);
-        category.user = response.locals.user._id;
+        const role = { ...request.body };
+        role.level = parseInt(role.level);
         const result = await this.db
-            .collection('categories')
-            .insertOne(category);
+            .collection('roles')
+            .insertOne(role);
         response.end(result.insertedId.toString());
     }
 
     updateOne = async (request, response) => {
-        if ((response.locals.user.role.level > 2)) {
+        if ((response.locals.user.role.level > 1)) {
             return response.sendStatus(403);
         }
-        const category = { ...request.body };
-        category.alias = this.toAlias(category.title);
-        category.order = parseInt(category.order);
-        delete category._id;
-        delete category.user;
+        const role = { ...request.body };
+        role.level = parseInt(role.level);
+        delete role._id;
         await this.db
-            .collection('categories')
+            .collection('roles')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
-                { $set: category }
+                { $set: role }
             );
         response.end();
     }
 
     deleteOne = async (request, response) => {
-        if ((response.locals.user.role.level > 2)) {
+        if ((response.locals.user.role.level > 1)) {
             return response.sendStatus(403);
         }
         await this.db
-            .collection('categories')
+            .collection('roles')
             .deleteOne(
                 { _id: new ObjectId(request.params.id) }
             );

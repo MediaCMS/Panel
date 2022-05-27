@@ -16,6 +16,9 @@ export default {
     Page: {
         path: "/сторінки",
     },
+    Role: {
+        path: "/ролі",
+    },
     User: {
         path: "/користувачі",
         actions: {

@@ -90,13 +90,12 @@ export function Editor() {
                 { title: 'Закрити', url: '/категорії/список' }
             ]
         })
-        if (params?.id) {
-            const category = await context.api.get(['категорії', params.id])
-            if (!category) {
-                return context.setMessage('Категорія не знайдена')
-            }
-            setCategory(category)
+        if (!params?.id) return
+        const category = await context.api.get(['категорії', params.id])
+        if (!category) {
+            return context.setMessage('Категорія не знайдена')
         }
+        setCategory(categoryPrev => ({ ...categoryPrev, ...category }))
     }, [])
 
     return (
