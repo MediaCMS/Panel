@@ -103,10 +103,10 @@ export function Editor() {
             if (!article) {
                 return context.setMessage('Стаття не знайдена')
             }
+            setArticle(article)
         } else {
-            const article = { ...article, ...{ category: categories[0]._id } }
+            setArticle(article => ({ ...article, ...{ category: categories[0]._id } }))
         }
-        setArticle(articlePrev => ({ ...articlePrev, ...article }))
     }, [])
 
     return (

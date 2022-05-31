@@ -93,7 +93,7 @@ export function Editor() {
         if (!tag) {
             return context.setMessage('Мітка не знайдена')
         }
-        setTag(tagPrev => ({ ...tagPrev, ...tag }))
+        setTag(tag)
     }, [])
 
     return (

@@ -1,12 +1,12 @@
 "use strict"
 
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useMemo } from "react"
 import { NavLink, Outlet, useNavigate } from "react-router-dom"
 import axios from "axios"
 import settings from "../settings.js"
-import menu from "../menu.js"
+import menuStorage from "../menu.js"
 
-const user = JSON.parse(localStorage.getItem('user'))
+const userStorage = JSON.parse(localStorage.getItem('user'))
 
 const api = axios.create({
     baseURL: settings.api.url,
@@ -32,12 +32,9 @@ export default function (props) {
         {title: '', router: ['', ''], submenu: []}
     )
     const [message, setMessage] = useState()
+    const [user, setUser] = useState(userStorage)
+    const [menu, setMenu] = useState({ items: menuStorage })
     const navigate = useNavigate()
-
-    const setHeader = (params) => {
-        setParams(params)
-        setMessage(null)
-    }
 
     useMemo(() => {
         api.interceptors.response.use(function (response) {
@@ -70,7 +67,7 @@ export default function (props) {
     return props.template ? (
         <>
             <header>
-                <Navigation />
+                <Navigation items={menu.items} user={user} />
             </header>
             <main className="container" >
                 <div id="header" className="my-5 d-flex">
@@ -96,16 +93,16 @@ export default function (props) {
                     className="alert alert-info my-5 box"
                     role="alert"
                 />
-                <Menu />
+                <Menu items={menu.items} user={user} />
                 <p className="text-muted small mt-3" title={settings.slogan}>
                     {settings.name} &copy; {settings.copyright}
                 </p>
             </footer>
         </>
-    ) : <Outlet context={{api}} />
+    ) : <Outlet context={{api, setMenu, setUser}} />
 }
 
-function Navigation() {
+function Navigation(props) {
 
     return (
         <nav className="navbar navbar-expand-sm navbar-light bg-light">
@@ -120,8 +117,8 @@ function Navigation() {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-lg-0">
-                        {menu.map((item, index) => (
-                            (item.access >= user.role.level) ? (
+                        {props.items.map((item, index) => (
+                            (item.access >= props.user.role.level) ? (
                                 <li className="nav-item" key={index} title={item.description}>
                                     <NavLink to={encodeURI(item.url)} className="nav-link" >
                                         {item.title}
@@ -131,23 +128,25 @@ function Navigation() {
                         ))}
                     </ul>
                 </div>
-                {<div title={user.role.title + ' ' + user.description}>
-                    {user.title}
-                    {user.image ? (
-                        <img src={settings.images.url + user.image} height="36px" className="rounded-3 ms-3" />
-                    ) : null}
-                </div>}
+                {props?.user ? (
+                    <div title={props.user.role.title + ' ' + props.user.description}>
+                        {props.user.title}
+                        {props.user.image ? (
+                            <img src={settings.images.url + props.user.image} height="36px" className="rounded-3 ms-3" />
+                        ) : null}
+                    </div>
+                ) : null}
             </div>
         </nav>
     )
 }
 
-function Menu() {
+function Menu(props) {
 
     return (
         <ul className="nav justify-content-center">
-            {menu.map((item, index) => (
-                (item.access >= user.role.level) ? (
+            {props.items.map((item, index) => (
+                (item.access >= props.user.role.level) ? (
                     <li className="nav-item" key={index}>
                         <NavLink
                             to={encodeURI(item.url)}

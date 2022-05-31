@@ -93,7 +93,7 @@ export function Editor() {
         if (!role) {
             return context.setMessage('Роль не знайдена')
         }
-        setRole(rolePrev => ({ ...rolePrev, ...role }))
+        setRole(role)
     }, [])
 
     return (

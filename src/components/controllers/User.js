@@ -7,6 +7,8 @@ import {
 import Form, { Image, Switch } from "../Form.js"
 import { Buffer } from "buffer"
 import MD5 from "crypto-js/md5.js"
+import settings from "../../settings.js"
+import menu from "../../menu.js"
 
 export function Index() {
 
@@ -116,10 +118,10 @@ export function Editor() {
             if (!user) {
                 return context.setMessage('Користувач не знайдений')
             }
+            setUser(user)
         } else {
-            const user = { ...user, ...{ role: roles[5]._id } }
+            setUser(user => ({ ...user, ...{ role: roles[5]._id } }))
         }
-        setUser(userPrev => ({ ...userPrev, ...user }))
     }, [])
 
     return (
@@ -134,8 +136,8 @@ export function Editor() {
                 title="Skype" placeholder="skype ..." required />
             <input type="email" name="email" value={user.email} pattern=".*"
                 title="Пошта" placeholder="example@domain.com" required />
-            <input type="password" name="password" pattern=".*{8,32}" title="Пароль" />
-            <input type="password" name="password2" pattern=".*{8,32}" title="Пароль (повторно)" />
+            <input type="password" name="password" pattern=".*{8,32}" title="Пароль" autoComplete="off" />
+            <input type="password" name="password2" pattern=".*{8,32}" title="Пароль (повторно)" autoComplete="off" />
             <Image name="image" value={user.image} title="Зображення" />
             <select name="role" value={user?.role} title="Роль">
                 {roles?.map(role => (
@@ -161,6 +163,8 @@ export function Login() {
             const user = await context.api.get('/користувачі/вхід', { 
                 headers: { 'Authorization': `Basic ${authorization}}` }
             })
+            context.setUser(user)
+            context.setMenu({ items: menu })
             localStorage.setItem('user', JSON.stringify(user))
             navigate('/статті/список')
         } catch (error) {
@@ -200,6 +204,8 @@ export function Logout() {
 
     useEffect(async () => {
         await context.api.get('/користувачі/вихід')
+        context.setUser(null)
+        context.setMenu({ items: [] })
         localStorage.removeItem('user')
         navigate('/доступ/вхід')
     }, [])

@@ -93,7 +93,7 @@ export function Editor() {
         if (!page) {
             return context.setMessage('Сторінка не знайдена')
         }
-        setPage(pagePrev => ({ ...pagePrev, ...page }))
+        setPage(page)
     }, [])
 
     return (

@@ -95,7 +95,7 @@ export function Editor() {
         if (!category) {
             return context.setMessage('Категорія не знайдена')
         }
-        setCategory(categoryPrev => ({ ...categoryPrev, ...category }))
+        setCategory(category)
     }, [])
 
     return (
