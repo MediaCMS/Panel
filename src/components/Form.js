@@ -5,7 +5,7 @@ import { useOutletContext } from "react-router-dom"
 import axios from "axios"
 import settings from "../settings.js"
 
-export default function Form(props) {
+export default function (props) {
 
     const setField = async (name, value) => {
         await props.setData(data => (

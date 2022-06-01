@@ -1,7 +1,7 @@
 "use strict"
 
 import React, { useState, useMemo } from "react"
-import { NavLink, Outlet, useNavigate } from "react-router-dom"
+import { NavLink, Outlet, Navigate, useNavigate } from "react-router-dom"
 import axios from "axios"
 import settings from "../settings.js"
 import menuStorage from "../menu.js"
@@ -64,42 +64,46 @@ export default function (props) {
         })
     }, [])
 
-    return props.template ? (
-        <>
-            <header>
-                <Navigation items={menu.items} user={user} />
-            </header>
-            <main className="container" >
-                <div id="header" className="my-5 d-flex">
-                    <h1 className="me-auto">{params.title}</h1>
-                    <ul className="nav">
-                        {params.submenu.map(item => (
-                            <li className="nav-item" key={item.url}>
-                                <NavLink to={encodeURI(item.url)} className="nav-link" >
-                                    {item.title}
-                                </NavLink>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                {message ? (<div className="box alert alert-danger text-center">{message}</div>) : null}
-                <div id="body" className={params.router[0] + ' ' + params.router[1]}>
-                    <Outlet context={{api, setParams, setMessage}} />
-                </div>
-            </main>
-            <footer className="text-center mt-5">
-                <div
-                    dangerouslySetInnerHTML={{ __html: settings.alert }}
-                    className="alert alert-info my-5 box"
-                    role="alert"
-                />
-                <Menu items={menu.items} user={user} />
-                <p className="text-muted small mt-3" title={settings.slogan}>
-                    {settings.name} &copy; {settings.copyright}
-                </p>
-            </footer>
-        </>
-    ) : <Outlet context={{api, setMenu, setUser}} />
+    return props.template ? 
+        user ? (
+            <React.StrictMode>
+                <header>
+                    <Navigation items={menu.items} user={user} />
+                </header>
+                <main className="container" >
+                    <div id="header" className="my-5 d-flex">
+                        <h1 className="me-auto">{params.title}</h1>
+                        <ul className="nav">
+                            {params.submenu.map(item => (
+                                <li className="nav-item" key={item.url}>
+                                    <NavLink to={encodeURI(item.url)} className="nav-link" >
+                                        {item.title}
+                                    </NavLink>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    {message 
+                        ? (<div className="box alert alert-danger text-center">{message}</div>)
+                        : null}
+                    <div id="body" className={params.router[0] + ' ' + params.router[1]}>
+                        <Outlet context={{api, setParams, setMessage}} />
+                    </div>
+                </main>
+                <footer className="text-center mt-5">
+                    <div
+                        dangerouslySetInnerHTML={{ __html: settings.alert }}
+                        className="alert alert-info my-5 box"
+                        role="alert"
+                    />
+                    <Menu items={menu.items} user={user} />
+                    <p className="text-muted small mt-3" title={settings.slogan}>
+                        {settings.name} &copy; {settings.copyright}
+                    </p>
+                </footer>
+            </React.StrictMode>
+        ) : <Navigate to={encodeURI('/доступ/вхід')} replace />
+    : <Outlet context={{api, setMenu, setUser}} />
 }
 
 function Navigation(props) {

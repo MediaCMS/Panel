@@ -49,7 +49,5 @@ for await (const route of routes[1].children) {
 
 export default function () {
 
-    const element = useRoutes(routes)
-
-    return element
+    return useRoutes(routes)
 }

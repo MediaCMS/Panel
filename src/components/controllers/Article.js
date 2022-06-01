@@ -5,6 +5,7 @@ import {
     useParams, useSearchParams, useNavigate, useOutletContext, generatePath
 } from "react-router-dom"
 import Form, { Image, Autocomplete, Switch } from "../Form.js"
+import Table from "../Table.js"
 
 export function Index() {
 
@@ -29,34 +30,23 @@ export function Index() {
                 { title: 'Створити', url: '/статті/редактор' }
             ]
         })
-        setArticles({ items:
-            await context.api.get('/статті')
+        setArticles({
+            items: await context.api.get('/статті')
         })
     }, [searchParams])
 
-    return (
-        <table className="table table-hover">
-            <thead>
-                <tr className="text-center">
-                    <th scope="col">#</th>
-                    <th scope="col">Дата</th>
-                    <th scope="col">Заголовок</th>
-                    <th scope="col">Автор</th>
-                </tr>
-            </thead>
-            <tbody>
-                {articles.items.map((article, index) => (
-                    <tr key={article._id} role="button" onClick={() => handleClick(article._id)}
-                        className={!article.status ? 'text-muted' : ''}>
-                        <th scope="row">{index + 1}</th>
-                        <td className="text-nowrap">{article.time.split('T')[0]}</td>
-                        <td>{article.title}</td>
-                        <td>{article.user}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    )
+    return articles.items.length ? (
+        <Table
+            columns={[
+                { title: 'Дата', class: 'text-nowrap'}, 'Заголовок', 'Автор'
+            ]} rows={
+                articles.items.map(article => ({
+                    id: article._id, status: article.status,
+                    values: [article.time.split('T')[0], article.title, article.user]
+                }))
+            } onClick={handleClick}
+        />
+    ) : null
 }
 
 export function Editor() {
