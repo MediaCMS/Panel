@@ -5,6 +5,7 @@ import {
     useParams, useSearchParams, useNavigate, useOutletContext, generatePath
 } from "react-router-dom"
 import Form, { Image, Switch } from "../Form.js"
+import Table from "../Table.js"
 
 export function Index() {
 
@@ -30,30 +31,19 @@ export function Index() {
             ]
         })
         setTags({ items:
-            await context.api.get('/мітки')
+            await context.api.get('/мітки', { params: { 'сортування': 'title' } })
         })
     }, [searchParams])
 
     return (
-        <table className="table table-hover">
-            <thead>
-                <tr className="text-center">
-                    <th scope="col">#</th>
-                    <th scope="col">Заголовок</th>
-                    <th scope="col">Посилання</th>
-                </tr>
-            </thead>
-            <tbody>
-                {tags.items.map((tag, index) => (
-                    <tr key={tag._id} role="button" onClick={() => handleClick(tag._id)}
-                        className={'text-center' + (!tag.status ? ' text-muted' : '') }>
-                        <th scope="row">{index + 1}</th>
-                        <td>{tag.title}</td>
-                        <td>{tag.alias}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <Table onClick={handleClick}
+            columns={[
+                { title: 'Заголовок', class: 'text-center'},
+                { title: 'Посилання', class: 'text-center'}
+            ]} rows={tags.items.length ? tags.items.map(tag => ({
+                id: tag._id, status: tag.status, values: [tag.title, tag.alias]
+            })) : []}
+        />
     )
 }
 
@@ -93,7 +83,7 @@ export function Editor() {
         if (!tag) {
             return context.setMessage('Мітка не знайдена')
         }
-        setTag(tag)
+        setTag(tagPrev => ({ ...tagPrev, ...tag }))
     }, [])
 
     return (

@@ -28,7 +28,7 @@ export default class User extends Controller {
                         { from: "roles", localField: "role", foreignField: "_id", as: "role" }
                     },
                     { $project:
-                        { time: 1, title: 1, role: { $arrayElemAt: ["$role.title", 0] }, status: 1 }
+                        { time: 1, title: 1, role: { $arrayElemAt: ["$role", 0] }, status: 1 }
                     },
                     { $match: filter.match },
                     { $sort: filter.sort },

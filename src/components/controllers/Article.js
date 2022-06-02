@@ -35,18 +35,18 @@ export function Index() {
         })
     }, [searchParams])
 
-    return articles.items.length ? (
-        <Table
+    return (
+        <Table onClick={handleClick}
             columns={[
-                { title: 'Дата', class: 'text-nowrap'}, 'Заголовок', 'Автор'
-            ]} rows={
-                articles.items.map(article => ({
-                    id: article._id, status: article.status,
-                    values: [article.time.split('T')[0], article.title, article.user]
-                }))
-            } onClick={handleClick}
+                { title: 'Дата', class: 'text-nowrap'},
+                { title: 'Заголовок', class: 'text-start' },
+                { title: 'Автор', class: 'text-start' }
+            ]} rows={articles.items.length ? articles.items.map(article => ({
+                id: article._id, status: article.status,
+                values: [article.time.split('T')[0], article.title, article.user]
+            })) : []}
         />
-    ) : null
+    )
 }
 
 export function Editor() {
@@ -93,9 +93,9 @@ export function Editor() {
             if (!article) {
                 return context.setMessage('Стаття не знайдена')
             }
-            setArticle(article)
+            setArticle(articlePrev => ({ ...articlePrev, ...article }))
         } else {
-            setArticle(article => ({ ...article, ...{ category: categories[0]._id } }))
+            setArticle(articlePrev => ({ ...articlePrev, ...{ category: categories[0]._id } }))
         }
     }, [])
 

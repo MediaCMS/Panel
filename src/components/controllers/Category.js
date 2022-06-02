@@ -5,6 +5,7 @@ import {
     useParams, useSearchParams, useNavigate, useOutletContext, generatePath
 } from "react-router-dom"
 import Form, { Image, Switch } from "../Form.js"
+import Table from "../Table.js"
 
 export function Index() {
 
@@ -30,32 +31,21 @@ export function Index() {
             ]
         })
         setCategories({ items:
-            await context.api.get('/категорії')
+            await context.api.get('/категорії', { params: { 'сортування': 'order' } })
         })
     }, [searchParams])
 
     return (
-        <table className="table table-hover">
-            <thead>
-                <tr className="text-center">
-                    <th scope="col">#</th>
-                    <th scope="col">Заголовок</th>
-                    <th scope="col">Посилання</th>
-                    <th scope="col">Сортування</th>
-                </tr>
-            </thead>
-            <tbody>
-                {categories.items.map((category, index) => (
-                    <tr key={category._id} role="button" onClick={() => handleClick(category._id)}
-                        className={'text-center' + (!category.status ? ' text-muted' : '') }>
-                        <th scope="row">{index + 1}</th>
-                        <td>{category.title}</td>
-                        <td>{category.alias}</td>
-                        <td>{category.order}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <Table onClick={handleClick}
+            columns={[
+                { title: 'Заголовок', class: 'text-center'},
+                { title: 'Посилання', class: 'text-center'},
+                { title: 'Сортування', class: 'text-center'}
+            ]} rows={categories.items.length ? categories.items.map(category => ({
+                id: category._id, status: category.status,
+                values: [category.title, category.alias, category.order]
+            })) : []}
+        />
     )
 }
 
@@ -95,7 +85,7 @@ export function Editor() {
         if (!category) {
             return context.setMessage('Категорія не знайдена')
         }
-        setCategory(category)
+        setCategory(categoryPrev => ({ ...categoryPrev, ...category }))
     }, [])
 
     return (

@@ -5,6 +5,7 @@ import {
     useParams, useSearchParams, useNavigate, useOutletContext, generatePath
 } from "react-router-dom"
 import Form, { Image, Switch } from "../Form.js"
+import Table from "../Table.js"
 
 export function Index() {
 
@@ -30,30 +31,19 @@ export function Index() {
             ]
         })
         setRoles({ items:
-            await context.api.get('/ролі')
+            await context.api.get('/ролі', { params: { 'сортування': 'level' } })
         })
     }, [searchParams])
 
     return (
-        <table className="table table-hover">
-            <thead>
-                <tr className="text-center">
-                    <th scope="col">#</th>
-                    <th scope="col">Заголовок</th>
-                    <th scope="col">Рівень</th>
-                </tr>
-            </thead>
-            <tbody>
-                {roles.items.map((role, index) => (
-                    <tr key={role._id} role="button" onClick={() => handleClick(role._id)}
-                        className={'text-center' + (!role.status ? ' text-muted' : '') }>
-                        <th scope="row">{index + 1}</th>
-                        <td>{role.title}</td>
-                        <td>{role.level}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <Table onClick={handleClick}
+            columns={[
+                { title: 'Заголовок', class: 'text-center'},
+                { title: 'Рівень', class: 'text-center'}
+            ]} rows={roles.items.length ? roles.items.map(role => ({
+                id: role._id, status: role.status, values: [role.title, role.level]
+            })) : []}
+        />
     )
 }
 
@@ -93,7 +83,7 @@ export function Editor() {
         if (!role) {
             return context.setMessage('Роль не знайдена')
         }
-        setRole(role)
+        setRole(rolePrev => ({ ...rolePrev, ...role }))
     }, [])
 
     return (

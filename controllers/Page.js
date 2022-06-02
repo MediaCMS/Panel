@@ -18,11 +18,12 @@ export default class Page extends Controller {
     }
 
     findMany = async (request, response) => {
+        const filter = this.getFilter(request.query)
         response.json(
             await (
                 await this.db
                     .collection('pages')
-                    .find().sort({ title: 1 })
+                    .find().sort(filter.sort)
             ).toArray()
         )
     }

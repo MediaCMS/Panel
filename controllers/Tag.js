@@ -18,9 +18,7 @@ export default class Tag extends Controller {
     }
 
     findMany = async (request, response) => {
-        const filter = this.getFilter(
-            { ['сортування-поле']: 'title', ...request.query }
-        )
+        const filter = this.getFilter(request.query)
         response.json(
             await (
                 await this.db

@@ -18,7 +18,7 @@ export default function (props) {
                 {props.rows.map((row, index) => (
                     <tr key={row.id} role="button" onClick={() => props.onClick(row.id)}
                         className={(row?.status !== null) ? (!row.status ? 'text-muted' : '') : null}>
-                        <th scope="row">{index + 1}</th>
+                        <th scope="row" className="text-center">{index + 1}</th>
                         {row.values.map((value, index) => (
                             <td className={props.columns[index]?.class} key={index}>{value}</td>
                         ))}

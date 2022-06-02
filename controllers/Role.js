@@ -18,11 +18,12 @@ export default class Role extends Controller {
     }
 
     findMany = async (request, response) => {
+        const filter = this.getFilter(request.query)
         response.json(
             await (
                 await this.db
                     .collection('roles')
-                    .find().sort({ level: 1 })
+                    .find().sort(filter.sort)
             ).toArray()
         );
     }

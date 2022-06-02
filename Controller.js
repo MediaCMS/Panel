@@ -28,11 +28,12 @@ export default class Controller {
         if (typeof query['автор'] !== 'undefined') {
             filter.match['user._id'] = new ObjectId(query['автор']);
         } 
-        if (typeof query['сортування-поле'] !== 'undefined') {
-            const direction = (typeof query['сортування-напрям'] !== 'undefined')
-                ? parseInt(query['сортування-напрям'])
-                : 1;
-            filter.sort = { [query['сортування-поле']] : direction};
+        if (typeof query['сортування'] !== 'undefined') {
+            filter.sort = {};
+            query['сортування'].split(',').forEach(item => {
+                const [field, direction] = item.split(':');
+                filter.sort[field] = parseInt(direction ?? 1);
+            });
         }
         if (typeof query['обмеження'] !== 'undefined') {
             filter.limit = parseInt(query['обмеження']);

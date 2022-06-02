@@ -18,11 +18,12 @@ export default class Category extends Controller {
     }
 
     findMany = async (request, response) => {
+        const filter = this.getFilter(request.query);
         response.json(
             await (
                 await this.db
                     .collection('categories')
-                    .find().sort({ order: 1 })
+                    .find().sort(filter.sort)
             ).toArray()
         );
     }

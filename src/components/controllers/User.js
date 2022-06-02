@@ -5,6 +5,7 @@ import {
     useParams, useSearchParams, useNavigate, useOutletContext, generatePath
 } from "react-router-dom"
 import Form, { Image, Switch } from "../Form.js"
+import Table from "../Table.js"
 import { Buffer } from "buffer"
 import MD5 from "crypto-js/md5.js"
 import settings from "../../settings.js"
@@ -34,32 +35,23 @@ export function Index() {
             ]
         })
         setUsers({ items:
-            await context.api.get('/користувачі')
+            await context.api.get('/користувачі', {
+                params: { 'сортування': 'role.level:1,title:1' }
+            })
         })
     }, [searchParams])
 
     return (
-        <table className="table table-hover">
-            <thead>
-                <tr className="text-center">
-                    <th scope="col">#</th>
-                    <th scope="col">Дата</th>
-                    <th scope="col">Заголовок</th>
-                    <th scope="col">Роль</th>
-                </tr>
-            </thead>
-            <tbody>
-                {users.items.map((user, index) => (
-                    <tr key={user._id} role="button" onClick={() => handleClick(user._id)}
-                        className={!user.status ? ' text-muted' : ''}>
-                        <th scope="row" className="text-center">{index + 1}</th>
-                        <td className="text-nowrap">{user.time.split('T')[0]}</td>
-                        <td>{user.title}</td>
-                        <td className="text-center">{user.role}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <Table onClick={handleClick}
+            columns={[
+                { title: 'Дата', class: 'text-center text-nowrap'},
+                { title: 'Заголовок', class: 'text-start' },
+                { title: 'Роль', class: 'text-center' }
+            ]} rows={users.items.length ? users.items.map(user => ({
+                id: user._id, status: user.status,
+                values: [user.time.split('T')[0], user.title, user.role.title]
+            })) : []}
+        />
     )
 }
 
@@ -118,9 +110,9 @@ export function Editor() {
             if (!user) {
                 return context.setMessage('Користувач не знайдений')
             }
-            setUser(user)
+            setUser(userPrev => ({ ...userPrev, ...user }))
         } else {
-            setUser(user => ({ ...user, ...{ role: roles[5]._id } }))
+            setUser(userPrev => ({ ...userPrev, ...{ role: roles[4]._id } }))
         }
     }, [])
 
@@ -133,7 +125,7 @@ export function Editor() {
             <input type="text" name="phone" value={user.phone} pattern=".*"
                 title="Телефон" placeholder="+380 67 123-45-67" />
             <input type="text" name="skype" value={user.skype} pattern=".*"
-                title="Skype" placeholder="skype ..." required />
+                title="Skype" placeholder="skype ..." />
             <input type="email" name="email" value={user.email} pattern=".*"
                 title="Пошта" placeholder="example@domain.com" required />
             <input type="password" name="password" pattern=".*{8,32}" title="Пароль" autoComplete="off" />

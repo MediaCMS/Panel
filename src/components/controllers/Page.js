@@ -5,6 +5,7 @@ import {
     useParams, useSearchParams, useNavigate, useOutletContext, generatePath
 } from "react-router-dom"
 import Form, { Image, Switch } from "../Form.js"
+import Table from "../Table.js"
 
 export function Index() {
 
@@ -30,30 +31,19 @@ export function Index() {
             ]
         })
         setPages({ items:
-            await context.api.get('/сторінки')
+            await context.api.get('/сторінки', { params: { 'сортування': 'title' } })
         })
     }, [searchParams])
 
     return (
-        <table className="table table-hover">
-            <thead>
-                <tr className="text-center">
-                    <th scope="col">#</th>
-                    <th scope="col">Заголовок</th>
-                    <th scope="col">Посилання</th>
-                </tr>
-            </thead>
-            <tbody>
-                {pages.items.map((page, index) => (
-                    <tr key={page._id} role="button" onClick={() => handleClick(page._id)}
-                        className={'text-center' + (!page.status ? ' text-muted' : '') }>
-                        <th scope="row">{index + 1}</th>
-                        <td>{page.title}</td>
-                        <td>{page.alias}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
+        <Table onClick={handleClick}
+            columns={[
+                { title: 'Заголовок', class: 'text-center'},
+                { title: 'Посилання', class: 'text-center'}
+            ]} rows={pages.items.length ? pages.items.map(page => ({
+                id: page._id, status: page.status, values: [page.title, page.alias]
+            })) : []}
+        />
     )
 }
 
@@ -93,7 +83,7 @@ export function Editor() {
         if (!page) {
             return context.setMessage('Сторінка не знайдена')
         }
-        setPage(page)
+        setPage(pagePrev => ({ ...pagePrev, ...page }))
     }, [])
 
     return (
