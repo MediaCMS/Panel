@@ -3,13 +3,13 @@
 import { ObjectId } from "mongodb";
 import Controller from "../Controller.js";
 
-export default class Article extends Controller {
+export default class Publication extends Controller {
 
     findOne = async (request, response) => {
         response.json(
             await (
                 await this.db
-                    .collection('articles')
+                    .collection('publications')
                     .aggregate([
                         { $lookup: {
                             from: "tags", localField: "tags", foreignField: "_id", as: "tags"
@@ -29,7 +29,7 @@ export default class Article extends Controller {
         response.json(
             await (
                 await this.db
-                    .collection('articles')
+                    .collection('publications')
                     .aggregate([
                         { $lookup: 
                             { from: "users", localField: "user", foreignField: "_id", as: "user" }
@@ -47,17 +47,17 @@ export default class Article extends Controller {
     }
 
     insertOne = async (request, response) => {
-        const article = { ...request.body };
-        article.time = new Date().toISOString();
-        article.alias = this.toAlias(article.title);
-        article.order = parseInt(article.order);
-        if (article?.tags) {
-            article.tags = article.tags.map(tag => ObjectId(tag));
+        const publication = { ...request.body };
+        publication.time = new Date().toISOString();
+        publication.alias = this.toAlias(publication.title);
+        publication.order = parseInt(publication.order);
+        if (publication?.tags) {
+            publication.tags = publication.tags.map(tag => ObjectId(tag));
         }
-        article.user = response.locals.user._id;
+        publication.user = response.locals.user._id;
         const result = await this.db
-            .collection('articles')
-            .insertOne(article);
+            .collection('publications')
+            .insertOne(publication);
         response.end(result.insertedId.toString());
     }
 
@@ -66,20 +66,20 @@ export default class Article extends Controller {
             && (response.locals.user._id !== request.body.user)) {
             return response.sendStatus(403);
         }
-        const article = { ...request.body };
-        article.time = new Date(article.time);
-        article.alias = this.toAlias(article.title);
-        article.category = ObjectId(article.category);
-        if (article?.tags) {
-            article.tags = article.tags.map(tag => ObjectId(tag));
+        const publication = { ...request.body };
+        publication.time = new Date(publication.time);
+        publication.alias = this.toAlias(publication.title);
+        publication.category = ObjectId(publication.category);
+        if (publication?.tags) {
+            publication.tags = publication.tags.map(tag => ObjectId(tag));
         }
-        delete article._id;
-        delete article.user;
+        delete publication._id;
+        delete publication.user;
         await this.db
-            .collection('articles')
+            .collection('publications')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
-                { $set: article }
+                { $set: publication }
             );
         response.end();
     }
@@ -89,7 +89,7 @@ export default class Article extends Controller {
             return response.sendStatus(403);
         }
         await this.db
-            .collection('articles')
+            .collection('publications')
             .deleteOne(
                 { _id: new ObjectId(request.params.id) }
             );

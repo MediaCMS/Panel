@@ -10,21 +10,27 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
     img {border-radius: 1%;}
 
     main {
-      #body.editor {max-width: 960px; margin: 5rem auto;
-        form {
-          input[type='datetime-local'], input[type='number'], select {width: auto;}
-          img {
-            &:hover {opacity: 0.3; cursor: pointer;}
-          }
-          div.autocomplete {
-            label {
-              &:hover {color: #fff; border-color: #dc3545; background-color: #dc3545;}
+      #body {
+        &.index {}
+        &.editor {max-width: 960px; margin: 5rem auto;
+          form {
+            input[type='datetime-local'], input[type='number'], select {width: auto;}
+            img {
+              &:hover {opacity: 0.3; cursor: pointer;}
             }
-            input[type='text'] {width: 150px;}
+            div.autocomplete {
+              label {
+                &:hover {color: #fff; border-color: #dc3545; background-color: #dc3545;}
+              }
+              input[type='text'] {width: 150px;}
+            }
           }
         }
       }
       .box {max-width: 768px; font-weight: 300; margin: 50px auto;}
+      .mw-sm {max-width: 576px;}
+      .mw-md {max-width: 768px;}
+      .mw-lg {max-width: 992px;}
       .screen {min-width: 100vw; height: 50vh;text-align: center;vertical-align: middle; display: table-cell;}
     }
 

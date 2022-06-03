@@ -52,22 +52,36 @@ app.use(function (request, response, next) {
     next();
 });
 
+console.log();
 for (const [routeName, route] of Object.entries(routes)) {
     const path = encodeURI(settings.path + route.path);
     const controller = controllers[routeName];
-    console.log(routeName, "    \t", decodeURI(path));
+    console.log(
+        ((typeof route.kit === 'undefined') || (route.kit === true)) ? '+' : '-',
+        routeName.padEnd(16, ' '),
+        route.path
+    );
     if (route?.actions) {
         for (const [actionName, action] of Object.entries(route.actions)) {
-            console.log(" ", actionName, "\t", decodeURI(path + action.path));
+            console.log(
+                '   ',
+                actionName.padEnd(14, ' '), decodeURI(route.path + action.path),
+                ` [${action?.method ?? 'get'}]`
+            );
             router[action?.method ?? 'get'](path + encodeURI(action.path), controller[actionName]);
         }
     }
-    router.get(path,  controller['findMany']);
-    router.get(path + '/:id',  controller['findOne']);
-    router.post(path,  controller['insertOne']);
-    router.put(path + '/:id',  controller['updateOne']);
-    router.delete(path + '/:id',  controller['deleteOne']);
+    if ((typeof route.kit === 'undefined') || (route.kit === true)) {
+        router.get(path,  controller['findMany']);
+        router.get(path + '/:id',  controller['findOne']);
+        router.post(path,  controller['insertOne']);
+        router.put(path + '/:id',  controller['updateOne']);
+        router.delete(path + '/:id',  controller['deleteOne']);
+    } else {
+
+    }
 }
+console.log();
 
 app.use('/', router);
 

@@ -36,7 +36,7 @@ export function Index() {
     }, [searchParams])
 
     return (
-        <Table onClick={handleClick}
+        <Table className="mw-sm" onClick={handleClick}
             columns={[
                 { title: 'Заголовок', class: 'text-center'},
                 { title: 'Рівень', class: 'text-center'}
@@ -66,6 +66,9 @@ export function Editor() {
     }
 
     const handleDelete = async () => {
+        if (role?.image) {
+            return alert('Спершу видаліть фото')
+        }
         await context.api.delete(['ролі', params.id])
         navigate('/ролі/список')
     }

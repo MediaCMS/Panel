@@ -42,7 +42,7 @@ export function Index() {
     }, [searchParams])
 
     return (
-        <Table onClick={handleClick}
+        <Table className="mw-lg" onClick={handleClick}
             columns={[
                 { title: 'Дата', class: 'text-center text-nowrap'},
                 { title: 'Заголовок', class: 'text-start' },
@@ -91,6 +91,9 @@ export function Editor() {
     }
 
     const handleDelete = async () => {
+        if (user?.image) {
+            return alert('Спершу видаліть фото')
+        }
         await context.api.delete(['користувачі', params.id])
         navigate('/користувачі/список')
     }
@@ -158,7 +161,7 @@ export function Login() {
             context.setUser(user)
             context.setMenu({ items: menu })
             localStorage.setItem('user', JSON.stringify(user))
-            navigate('/статті/список')
+            navigate('/публікації/список')
         } catch (error) {
             console.log(error)
             if (error.response.status === 401) {

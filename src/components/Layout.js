@@ -74,7 +74,7 @@ export default function (props) {
                     <div id="header" className="my-5 d-flex">
                         <h1 className="me-auto">{params.title}</h1>
                         <ul className="nav">
-                            {params.submenu.map(item => (
+                            {(params?.submenu ?? []).map(item => (
                                 <li className="nav-item" key={item.url}>
                                     <NavLink to={encodeURI(item.url)} className="nav-link" >
                                         {item.title}

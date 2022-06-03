@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import { useOutletContext } from "react-router-dom"
 
-export default function () {
+export function Index() {
 
     const [logs, setLogs] = useState({ items: [] })
     const context = useOutletContext()
@@ -43,3 +43,5 @@ export default function () {
         </table>
     )
 }
+
+export default { Index }

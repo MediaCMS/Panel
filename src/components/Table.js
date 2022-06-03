@@ -5,7 +5,7 @@ import React from "react"
 export default function (props) {
 
     return (
-        <table className="table table-hover">
+        <table className={'table table-hover mx-auto ' + props.className}>
             <thead>
                 <tr className="text-center">
                     <th scope="col">#</th>
