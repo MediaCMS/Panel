@@ -137,7 +137,8 @@ function Navigation(props) {
                         ))}
                         {(props.items.length > settings.menu) ? (
                             <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">...</a>
+                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                    role="button" data-bs-toggle="dropdown" aria-expanded="false">...</a>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                     {props.items.slice(settings.menu).map((item, index) => (
                                         <li key={index} title={item.description}>
@@ -150,7 +151,7 @@ function Navigation(props) {
                             </li>
                         ) : null}
                         <li className="nav-item" title="Вихід з панелі куерування">
-                            <NavLink to={encodeURI('/доступ/вихід')} className="nav-link" >Вихід</NavLink>
+                            <NavLink to={encodeURI('/доступ/вихід')} className="nav-link">Вихід</NavLink>
                         </li>
                     </ul>
                 </div>
@@ -158,7 +159,8 @@ function Navigation(props) {
                     <div title={props.user.role.title + ' ' + props.user.description}>
                         {props.user.title}
                         {props.user.image ? (
-                            <img src={settings.images.url + props.user.image} height="36px" className="rounded-3 ms-3" />
+                            <img src={settings.images.url + props.user.image}
+                                height="36px" className="rounded-3 ms-3" />
                         ) : null}
                     </div>
                 ) : null}

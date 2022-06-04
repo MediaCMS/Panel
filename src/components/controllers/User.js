@@ -164,10 +164,12 @@ export function Login() {
             navigate('/публікації/список')
         } catch (error) {
             console.log(error)
-            if (error.response.status === 401) {
-                alert('Неправильний логін та пароль');
+            if (error?.response) {
+                if (error.response.status === 401) {
+                    alert('Неправильний логін та пароль')
+                }
             } else {
-                alert('Під час авторизації сталась невідома помилка');
+                alert('Під час авторизації сталась невідома помилка')
             }
         }
     }
