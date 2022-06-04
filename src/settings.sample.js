@@ -18,6 +18,7 @@ export default {
         "січня", "лютого", "березня", "квітня", "травня", "червня",
         "липня", "серпня", "вересня", "жовтня", "листопада", "грудня"
     ],
+    menu: 5,
     notFound: "Сторінка не знайдена",
     alert: "Демонстраційний сайт <a href=\"https://github.com/MediaCMS\" title=\"MediaCMS\" className=\"alert-link\">MediaCMS</a>",
     copyright: "2022"

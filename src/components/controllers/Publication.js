@@ -100,7 +100,7 @@ export function Editor() {
         } else {
             publicationImport = { category: categories[0]._id }
         }
-        setArticle(publicationPrev => ({ ...publicationPrev, ...publicationImport }))
+        setPublication(publicationPrev => ({ ...publicationPrev, ...publicationImport }))
     }, [])
 
     return (

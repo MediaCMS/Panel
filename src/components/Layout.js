@@ -1,6 +1,6 @@
 "use strict"
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { NavLink, Outlet, Navigate, useNavigate } from "react-router-dom"
 import axios from "axios"
 import settings from "../settings.js"
@@ -33,8 +33,15 @@ export default function (props) {
     )
     const [message, setMessage] = useState()
     const [user, setUser] = useState(userStorage)
-    const [menu, setMenu] = useState({ items: menuStorage })
+    const [menu, setMenu] = useState({ items: [] })
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (!user) return
+        setMenu({ items: 
+            menuStorage.filter(item => item.access >= user.role.level)
+        })
+    }, [user])
 
     useMemo(() => {
         api.interceptors.response.use(function (response) {
@@ -121,15 +128,30 @@ function Navigation(props) {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav me-auto mb-lg-0">
-                        {props.items.map((item, index) => (
-                            (item.access >= props.user.role.level) ? (
-                                <li className="nav-item" key={index} title={item.description}>
-                                    <NavLink to={encodeURI(item.url)} className="nav-link" >
-                                        {item.title}
-                                    </NavLink>
-                                </li>
-                            ) : null
+                        {props.items.slice(0, settings.menu).map((item, index) => (
+                            <li className="nav-item" key={index} title={item.description}>
+                                <NavLink to={encodeURI(item.url)} className="nav-link" >
+                                    {item.title}
+                                </NavLink>
+                            </li>
                         ))}
+                        {(props.items.length > settings.menu) ? (
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">...</a>
+                                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    {props.items.slice(settings.menu).map((item, index) => (
+                                        <li key={index} title={item.description}>
+                                            <NavLink to={encodeURI(item.url)} className="dropdown-item" >
+                                                {item.title}
+                                            </NavLink>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        ) : null}
+                        <li className="nav-item" title="Вихід з панелі куерування">
+                            <NavLink to={encodeURI('/доступ/вихід')} className="nav-link" >Вихід</NavLink>
+                        </li>
                     </ul>
                 </div>
                 {props?.user ? (

@@ -10,6 +10,5 @@ export default [
     { title: "Категорії",   description: "Список категорій публікацій",     url: '/категорії/список',   access: 2 },
     { title: "Типи",        description: "Список типів публікацій",         url: '/типи/список',        access: 1 },
     { title: "Ролі",        description: "Список ролей користувачів",       url: '/ролі/список',        access: 1 },
-    { title: "Логи",        description: "Список логів користувачів",       url: '/логи/список',        access: 1 },
-    { title: "Вихід",       description: "Вихід з панелі куерування",       url: '/доступ/вихід',       access: 3 },
+    { title: "Логи",        description: "Список логів користувачів",       url: '/логи/список',        access: 1 }
 ]
