@@ -1,31 +1,21 @@
-"use strict"
-
-import express from "express";
-import process from "process";
-import { MongoClient } from 'mongodb';
-import cookieParser from "cookie-parser";
-import jwt from "jsonwebtoken";
-import routes from "./routes.js";
-import settings from "./settings.js";
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import jwt from 'jsonwebtoken';
+import { client } from './db.js';
+import log from './log.js';
+import router from './router.js';
+import routes from './routes.js';
+import config from './config.js';
 
 const app = express();
-const server = app.listen(settings.port, settings.ip, () => {
+const server = app.listen(config.port, config.ip, () => {
     console.log(`HTTP server started [${app.get('env')}]`);
-    console.log(`Listening at ${settings.ip}:${settings.port}`);
+    console.log(`Listening at ${config.ip}:${config.port}`);
 });
-const client = new MongoClient(settings.db);
-await client.connect();
-const db = client.db();
-const router = express.Router();
-//const session = cookieSession(settings.session);
-
-const controllers = {};
-for (const [controllerName, controller] of Object.entries(routes)) {
-    controllers[controllerName] = new (
-        await import('./controllers/' + controllerName + '.js')
-    ).default(db, controller);
-}
-const loginURI = settings.path + routes.User.path + routes.User.actions.login.path;
+//const session = cookieSession(config.session);
+const exclude = [
+    config.path + routes.user.path + routes.user.actions.login.path
+];
 
 app.use(cookieParser());
 app.use(express.json());
@@ -41,64 +31,39 @@ app.use(function (request, response, next) {
     console.log(decodeURI(request.path), request.params, request.query);
     //console.log('app.use.request.cookies', request.cookies);
     if (!request.cookies?.token) {
-        if (decodeURI(request.path) === loginURI) return next();
+        if (exclude.includes(decodeURI(request.path))) return next();
         return response.status(401).end('Відсутня авторизація');
     }
     try {
-        response.locals.user = jwt.verify(request.cookies.token, settings.key);
+        response.locals.user = jwt.verify(request.cookies.token, config.key);
     } catch (error) {
         return response.status(401).end(error.message);
     }
     next();
 });
 
-console.log();
-for (const [routeName, route] of Object.entries(routes)) {
-    const path = encodeURI(settings.path + route.path);
-    const controller = controllers[routeName];
-    console.log(
-        ((typeof route.kit === 'undefined') || (route.kit === true)) ? '+' : '-',
-        routeName.padEnd(16, ' '),
-        route.path
-    );
-    if (route?.actions) {
-        for (const [actionName, action] of Object.entries(route.actions)) {
-            console.log(
-                '   ',
-                actionName.padEnd(14, ' '), decodeURI(route.path + action.path),
-                ` [${action?.method ?? 'get'}]`
-            );
-            router[action?.method ?? 'get'](path + encodeURI(action.path), controller[actionName]);
-        }
-    }
-    if ((typeof route.kit === 'undefined') || (route.kit === true)) {
-        router.get(path,  controller['findMany']);
-        router.get(path + '/:id',  controller['findOne']);
-        router.post(path,  controller['insertOne']);
-        router.put(path + '/:id',  controller['updateOne']);
-        router.delete(path + '/:id',  controller['deleteOne']);
-    } else {
-
-    }
-}
-console.log();
-
 app.use('/', router);
 
 app.use(async (error, request, response, next) => {
     console.error(error);
     if (response.headersSent) return next(error);
-    response.status(500).json({ message: error.message, name: error.name });
+    response.status(500).json({
+        message: error.message, name: error.name
+    });
+    await log(error);
 })
 
-process.on('unhandledRejection', async (error) => {
-    console.error('Unhandled Rejection', error);
+process.on('unhandledRejection', async error => {
+    console.log('Unhandled Rejection', error);
+    await log(error);
     process.exit(1);
 })
 
 process.on('SIGINT', async () => {
-    console.log(`HTTP server closed`);
+    console.log('\nSIGINT signal received')
     await client.close();
     server.close();
+    console.log(`HTTP server closed`);
+    await client.close()
     process.exit(0);
 })

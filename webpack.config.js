@@ -1,30 +1,26 @@
-"use strict"
-
-import webpack from "webpack";
-
 export default {
-  mode: "development",
-  entry: { index: "./src/index.js" },
-  output: { filename: "index.js" },
+  mode: 'development',
+  entry: { index: './src/index.js' },
+  output: { filename: 'index.js' },
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: "babel-loader"
+        use: 'babel-loader'
       }, {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        use: ['style-loader', 'css-loader']
       }, {
         test: /\.s[ac]ss$/i,
-        use: ["style-loader", "css-loader", "sass-loader"],
+        use: ['style-loader', 'css-loader', 'sass-loader'],
       }, {
         test: /\.(png|svg|jpg|gif)$/,
-        use: "file-loader"
+        use: 'file-loader'
       }
     ]
   },
-  devtool: "source-map",
+  devtool: 'source-map',
   experiments: {
     topLevelAwait: true
   }
