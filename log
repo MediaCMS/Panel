@@ -1,0 +1,5 @@
+2023-06-28T20:14:51.652Z  ReferenceError settings is not defined
+ReferenceError: settings is not defined
+    at login (file:///home/www/media/panel/controllers/user.js:130:49)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+

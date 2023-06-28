@@ -6,7 +6,7 @@ const router = express.Router();
 
 const controllers = {};
 for (const name of Object.keys(routes)) {
-    controllers[name] = await import(`./controllers/${name}.js`);
+    controllers[name] = (await import(`./controllers/${name}.js`)).default;
 }
 
 console.log();
@@ -15,10 +15,17 @@ for (let route of Object.entries(routes)) {
     const path = encodeURI(config.path + route.path);
     const controller = controllers[route.name];
     console.log(
-        (!('crud' in route) || (route.crud === true)) ? '+' : '-',
+        (!('crud' in route) || route.crud) ? '+' : '-',
         route.name.padEnd(16, ' '),
         route.path
     );
+    if (!('crud' in route) || route.crud) {
+        router.get(path, controller.list);
+        router.get(path + '/:id', controller.read);
+        //router.post(path, controller.create);
+        //router.put(path + '/:id', controller.update);
+        //router.delete(path + '/:id', controller.delete);
+    }
     if (route?.actions) {
         for (let action of Object.entries(route.actions)) {
             action = { name: action[0], ...action[1] };
@@ -31,15 +38,6 @@ for (let route of Object.entries(routes)) {
                 path + encodeURI(action.path), controller[action.name]
             );
         }
-    }
-    if (!('crud' in route) || (route.crud === true)) {
-        router.get(path, controller['index']);
-        router.get(path + '/:id', controller['read']);
-        router.post(path, controller['create']);
-        router.put(path + '/:id', controller['update']);
-        router.delete(path + '/:id', controller['delete']);
-    } else {
-
     }
 }
 console.log();

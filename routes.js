@@ -1,5 +1,5 @@
 export default {
-    post: { path: '/публікації' }, 
+    post: { path: '/публікації' },
     /*
     image: { path: '/зображення' },
     tag: {
@@ -9,6 +9,7 @@ export default {
         }
     },
     comment: { path: '/коментарі' },
+    */
     user: {
         path: '/користувачі',
         actions: {
@@ -16,6 +17,7 @@ export default {
             logout: { path: '/вихід' }
         }
     },
+    /*
     page: { path: '/сторінки' },
     category: { path: '/категорії' },
     type: { path: '/типи' },
