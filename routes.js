@@ -1,6 +1,5 @@
 export default {
     post: { path: '/публікації' },
-    /*
     image: { path: '/зображення' },
     tag: {
         path: '/мітки',
@@ -9,7 +8,6 @@ export default {
         }
     },
     comment: { path: '/коментарі' },
-    */
     user: {
         path: '/користувачі',
         actions: {
@@ -17,7 +15,6 @@ export default {
             logout: { path: '/вихід' }
         }
     },
-    /*
     page: { path: '/сторінки' },
     category: { path: '/категорії' },
     type: { path: '/типи' },
@@ -30,5 +27,4 @@ export default {
             findMany: { path: '' }
         }
     }
-    */
 }

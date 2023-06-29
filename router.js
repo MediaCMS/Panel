@@ -22,9 +22,9 @@ for (let route of Object.entries(routes)) {
     if (!('crud' in route) || route.crud) {
         router.get(path, controller.list);
         router.get(path + '/:id', controller.read);
-        //router.post(path, controller.create);
-        //router.put(path + '/:id', controller.update);
-        //router.delete(path + '/:id', controller.delete);
+        router.post(path, controller.create);
+        router.put(path + '/:id', controller.update);
+        router.delete(path + '/:id', controller.delete);
     }
     if (route?.actions) {
         for (let action of Object.entries(route.actions)) {

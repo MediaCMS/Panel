@@ -1,0 +1,57 @@
+import db, { ObjectId } from '../db.js';
+
+export default {
+
+    list: async (request, response) => {
+        const pages = await db.collection('pages')
+            .find().sort({ title: 1 }).toArray();
+        response.json(pages);
+    },
+
+    read: async (request, response) => {
+        const page = await db.collection('pages')
+            .find({ _id: ObjectId(request.params.id) })
+            .next();
+        response.json(page);
+    },
+
+    create: async (request, response) => {
+        if ((response.locals.user.role.level > 2)) {
+            return response.sendStatus(403);
+        }
+        const page = { ...request.body };
+        page.time = new Date().toISOString();
+        //page.alias = this.toAlias(page.title);
+        page.user = response.locals.user._id;
+        const result = await db.collection('pages')
+            .insertOne(page);
+        response.end(result.insertedId.toString());
+    },
+
+    update: async (request, response) => {
+        if ((response.locals.user.role.level > 2)) {
+            return response.sendStatus(403);
+        }
+        const page = { ...request.body };
+        //page.alias = this.toAlias(page.title);
+        delete page._id;
+        delete page.user;
+        await db.collection('pages')
+            .updateOne(
+                { _id: ObjectId(request.params.id) },
+                { $set: page }
+            );
+        response.end();
+    },
+
+    delete: async (request, response) => {
+        if ((response.locals.user.role.level > 2)) {
+            return response.sendStatus(403);
+        }
+        await db.collection('pages')
+            .deleteOne(
+                { _id: new ObjectId(request.params.id) }
+            );
+        response.end();
+    }
+}

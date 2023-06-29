@@ -31,7 +31,9 @@ app.use(function (request, response, next) {
     console.log(decodeURI(request.path), request.params, request.query);
     //console.log('app.use.request.cookies', request.cookies);
     if (!request.cookies?.token) {
-        if (exclude.includes(decodeURI(request.path))) return next();
+        if (exclude.includes(decodeURI(request.path))) {
+            return next();
+        } 
         return response.status(401).end('Відсутня авторизація');
     }
     try {

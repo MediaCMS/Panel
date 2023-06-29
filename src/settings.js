@@ -9,7 +9,7 @@ export default {
         timeout: 5_000 
     },
     images: {
-        url: "http://фото.медіа/сховище",
+        url: "http://фото.медіа/",
         api: "http://фото.медіа/",
         key: "7m3v2nZBB7xBCMAgHb5WrkHGvjuNY55T",
         widths: [320, 480, 640, 960, 1280, 1600, 1920, 2560, 3840],

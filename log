@@ -3,3 +3,42 @@ ReferenceError: settings is not defined
     at login (file:///home/www/media/panel/controllers/user.js:130:49)
     at processTicksAndRejections (internal/process/task_queues.js:95:5)
 
+2023-06-29T13:18:22.609Z  ReferenceError db is not defined
+ReferenceError: db is not defined
+    at list (file:///home/www/media/panel/controllers/role.js:6:23)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/www/media/panel/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/www/media/panel/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at /home/www/media/panel/node_modules/express/lib/router/index.js:281:22
+    at Function.process_params (/home/www/media/panel/node_modules/express/lib/router/index.js:341:12)
+    at next (/home/www/media/panel/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/home/www/media/panel/node_modules/express/lib/router/index.js:174:3)
+    at router (/home/www/media/panel/node_modules/express/lib/router/index.js:47:12)
+
+2023-06-29T14:24:45.632Z  ReferenceError db is not defined
+ReferenceError: db is not defined
+    at list (file:///home/www/media/panel/controllers/tag.js:7:22)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/www/media/panel/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/www/media/panel/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at /home/www/media/panel/node_modules/express/lib/router/index.js:281:22
+    at Function.process_params (/home/www/media/panel/node_modules/express/lib/router/index.js:341:12)
+    at next (/home/www/media/panel/node_modules/express/lib/router/index.js:275:10)
+    at Function.handle (/home/www/media/panel/node_modules/express/lib/router/index.js:174:3)
+    at router (/home/www/media/panel/node_modules/express/lib/router/index.js:47:12)
+
+2023-06-29T14:25:18.573Z  MongoServerError Skip value must be non-negative, but received: -9223372036854775808
+MongoServerError: Skip value must be non-negative, but received: -9223372036854775808
+    at Connection.onMessage (/home/www/media/panel/node_modules/mongodb/lib/cmap/connection.js:203:30)
+    at MessageStream.<anonymous> (/home/www/media/panel/node_modules/mongodb/lib/cmap/connection.js:63:60)
+    at MessageStream.emit (events.js:400:28)
+    at processIncomingData (/home/www/media/panel/node_modules/mongodb/lib/cmap/message_stream.js:108:16)
+    at MessageStream._write (/home/www/media/panel/node_modules/mongodb/lib/cmap/message_stream.js:28:9)
+    at writeOrBuffer (internal/streams/writable.js:358:12)
+    at MessageStream.Writable.write (internal/streams/writable.js:303:10)
+    at Socket.ondata (internal/streams/readable.js:731:22)
+    at Socket.emit (events.js:400:28)
+    at addChunk (internal/streams/readable.js:293:12)
+
