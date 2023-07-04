@@ -1,30 +1,30 @@
 export default {
-    post: { path: '/публікації' },
-    image: { path: '/зображення' },
+    post: '/публікації',
+    image: '/зображення',
     tag: {
         path: '/мітки',
         actions: {
-            autocomplete: { path: '/автозаповнення' }
+            autocomplete: '/автозаповнення'
         }
     },
-    comment: { path: '/коментарі' },
+    comment: '/коментарі',
     user: {
         path: '/користувачі',
         actions: {
-            login: { path: '/вхід' },
-            logout: { path: '/вихід' }
+            login: '/вхід',
+            logout: '/вихід'
         }
     },
-    page: { path: '/сторінки' },
-    category: { path: '/категорії' },
-    type: { path: '/типи' },
-    role: { path: '/ролі' },
-    log: { 
+    page: '/сторінки',
+    category: '/категорії',
+    type: '/типи',
+    role: '/ролі',
+    log: {
         path: '/лог',
         crud: false,
         actions: {
-            findOne: { path: '/:id' },
-            findMany: { path: '' }
+            read: '/:id',
+            list: ''
         }
     }
 }

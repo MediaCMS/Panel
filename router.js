@@ -11,7 +11,12 @@ for (const name of Object.keys(routes)) {
 
 console.log();
 for (let route of Object.entries(routes)) {
-    route = { name: route[0], ...route[1] };
+    route = { name: route[0] };
+    if (typeof route[1] === 'string') {
+        route['path'] = route[1];
+    } else {
+        route = { route, ...route[1] };
+    }
     const path = encodeURI(config.path + route.path);
     const controller = controllers[route.name];
     console.log(

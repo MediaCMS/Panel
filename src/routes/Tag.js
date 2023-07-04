@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react"
 import {
     useParams, useSearchParams, useNavigate, useOutletContext, generatePath
 } from "react-router-dom"
-import Form, { Image, Switch } from "../Form.js"
-import Table from "../Table.js"
+import Form, { Image, Switch } from "../../Form.js"
+import Table from "../../Table.js"
 
 export function Index() {
 
