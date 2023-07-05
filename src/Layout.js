@@ -1,31 +1,46 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { NavLink, Outlet, Navigate, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { Modal, Button } from 'react-bootstrap'
-import API from './api.js'
+import APIFactory from './api.js'
 import config from './config.js'
-import menuStorage from './menu.js'
+import menuSource from './menu.js'
 
 const userStorage = JSON.parse(localStorage.getItem('user'))
 
+const paramsDefault = {
+    title: config.title, router: 'main', size: 'full', submenu: []
+}
+
 export default function (props) {
 
-    const [params, setParams] = useState({
-        title: '', router: '', container: true,
-        width: 'standart', submenu: []
-    })
-    const [menu, setMenu] = useState(menuStorage)
+    const [menu, setMenu] = useState()
     const [user, setUser] = useState(userStorage)
+    const [params, setParams] = useState(userStorage)
+    /*
+    const [title, setTitle] = useState()
+    const [submenu, setSubmenu] = useState()
+    const [router, setRouter] = useState()
+    const [container, setContainer] = useState()
+    const [width, setWidth] = useState()
+    */
     const [message, setMessage] = useState()
-    const [loading, setLoading] = useState(false)
+    const [spinner, setSpinner] = useState(false)
     //const [key, setKey] = useState(localStorage.getItem('key'))
     const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
         if (!user) return
-        setMenu({ items: menuStorage.filter(item => 
-            item.access >= user.role.level
-        )})
+        setMenu(
+            menuSource.filter(item => 
+                item.access >= user.role.level
+            )
+        )
     }, [user])
+
+    const init = paramsNew => {
+        setParams({ ...paramsDefault, ...paramsNew })
+    }
 
     const setAlert = message => {
         setMessage({
@@ -46,32 +61,32 @@ export default function (props) {
     }
 
     const api = useMemo(() => ({
-        main: API.createMain(setLoading, setAlert),
-        panel: API.createPanel(setLoading, setAlert, navigate),
-        image: API.createImage(setLoading, setAlert)
+        main: APIFactory.createMain(setSpinner, setAlert),
+        panel: APIFactory.createPanel(setSpinner, setAlert, navigate),
+        image: APIFactory.createImage(setSpinner, setAlert)
     }), [])
 
-    return props.template ? 
+    return props?.template ? 
         user ? (
             <React.StrictMode>
-                <Header items={menu.items} user={user} />
-                <main className='container' >
-                    <div id="header" className="my-5 px-5 d-flex">
-                        <h1 className="me-auto">{meta.title}</h1>
+                <Header menu={menu} user={user} />
+                <main className="container" >
+                    <div id="header" className="my-5 d-flex">
+                        <h1 className="me-auto">{params?.title}</h1>
                         <ul className="nav">
-                            {meta?.submenu
-                            && <Submenu items={meta.submenu} setConfirm={setConfirm} />}
+                            {params?.submenu &&
+                                <Submenu items={params.submenu} setConfirm={setConfirm} />}
                         </ul>
                     </div>
-                    <div id='body' className={[params.router, params.width]}>
+                    <div id='body' className={params?.router + ' ' + params?.size}>
                         <Outlet context={{
-                            setParams, setAlert, setConfirm, setMessage, api
+                            init, api, setSpinner, setAlert, setConfirm, setMessage
                         }} />
                     </div>
                 </main>
-                <Footer menu={menu} />
+                <Footer menu={menu} user={user} />
                 <Message {...message} setMessage={setMessage} />
-                {loading && (
+                {spinner && (
                     <div className="spinner-border position-fixed bottom-50 start-50"
                         role="status" style={{ zIndex: 9999 }}>
                         <span className="visually-hidden">Loading...</span>
@@ -79,13 +94,75 @@ export default function (props) {
                 )}
             </React.StrictMode>
         ) : <Navigate to={encodeURI('/доступ/вхід')} replace />
-    : <Outlet context={{setAlert, setUser, api}} />
+    : <Outlet context={{api, setUser, setAlert, setSpinner}} />
 }
+
+function Header(props) {
+
+    return (
+        <header>
+            <nav className='navbar navbar-expand-sm navbar-light bg-light'>
+                <div className='container-fluid'>
+                    <NavLink to='/' className='navbar-brand' title={config.slogan}>
+                        <img src='/logo.png' alt={config.name} width='100' />
+                    </NavLink>
+                    <button className='navbar-toggler' type='button' data-bs-toggle='collapse'
+                        data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent'
+                        aria-expanded='false' aria-label='Toggle navigation'>
+                        <span className='navbar-toggler-icon' />
+                    </button>
+                    <div className='collapse navbar-collapse' id='navbarSupportedContent'>
+                        {props?.menu && (
+                            <ul className='navbar-nav me-auto mb-lg-0'>
+                                {props.menu.slice(0, 5).map((item, index) => (
+                                    <li className='nav-item' key={index} title={item.description}>
+                                        <NavLink to={encodeURI(item.path)} className='nav-link' >
+                                            {item.title}
+                                        </NavLink>
+                                    </li>
+                                ))}
+                                {(props.menu.length > 5) && (
+                                    <li className='nav-item dropdown'>
+                                        <a className='nav-link dropdown-toggle' href='#' id='navbarDropdown'
+                                            role='button' data-bs-toggle='dropdown' aria-expanded='false'>...</a>
+                                        <ul className='dropdown-menu' aria-labelledby='navbarDropdown'>
+                                            {props.menu.slice(5).map((item, index) => (
+                                                <li key={index} title={item.description}>
+                                                    <NavLink to={encodeURI(item.url)} className='dropdown-item' >
+                                                        {item.title}
+                                                    </NavLink>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </li>
+                                )}
+                                <li className='nav-item' title='Вихід з панелі куерування'>
+                                    <NavLink to={encodeURI('/доступ/вихід')} className='nav-link'>
+                                        Вихід
+                                    </NavLink>
+                                </li>
+                            </ul>
+                        )}
+                    </div>
+                    {props?.user ? (
+                        <div title={props.user.role.title + ' ' + props.user.description}>
+                            {props.user.title}
+                            {props.user.image ? (
+                                <img src={config.images.url + props.user.image}
+                                    height='36px' className='rounded-3 ms-3' />
+                            ) : null}
+                        </div>
+                    ) : null}
+                </div>
+            </nav>
+        </header>
+    )
+} 
 
 function Submenu(props) {
     return props.items.map(item => (
         <li className="nav-item" key={item.title}>
-            <NavLink to={encodeURI(item?.uri ?? '#')}
+            <NavLink to={encodeURI(item?.path ?? '#')}
                 onClick={() => {
                     if (item?.onClick) {
                         if (item?.confirm) {
@@ -105,68 +182,8 @@ function Submenu(props) {
     ))
 }
 
-function Header(props) {
-
-    return (
-        <header>
-            <nav className='navbar navbar-expand-sm navbar-light bg-light'>
-                <div className='container-fluid'>
-                    <NavLink to='/' className='navbar-brand' title={config.slogan}>
-                        <img src='/logo.png' alt={config.name} width='100' />
-                    </NavLink>
-                    <button className='navbar-toggler' type='button' data-bs-toggle='collapse'
-                        data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent'
-                        aria-expanded='false' aria-label='Toggle navigation'>
-                        <span className='navbar-toggler-icon' />
-                    </button>
-                    <div className='collapse navbar-collapse' id='navbarSupportedContent'>
-                        <ul className='navbar-nav me-auto mb-lg-0'>
-                            {props.items.slice(0, config.menu).map((item, index) => (
-                                <li className='nav-item' key={index} title={item.description}>
-                                    <NavLink to={encodeURI(item.url)} className='nav-link' >
-                                        {item.title}
-                                    </NavLink>
-                                </li>
-                            ))}
-                            {(props.items.length > config.menu) ? (
-                                <li className='nav-item dropdown'>
-                                    <a className='nav-link dropdown-toggle' href='#' id='navbarDropdown'
-                                        role='button' data-bs-toggle='dropdown' aria-expanded='false'>...</a>
-                                    <ul className='dropdown-menu' aria-labelledby='navbarDropdown'>
-                                        {props.items.slice(config.menu).map((item, index) => (
-                                            <li key={index} title={item.description}>
-                                                <NavLink to={encodeURI(item.url)} className='dropdown-item' >
-                                                    {item.title}
-                                                </NavLink>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </li>
-                            ) : null}
-                            <li className='nav-item' title='Вихід з панелі куерування'>
-                                <NavLink to={encodeURI('/доступ/вихід')} className='nav-link'>
-                                    Вихід
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </div>
-                    {props?.user ? (
-                        <div title={props.user.role.title + ' ' + props.user.description}>
-                            {props.user.title}
-                            {props.user.image ? (
-                                <img src={config.images.url + props.user.image}
-                                    height='36px' className='rounded-3 ms-3' />
-                            ) : null}
-                        </div>
-                    ) : null}
-                </div>
-            </nav>
-        </header>
-    )
-}
-
 function Footer(props) {
-    
+
     return (
         <footer className='text-center mt-5'>
             <div className='alert alert-info my-5 box' role='alert'>
@@ -174,7 +191,7 @@ function Footer(props) {
                     className="alert-link">MediaCMS</a>
             </div>
             <ul className='nav justify-content-center'>
-                {props.items.map((item, index) => (
+                {props?.menu && props.menu.map((item, index) => (
                     (item.access >= props.user.role.level) ? (
                         <li className='nav-item' key={index}>
                             <NavLink
@@ -187,8 +204,8 @@ function Footer(props) {
                     ) : null
                 ))}
             </ul>
-            <p className='text-muted small mt-3' title={config.slogan}>
-                {config.name} &copy; {config.copyright}
+            <p className='text-muted small mt-3' title={config.brand}>
+                {config.brand} &copy; {config.copyright}
             </p>
         </footer>
     )

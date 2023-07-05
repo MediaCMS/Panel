@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
+import { useOutletContext } from 'react-router-dom'
 
 export default () => {
 
+    const context = useOutletContext()
+
     useEffect(async () => {
-        context.setParams({
-            title: 'Головна', router: 'main', container: true,
-            width: 'standart', submenu: []
-        })
+        context.init({ title: 'Головна' })
     }, [])
 
-    return <></>
+    return <p className="lead">Голова сторінка сайту</p>
 }

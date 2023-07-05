@@ -10,7 +10,11 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
     img { border-radius: 1%; }
 
     main {
-      #body {
+      #body { min-height: 50vh; margin: 0 auto;
+        &.small {max-width: 640px;}
+        &.medium {max-width: 768px;}
+        &.large {max-width: 960px;}
+        &.full {max-width: auto;}
         &.index {}
         &.editor {max-width: 960px; margin: 5rem auto;
           form {
@@ -27,11 +31,12 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
           }
         }
       }
-      .box {max-width: 768px; font-weight: 300; margin: 50px auto;}
       .mw-sm {max-width: 576px;}
       .mw-md {max-width: 768px;}
       .mw-lg {max-width: 992px;}
-      .screen {min-width: 100vw; height: 50vh;text-align: center;vertical-align: middle; display: table-cell;}
+      .screen {
+        min-width: 100vw; height: 50vh;text-align: center;vertical-align: middle; display: table-cell;
+      }
     }
 
     footer {
