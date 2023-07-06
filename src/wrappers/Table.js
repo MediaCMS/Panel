@@ -1,28 +1,49 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Table, Button } from 'react-bootstrap'
+import Row from './Table/Row.js'
+import Cell from './Table/Cell.js'
+import config from '../config.js'
 
-export default function (props) {
+function TableWrapper(props) {
+
+    const [rows, setRows] = useState(config.rows)
+
+    const handleMore = () => {
+        setRows(rowsOld => rowsOld + config.rows)
+    }
 
     return (
-        <table className={'table table-hover mx-auto ' + props.className}>
+        <Table hover>
             <thead>
-                <tr className='text-center'>
-                    <th scope='col'>#</th>
-                    {props.columns.map((column, index) => (
-                        <th scope='col' key={index}>{column?.title ?? column}</th>
+                <tr className="text-center">
+                    <Cell scope="col">#</Cell>
+                    {props.columns.map(column => (
+                        <Cell scope="col" key={column}>{column}</Cell>
                     ))}
                 </tr>
             </thead>
             <tbody>
-                {props.rows.map((row, index) => (
-                    <tr key={row.id} role='button' onClick={() => props.onClick(row.id)}
-                        className={(row?.status !== null) ? (!row.status ? 'text-muted' : '') : null}>
-                        <th scope='row' className='text-center'>{index + 1}</th>
-                        {row.values.map((value, index) => (
-                            <td className={props.columns[index]?.class} key={index}>{value}</td>
-                        ))}
-                    </tr>
-                ))}
+                {props.children.slice(0, rows).map((child, index) => 
+                    React.cloneElement(child, [], 
+                        <>
+                            <th scope="row" className="text-center">{index + 1}</th>
+                            {child.props?.children}
+                        </>
+                    )
+                )}
             </tbody>
-        </table>
-    )
+            {props.children.length > rows ? (
+                <tfoot>
+                    <tr className="text-center">
+                        <td colSpan={props.columns.length + 1}>
+                            <Button variant="outline-secondary"
+                                classname="my-4" onClick={handleMore}>Більше ...</Button>
+                        </td>
+                    </tr>
+                </tfoot>
+            ) : null}
+        </Table>
+   )
 }
+
+export { TableWrapper as default, Row, Cell }

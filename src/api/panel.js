@@ -1,31 +1,31 @@
 import axios from 'axios'
 import config from '../config.js'
 
-export default (setLoading, setAlert, navigate) => {
+export default (setSpinner, setAlert, navigate) => {
 
     const api = axios.create({
-        baseURL: config.main.url,
-        timeout: config.main.timeout
+        baseURL: config.api.url,
+        timeout: config.api.timeout
     })
 
     api.interceptors.request.use(function (conf) {
-        setLoading(true)
+        setSpinner(true)
         return conf
     }, function (error) {
         console.log('api.request.error.message', error.message)
         if (error?.request) {
             console.log('api.response.error.request', error.request)
         }
-        setLoading(false)
+        setSpinner(false)
         return Promise.reject(error)
     })
 
     api.interceptors.response.use(function (response) {
-        setLoading(false)
+        setSpinner(false)
         return response.data
     }, function (error) {
         console.dir(error)
-        setLoading(false)
+        setSpinner(false)
         if ('response' in error) {
             console.log('api.response.error.response', error.response)
             if (error.response?.status) {

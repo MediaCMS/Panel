@@ -18,7 +18,7 @@ export default {
     },
     google: {
         recaptcha: {
-            key: '6LeydhgUAAAAAOR1sqQ-HadqBnsZdf_mMyAAOefW'
+            key: ''
         },
     },
     months: [

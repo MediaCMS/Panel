@@ -42,3 +42,55 @@ MongoServerError: Skip value must be non-negative, but received: -92233720368547
     at Socket.emit (events.js:400:28)
     at addChunk (internal/streams/readable.js:293:12)
 
+2023-07-06T22:10:57.258Z  BSONTypeError Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+BSONTypeError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+    at new BSONTypeError (/home/www/media/panel/node_modules/bson/lib/error.js:41:28)
+    at new ObjectId (/home/www/media/panel/node_modules/bson/lib/objectid.js:65:23)
+    at ObjectId (/home/www/media/panel/node_modules/bson/lib/objectid.js:25:20)
+    at read (file:///home/www/media/panel/controllers/user.js:35:26)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/www/media/panel/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/www/media/panel/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at /home/www/media/panel/node_modules/express/lib/router/index.js:281:22
+    at param (/home/www/media/panel/node_modules/express/lib/router/index.js:360:14)
+
+2023-07-06T22:12:11.363Z  BSONTypeError Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+BSONTypeError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+    at new BSONTypeError (/home/www/media/panel/node_modules/bson/lib/error.js:41:28)
+    at new ObjectId (/home/www/media/panel/node_modules/bson/lib/objectid.js:65:23)
+    at ObjectId (/home/www/media/panel/node_modules/bson/lib/objectid.js:25:20)
+    at read (file:///home/www/media/panel/controllers/user.js:35:26)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/www/media/panel/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/www/media/panel/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at /home/www/media/panel/node_modules/express/lib/router/index.js:281:22
+    at param (/home/www/media/panel/node_modules/express/lib/router/index.js:360:14)
+
+2023-07-06T22:13:05.979Z  BSONTypeError Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+BSONTypeError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+    at new BSONTypeError (/home/www/media/panel/node_modules/bson/lib/error.js:41:28)
+    at new ObjectId (/home/www/media/panel/node_modules/bson/lib/objectid.js:65:23)
+    at ObjectId (/home/www/media/panel/node_modules/bson/lib/objectid.js:25:20)
+    at read (file:///home/www/media/panel/controllers/user.js:35:26)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/www/media/panel/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/www/media/panel/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at /home/www/media/panel/node_modules/express/lib/router/index.js:281:22
+    at param (/home/www/media/panel/node_modules/express/lib/router/index.js:360:14)
+
+2023-07-06T22:13:50.900Z  BSONTypeError Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+BSONTypeError: Argument passed in must be a string of 12 bytes or a string of 24 hex characters or an integer
+    at new BSONTypeError (/home/www/media/panel/node_modules/bson/lib/error.js:41:28)
+    at new ObjectId (/home/www/media/panel/node_modules/bson/lib/objectid.js:65:23)
+    at ObjectId (/home/www/media/panel/node_modules/bson/lib/objectid.js:25:20)
+    at read (file:///home/www/media/panel/controllers/user.js:35:26)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/www/media/panel/node_modules/express/lib/router/route.js:137:13)
+    at Route.dispatch (/home/www/media/panel/node_modules/express/lib/router/route.js:112:3)
+    at Layer.handle [as handle_request] (/home/www/media/panel/node_modules/express/lib/router/layer.js:95:5)
+    at /home/www/media/panel/node_modules/express/lib/router/index.js:281:22
+    at param (/home/www/media/panel/node_modules/express/lib/router/index.js:360:14)
+

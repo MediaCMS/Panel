@@ -98,6 +98,8 @@ export default {
     },
 
     login: async (request, response) => {
+        console.log(request.headers)
+        /*
         const [email, password] = Buffer
             .from(request.headers.authorization.split(' ')[1], 'base64')
             .toString().split(':');
@@ -132,6 +134,8 @@ export default {
         });
         delete user._id;
         response.json(user);
+        */
+       response.end()
     },
 
     logout: async (request, response) => {

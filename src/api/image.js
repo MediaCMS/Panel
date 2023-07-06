@@ -1,7 +1,7 @@
 import axios from 'axios'
 import config from '../config.js'
 
-export default (setLoading, setAlert) => {
+export default (setSpinner, setAlert) => {
 
     const api = axios.create({
         baseURL: config.images.url,
@@ -13,21 +13,21 @@ export default (setLoading, setAlert) => {
 
     api.interceptors.request.use(function (conf) {
         //console.log('api.image.request.config', conf)
-        setLoading(true)
+        setSpinner(true)
         return conf
     }, function (error) {
         console.log('api.image.request.error', error)
-        setLoading(false)
+        setSpinner(false)
         return Promise.reject(error)
     })
 
     api.interceptors.response.use(function (response) {
-        setLoading(false)
+        setSpinner(false)
         return response.data
     }, function (error) {
         console.log('api.image.response.error', error)
         console.log('api.image.response.error.message', error.message)
-        setLoading(false)
+        setSpinner(false)
         if (error?.response) {
             console.log('api.image.response.error.response', error.response)
             if (error.response?.status) {

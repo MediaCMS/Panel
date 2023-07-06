@@ -12,15 +12,13 @@ import Main from './routes/Main.js'
 //import Type from './routes/Type.js'
 //import Role from './routes/Role.js'
 //import Log from './routes/Log.js'
+import Access from './routes/Access.js'
 
 const routes = [
-    /*
     { path: encodeURI('/доступ'), element: <Layout template={false} />, children: [
-        { path: encodeURI('вхід'), element: <User.Login /> },
-        { path: encodeURI('вихід'), element: <User.Logout /> }
+        { path: encodeURI('вхід'), element: <Access.Login /> },
+        { path: encodeURI('вихід'), element: <Access.Logout /> }
     ] },
-    */
-
     { path: '/', element: <Layout template={true} />, children: [
         { index: true,                      element: <Main /> },
         //{ path: encodeURI('/публікації'),   module: Post },

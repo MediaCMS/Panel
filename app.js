@@ -14,7 +14,7 @@ const server = app.listen(config.port, config.ip, () => {
 });
 //const session = cookieSession(config.session);
 const exclude = [
-    config.path + routes.user.path + routes.user.actions.login.path
+    config.path + routes.user.path + routes.user.actions.login
 ];
 
 app.use(cookieParser());
@@ -34,17 +34,17 @@ app.use(function (request, response, next) {
         if (exclude.includes(decodeURI(request.path))) {
             return next();
         } 
-        return response.status(401).end('Відсутня авторизація');
+        return response.sendStatus(401);
     }
     try {
         response.locals.user = jwt.verify(request.cookies.token, config.key);
     } catch (error) {
-        return response.status(401).end(error.message);
+        return response.status(401).end(error);
     }
     next();
 });
 
-app.use('/', router);
+app.use(encodeURI(config.path), router);
 
 app.use(async (error, request, response, next) => {
     console.error(error);

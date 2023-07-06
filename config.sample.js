@@ -9,6 +9,12 @@ export default {
     cookie: {
         maxAge: 1_000 * 60 * 60 * 24
     },
+    google: {
+        recaptcha: {
+            key: ''
+        }
+    },
+
     limit: 100,
     log: '/log'
 }

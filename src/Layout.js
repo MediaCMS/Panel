@@ -66,35 +66,39 @@ export default function (props) {
         image: APIFactory.createImage(setSpinner, setAlert)
     }), [])
 
-    return props?.template ? 
-        user ? (
-            <React.StrictMode>
-                <Header menu={menu} user={user} />
-                <main className="container" >
-                    <div id="header" className="my-5 d-flex">
-                        <h1 className="me-auto">{params?.title}</h1>
-                        <ul className="nav">
-                            {params?.submenu &&
-                                <Submenu items={params.submenu} setConfirm={setConfirm} />}
-                        </ul>
-                    </div>
-                    <div id='body' className={params?.router + ' ' + params?.size}>
-                        <Outlet context={{
-                            init, api, setSpinner, setAlert, setConfirm, setMessage
-                        }} />
-                    </div>
-                </main>
-                <Footer menu={menu} user={user} />
-                <Message {...message} setMessage={setMessage} />
-                {spinner && (
-                    <div className="spinner-border position-fixed bottom-50 start-50"
-                        role="status" style={{ zIndex: 9999 }}>
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                )}
-            </React.StrictMode>
-        ) : <Navigate to={encodeURI('/доступ/вхід')} replace />
-    : <Outlet context={{api, setUser, setAlert, setSpinner}} />
+    return (
+        <React.StrictMode>
+            {props?.template ?
+                user ? (
+                    <>
+                        <Header menu={menu} user={user} />
+                        <main className="container" >
+                            <div id="header" className="my-5 d-flex">
+                                <h1 className="me-auto">{params?.title}</h1>
+                                <ul className="nav">
+                                    {params?.submenu &&
+                                        <Submenu items={params.submenu} setConfirm={setConfirm} />}
+                                </ul>
+                            </div>
+                            <div id='body' className={params?.router + ' ' + params?.size}>
+                                <Outlet context={{
+                                    init, api, setSpinner, setAlert, setConfirm, setMessage
+                                }} />
+                            </div>
+                        </main>
+                        <Footer menu={menu} user={user} />
+                    </>
+                ) : <Navigate to={encodeURI('/доступ/вхід')} replace />
+            : <Outlet context={{api, setUser, setAlert, setSpinner}} />}
+            <Message {...message} setMessage={setMessage} />
+            {spinner && (
+                <div className="spinner-border position-fixed bottom-50 start-50"
+                    role="status" style={{ zIndex: 9999 }}>
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+            )}
+        </React.StrictMode>
+    )
 }
 
 function Header(props) {

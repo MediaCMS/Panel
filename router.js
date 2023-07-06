@@ -15,20 +15,12 @@ for (let route of Object.entries(routes)) {
         route[1] = { path: route[1] };
     }
     route = { name: route[0], ...route[1] };
-    const path = encodeURI(config.path + route.path);
     const controller = controllers[route.name];
     console.log(
         (!('crud' in route) || route.crud) ? '+' : '-',
         route.name.padEnd(16, ' '),
         route.path
     );
-    if (!('crud' in route) || route.crud) {
-        router.get(path, controller.list);
-        router.get(path + '/:id', controller.read);
-        router.post(path, controller.create);
-        router.put(path + '/:id', controller.update);
-        router.delete(path + '/:id', controller.delete);
-    }
     if (route?.actions) {
         for (let action of Object.entries(route.actions)) {
             if (typeof action[1] === 'string') {
@@ -37,30 +29,27 @@ for (let route of Object.entries(routes)) {
             action = { name: action[0], ...action[1] };
             console.log(
                 '   ',
-                action.name.padEnd(14, ' '), decodeURI(route.path + action.path),
+                action.name.padEnd(14, ' '), route.path + action.path,
                 ` [${action?.method ?? 'get'}]`
             );
             router[action?.method ?? 'get'](
-                path + encodeURI(action.path), controller[action.name]
+                encodeURI(route.path + action.path), controller[action.name]
             );
         }
+    }
+    if (!('crud' in route) || route.crud) {
+        router.get(encodeURI(route.path), controller.list);
+        router.get(encodeURI(route.path) + '/:id', controller.read);
+        router.post(encodeURI(route.path), controller.create);
+        router.put(encodeURI(route.path) + '/:id', controller.update);
+        router.delete(encodeURI(route.path) + '/:id', controller.delete);
     }
 }
 console.log();
 
-router.get('/:slug', async (request, response, next) => {
-    console.log(request.params.slug)
-    response.status(404);
-    next();
-});
-
-router.use(async (request, response, next) => {
-    if (response.statusCode === 404) {
-        response.locals.title = config.notFound.title;
-        response.locals.description = config.notFound.description;
-        response.locals.keywords = config.notFound.keywords;
-        response.render('404');
-    }
+router.get('*', async (request, response, next) => {
+    console.log('404', request.params.slug)
+    response.sendStatus(404);
     next();
 });
 
