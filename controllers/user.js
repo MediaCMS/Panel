@@ -1,4 +1,5 @@
 import db, { ObjectId, sort, skip, limit } from '../db.js';
+import axios from 'axios';
 import config from '../config.js';
 import jwt from 'jsonwebtoken';
 
@@ -97,45 +98,53 @@ export default {
         response.end();
     },
 
-    login: async (request, response) => {
-        console.log(request.headers)
-        /*
+    login: async (request, response, next) => {
+        const recaptcha = (await axios({
+            method: 'post',
+            url: config.google.recaptcha.url,
+            params: {
+                secret: config.google.recaptcha.key,
+                response: request.body.recaptcha
+            }
+        })).data;
+        if (recaptcha.success !== true) {
+            return next(
+                Error(
+                    `Помилка reCaptcha (${recaptcha['error-codes'].join(', ')})`
+                )
+            );
+        }
         const [email, password] = Buffer
             .from(request.headers.authorization.split(' ')[1], 'base64')
             .toString().split(':');
+        const pipeline = [
+            { $match: {
+                email: email, password: password, status: true
+            } },
+            { $lookup: {
+                from: 'roles',
+                localField: 'role',
+                foreignField: '_id',
+                as: 'role'
+            } },
+            { $project: {
+                title: 1, description: 1, image: 1, alias: 1, 
+                role: { $arrayElemAt: ["$role", 0] }
+            } }
+        ];
         const [user] = await db.collection('users')
-            .aggregate([
-                { $lookup: {
-                    from: 'roles',
-                    localField: 'role',
-                    foreignField: '_id',
-                    as: 'role'
-                } },
-                { $project: {
-                    title: 1, description: 1, image: 1,
-                    email: 1, password: 1, alias: 1, status: 1, 
-                    role: { $arrayElemAt: ["$role", 0] }
-                } },
-                { $match: {
-                    email: email, password: password, status: true
-                }},
-            ]).toArray();
+            .aggregate(pipeline).toArray();
         if (!user) {
             return response.sendStatus(401);
         }
         if (user.role.level > 3) {
             return response.sendStatus(403);
         }
-        delete user.email;
-        delete user.password;
-        delete user.status;
-        response.cookie('token', jwt.sign(user, config.key), {
+        response.cookie('token', jwt.sign(user, config.jwt.key), {
             maxAge: config.cookie.maxAge, httpOnly: true
         });
         delete user._id;
         response.json(user);
-        */
-       response.end()
     },
 
     logout: async (request, response) => {

@@ -11,8 +11,8 @@ export default {
     user: {
         path: '/користувачі',
         actions: {
-            login: '/вхід',
-            logout: '/вихід'
+            login: { path: '/вхід', method: 'post' },
+            logout: { path: '/вихід', method: 'delete' }
         }
     },
     page: '/сторінки',

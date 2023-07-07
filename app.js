@@ -14,7 +14,7 @@ const server = app.listen(config.port, config.ip, () => {
 });
 //const session = cookieSession(config.session);
 const exclude = [
-    config.path + routes.user.path + routes.user.actions.login
+    config.path + routes.user.path + routes.user.actions.login.path
 ];
 
 app.use(cookieParser());
@@ -37,7 +37,7 @@ app.use(function (request, response, next) {
         return response.sendStatus(401);
     }
     try {
-        response.locals.user = jwt.verify(request.cookies.token, config.key);
+        response.locals.user = jwt.verify(request.cookies.token, config.jwt.key);
     } catch (error) {
         return response.status(401).end(error);
     }

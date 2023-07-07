@@ -6,3 +6,4 @@ src/config.js
 .gitignore
 config.js
 package-lock.json
+log

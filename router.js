@@ -48,7 +48,7 @@ for (let route of Object.entries(routes)) {
 console.log();
 
 router.get('*', async (request, response, next) => {
-    console.log('404', request.params.slug)
+    console.log('404', request.path)
     response.sendStatus(404);
     next();
 });
