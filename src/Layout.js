@@ -132,7 +132,7 @@ function Header(props) {
                                         <ul className='dropdown-menu' aria-labelledby='navbarDropdown'>
                                             {props.menu.slice(5).map((item, index) => (
                                                 <li key={index} title={item.description}>
-                                                    <NavLink to={encodeURI(item.url)} className='dropdown-item' >
+                                                    <NavLink to={encodeURI(item.path)} className='dropdown-item' >
                                                         {item.title}
                                                     </NavLink>
                                                 </li>

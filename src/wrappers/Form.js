@@ -1,4 +1,5 @@
 import React from 'react'
+import { useOutletContext } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import Context from './Form/Context.js'
 import Field from './Form/Field.js'
@@ -7,6 +8,8 @@ import Row from './Form/Row.js'
 import Cell from './Form/Cell.js'
 
 function FormWrapper(props) {
+
+    const outletContext = useOutletContext()
 
     const handleChange = (name, value) => {
         props.onChange(dataOld => {
@@ -40,7 +43,7 @@ function FormWrapper(props) {
     }
 
     const handleDelete = async () => {
-        if (await props.setConfirm('Ви впевненні?')) {
+        if (await outletContext.setConfirm('Ви впевненні?')) {
             props.onDelete()
         }
     }

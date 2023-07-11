@@ -8,7 +8,12 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
       }
     }
     img { border-radius: 1%; }
-
+    table {
+      tr.text-muted {
+        td { color: var(--bs-secondary-color); }
+      }
+    }
+   
     main {
       #body { min-height: 50vh; margin: 0 auto;
         &.small {max-width: 640px;}

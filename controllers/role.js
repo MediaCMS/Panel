@@ -4,7 +4,7 @@ export default {
 
     list: async (request, response) => {
         const roles = await db.collection('roles')
-            .find().sort({ title: 1 }).toArray()
+            .find().sort({ level: 1 }).toArray()
         response.json(roles);
     },
 
@@ -39,13 +39,18 @@ export default {
         response.end();
     },
 
-    delete: async (request, response) => {
+    delete: async (request, response, next) => {
         if ((response.locals.user.role.level > 1)) {
             return response.sendStatus(403);
         }
-        await db.collection('roles').deleteOne(
-            { _id: new ObjectId(request.params.id) }
-        );
+        const _id = new ObjectId(request.params.id);
+        const count = await db.collection('users').count({ role: _id });
+        if (count > 0) {
+            return next(
+                Error(`Роль використана в користувачах (${count})`)
+            )
+        }
+        await db.collection('roles').deleteOne({ _id });
         response.end();
     }
 }

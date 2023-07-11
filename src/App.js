@@ -10,7 +10,7 @@ import Main from './routes/Main.js'
 //import Page from './routes/Page.js'
 //import Category from './routes/Category.js'
 //import Type from './routes/Type.js'
-//import Role from './routes/Role.js'
+import Role from './routes/Role.js'
 //import Log from './routes/Log.js'
 import Access from './routes/Access.js'
 
@@ -29,12 +29,12 @@ const routes = [
         //{ path: encodeURI('/сторінки'),     module: Page },
         //{ path: encodeURI('/категорії'),    module: Category },
         //{ path: encodeURI('/типи'),         module: Type },
-        //{ path: encodeURI('/ролі'),         module: Role },
+        { path: encodeURI('/ролі'),         module: Role },
         //{ path: encodeURI('/логи/список'),  element: <Log.Index /> },
         { path: '*', element: <NotFound /> }
     ] }
 ]
-/*
+
 for await (const route of routes[1].children) {
     if (route?.module) {
         route.children = [...route.children ?? [], ...[
@@ -48,10 +48,11 @@ for await (const route of routes[1].children) {
                 path: encodeURI('редактор/:id'),
                 element: React.createElement(route.module['Editor'])
             },
+            { path: '*', element: <NotFound /> }
         ]]
     }
 }
-*/
+
 export default function () {
 
     return useRoutes(routes)

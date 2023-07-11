@@ -1,6 +1,6 @@
 import Field from './Field/Field.js'
 
-const modules = ['Title', 'Description', 'Latitude', 'Longitude', 'URI', 'Date', 'Status']
+const modules = ['Title', 'Description', 'Latitude', 'Longitude', 'Slug', 'Date', 'Status']
 
 const components = {}
 
