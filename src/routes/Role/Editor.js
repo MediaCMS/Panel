@@ -26,7 +26,6 @@ export default function () {
     useEffect(async () => {
         context.init({
             title: 'Ролі (редактор)',
-            router: 'role editor',
             submenu: [
                 { title: 'Закрити', path: '/ролі/список' }
             ]

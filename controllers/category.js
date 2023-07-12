@@ -4,7 +4,7 @@ export default {
 
     list: async (request, response) => {
         const category = await db.collection('categories')
-            .find().sort({ title: 1 }).toArray();
+            .find().sort({ order: 1 }).toArray();
         response.json(category);
     },
 
@@ -33,7 +33,6 @@ export default {
             return response.sendStatus(403);
         }
         const category = { ...request.body };
-        //category.alias = this.toAlias(category.title);
         category.order = parseInt(category.order);
         delete category._id;
         delete category.user;
@@ -44,13 +43,18 @@ export default {
         response.end();
     },
 
-    delete: async (request, response) => {
+    delete: async (request, response, next) => {
         if ((response.locals.user.role.level > 2)) {
             return response.sendStatus(403);
         }
-        await db.collection('categories').deleteOne({
-            _id: new ObjectId(request.params.id)
-        });
+        const _id = new ObjectId(request.params.id);
+        const count = await db.collection('posts').count({ category: _id });
+        if (count > 0) {
+            return next(
+                Error(`Категорія використана в публікаціях (${count})`)
+            )
+        }
+        await db.collection('categories').deleteOne({ _id });
         response.end();
     }
 }

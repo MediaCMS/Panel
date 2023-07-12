@@ -16,10 +16,10 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
    
     main {
       #body { min-height: 50vh; margin: 0 auto;
-        &.small {max-width: 640px;}
-        &.medium {max-width: 768px;}
-        &.large {max-width: 960px;}
-        &.full {max-width: auto;}
+        &.width-small {max-width: 640px;}
+        &.width-medium {max-width: 768px;}
+        &.width-large {max-width: 960px;}
+        &.width-full {max-width: auto;}
         &.index {}
         &.editor {max-width: 960px; margin: 5rem auto;
           form {

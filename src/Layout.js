@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { NavLink, Outlet, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, Navigate, useNavigate } from 'react-router-dom'
 import { Modal, Button } from 'react-bootstrap'
 import APIFactory from './api.js'
 import config from './config.js'
@@ -8,7 +8,7 @@ import menuSource from './menu.js'
 const userStorage = JSON.parse(localStorage.getItem('user'))
 
 const paramsDefault = {
-    title: config.title, router: 'main', size: 'full', submenu: []
+    title: '', width: 'full', submenu: []
 }
 
 export default function (props) {
@@ -16,18 +16,9 @@ export default function (props) {
     const [menu, setMenu] = useState()
     const [user, setUser] = useState(userStorage)
     const [params, setParams] = useState(userStorage)
-    /*
-    const [title, setTitle] = useState()
-    const [submenu, setSubmenu] = useState()
-    const [router, setRouter] = useState()
-    const [container, setContainer] = useState()
-    const [width, setWidth] = useState()
-    */
     const [message, setMessage] = useState()
     const [spinner, setSpinner] = useState(false)
-    //const [key, setKey] = useState(localStorage.getItem('key'))
     const navigate = useNavigate()
-    const location = useLocation()
 
     useEffect(() => {
         if (!user) return
@@ -80,7 +71,7 @@ export default function (props) {
                                         <Submenu items={params.submenu} setConfirm={setConfirm} />}
                                 </ul>
                             </div>
-                            <div id='body' className={params?.router + ' ' + params?.size}>
+                            <div id='body' className={' width-' + params?.width}>
                                 <Outlet context={{
                                     init, api, setSpinner, setAlert, setConfirm, setMessage
                                 }} />

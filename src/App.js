@@ -8,7 +8,7 @@ import Main from './routes/Main.js'
 //import Comment from './routes/Comment.js'
 //import User from './routes/User.js'
 //import Page from './routes/Page.js'
-//import Category from './routes/Category.js'
+import Category from './routes/Category.js'
 //import Type from './routes/Type.js'
 import Role from './routes/Role.js'
 //import Log from './routes/Log.js'
@@ -27,7 +27,7 @@ const routes = [
         //{ path: encodeURI('/коментарі'),    module: Comment },
         //{ path: encodeURI('/користувачі'),  module: User },
         //{ path: encodeURI('/сторінки'),     module: Page },
-        //{ path: encodeURI('/категорії'),    module: Category },
+        { path: encodeURI('/категорії'),    module: Category },
         //{ path: encodeURI('/типи'),         module: Type },
         { path: encodeURI('/ролі'),         module: Role },
         //{ path: encodeURI('/логи/список'),  element: <Log.Index /> },
