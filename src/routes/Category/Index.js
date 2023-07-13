@@ -29,9 +29,9 @@ export default function () {
             {categories.map(category => (
                 <Row status={category.status} key={category._id}
                     onClick={() => handleClick(category._id)}>
-                    <Cell align="left">{category.title}</Cell>
-                    <Cell align="left">{category.alias}</Cell>
-                    <Cell align="center">{category.order}</Cell>
+                    <Cell className="text-left">{category.title}</Cell>
+                    <Cell className="text-left">{category.alias}</Cell>
+                    <Cell className="text-center">{category.order}</Cell>
                 </Row>
             ))}
         </Table>

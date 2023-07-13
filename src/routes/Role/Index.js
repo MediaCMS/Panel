@@ -28,9 +28,9 @@ export default function () {
             {roles.map(role => (
                 <Row status={role.status} key={role._id}
                     onClick={() => handleClick(role._id)}>
-                    <Cell align="left">{role.title}</Cell>
-                    <Cell align="center">{role.level}</Cell>
-                    <Cell align="left">{role.description}</Cell>
+                    <Cell className="text-left">{role.title}</Cell>
+                    <Cell className="text-center">{role.level}</Cell>
+                    <Cell className="text-left">{role.description}</Cell>
                 </Row>
             ))}
         </Table>

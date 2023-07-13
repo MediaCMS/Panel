@@ -4,12 +4,12 @@ import Form, { Field, Row, Cell } from '../../wrappers/Form.js'
 
 export default function () {
 
-    const params = useParams()
-    const [category, setCategory] = useState(
-        { title: '', description: '', order: 30, status: false }
-    )
+    const [category, setCategory] = useState({
+        title: '', description: '', order: 30, status: false
+    })
     const context = useOutletContext()
     const navigate = useNavigate()
+    const params = useParams()
 
     const handleSubmit = async () => {
         category?._id

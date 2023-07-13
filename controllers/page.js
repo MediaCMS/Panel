@@ -21,7 +21,6 @@ export default {
         }
         const page = { ...request.body };
         page.time = new Date().toISOString();
-        //page.alias = this.toAlias(page.title);
         page.user = response.locals.user._id;
         const result = await db.collection('pages')
             .insertOne(page);
@@ -33,9 +32,6 @@ export default {
             return response.sendStatus(403);
         }
         const page = { ...request.body };
-        //page.alias = this.toAlias(page.title);
-        delete page._id;
-        delete page.user;
         await db.collection('pages')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
