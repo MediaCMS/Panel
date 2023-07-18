@@ -48,7 +48,7 @@ export default function Editor() {
 
     useEffect(async () => {
         context.setParams({
-            title: 'Користувачі (редактор)',
+            title: 'Користувачі / Редактор',
             router: ['user', 'editor'],
             submenu: [
                 { title: 'Закрити', url: '/користувачі/список' }

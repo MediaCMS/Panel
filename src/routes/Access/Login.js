@@ -24,6 +24,7 @@ export default function () {
             { recaptcha: form.get('g-recaptcha-response') },
             { headers: { Authorization: `Basic ${authorization}}` } }
         )
+        console.log(user)
         context.setUser(user)
         localStorage.setItem('user', JSON.stringify(user))
         navigate('/публікації/список')

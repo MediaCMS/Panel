@@ -15,23 +15,23 @@ import Role from './routes/Role.js'
 import Access from './routes/Access.js'
 
 const routes = [
-    { path: encodeURI('/доступ'), element: <Layout template={false} />, children: [
-        { path: encodeURI('вхід'), element: <Access.Login /> },
-        { path: encodeURI('вихід'), element: <Access.Logout /> }
+    { path: '/доступ', element: <Layout template={false} />, children: [
+        { path: 'вхід', element: <Access.Login /> },
+        { path: 'вихід', element: <Access.Logout /> }
     ] },
     { path: '/', element: <Layout template={true} />, children: [
-        { index: true,                      element: <Main /> },
-        //{ path: encodeURI('/публікації'),   module: Post },
-        //{ path: encodeURI('/зображення'),   module: Image },
-        //{ path: encodeURI('/мітки'),        module: Tag },
-        //{ path: encodeURI('/коментарі'),    module: Comment },
-        //{ path: encodeURI('/користувачі'),  module: User },
-        { path: encodeURI('/сторінки'),     module: Page },
-        { path: encodeURI('/категорії'),    module: Category },
-        //{ path: encodeURI('/типи'),         module: Type },
-        { path: encodeURI('/ролі'),         module: Role },
-        //{ path: encodeURI('/логи/список'),  element: <Log.Index /> },
-        { path: '*', element: <NotFound /> }
+        { index: true,           element: <Main /> },
+        //{ path: '/публікації',   module: Post },
+        //{ path: '/зображення',   module: Image },
+        //{ path: '/мітки',        module: Tag },
+        //{ path: '/коментарі',    module: Comment },
+        //{ path: '/користувачі',  module: User },
+        { path: '/сторінки',     module: Page },
+        { path: '/категорії',    module: Category },
+        //{ path: '/типи',         module: Type },
+        { path: 'ролі',          module: Role },
+        //{ path: '/логи/список',  element: <Log.Index /> },
+        { path: '*',             element: <NotFound /> }
     ] }
 ]
 
@@ -39,13 +39,13 @@ for await (const route of routes[1].children) {
     if (route?.module) {
         route.children = [...route.children ?? [], ...[
             {
-                path: encodeURI('список'),
+                path: 'список',
                 element: React.createElement(route.module['Index'])
             }, {
-                path: encodeURI('редактор'),
+                path: 'редактор',
                 element: React.createElement(route.module['Editor'])
             }, {
-                path: encodeURI('редактор/:id'),
+                path: 'редактор/:id',
                 element: React.createElement(route.module['Editor'])
             },
             { path: '*', element: <NotFound /> }
@@ -54,7 +54,6 @@ for await (const route of routes[1].children) {
 }
 
 export default function () {
-
     return useRoutes(routes)
 }
 

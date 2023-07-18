@@ -21,7 +21,7 @@ export default function Index() {
 
     useEffect(async () => {
         context.setParams({
-            title: 'Користувачі (cписок)',
+            title: 'Користувачі / Список',
             router: ['user', 'index'],
             submenu: [
                 { title: 'Створити', url: '/користувачі/редактор' }

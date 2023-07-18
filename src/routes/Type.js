@@ -13,7 +13,7 @@ export function Index() {
 
     useEffect(async () => {
         context.setParams({
-            title: 'Тип (cписок)',
+            title: 'Тип / Список',
             router: ['type', 'index'],
             submenu: [
                 { title: 'Створити', url: '/тип/редактор' }

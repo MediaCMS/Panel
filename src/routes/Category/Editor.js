@@ -25,7 +25,7 @@ export default function () {
 
     useEffect(async () => {
         context.init({
-            title: 'Категорії (редактор)',
+            title: 'Категорії / Редактор',
             submenu: [
                 { title: 'Закрити', path: '/категорії/список' }
             ]

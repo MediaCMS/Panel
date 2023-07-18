@@ -71,7 +71,7 @@ export default function (props) {
                                         <Submenu items={params.submenu} setConfirm={setConfirm} />}
                                 </ul>
                             </div>
-                            <div id='body' className={' width-' + params?.width}>
+                            <div id="body" className={' width-' + params?.width}>
                                 <Outlet context={{
                                     init, api, setSpinner, setAlert, setConfirm, setMessage
                                 }} />
@@ -96,34 +96,34 @@ function Header(props) {
 
     return (
         <header>
-            <nav className='navbar navbar-expand-sm navbar-light bg-light'>
-                <div className='container-fluid'>
-                    <NavLink to='/' className='navbar-brand' title={config.slogan}>
-                        <img src='/logo.png' alt={config.name} width='100' />
+            <nav className="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
+                <div className="container-fluid">
+                    <NavLink to="/" className="navbar-brand" title={config.slogan}>
+                        <img src="/logo.png" alt={config.name} />
                     </NavLink>
-                    <button className='navbar-toggler' type='button' data-bs-toggle='collapse'
-                        data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent'
-                        aria-expanded='false' aria-label='Toggle navigation'>
-                        <span className='navbar-toggler-icon' />
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon" />
                     </button>
-                    <div className='collapse navbar-collapse' id='navbarSupportedContent'>
+                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         {props?.menu && (
-                            <ul className='navbar-nav me-auto mb-lg-0'>
+                            <ul className="navbar-nav me-auto mb-lg-0">
                                 {props.menu.slice(0, 5).map((item, index) => (
-                                    <li className='nav-item' key={index} title={item.description}>
-                                        <NavLink to={encodeURI(item.path)} className='nav-link' >
+                                    <li className="nav-item" key={index} title={item.description}>
+                                        <NavLink to={encodeURI(item.path)} className="nav-link" >
                                             {item.title}
                                         </NavLink>
                                     </li>
                                 ))}
                                 {(props.menu.length > 5) && (
-                                    <li className='nav-item dropdown'>
-                                        <a className='nav-link dropdown-toggle' href='#' id='navbarDropdown'
-                                            role='button' data-bs-toggle='dropdown' aria-expanded='false'>...</a>
-                                        <ul className='dropdown-menu' aria-labelledby='navbarDropdown'>
+                                    <li className="nav-item dropdown">
+                                        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                                            role="button" data-bs-toggle="dropdown" aria-expanded="false">...</a>
+                                        <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                             {props.menu.slice(5).map((item, index) => (
                                                 <li key={index} title={item.description}>
-                                                    <NavLink to={encodeURI(item.path)} className='dropdown-item' >
+                                                    <NavLink to={encodeURI(item.path)} className="dropdown-item" >
                                                         {item.title}
                                                     </NavLink>
                                                 </li>
@@ -131,8 +131,8 @@ function Header(props) {
                                         </ul>
                                     </li>
                                 )}
-                                <li className='nav-item' title='Вихід з панелі куерування'>
-                                    <NavLink to={encodeURI('/доступ/вихід')} className='nav-link'>
+                                <li className="nav-item" title="Вихід з панелі куерування">
+                                    <NavLink to={encodeURI('/доступ/вихід')} className="nav-link">
                                         Вихід
                                     </NavLink>
                                 </li>
@@ -140,11 +140,12 @@ function Header(props) {
                         )}
                     </div>
                     {props?.user ? (
-                        <div title={props.user.role.title + ' ' + props.user.description}>
+                        <div className="text-light"
+                            title={props.user.role.title + ' ' + props.user.description}>
                             {props.user.title}
                             {props.user.image ? (
                                 <img src={config.images.url + props.user.image}
-                                    height='36px' className='rounded-3 ms-3' />
+                                    height="36px" className="rounded-3 ms-3" />
                             ) : null}
                         </div>
                     ) : null}
@@ -180,18 +181,18 @@ function Submenu(props) {
 function Footer(props) {
 
     return (
-        <footer className='text-center mt-5'>
-            <div className='alert alert-info my-5 box' role='alert'>
+        <footer className="text-center mt-5">
+            <div className="alert alert-info my-5 box" role="alert">
                 Демонстраційний сайт <a href="https://github.com/MediaCMS"
                     className="alert-link">MediaCMS</a>
             </div>
-            <ul className='nav justify-content-center'>
+            <ul className="nav justify-content-center">
                 {props?.menu && props.menu.map((item, index) => (
                     (item.access >= props.user.role.level) ? (
-                        <li className='nav-item' key={index}>
+                        <li className="nav-item" key={index}>
                             <NavLink
                                 to={encodeURI(item.path)}
-                                className='nav-link small p-2'
+                                className="nav-link small p-2"
                                 title={item.description}>
                                 {item.title}
                             </NavLink>
@@ -199,7 +200,7 @@ function Footer(props) {
                     ) : null
                 ))}
             </ul>
-            <p className='text-muted small mt-3' title={config.brand}>
+            <p className="text-muted small mt-3" title={config.brand}>
                 {config.brand} &copy; {config.copyright}
             </p>
         </footer>

@@ -1,4 +1,5 @@
 import express from 'express';
+import process from 'process';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import { client } from './db.js';
