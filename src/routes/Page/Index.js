@@ -29,7 +29,7 @@ export default function () {
                 <Row status={page.status} key={page._id}
                     onClick={() => handleClick(page._id)}>
                     <Cell className="text-left text-nowrap">{page.title}</Cell>
-                    <Cell className="text-left text-nowrap">{page.alias}</Cell>
+                    <Cell className="text-left text-nowrap">{page.slug}</Cell>
                     <Cell className="text-left overflow-hidden">{page.description}</Cell>
                 </Row>
             ))}

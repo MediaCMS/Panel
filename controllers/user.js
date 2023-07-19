@@ -45,7 +45,7 @@ export default {
         }
         const user = { ...request.body };
         user.time = new Date().toISOString();
-        //user.alias = this.toAlias(user.title);
+        //user.slug = this.toslug(user.title);
         user.role = ObjectId(user.role);
         user.user = response.locals.user._id;
         const result = await db.collection('users').insertOne(user);
@@ -59,7 +59,7 @@ export default {
             return response.sendStatus(403);
         }
         const user = { ...request.body };
-        //user.alias = this.toAlias(user.title);
+        //user.slug = this.toslug(user.title);
         user.role = ObjectId(user.role);
         delete user._id;
         if (!user.password) {
@@ -128,7 +128,7 @@ export default {
                 as: 'role'
             } },
             { $project: {
-                title: 1, description: 1, image: 1, alias: 1, 
+                title: 1, description: 1, image: 1, slug: 1, 
                 role: { $arrayElemAt: ["$role", 0] }
             } }
         ];

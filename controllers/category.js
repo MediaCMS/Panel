@@ -20,7 +20,7 @@ export default {
         }
         const category = { ...request.body };
         category.time = new Date().toISOString();
-        //category.alias = this.toAlias(category.title);
+        //category.slug = this.toslug(category.title);
         category.order = parseInt(category.order);
         category.user = response.locals.user._id;
         const result = await db.collection('categories')

@@ -30,7 +30,7 @@ export default function () {
                 <Row status={category.status} key={category._id}
                     onClick={() => handleClick(category._id)}>
                     <Cell className="text-left">{category.title}</Cell>
-                    <Cell className="text-left">{category.alias}</Cell>
+                    <Cell className="text-left">{category.slug}</Cell>
                     <Cell className="text-center">{category.order}</Cell>
                 </Row>
             ))}

@@ -39,7 +39,7 @@ export default {
                     as: 'tags'
                 } },
                 { $project: {
-                    time: 1, title: 1, description: 1, body: 1, image: 1, alias: 1,
+                    time: 1, title: 1, description: 1, body: 1, image: 1, slug: 1,
                     category: 1, tags: { _id: 1, title: 1 }, status: 1
                 }},
                 { $match: { _id: ObjectId(request.params.id) } }
@@ -50,7 +50,7 @@ export default {
     create: async (request, response) => {
         const publication = { ...request.body };
         publication.time = new Date().toISOString();
-        //publication.alias = this.toAlias(publication.title);
+        //publication.slug = this.toslug(publication.title);
         publication.order = parseInt(publication.order);
         if (publication?.tags) {
             publication.tags = publication.tags.map(tag => ObjectId(tag));
@@ -68,7 +68,7 @@ export default {
         }
         const publication = { ...request.body };
         publication.time = new Date(publication.time);
-        publication.alias = this.toAlias(publication.title);
+        publication.slug = this.toslug(publication.title);
         publication.category = ObjectId(publication.category);
         if (publication?.tags) {
             publication.tags = publication.tags.map(tag => ObjectId(tag));

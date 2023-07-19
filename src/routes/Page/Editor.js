@@ -5,7 +5,7 @@ import Form, { Field, Row, Cell } from '../../wrappers/Form.js'
 export default function () {
 
     const [page, setPage] = useState({
-        title: '', description: '', alias: '', status: false
+        title: '', description: '', slug: '', status: false
     })
     const context = useOutletContext()
     const navigate = useNavigate()
@@ -47,7 +47,7 @@ export default function () {
                     <Field.Title value={page.title} placeholder="Про проєкт" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Slug name="alias" value={page.alias} placeholder="про-проєкт" required />
+                    <Field.Slug value={page.slug} placeholder="про-проєкт" required />
                 </Cell>
                 <Cell sm="3">
                     <Field.Status value={page.status} label='Видимість сторінки' />

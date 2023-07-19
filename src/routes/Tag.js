@@ -41,7 +41,7 @@ export function Index() {
                 { title: 'Заголовок', class: 'text-center'},
                 { title: 'Посилання', class: 'text-center'}
             ]} rows={tags.items.length ? tags.items.map(tag => ({
-                id: tag._id, status: tag.status, values: [tag.title, tag.alias]
+                id: tag._id, status: tag.status, values: [tag.title, tag.slug]
             })) : []}
         />
     )

@@ -19,7 +19,7 @@ export default {
 
     autocomplete: async (request, response) => {
         const match = {
-            alias: {
+            slug: {
                 '$regex' : request.query.string,
                 '$options' : 'i'
             },
@@ -40,7 +40,7 @@ export default {
     create: async (request, response) => {
         const tag = { ...request.body };
         tag.time = new Date().toISOString();
-        //tag.alias = this.toAlias(tag.title);
+        //tag.slug = this.toslug(tag.title);
         tag.user = response.locals.user._id;
         const result = await db.collection('tags')
             .insertOne(tag);
@@ -49,7 +49,7 @@ export default {
 
     update: async (request, response) => {
         const tag = { ...request.body };
-        //tag.alias = this.toAlias(tag.title);
+        //tag.slug = this.toslug(tag.title);
         delete tag._id;
         delete tag.user;
         await db.collection('tags').updateOne(
