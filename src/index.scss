@@ -20,7 +20,7 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
         &.width-medium {max-width: 768px;}
         &.width-large {max-width: 960px;}
         &.width-full {max-width: auto;}
-        &.index {}
+        //&.index {}
         &.editor {max-width: 960px; margin: 5rem auto;
           form {
             input[type='datetime-local'], input[type='number'], select {width: auto;}

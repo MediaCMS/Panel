@@ -24,13 +24,13 @@ export default function () {
     }, [])
 
     return (
-        <Table columns={['Назва', 'Рівень', 'Опис']}>
+        <Table columns={['Назва', 'Опис', 'Рівень']}>
             {roles.map(role => (
                 <Row status={role.status} key={role._id}
                     onClick={() => handleClick(role._id)}>
                     <Cell className="text-left">{role.title}</Cell>
-                    <Cell className="text-center">{role.level}</Cell>
                     <Cell className="text-left">{role.description}</Cell>
+                    <Cell className="text-center">{role.level}</Cell>
                 </Row>
             ))}
         </Table>

@@ -15,7 +15,7 @@ export default function () {
         event.preventDefault()
         const form = new FormData(event.target)
         if (!form.get('g-recaptcha-response')) {
-            return context.setAlert('Підтвердіть що ви не робот')
+            return context.setAlert('Підтвердіть, що ви не робот')
         }
         const string = form.get('email') + ':' + MD5(form.get('password'))
         const authorization = Buffer.from(string, 'utf8').toString('base64')
@@ -24,7 +24,6 @@ export default function () {
             { recaptcha: form.get('g-recaptcha-response') },
             { headers: { Authorization: `Basic ${authorization}}` } }
         )
-        console.log(user)
         context.setUser(user)
         localStorage.setItem('user', JSON.stringify(user))
         navigate('/публікації/список')
@@ -34,8 +33,7 @@ export default function () {
         <main className="vh-100 d-flex">
             <div className="text-center m-auto">
                 <Form className="border p-3" onSubmit={handleSubmit}>
-                    <h2 className="mt-1">Авторизація</h2>
-                    <FloatingLabel label="Логін" className="mt-3">
+                    <FloatingLabel label="Логін" className="mt-1">
                         <Form.Control type="email" name="email"
                             autoComplete="false" required />
                     </FloatingLabel>
@@ -46,11 +44,11 @@ export default function () {
                     <div className="mt-2">
                         <ReCAPTCHA sitekey={config.google.recaptcha.key} />
                     </div>
-                    <Button variant="primary" type="submit" size="lg" className="mt-4">
+                    <Button variant="primary" type="submit" className="mt-4">
                         Авторизуватись
                     </Button>
                 </Form>
-                <p className='mt-3 mb-3 text-muted'>© {config.copyright}</p>
+                <p className='mt-3 small text-muted'>© {config.copyright}</p>
             </div>
         </main>
     )
