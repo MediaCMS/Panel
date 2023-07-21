@@ -1,5 +1,4 @@
 import express from 'express';
-import process from 'process';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import { client } from './db.js';
@@ -21,6 +20,7 @@ const exclude = [
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('dist'));
 
 if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
@@ -46,6 +46,11 @@ app.use(function (request, response, next) {
 });
 
 app.use(encodeURI(config.path), router);
+
+app.use('/*', (request, response) => {
+    console.log('302', encodeURI(request.path))
+    response.sendFile(config.root + '/dist/index.html')
+});
 
 app.use(async (error, request, response, next) => {
     console.error(error);

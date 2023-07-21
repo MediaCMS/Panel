@@ -45,10 +45,9 @@ for (let route of Object.entries(routes)) {
         router.delete(encodeURI(route.path) + '/:id', controller.delete);
     }
 }
-console.log();
 
 router.get('*', async (request, response, next) => {
-    console.log('404', request.path)
+    console.log('404', encodeURI(request.path))
     response.sendStatus(404);
     next();
 });

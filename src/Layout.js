@@ -124,16 +124,16 @@ function Header(props) {
                             </ul>
                         )}
                     </div>
+                    <div className="d-none d-xl-block text-light"
+                        title={props.user.role.title + ' ' + props.user.description}>
+                        {props.user.title}
+                        {props.user.image ? (
+                            <img src={config.images.url + props.user.image}
+                                height="36px" className="rounded-3 ms-3" />
+                        ) : null}
+                    </div>
                 </div>
             </nav>
-            <div className="text-light"
-                title={props.user.role.title + ' ' + props.user.description}>
-                {props.user.title}
-                {props.user.image ? (
-                    <img src={config.images.url + props.user.image}
-                        height="36px" className="rounded-3 ms-3" />
-                ) : null}
-            </div>
         </header>
     )
 } 

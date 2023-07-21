@@ -6,7 +6,7 @@ export default {
     path: '/api',
     root: '/var/www/media/panel',
     db: { 
-        url: 'mongodb://media:0123456789@localhost:27017/media',
+        url: 'mongodb://media:0123456789@127.0.0.1:27017/media',
         options: {
             connectTimeoutMS: 5_000,
             socketTimeoutMS: 5_000,
