@@ -10,7 +10,9 @@ export default {
 
     read: async (request, response) => {
         const role = await db.collection('roles')
-            .find({ _id: ObjectId(request.params.id) }).next()
+            .find({ _id: ObjectId(request.params.id) })
+            .project({ _id: false })
+            .next()
         response.json(role);
     },
 
@@ -31,7 +33,6 @@ export default {
         }
         const role = { ...request.body };
         role.level = parseInt(role.level);
-        delete role._id;
         await db.collection('roles').updateOne(
             { _id: ObjectId(request.params.id) },
             { $set: role }

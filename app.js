@@ -29,7 +29,7 @@ if (app.get('env') === 'production') {
 
 app.use(function (request, response, next) {
     //console.log(decodeURI(request.originalUrl));
-    console.log(decodeURI(request.path), request.params, request.query);
+    console.log(decodeURI(request.path), request.method, request.params, request.query);
     //console.log('app.use.request.cookies', request.cookies);
     if (!request.cookies?.token) {
         if (exclude.includes(decodeURI(request.path))) {

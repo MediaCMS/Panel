@@ -12,7 +12,7 @@ export default function () {
     const params = useParams()
 
     const handleSubmit = async () => {
-        category?._id
+        params?.id
             ? await context.api.panel.put('/категорії/' + params.id, category)
             : await context.api.panel.post('/категорії', category)
         navigate('/категорії/список')

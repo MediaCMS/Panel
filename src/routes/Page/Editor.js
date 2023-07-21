@@ -12,7 +12,7 @@ export default function () {
     const params = useParams()
 
     const handleSubmit = async () => {
-        page?._id
+        params?.id
             ? await context.api.panel.put('/сторінки/' + params.id, page)
             : await context.api.panel.post('/сторінки', page)
         navigate('/сторінки/список')
@@ -55,6 +55,12 @@ export default function () {
             </Row>
             <Row>
                 <Field.Description value={page.description} placeholder="Опис сторінки" />
+            </Row>
+            <Row>
+                <Field.Body value={page.body} placeholder="Опис сторінки" />
+            </Row>
+            <Row>
+                <Field.Image value={page.image} />
             </Row>
         </Form>
      )

@@ -10,7 +10,9 @@ export default {
 
     read: async (request, response) => {
         const category = await db.collection('categories')
-            .find({ _id: ObjectId(request.params.id) }).next()
+            .find({ _id: ObjectId(request.params.id) })
+            .project({ _id: false })
+            .next()
         response.json(category);
     },
 
@@ -19,10 +21,7 @@ export default {
             return response.sendStatus(403);
         }
         const category = { ...request.body };
-        category.time = new Date().toISOString();
-        //category.slug = this.toslug(category.title);
         category.order = parseInt(category.order);
-        category.user = response.locals.user._id;
         const result = await db.collection('categories')
             .insertOne(category);
         response.end(result.insertedId.toString());
@@ -34,8 +33,6 @@ export default {
         }
         const category = { ...request.body };
         category.order = parseInt(category.order);
-        delete category._id;
-        delete category.user;
         await db.collection('categories').updateOne(
             { _id: ObjectId(request.params.id) },
             { $set: category }

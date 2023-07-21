@@ -12,7 +12,7 @@ export default function () {
     })
 
     const handleSubmit = async () => {
-        role?._id
+        params?.id
             ? await context.api.panel.put('/ролі/' + params.id, role)
             : await context.api.panel.post('/ролі', role)
         navigate('/ролі/список')

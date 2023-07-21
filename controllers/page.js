@@ -11,6 +11,7 @@ export default {
     read: async (request, response) => {
         const page = await db.collection('pages')
             .find({ _id: ObjectId(request.params.id) })
+            .project({ _id: false })
             .next();
         response.json(page);
     },
@@ -20,8 +21,6 @@ export default {
             return response.sendStatus(403);
         }
         const page = { ...request.body };
-        page.time = new Date().toISOString();
-        page.user = response.locals.user._id;
         const result = await db.collection('pages')
             .insertOne(page);
         response.end(result.insertedId.toString());
