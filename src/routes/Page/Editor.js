@@ -56,12 +56,8 @@ export default function () {
             <Row>
                 <Field.Description value={page.description} placeholder="Опис сторінки" />
             </Row>
-            <Row>
-                <Field.Body value={page.body} placeholder="Опис сторінки" />
-            </Row>
-            <Row>
-                <Field.Image value={page.image} />
-            </Row>
+            <Row><Field.Body value={page.body} /></Row>
+            <Row><Field.Image value={page.image} /></Row>
         </Form>
      )
 }
