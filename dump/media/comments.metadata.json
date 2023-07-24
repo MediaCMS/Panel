@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"media.comments"}],"uuid":"f6e8fa231b7e4550b3417479c56c2aa7"}
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"0f437151dd93432d9c41b3adaf2f072c","collectionName":"comments","type":"collection"}
