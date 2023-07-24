@@ -4,12 +4,12 @@ import Form, { Field, Row, Cell } from '../../wrappers/Form.js'
 
 export default function () {
 
-    const context = useOutletContext()
-    const navigate = useNavigate()
-    const params = useParams()
     const [role, setRole] = useState({
         title: '', description: '', level: 5, status: false
     })
+    const context = useOutletContext()
+    const navigate = useNavigate()
+    const params = useParams()
 
     const handleSubmit = async () => {
         params?.id

@@ -10,7 +10,9 @@ export default {
 
     read: async (request, response) => {
         const type = await db.collection('types')
-            .find({ _id: ObjectId(request.params.id) }).next()
+            .find({ _id: ObjectId(request.params.id) })
+            .project({ _id: false })
+            .next()
         response.json(type);
     },
 
@@ -19,8 +21,8 @@ export default {
             return response.sendStatus(403);
         }
         const type = { ...request.body };
-        type.level = parseInt(type.level);
-        const result = await db.collection('types').insertOne(type);
+        const result = await db.collection('types')
+            .insertOne(type);
         response.end(result.insertedId.toString());
     },
 
@@ -29,19 +31,23 @@ export default {
             return response.sendStatus(403);
         }
         const type = { ...request.body };
-        type.level = parseInt(type.level);
-        delete type._id;
-        await db.collection('types')
-            .updateOne(
-                { _id: ObjectId(request.params.id) },
-                { $set: type }
-            );
+        await db.collection('types').updateOne(
+            { _id: ObjectId(request.params.id) },
+            { $set: type }
+        );
         response.end();
     },
 
     delete: async (request, response) => {
         if ((response.locals.user.role.level > 1)) {
             return response.sendStatus(403);
+        }
+        const _id = new ObjectId(request.params.id);
+        const count = await db.collection('posts').count({ type: _id });
+        if (count > 0) {
+            return next(
+                Error(`Тип використаний в публікаціях (${count})`)
+            )
         }
         await db.collection('types').deleteOne(
             { _id: new ObjectId(request.params.id) }

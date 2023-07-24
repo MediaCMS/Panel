@@ -5,7 +5,6 @@ import MD5 from 'crypto-js/md5.js'
 
 export default function Editor() {
 
-    const params = useParams()
     const [user, setUser] = useState({
         title: '', description: '', phone: '', skype: '', email: '',
         image: null, status: false
@@ -13,6 +12,7 @@ export default function Editor() {
     const [roles, setRoles] = useState()
     const context = useOutletContext()
     const navigate = useNavigate()
+    const params = useParams()
 
     const handleSave = async () => {
         const userExport = { ...user }

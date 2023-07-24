@@ -9,7 +9,7 @@ import Main from './routes/Main.js'
 //import User from './routes/User.js'
 import Page from './routes/Page.js'
 import Category from './routes/Category.js'
-//import Type from './routes/Type.js'
+import Type from './routes/Type.js'
 import Role from './routes/Role.js'
 //import Log from './routes/Log.js'
 import Access from './routes/Access.js'
@@ -28,7 +28,7 @@ const routes = [
         //{ path: '/користувачі',  module: User },
         { path: '/сторінки',     module: Page },
         { path: '/категорії',    module: Category },
-        //{ path: '/типи',         module: Type },
+        { path: '/типи',         module: Type },
         { path: 'ролі',          module: Role },
         //{ path: '/логи/список',  element: <Log.Index /> },
         { path: '*',             element: <NotFound /> }
