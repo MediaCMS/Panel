@@ -3,35 +3,67 @@ import db, { ObjectId } from '../db.js';
 export default {
 
     list: async (request, response) => {
-        const comment = await db.collection('comments')
-            .find().sort({ title: 1 }).toArray();
-        response.json(comment);
+        const match = {};
+        //console.log(match)
+        const pipeline = [
+                { $lookup: {
+                    from: 'users',
+                    localField: 'user',
+                    foreignField: '_id',
+                    as: 'user'
+                } },
+                { $match: match },
+                { $project: {
+                    time: 1, body: 1, user: {
+                        $arrayElemAt: ['$user.title', 0]
+                    }, status: 1
+                } },
+                { $sort: sort(request.query?.sort, { time: -1 }) },
+                { $skip: skip(request.query?.page) },
+                { $limit: limit }
+            ]
+        //console.log(pipeline)
+        const comments = await db.collection('comments')
+            .aggregate(pipeline).toArray()
+        response.json(comments);
     },
 
     read: async (request, response) => {
         const comment = await db.collection('comments')
-            .find({ _id: ObjectId(request.params.id) }).next();
+            .aggregate([
+                { $match: {
+                    _id: ObjectId(request.params.id) }
+                },
+                { $lookup: {
+                    from: 'users',
+                    localField: 'user',
+                    foreignField: '_id',
+                    as: 'user'
+                } },
+                { $project: {
+                    _id: 0, time: 1, body: 1, user: {
+                        $arrayElemAt: ['$user.title', 0]
+                    }, status: 1
+                } }
+            ]).next();
         response.json(comment);
     },
-
+    /*
     create: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if ((response.locals.user.role.level > 5)) {
             return response.sendStatus(403);
         }
         const comment = { ...request.body };
-        comment.level = parseInt(comment.level);
         const result = await db.collection('comments')
             .insertOne(comment);
         response.end(result.insertedId.toString());
     },
-
+    */
     update: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if ((response.locals.user.role.level > 3)) {
             return response.sendStatus(403);
         }
         const comment = { ...request.body };
-        comment.level = parseInt(comment.level);
-        delete comment._id;
         await db.collection('comments')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
@@ -41,7 +73,7 @@ export default {
     },
 
     delete: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if ((response.locals.user.role.level > 3)) {
             return response.sendStatus(403);
         }
         await db.collection('comments').deleteOne({

@@ -4,7 +4,7 @@ export default {
 
     list: async (request, response) => {
         const types = await db.collection('types')
-            .find().sort({ title: 1 }).toArray();
+            .find().sort({ time: -1 }).toArray();
         response.json(types);
     },
 

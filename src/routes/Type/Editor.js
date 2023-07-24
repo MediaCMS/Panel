@@ -31,13 +31,9 @@ export default function () {
             ]
         })
         if (!params?.id) return
-        const type = await context.api.panel.get('/типи/' + params.id)
-        if (!type) {
-            context.setAlert('Тип не знайдений')
-            navigate('/типи/список')
-            return
-        }
-        setType(type)
+        setType(
+            await context.api.panel.get('/типи/' + params.id)
+        )
     }, [])
 
     return (
