@@ -1,11 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { NavLink, Outlet, Navigate, useNavigate } from 'react-router-dom'
-import { Modal, Button } from 'react-bootstrap'
+import { Outlet, Navigate, useNavigate } from 'react-router-dom'
+import Header from './Header.js'
+import Submenu from './Submenu.js'
+import Message from './Message.js'
+import Footer from './Footer.js'
 import APIFactory from './api.js'
-import config from './config.js'
 import menuSource from './menu.js'
 
-const userStorage = JSON.parse(localStorage.getItem('user'))
+const userStorage = JSON.parse(
+    localStorage.getItem('user')
+)
 
 const paramsDefault = {
     title: '', width: 'full', submenu: []
@@ -89,137 +93,5 @@ export default function (props) {
                 </div>
             )}
         </React.StrictMode>
-    )
-}
-
-function Header(props) {
-
-    return (
-        <header>
-            <nav className="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
-                <div className="container-fluid">
-                    <NavLink to="/" className="navbar-brand" title={config.slogan}>
-                        <img src="/logo.png" alt={config.name} />
-                    </NavLink>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon" />
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        {props?.menu && (
-                            <ul className="navbar-nav me-auto mb-lg-0">
-                                {props.menu.map((item, index) => (
-                                    <li className="nav-item" key={index} title={item.description}>
-                                        <NavLink to={encodeURI(item.path)} className="nav-link" >
-                                            {item.title}
-                                        </NavLink>
-                                    </li>
-                                ))}
-                                <li className="nav-item" title="Вихід з панелі куерування">
-                                    <NavLink to={encodeURI('/доступ/вихід')} className="nav-link">
-                                        Вихід
-                                    </NavLink>
-                                </li>
-                            </ul>
-                        )}
-                    </div>
-                    <div className="d-none d-xl-block text-light"
-                        title={props.user.role.title + ' ' + props.user.description}>
-                        {props.user.title}
-                        {props.user.image ? (
-                            <img src={config.images.url + props.user.image}
-                                height="36px" className="rounded-3 ms-3" />
-                        ) : null}
-                    </div>
-                </div>
-            </nav>
-        </header>
-    )
-} 
-
-function Submenu(props) {
-    return props.items.map(item => (
-        <li className="nav-item" key={item.title}>
-            <NavLink to={encodeURI(item?.path ?? '#')}
-                onClick={() => {
-                    if (item?.onClick) {
-                        if (item?.confirm) {
-                            if (!props.setConfirm(item.description + '?')) {
-                                return
-                            }
-                        }
-                        item.onClick()
-                    }
-                }}
-                data-bs-toggle={item?.toggle}
-                className="nav-link"
-                title={item?.description}>
-                {item.title}
-            </NavLink>
-        </li>
-    ))
-}
-
-function Footer(props) {
-
-    return (
-        <footer className="text-center mt-5">
-            <div className="alert alert-info my-5 box" role="alert">
-                Демонстраційний сайт <a href="https://github.com/MediaCMS"
-                    className="alert-link">MediaCMS</a>
-            </div>
-            <ul className="nav justify-content-center">
-                {props?.menu && props.menu.map((item, index) => (
-                    (item.access >= props.user.role.level) ? (
-                        <li className="nav-item" key={index}>
-                            <NavLink
-                                to={encodeURI(item.path)}
-                                className="nav-link small p-2"
-                                title={item.description}>
-                                {item.title}
-                            </NavLink>
-                        </li>
-                    ) : null
-                ))}
-            </ul>
-            <p className="text-muted small mt-3" title={config.brand}>
-                {config.brand} &copy; {config.copyright}
-            </p>
-        </footer>
-    )
-}
-
-function Message(props) {
-
-    const handleClose = () => {
-        props.setMessage(null)
-    }
-
-    return (
-        <Modal show={!!props?.type} onHide={handleClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>{props?.title ?? 'Повідомлення'}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <p>{props.body}</p>
-            </Modal.Body>
-            <Modal.Footer>
-                {props.type === 'alert' ? (
-                    <Button variant="primary" onClick={handleClose}>Зрозуміло</Button>
-                ) : (
-                    <>
-                        <Button variant="secondary" onClick={() => {
-                            props?.onFalse && props.onFalse()
-                            handleClose()
-                        }}>Ні, дякую</Button>
-                        <Button variant="primary" onClick={() => {
-                            props.onTrue()
-                            handleClose()
-                        }}>Гаразд</Button>
-                    </>
-                )}
-            </Modal.Footer>
-        </Modal>
     )
 }

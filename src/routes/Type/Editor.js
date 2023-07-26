@@ -31,9 +31,8 @@ export default function () {
             ]
         })
         if (!params?.id) return
-        setType(
-            await context.api.panel.get('/типи/' + params.id)
-        )
+        const types = await context.api.panel.get('/типи/' + params.id)
+        setType(types)
     }, [])
 
     return (

@@ -1,4 +1,4 @@
-import db, { ObjectId } from '../db.js';
+import db, { ObjectId, sort, skip } from '../db.js';
 
 export default {
 
@@ -48,8 +48,9 @@ export default {
             ]).next();
         response.json(comment);
     },
-    /*
+
     create: async (request, response) => {
+        /*
         if ((response.locals.user.role.level > 5)) {
             return response.sendStatus(403);
         }
@@ -57,8 +58,9 @@ export default {
         const result = await db.collection('comments')
             .insertOne(comment);
         response.end(result.insertedId.toString());
+        */
     },
-    */
+
     update: async (request, response) => {
         if ((response.locals.user.role.level > 3)) {
             return response.sendStatus(403);

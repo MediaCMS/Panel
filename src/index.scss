@@ -1,4 +1,5 @@
-html {min-height: 100%; font-size: calc(12px + 0.5vw);
+html { min-height: 100%; font-size: calc(12px + 0.5vw);
+  --bs-secondary-color: #e9ecef;
   body {
     min-height: 100vh; color: #303030; line-height: calc(130% + 0.5vw); background-color: #ffffff;
     padding: 0; margin: 0; position: relative;
@@ -10,7 +11,10 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
     img { border-radius: 1%; }
     table {
       tr.text-muted {
-        td { color: var(--bs-secondary-color); }
+        th, td { color: #c2c9d6 !important; }
+        &:hover {
+          th, td { color: initial !important; }
+        }
       }
     }
    
@@ -19,7 +23,7 @@ html {min-height: 100%; font-size: calc(12px + 0.5vw);
         &.width-small {max-width: 640px;}
         &.width-medium {max-width: 768px;}
         &.width-large {max-width: 960px;}
-        &.width-full {max-width: auto;}
+        &.width-full {max-width: fit-content;}
         //&.index {}
         &.editor {max-width: 960px; margin: 5rem auto;
           form {

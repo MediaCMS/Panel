@@ -5,19 +5,26 @@ export default {
     list: async (request, response) => {
         const match = {};
         const tags = await db.collection('tags')
-            .find(match).sort(sort(request.query?.sort))
+            .find(match)
+            .sort(sort(request.query?.sort))
             .skip(skip(request.query?.page))
-            .limit(limit).toArray();
+            .limit(limit)
+            .toArray();
         response.json(tags);
     },
 
     read: async (request, response) => {
         const tag = await db.collection('tags')
-            .find({ _id: ObjectId(request.params.id) }).next();            
+            .find({ _id: ObjectId(request.params.id) })
+            .project({ _id: false })
+            .next();            
         response.json(tag)
     },
 
     autocomplete: async (request, response) => {
+        if ((response.locals.user.role.level > 4)) {
+            return response.sendStatus(403);
+        }
         const match = {
             slug: {
                 '$regex' : request.query.string,
@@ -32,26 +39,28 @@ export default {
             }
         }
         const tags = await db.collection('tags')
-            .find(match).project({ title: 1 })
-            .sort({ title: 1 }).toArray();
+            .find(match)
+            .project({ title: 1 })
+            .sort({ title: 1 })
+            .toArray();
         response.json(tags);
     },
 
     create: async (request, response) => {
+        if ((response.locals.user.role.level > 3)) {
+            return response.sendStatus(403);
+        }
         const tag = { ...request.body };
-        tag.time = new Date().toISOString();
-        //tag.slug = this.toslug(tag.title);
-        tag.user = response.locals.user._id;
         const result = await db.collection('tags')
             .insertOne(tag);
         response.end(result.insertedId.toString());
     },
 
     update: async (request, response) => {
+        if ((response.locals.user.role.level > 3)) {
+            return response.sendStatus(403);
+        }
         const tag = { ...request.body };
-        //tag.slug = this.toslug(tag.title);
-        delete tag._id;
-        delete tag.user;
         await db.collection('tags').updateOne(
             { _id: ObjectId(request.params.id) },
             { $set: tag }
@@ -60,6 +69,16 @@ export default {
     },
 
     delete: async (request, response) => {
+        if ((response.locals.user.role.level > 3)) {
+            return response.sendStatus(403);
+        }
+        const _id = new ObjectId(request.params.id);
+        const count = await db.collection('posts').count({ tags: _id });
+        if (count > 0) {
+            return next(
+                Error(`Мітка використана в публікаціях (${count})`)
+            )
+        }
         await db.collection('tags').deleteOne(
             { _id: new ObjectId(request.params.id) }
         );

@@ -4,7 +4,7 @@ import Layout from './Layout.js'
 import Main from './routes/Main.js'
 //import Post from './routes/Post.js'
 //import Image from './routes/Image.js'
-//import Tag from './routes/Tag.js'
+import Tag from './routes/Tag.js'
 import Comment from './routes/Comment.js'
 //import User from './routes/User.js'
 import Page from './routes/Page.js'
@@ -23,7 +23,7 @@ const routes = [
         { index: true,           element: <Main /> },
         //{ path: 'публікації',   module: Post },
         //{ path: 'зображення',   module: Image },
-        //{ path: 'мітки',        module: Tag },
+        { path: 'мітки',        module: Tag },
         { path: 'коментарі',    module: Comment },
         //{ path: 'користувачі',  module: User },
         { path: 'сторінки',     module: Page },
