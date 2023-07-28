@@ -6,7 +6,7 @@ import Main from './routes/Main.js'
 //import Image from './routes/Image.js'
 import Tag from './routes/Tag.js'
 import Comment from './routes/Comment.js'
-//import User from './routes/User.js'
+import User from './routes/User.js'
 import Page from './routes/Page.js'
 import Category from './routes/Category.js'
 import Type from './routes/Type.js'
@@ -25,7 +25,7 @@ const routes = [
         //{ path: 'зображення',   module: Image },
         { path: 'мітки',        module: Tag },
         { path: 'коментарі',    module: Comment },
-        //{ path: 'користувачі',  module: User },
+        { path: 'користувачі',  module: User },
         { path: 'сторінки',     module: Page },
         { path: 'категорії',    module: Category },
         { path: 'типи',         module: Type },

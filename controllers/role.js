@@ -11,7 +11,6 @@ export default {
     read: async (request, response) => {
         const role = await db.collection('roles')
             .find({ _id: ObjectId(request.params.id) })
-            .project({ _id: false })
             .next()
         response.json(role);
     },
