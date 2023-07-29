@@ -7,7 +7,7 @@ export default function Editor() {
 
     const [user, setUser] = useState({
         title: '', description: '', phone: '', email: '',
-        role: '', slug: '', status: false
+        password: '', password2: '', role: '', slug: '', status: false
     })
     const [roles, setRoles] = useState()
     const context = useOutletContext()
@@ -15,23 +15,22 @@ export default function Editor() {
     const params = useParams()
 
     const handleSubmit = async () => {
-        if (user?.password) {
-            if (!user?.password2) {
+        const userNew = { ...user }
+        if (userNew?.password) {
+            if (!userNew?.password2) {
                 return context.setAlert('Відсутній повторний пароль')
             }
-            if (user.password !== user.password2) {
+            if (userNew.password !== userNew.password2) {
                 return context.setAlert('Пароль відрізняється від повторного пароля')
             }
-            user.password = MD5(user.password).toString()
+            userNew.password = MD5(userNew.password).toString()
+        } else {
+            delete userNew.password
         }
-        user?._id
-            ? await context.api.panel.put('/користувачі/' + params.id, user)
-            : await context.api.panel.post('/користувачі', user)
-        setUser(user => {
-            delete user.password
-            delete user.password2
-            return user
-        })
+        delete userNew.password2
+        userNew?._id
+            ? await context.api.panel.put('/користувачі/' + params.id, userNew)
+            : await context.api.panel.post('/користувачі', userNew)
         navigate('/користувачі/список')
     }
 
@@ -49,9 +48,12 @@ export default function Editor() {
         })
         const roles = await context.api.panel.get('/ролі')
         setRoles(roles)
-        if (!params?.id) return
-        const user = await context.api.panel.get('/користувачі/' + params.id)
-        setUser(user)
+        if (params?.id) {
+            const user = await context.api.panel.get('/користувачі/' + params.id)
+            setUser(user)
+        } else {
+            setUser(user => ({ ...user, role: roles.at(-1)._id }))
+        }
     }, [])
 
     return (
@@ -76,13 +78,13 @@ export default function Editor() {
             </Row>
             <Row>
                 <Cell sm="4">
-                    <Field type="password" name="password"
-                        label="Пароль" pattern="[a-zA-Z0-9_/-]{8,32}" autoComplete="off"
+                    <Field type="password" name="password" value={user.password}
+                        label="Пароль" pattern="[a-zA-Z0-9$_\-]{8,32}" autoComplete="off"
                         title="Латиниця, цифри, підкреслення (від 8 до 32 символів)" />
                 </Cell>
                 <Cell sm="4">
-                    <Field type="password" name="password2" autoComplete="off"
-                        label="Пароль (повторно)" pattern="[a-zA-Z0-9_/-].*{8,32}"
+                    <Field type="password" name="password2"  value={user.password2}
+                        label="Пароль (повторно)" pattern="[a-zA-Z0-9$_\-]{8,32}" autoComplete="off"
                         title="Латиниця, цифри, підкреслення (від 8 до 32 символів)" />
                 </Cell>
                 <Cell sm="4">

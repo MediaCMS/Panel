@@ -15,9 +15,7 @@ export default {
 
     read: async (request, response) => {
         const tag = await db.collection('tags')
-            .find({ _id: ObjectId(request.params.id) })
-            .project({ _id: false })
-            .next();            
+            .find({ _id: ObjectId(request.params.id) }).next();            
         response.json(tag)
     },
 
@@ -39,10 +37,8 @@ export default {
             }
         }
         const tags = await db.collection('tags')
-            .find(match)
-            .project({ title: 1 })
-            .sort({ title: 1 })
-            .toArray();
+            .find(match).project({ title: 1 })
+            .sort({ title: 1 }).toArray();
         response.json(tags);
     },
 
@@ -61,6 +57,7 @@ export default {
             return response.sendStatus(403);
         }
         const tag = { ...request.body };
+        tag._id = ObjectId(tag._id);
         await db.collection('tags').updateOne(
             { _id: ObjectId(request.params.id) },
             { $set: tag }

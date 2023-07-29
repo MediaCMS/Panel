@@ -32,7 +32,7 @@ export default {
     read: async (request, response) => {
         const user = await db.collection('users')
             .find({ _id: ObjectId(request.params.id) })
-            .next();
+            .project({ password: false }).next();
         response.json(user);
     },
 
@@ -40,13 +40,13 @@ export default {
         if ((response.locals.user.role.level > 2)) {
             return response.sendStatus(403);
         }
+        const user = { ...request.body };
+        user.role = ObjectId(user.role);
         const role = await db.collection('roles')
-            .find({ _id: ObjectId(id) }).next();
+            .find({ _id: user.role }).next();
         if (response.locals.user.role.level >= role.level) {
             return response.sendStatus(403);
         }
-        const user = { ...request.body };
-        user.role = ObjectId(user.role);
         const result = await db.collection('users')
             .insertOne(user);
         response.end(result.insertedId.toString());
@@ -56,10 +56,11 @@ export default {
         if ((response.locals.user.role.level > 2)) {
             return response.sendStatus(403);
         }
-        if (!validateUserRole(request.params.id, response.locals.user.role.level)) {
+        if (!await validateUserRole(request.params.id, response.locals.user.role.level)) {
             return response.sendStatus(403);
         }
         const user = { ...request.body };
+        user._id = ObjectId(user._id);
         user.role = ObjectId(user.role);
         if (!user.password) {
             delete user.password;
@@ -75,7 +76,7 @@ export default {
         if ((response.locals.user.role.level > 2)) {
             return response.sendStatus(403);
         }
-        if (!validateUserRole(request.params.id, response.locals.user.role.level)) {
+        if (!await validateUserRole(request.params.id, response.locals.user.role.level)) {
             return response.sendStatus(403);
         }
         await db.collection('users').deleteOne({
@@ -145,7 +146,7 @@ async function validateUserRole(id, lavel) {
         .aggregate([
             { $lookup: {
                 from: 'roles',
-                ocalField: 'role',
+                localField: 'role',
                 foreignField: '_id',
                 as: 'role'
             } },

@@ -48,16 +48,16 @@ export default {
     },
 
     create: async (request, response) => {
-        const publication = { ...request.body };
-        publication.time = new Date().toISOString();
-        //publication.slug = this.toslug(publication.title);
-        publication.order = parseInt(publication.order);
-        if (publication?.tags) {
-            publication.tags = publication.tags.map(tag => ObjectId(tag));
+        const post = { ...request.body };
+        post.time = new Date().toISOString();
+        //post.slug = this.toslug(post.title);
+        post.order = parseInt(post.order);
+        if (post?.tags) {
+            post.tags = post.tags.map(tag => ObjectId(tag));
         }
-        publication.user = response.locals.user._id;
+        post.user = response.locals.user._id;
         const result = await db.collection('posts')
-            .insertOne(publication);
+            .insertOne(post);
         response.end(result.insertedId.toString());
     },
 
@@ -66,19 +66,19 @@ export default {
             && (response.locals.user._id !== request.body.user)) {
             return response.sendStatus(403);
         }
-        const publication = { ...request.body };
-        publication.time = new Date(publication.time);
-        publication.slug = this.toslug(publication.title);
-        publication.category = ObjectId(publication.category);
-        if (publication?.tags) {
-            publication.tags = publication.tags.map(tag => ObjectId(tag));
+        const post = { ...request.body };
+        post.time = new Date(post.time);
+        post.slug = this.toslug(post.title);
+        post.category = ObjectId(post.category);
+        if (post?.tags) {
+            post.tags = post.tags.map(tag => ObjectId(tag));
         }
-        delete publication._id;
-        delete publication.user;
+        post._id = ObjectId(post._id);
+        //delete post.user;
         await db.collection('posts')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
-                { $set: publication }
+                { $set: post }
             );
         response.end();
     },

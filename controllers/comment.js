@@ -66,6 +66,7 @@ export default {
             return response.sendStatus(403);
         }
         const comment = { ...request.body };
+        comment._id = ObjectId(comment._id);
         await db.collection('comments')
             .updateOne(
                 { _id: ObjectId(request.params.id) },

@@ -30,8 +30,8 @@ export default {
             return response.sendStatus(403);
         }
         const image = { ...request.body };
+        image._id = ObjectId(image._id);
         image.level = parseInt(image.level);
-        delete image._id;
         await db.collection('images')
             .updateOne(
                 { _id: ObjectId(request.params.id) },

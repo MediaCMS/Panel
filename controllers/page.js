@@ -10,9 +10,7 @@ export default {
 
     read: async (request, response) => {
         const page = await db.collection('pages')
-            .find({ _id: ObjectId(request.params.id) })
-            .project({ _id: false })
-            .next();
+            .find({ _id: ObjectId(request.params.id) }).next();
         response.json(page);
     },
 
@@ -31,6 +29,7 @@ export default {
             return response.sendStatus(403);
         }
         const page = { ...request.body };
+        page._id = ObjectId(page._id);
         await db.collection('pages')
             .updateOne(
                 { _id: ObjectId(request.params.id) },

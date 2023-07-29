@@ -52,6 +52,8 @@ export default (setSpinner, setAlert, navigate) => {
             } else {
                 setAlert('Перевищенно час очікування відповіді сервера')
             }
+        } else {
+            setAlert('Під час виконання запиту виникла помилка')
         }
         return Promise.reject(error)
     })

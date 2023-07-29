@@ -4,7 +4,7 @@ import Control from '../Control.js'
 
 export default function (props) {
 
-    const { className, ...propsNew } = props
+    const { className, label, ...propsNew } = props
 
     return (
         <Form.Group className={props?.className}>

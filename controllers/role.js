@@ -10,8 +10,7 @@ export default {
 
     read: async (request, response) => {
         const role = await db.collection('roles')
-            .find({ _id: ObjectId(request.params.id) })
-            .next()
+            .find({ _id: ObjectId(request.params.id) }).next()
         response.json(role);
     },
 
@@ -31,6 +30,7 @@ export default {
             return response.sendStatus(403);
         }
         const role = { ...request.body };
+        role._id = ObjectId(role._id);
         role.level = parseInt(role.level);
         await db.collection('roles').updateOne(
             { _id: ObjectId(request.params.id) },

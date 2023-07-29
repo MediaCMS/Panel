@@ -12,7 +12,6 @@ export default function () {
     const params = useParams()
 
     const handleSubmit = async () => {
-        console.log(params?.id, tag)
         params?.id
             ? await context.api.panel.put('/мітки/' + params.id, tag)
             : await context.api.panel.post('/мітки', tag)
