@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useRoutes, useOutletContext } from 'react-router-dom'
 import Layout from './Layout.js'
 import Main from './routes/Main.js'
-//import Post from './routes/Post.js'
+import Post from './routes/Post.js'
 //import Image from './routes/Image.js'
 import Tag from './routes/Tag.js'
 import Comment from './routes/Comment.js'
@@ -21,7 +21,7 @@ const routes = [
     ] },
     { path: '/', element: <Layout template={true} />, children: [
         { index: true,           element: <Main /> },
-        //{ path: 'публікації',   module: Post },
+        { path: 'публікації',   module: Post },
         //{ path: 'зображення',   module: Image },
         { path: 'мітки',        module: Tag },
         { path: 'коментарі',    module: Comment },

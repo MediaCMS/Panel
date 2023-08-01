@@ -24,8 +24,8 @@ export default {
             return response.sendStatus(403);
         }
         const match = {
-            slug: {
-                '$regex' : request.query.string,
+            title: {
+                '$regex' : request.query.prompt,
                 '$options' : 'i'
             },
             status: true

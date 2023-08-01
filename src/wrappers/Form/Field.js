@@ -1,8 +1,8 @@
 import Field from './Field/Field.js'
 
 const modules = [
-    'Title', 'Description', 'Body', 'Image', 
-    'Latitude', 'Longitude', 'Slug', 'Date', 'Status'
+    'Date', 'DateTime', 'Title', 'Description', 'Body', 'Image',
+    'Autocomplete', 'Latitude', 'Longitude', 'Slug', 'Status'
 ]
 
 const components = {}

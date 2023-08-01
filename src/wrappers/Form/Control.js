@@ -10,7 +10,7 @@ export default function (props) {
         if (props?.onChange) {
             props?.onChange(event)
         } else {
-            context(
+            context.onChange(
                 event.target.name, 
                 event.target.type === 'checkbox'
                     ? event.target.checked

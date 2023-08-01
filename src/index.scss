@@ -25,17 +25,17 @@ html { min-height: 100%; font-size: calc(12px + 0.5vw);
         &.width-large {max-width: 960px;}
         &.width-full {max-width: initial;}
         //&.index {}
-        &.editor {max-width: 960px; margin: 5rem auto;
-          form {
-            input[type='datetime-local'], input[type='number'], select {width: auto;}
-            img {
-              &:hover {opacity: 0.3; cursor: pointer;}
-            }
-            div.autocomplete {
-              label {
-                &:hover {color: #fff; border-color: #dc3545; background-color: #dc3545;}
+        form {
+          input[type='datetime-local'], input[type='number'], select {width: auto;}
+          img {
+            &:hover {opacity: 0.3; cursor: pointer;}
+          }
+          div.autocomplete {
+            button {
+              &:hover {
+                color: var(--bs-white); border-color: var(--bs-danger);
+                background-color: var(--bs-danger); text-decoration: line-through;
               }
-              input[type='text'] {width: 150px;}
             }
           }
         }

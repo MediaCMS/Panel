@@ -50,7 +50,7 @@ export default function () {
                     <Field.Slug value={page.slug} placeholder="про-проєкт" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Status value={page.status} label='Видимість сторінки' />
+                    <Field.Status value={page.status} label="Видимість сторінки" />
                 </Cell>
             </Row>
             <Row>

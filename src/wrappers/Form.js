@@ -49,7 +49,7 @@ function FormWrapper(props) {
     }
 
     return (
-        <Context.Provider value={handleChange}>
+        <Context.Provider value={{ onChange: handleChange }}>
             <Form onSubmit={handleSubmit}>
                 <div className=" mx-auto" style={{ maxWidth: '720px' }}>
                     <div>{props.children}</div>
