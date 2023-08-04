@@ -20,8 +20,8 @@ export default function (props) {
     }
 
     const handleBlur = event => {
-        if (props?.onChange) {
-            props?.onChange(event)
+        if (props?.onBlur) {
+            props?.onBlur(event)
         } else {
             if ((props.type === 'textarea') && event.target.value.length) {
                 if (props?.pattern) {
@@ -54,7 +54,7 @@ export default function (props) {
             return <Form.Control as="textarea" {...props}
                 onChange={handleChange} onBlur={handleBlur} />
         default: {
-            return <Form.Control {...props} value={props.value ?? ''}
+            return <Form.Control autoComplete="off" {...props} value={props.value ?? ''}
                 onChange={handleChange} onBlur={handleBlur} />
         }
     }

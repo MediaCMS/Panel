@@ -23,7 +23,6 @@ export default {
             { $skip: skip(request.query?.page) },
             { $limit: limit }
         ]
-        console.log(pipeline)
         const posts = await db.collection('posts')
             .aggregate(pipeline).toArray()
         response.json(posts);
@@ -41,7 +40,7 @@ export default {
                 } },
                 { $project: {
                     time: 1, title: 1, description: 1, body: 1, image: 1, slug: 1,
-                    category: 1, tags: { _id: 1, title: 1 }, user: 1, status: 1
+                    category: 1, tags: { _id: 1, title: 1 }, type: 1, user: 1, status: 1
                 }}
             ]).next();
         response.json(post);
@@ -68,7 +67,6 @@ export default {
         }
         const post = { ...request.body };
         post.time = new Date(post.time);
-        post.slug = this.toslug(post.title);
         post.category = ObjectId(post.category);
         if (post?.tags) {
             post.tags = post.tags.map(tag => ObjectId(tag));

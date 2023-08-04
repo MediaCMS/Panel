@@ -66,7 +66,7 @@ export default function (props) {
         <Form.Group className={'autocomplete single dropdown ' + (props?.className ?? '')}>
             <Form.Label>{props.label ?? 'Автозаповнення'}</Form.Label>
             <Form.Control type="text" name="prompt" value={prompt}
-                pattern={props.pattern ?? '.{1,128}'}
+                pattern={props.pattern ?? '.{1,128}'} autoComplete="off"
                 onFocus={handleFocus} onChange={handleChange} onBlur={handleBlur}
                 title={props.title ?? 'Введіть початкові символи для пошуку'} />
             {!!items.length && (

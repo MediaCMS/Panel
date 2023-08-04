@@ -36,10 +36,17 @@ export default {
         if (request.query?.status) {
             match.status = request.query?.status === 'true'
         }
+        if (request.query?._exclude) {
+            match._id = {
+                $nin: request.query._exclude
+                    .split(',').map(id => ObjectId(id))
+            }
+        }
         pipeline.push({ $match: match });
         pipeline.push({ $sort: sort(request.query?.sort) });
         pipeline.push({ $skip: skip(request.query?.page) });
         pipeline.push({ $limit: limit });
+        console.log(pipeline);
         const users = await db.collection('users')
             .aggregate(pipeline).toArray();
         response.json(users);

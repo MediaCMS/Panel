@@ -7,7 +7,7 @@ export default function () {
     const params = useParams()
     const [post, setPost] = useState({
         time: new Date().toISOString(), title: '', description: '', body: '',
-        image: null, category: '', tags: null, user: null, status: false
+        image: null, category: '', tags: [], user: null, status: false
     })
     const [categories, setCategories] = useState([])
     const [types, setTypes] = useState([])
@@ -19,11 +19,9 @@ export default function () {
         if (postExport?.tags) {
             postExport.tags = postExport.tags.map(tag => tag._id)
         }
-        /*
         postExport?._id
             ? await context.api.panel.put('/публікації/' + params.id, postExport)
             : await context.api.panel.post('/публікації', postExport)
-        */
         navigate('/публікації/список')
     }
 
@@ -74,17 +72,17 @@ export default function () {
         <Form id={params.id} onChange={setPost} onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
-                    <Field.DateTime value={post.time.slice(0, 16)} required />
+                    <Field.DateTime value={post.time.slice(0, 16)} />
                 </Cell>
                 <Cell sm="4">
-                    <Field type="select" nmae="category" value={post.category} label="Категорія" required>
+                    <Field type="select" name="category" value={post.category} label="Категорія">
                         {categories.map(category => (
                             <option value={category._id} key={category._id}>{category.title}</option>
                         ))}
                     </Field>
                 </Cell>
                 <Cell sm="4">
-                    <Field type="select" nmae="type" value={post.type} label="Тип" required>
+                    <Field type="select" name="type" value={post.type} label="Тип">
                         {types.map(type => (
                             <option value={type._id} key={type._id}>{type.title}</option>
                         ))}
