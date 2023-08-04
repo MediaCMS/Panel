@@ -7,9 +7,10 @@ export default function () {
     const params = useParams()
     const [post, setPost] = useState({
         time: new Date().toISOString(), title: '', description: '', body: '',
-        image: null, category: '', tags: null, status: false
+        image: null, category: '', tags: null, user: null, status: false
     })
     const [categories, setCategories] = useState([])
+    const [types, setTypes] = useState([])
     const context = useOutletContext()
     const navigate = useNavigate()
 
@@ -41,16 +42,33 @@ export default function () {
                 { title: 'Закрити', path: '/публікації/список' }
             ]
         })
+        if (params?.id) return
+        setPost(post => ({ ...post, user: context.user._id }))
+    }, [])
+
+    useEffect(async () => {
         const categories = await context.api.panel.get('/категорії')
         setCategories(categories)
-        let postImport = {}
-        if (params?.id) {
-            postImport = await context.api.panel.get('/публікації/' + params.id)
-        } else {
-            postImport.category = categories[0]._id
-        }
-        setPost(postImport)
+        if (params?.id) return
+        setPost(post => ({ ...post, category: categories[0]._id }))
     }, [])
+
+    useEffect(async () => {
+        const types = await context.api.panel.get('/типи')
+        setTypes(types)
+        if (params?.id) return
+        setPost(post => ({ ...post, type: types[0]._id }))
+    }, [])
+
+    useEffect(async () => {
+        if (!params?.id) return
+        const post = await context.api.panel.get('/публікації/' + params.id)
+        setPost(post)
+    }, [])
+
+    useEffect(async () => {
+        console.log(post)
+    }, [post])
 
     return (
         <Form id={params.id} onChange={setPost} onSubmit={handleSubmit} onDelete={handleDelete}>
@@ -66,16 +84,20 @@ export default function () {
                     </Field>
                 </Cell>
                 <Cell sm="4">
-                    <Field.Status value={post.status} label="Видимість публікації" />
+                    <Field type="select" nmae="type" value={post.type} label="Тип" required>
+                        {types.map(type => (
+                            <option value={type._id} key={type._id}>{type.title}</option>
+                        ))}
+                    </Field>
                 </Cell>
             </Row>
             <Row>
-                <Cell sm="6">
-                    <Field.Title value={post.title} placeholder="Назва публікації" required />
-                </Cell>
-                <Cell sm="6">
-                    <Field.Slug value={post.slug} placeholder="назва-публікації" required />
-                </Cell>
+                <Field.Title value={post.title} required
+                    placeholder="Десь колись з кимось відбулась якась подія" />
+            </Row>
+            <Row>
+                <Field.Slug value={post.slug} required
+                    placeholder="десь-колись-з-кимось-відбулась-якась-подія" />
             </Row>
             <Row><Field.Image value={post.image} /></Row>
             <Row>
@@ -84,7 +106,16 @@ export default function () {
             <Row><Field.Body value={post.body} /></Row>
             <Row>
                 <Field.Autocomplete name="tags" value={post.tags} label="Мітки"
-                    path="/мітки/автозаповнення" multiple required />
+                    path="/мітки" multiple required />
+            </Row>
+            <Row>
+                <Cell sm="6">
+                    <Field.Autocomplete name="user" value={post.user} label="Автор"
+                        path="/користувачі" required />
+                </Cell>
+                <Cell sm="6">
+                    <Field.Status value={post.status} label="Видимість публікації" />
+                </Cell>
             </Row>
         </Form>
      )

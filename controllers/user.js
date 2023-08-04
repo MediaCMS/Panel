@@ -6,33 +6,51 @@ import jwt from 'jsonwebtoken';
 export default {
 
     list: async (request, response) => {
+        const pipeline = [];
+        if (request.query?._compact) {
+            pipeline.push(
+                { $project: { title: 1, status: 1 } }
+            );
+        } else {
+            pipeline.push(
+                { $lookup: {
+                    from: 'roles',
+                    localField: 'role', 
+                    foreignField: '_id', 
+                    as: 'role'
+                } },
+                { $project: {
+                    title: 1, email: 1, role: {
+                        $arrayElemAt: ['$role.title', 0]
+                    }, status: 1
+                } }
+            );
+        }
         const match = {}
-        const pipeline = [
-            { $lookup: {
-                from: 'roles',
-                localField: 'role', 
-                foreignField: '_id', 
-                as: 'role'
-            } },
-            { $project: {
-                title: 1, email: 1, role: {
-                    $arrayElemAt: ['$role.title', 0]
-                }, status: 1
-            } },
-            { $match: match },
-            { $sort: sort(request.query?.sort) },
-            { $skip: skip(request.query?.page) },
-            { $limit: limit }
-        ];
+        if (request.query?.title) {
+            match.title = {
+                '$regex' : request.query.title,
+                '$options' : 'i'
+            }
+        }
+        if (request.query?.status) {
+            match.status = request.query?.status === 'true'
+        }
+        pipeline.push({ $match: match });
+        pipeline.push({ $sort: sort(request.query?.sort) });
+        pipeline.push({ $skip: skip(request.query?.page) });
+        pipeline.push({ $limit: limit });
         const users = await db.collection('users')
             .aggregate(pipeline).toArray();
         response.json(users);
     },
 
     read: async (request, response) => {
+        console.log(request.params.id)
         const user = await db.collection('users')
             .find({ _id: ObjectId(request.params.id) })
             .project({ password: false }).next();
+        console.log(user)
         response.json(user);
     },
 

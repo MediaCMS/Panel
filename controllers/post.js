@@ -41,7 +41,7 @@ export default {
                 } },
                 { $project: {
                     time: 1, title: 1, description: 1, body: 1, image: 1, slug: 1,
-                    category: 1, tags: { _id: 1, title: 1 }, status: 1
+                    category: 1, tags: { _id: 1, title: 1 }, user: 1, status: 1
                 }}
             ]).next();
         response.json(post);

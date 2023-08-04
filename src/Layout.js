@@ -77,7 +77,7 @@ export default function (props) {
                             </div>
                             <div id="body" className={' width-' + params?.width}>
                                 <Outlet context={{
-                                    init, api, setSpinner, setAlert, setConfirm, setMessage
+                                    init, api, user, setSpinner, setAlert, setConfirm, setMessage
                                 }} />
                             </div>
                         </main>

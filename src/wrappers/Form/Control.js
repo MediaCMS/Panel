@@ -20,20 +20,24 @@ export default function (props) {
     }
 
     const handleBlur = event => {
-        if ((props.type === 'textarea') && event.target.value.length) {
-            if (props?.pattern) {
-                if (event.target.value.match(props.pattern)) {
-                    event.target.setCustomValidity('')
-                } else {
-                    event.target.setCustomValidity(
-                        props?.title ?? 'Невірний формат'
-                    )
-                }
-            }
+        if (props?.onChange) {
+            props?.onChange(event)
         } else {
-            event.target.setCustomValidity('')
+            if ((props.type === 'textarea') && event.target.value.length) {
+                if (props?.pattern) {
+                    if (event.target.value.match(props.pattern)) {
+                        event.target.setCustomValidity('')
+                    } else {
+                        event.target.setCustomValidity(
+                            props?.title ?? 'Невірний формат'
+                        )
+                    }
+                }
+            } else {
+                event.target.setCustomValidity('')
+            }
+            event.target.reportValidity()
         }
-        event.target.reportValidity()
     }
 
     switch(props.type) {

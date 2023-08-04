@@ -1,12 +1,12 @@
 export default {
     post: '/публікації',
     image: '/зображення',
-    tag: {
+    tag: '/мітки'/*{
         path: '/мітки',
         actions: {
             autocomplete: '/автозаповнення'
         }
-    },
+    }*/,
     comment: '/коментарі',
     user: {
         path: '/користувачі',
