@@ -1,4 +1,5 @@
 import db, { ObjectId, sort, skip, limit } from '../db.js';
+import roleController from './role.js';
 import axios from 'axios';
 import config from '../config.js';
 import jwt from 'jsonwebtoken';
@@ -62,7 +63,7 @@ export default {
     },
 
     create: async (request, response) => {
-        if ((response.locals.user.role.level > 2)) {
+        if (response.locals.user.role.level > 2) {
             return response.sendStatus(403);
         }
         const user = { ...request.body };
@@ -78,35 +79,45 @@ export default {
     },
 
     update: async (request, response) => {
-        if ((response.locals.user.role.level > 2)) {
+        if (response.locals.user.role.level > 2) {
             return response.sendStatus(403);
         }
+        const _id = new ObjectId(request.params.id);
+        const role = await roleController.readByUser(_id);
+        if (response.locals.user.role.level >= role.level) {
+            return response.sendStatus(403);
+        }
+        /*
         if (!await validateUserRole(request.params.id, response.locals.user.role.level)) {
             return response.sendStatus(403);
         }
+        */
         const user = { ...request.body };
         user._id = ObjectId(user._id);
         user.role = ObjectId(user.role);
         if (!user.password) {
             delete user.password;
         }
-        await db.collection('users').updateOne(
-            { _id: ObjectId(request.params.id) },
-            { $set: user }
-        );
+        await db.collection('users')
+            .updateOne({ _id }, { $set: user });
         response.end();
     },
 
     delete: async (request, response) => {
-        if ((response.locals.user.role.level > 2)) {
+        if (response.locals.user.role.level > 2) {
             return response.sendStatus(403);
         }
-        if (!await validateUserRole(request.params.id, response.locals.user.role.level)) {
+        const _id = new ObjectId(request.params.id);
+        const role = await roleController.readByUser(_id);
+        if (response.locals.user.role.level >= role.level) {
             return response.sendStatus(403);
         }
-        await db.collection('users').deleteOne({
-            _id: new ObjectId(request.params.id)
-        });
+        /*
+        if (!await validateUserRole(request.params.id, )) {
+            return response.sendStatus(403);
+        }
+        */
+        await db.collection('users').deleteOne({ _id });
         response.end();
     },
 
@@ -165,7 +176,7 @@ export default {
     }
 }
 
-
+/*
 async function validateUserRole(id, lavel) {
     const user = await db.collection('users')
         .aggregate([
@@ -184,3 +195,4 @@ async function validateUserRole(id, lavel) {
         ]).next()
     return lavel < user.role.level
 }
+*/

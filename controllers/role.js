@@ -14,6 +14,22 @@ export default {
         response.json(role);
     },
 
+    readByUser: async (userID) => {
+        const user = await db.collection('users')
+            .aggregate([
+                { $match: {
+                    _id: ObjectId(userID)
+                } },
+                { $lookup: {
+                    from: 'roles',
+                    localField: 'role',
+                    foreignField: '_id',
+                    as: 'role'
+                } }
+            ]).next();
+        return user.role[0];
+    },
+
     create: async (request, response) => {
         if ((response.locals.user.role.level > 1)) {
             return response.sendStatus(403);

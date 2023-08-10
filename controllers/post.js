@@ -5,15 +5,14 @@ export default {
     list: async (request, response) => {
         //const filter = this.getFilter(request.query);
         const match = {};
-        console.log(match)
         const pipeline = [
+            { $match: match },
             { $lookup: {
                 from: 'users',
                 localField: 'user',
                 foreignField: '_id',
                 as: 'user'
             } },
-            { $match: match },
             { $project: {
                 time: 1, title: 1, status: 1, user: {
                     $arrayElemAt: ['$user.title', 0]
@@ -25,6 +24,7 @@ export default {
         ]
         const posts = await db.collection('posts')
             .aggregate(pipeline).toArray()
+        console.log(posts[0].time, posts[0].time.toString(), posts[0].time.toISOString())
         response.json(posts);
     },
 
@@ -43,26 +43,12 @@ export default {
                     category: 1, tags: { _id: 1, title: 1 }, type: 1, user: 1, status: 1
                 }}
             ]).next();
+        console.log(post)
         response.json(post);
     },
 
     create: async (request, response) => {
-        const post = { ...request.body };
-        post.time = new Date().toISOString();
-        //post.slug = this.toslug(post.title);
-        post.order = parseInt(post.order);
-        if (post?.tags) {
-            post.tags = post.tags.map(tag => ObjectId(tag));
-        }
-        post.user = response.locals.user._id;
-        const result = await db.collection('posts')
-            .insertOne(post);
-        response.end(result.insertedId.toString());
-    },
-
-    update: async (request, response) => {
-        if ((response.locals.user.role.level === 3)
-            && (response.locals.user._id !== request.body.user)) {
+        if ((response.locals.user.role.level > 4)) {
             return response.sendStatus(403);
         }
         const post = { ...request.body };
@@ -71,8 +57,31 @@ export default {
         if (post?.tags) {
             post.tags = post.tags.map(tag => ObjectId(tag));
         }
+        post.user = ObjectId(post.user);
+        const result = await db.collection('posts')
+            .insertOne(post);
+        response.end(result.insertedId.toString());
+    },
+
+    update: async (request, response) => {
+        if ((response.locals.user.role.level > 4)) {
+            return response.sendStatus(403);
+        }
+        if ((response.locals.user.role.level === 4)
+            && (response.locals.user._id !== request.body.user)) {
+            return response.sendStatus(403);
+        }
+        console.log(response.locals.user.role.level)
+        const post = { ...request.body };
         post._id = ObjectId(post._id);
-        //delete post.user;
+        console.log(post.time)
+        post.time = new Date(post.time);
+        console.log(post.time.toISOString())
+        post.category = ObjectId(post.category);
+        if (post?.tags) {
+            post.tags = post.tags.map(tag => ObjectId(tag));
+        }
+        post.user = ObjectId(post.user);
         await db.collection('posts')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
@@ -82,13 +91,18 @@ export default {
     },
 
     delete: async (request, response) => {
-        if ((response.locals.user.role.level > 2)) {
+        if (response.locals.user.role.level > 4) {
             return response.sendStatus(403);
         }
-        await db.collection('posts')
-            .deleteOne(
-                { _id: new ObjectId(request.params.id) }
-            );
+        const _id = new ObjectId(request.params.id);
+        if ((response.locals.user.role.level === 4)) {
+            const post = await db.collection('posts')
+                .find({ _id }).toArray();
+            if (response.locals.user._id !== post.user) {
+                return response.sendStatus(403);
+            }
+        }
+        await db.collection('posts').deleteOne({ _id });
         response.end();
     }
 }
