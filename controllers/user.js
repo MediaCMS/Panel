@@ -47,18 +47,15 @@ export default {
         pipeline.push({ $sort: sort(request.query?.sort) });
         pipeline.push({ $skip: skip(request.query?.page) });
         pipeline.push({ $limit: limit });
-        console.log(pipeline);
         const users = await db.collection('users')
             .aggregate(pipeline).toArray();
         response.json(users);
     },
 
     read: async (request, response) => {
-        console.log(request.params.id)
         const user = await db.collection('users')
             .find({ _id: ObjectId(request.params.id) })
             .project({ password: false }).next();
-        console.log(user)
         response.json(user);
     },
 
@@ -87,11 +84,6 @@ export default {
         if (response.locals.user.role.level >= role.level) {
             return response.sendStatus(403);
         }
-        /*
-        if (!await validateUserRole(request.params.id, response.locals.user.role.level)) {
-            return response.sendStatus(403);
-        }
-        */
         const user = { ...request.body };
         user._id = ObjectId(user._id);
         user.role = ObjectId(user.role);
@@ -112,11 +104,6 @@ export default {
         if (response.locals.user.role.level >= role.level) {
             return response.sendStatus(403);
         }
-        /*
-        if (!await validateUserRole(request.params.id, )) {
-            return response.sendStatus(403);
-        }
-        */
         await db.collection('users').deleteOne({ _id });
         response.end();
     },
@@ -175,24 +162,3 @@ export default {
         response.end();
     }
 }
-
-/*
-async function validateUserRole(id, lavel) {
-    const user = await db.collection('users')
-        .aggregate([
-            { $lookup: {
-                from: 'roles',
-                localField: 'role',
-                foreignField: '_id',
-                as: 'role'
-            } },
-            { $project: {
-                role: { $arrayElemAt: ['$role', 0] }
-            } },
-            { $match: {
-                _id: ObjectId(id)
-            } }
-        ]).next()
-    return lavel < user.role.level
-}
-*/

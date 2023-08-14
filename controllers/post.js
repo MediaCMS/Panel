@@ -43,7 +43,7 @@ export default {
                     category: 1, tags: { _id: 1, title: 1 }, type: 1, user: 1, status: 1
                 }}
             ]).next();
-        console.log(post)
+        console.log(post.time, post.time.toISOString(), post.time.getTimezoneOffset(), post.time.toString())
         response.json(post);
     },
 
@@ -71,12 +71,11 @@ export default {
             && (response.locals.user._id !== request.body.user)) {
             return response.sendStatus(403);
         }
-        console.log(response.locals.user.role.level)
         const post = { ...request.body };
         post._id = ObjectId(post._id);
         console.log(post.time)
         post.time = new Date(post.time);
-        console.log(post.time.toISOString())
+        console.log(post.time.toISOString(), post.time.getTimezoneOffset(), post.time)
         post.category = ObjectId(post.category);
         if (post?.tags) {
             post.tags = post.tags.map(tag => ObjectId(tag));

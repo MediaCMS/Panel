@@ -6,7 +6,7 @@ export default function () {
 
     const params = useParams()
     const [post, setPost] = useState({
-        time: new Date().toISOString(), title: '', description: '', body: '',
+        time: null, title: '', description: '', body: '',
         image: null, category: '', tags: [], user: null, status: false
     })
     const [categories, setCategories] = useState([])
@@ -16,6 +16,9 @@ export default function () {
 
     const handleSubmit = async () => {
         const postExport = { ...post }
+        console.log(postExport.time)
+        postExport.time = new Date(postExport.time).toISOString()
+        console.log(postExport.time)
         if (postExport?.tags) {
             postExport.tags = postExport.tags.map(tag => tag._id)
         }
@@ -72,7 +75,7 @@ export default function () {
         <Form id={params.id} onChange={setPost} onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
-                    <Field.DateTime value={post.time.slice(0, 16)} />
+                    <Field.DateTime value={post.time} />
                 </Cell>
                 <Cell sm="4">
                     <Field type="select" name="category" value={post.category} label="Категорія">
