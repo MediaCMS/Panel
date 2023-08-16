@@ -5,16 +5,14 @@ import Context from '../../Context.js'
 
 export default function (props) {
 
-    const [value, setValue] = useState()
     const [prompt, setPrompt] = useState('')
     const [items, setItems] = useState([])
-    const contextForm = useContext(Context)
+    const [title, setTitle] = useState()
     const contextOutlet = useOutletContext()
+    const contextForm = useContext(Context)
 
     const handleFocus = async event => {
-        if (event.target.value !== value.title) return
-        event.target.placeholder = value.title
-        setPrompt('')
+        event.target.select()
     }
 
     const handleChange = async event => {
@@ -31,14 +29,14 @@ export default function (props) {
         if (props?.value) {
             params._exclude = props.value
         }
-        console.log(params)
-        const items = await contextOutlet.api.panel.get(props.path, { params })
+        const items = await contextOutlet.api.panel
+            .get(props.path, { params })
         setItems(items)
     }
 
     const handleClick = async event => {
         contextForm.onChange(props.name, event.target.id)
-        setValue({
+        setTitle({
             _id: event.target.id,
             title: event.target.innerHTML
         })
@@ -46,34 +44,47 @@ export default function (props) {
     }
 
     const handleBlur = async event => {
-        if (event.target.value === value.title) return
-        setPrompt(value.title)
+        if (event.target.value === title) return
+        if (event.target.value.length) {
+            setPrompt(title)
+        } else {
+            contextForm.onChange(props.name, null)
+            setPrompt('')
+            setTitle('')
+        }
         setItems([])
     }
 
     useEffect(async () => {
         if (!props?.value) return
-        const value = await contextOutlet.api.panel.get(props.path + '/' + props.value)
-        setValue({ _id: value._id, title: value.title })
+        const value = await contextOutlet.api.panel
+            .get(props.path + '/' + props.value)
+        setTitle(value.title)
     }, [props.value])
 
     useEffect(async () => {
-        if (!value) return
-        setPrompt(value.title)
-    }, [value])
+        if (!title) return
+        setPrompt(title)
+    }, [title])
 
     return (
-        <Form.Group className={'autocomplete single dropdown ' + (props?.className ?? '')}>
-            <Form.Label>{props.label ?? 'Автозаповнення'}</Form.Label>
+        <Form.Group className={
+            'autocomplete single dropdown' + (props?.className ?? '')
+        }>
+            <Form.Label className="d-block">
+                {props.label ?? 'Автозаповнення'}
+            </Form.Label>
             <Form.Control type="text" name="prompt" value={prompt}
-                pattern={props.pattern ?? '.{1,128}'} autoComplete="off"
-                onFocus={handleFocus} onChange={handleChange} onBlur={handleBlur}
-                title={props.title ?? 'Введіть початкові символи для пошуку'} />
+                pattern={props.pattern ?? '.{1,128}'} onChange={handleChange}
+                onFocus={handleFocus} onBlur={handleBlur} autoComplete="off"
+                title={props.title ?? 'Введіть символи для пошуку'}
+                required={!!props?.required} />
             {!!items.length && (
                 <ul className="dropdown-menu show">
                     {items.map(item => (
-                        <li key={item._id} className="dropdown-item" onMouseDown={handleClick}
-                                id={item._id}>{item.title}
+                        <li className="dropdown-item" onMouseDown={handleClick}
+                            id={item._id} key={item._id}>
+                            {item.title}
                         </li>
                     ))}
                 </ul>

@@ -24,7 +24,6 @@ export default {
         ]
         const posts = await db.collection('posts')
             .aggregate(pipeline).toArray()
-        console.log(posts[0].time, posts[0].time.toString(), posts[0].time.toISOString())
         response.json(posts);
     },
 
@@ -39,16 +38,16 @@ export default {
                     as: 'tags'
                 } },
                 { $project: {
-                    time: 1, title: 1, description: 1, body: 1, image: 1, slug: 1,
-                    category: 1, tags: { _id: 1, title: 1 }, type: 1, user: 1, status: 1
+                    time: 1, title: 1, description: 1, body: 1, image: 1,
+                    category: 1, tags: { _id: 1, title: 1 }, type: 1,
+                    user: 1, slug: 1, status: 1
                 }}
             ]).next();
-        console.log(post.time, post.time.toISOString(), post.time.getTimezoneOffset(), post.time.toString())
         response.json(post);
     },
 
     create: async (request, response) => {
-        if ((response.locals.user.role.level > 4)) {
+        if (response.locals.user.role.level > 4) {
             return response.sendStatus(403);
         }
         const post = { ...request.body };
@@ -64,18 +63,19 @@ export default {
     },
 
     update: async (request, response) => {
-        if ((response.locals.user.role.level > 4)) {
-            return response.sendStatus(403);
-        }
-        if ((response.locals.user.role.level === 4)
-            && (response.locals.user._id !== request.body.user)) {
+        if (response.locals.user.role.level > 4) {
             return response.sendStatus(403);
         }
         const post = { ...request.body };
         post._id = ObjectId(post._id);
-        console.log(post.time)
+        if (response.locals.user.role.level === 4) {
+            const postOld = await db.collection('posts')
+                .find({ _id: post._id }).toArray();
+            if (postOld.user !== response.locals.user._id) {
+                return response.sendStatus(403);
+            }
+        }
         post.time = new Date(post.time);
-        console.log(post.time.toISOString(), post.time.getTimezoneOffset(), post.time)
         post.category = ObjectId(post.category);
         if (post?.tags) {
             post.tags = post.tags.map(tag => ObjectId(tag));
@@ -94,10 +94,10 @@ export default {
             return response.sendStatus(403);
         }
         const _id = new ObjectId(request.params.id);
-        if ((response.locals.user.role.level === 4)) {
+        if (response.locals.user.role.level === 4) {
             const post = await db.collection('posts')
                 .find({ _id }).toArray();
-            if (response.locals.user._id !== post.user) {
+            if (post.user !== response.locals.user._id) {
                 return response.sendStatus(403);
             }
         }

@@ -4,5 +4,7 @@ import Multiple from './Autocomplete/Multiple.js'
 
 export default function (props) {
 
-    return props?.multiple ? <Multiple {...props} /> : <Single {...props} />
+    return props?.multiple 
+        ? <Multiple {...props} />
+        : <Single {...props} />
 }

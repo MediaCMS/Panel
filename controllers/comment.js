@@ -4,7 +4,6 @@ export default {
 
     list: async (request, response) => {
         const match = {};
-        //console.log(match)
         const pipeline = [
                 { $lookup: {
                     from: 'users',
@@ -22,7 +21,6 @@ export default {
                 { $skip: skip(request.query?.page) },
                 { $limit: limit }
             ]
-        //console.log(pipeline)
         const comments = await db.collection('comments')
             .aggregate(pipeline).toArray()
         response.json(comments);
@@ -50,19 +48,17 @@ export default {
     },
 
     create: async (request, response) => {
-        /*
-        if ((response.locals.user.role.level > 5)) {
+        if (response.locals.user.role.level > 5) {
             return response.sendStatus(403);
         }
         const comment = { ...request.body };
         const result = await db.collection('comments')
             .insertOne(comment);
         response.end(result.insertedId.toString());
-        */
     },
 
     update: async (request, response) => {
-        if ((response.locals.user.role.level > 3)) {
+        if (response.locals.user.role.level > 3) {
             return response.sendStatus(403);
         }
         const comment = { ...request.body };
@@ -76,7 +72,7 @@ export default {
     },
 
     delete: async (request, response) => {
-        if ((response.locals.user.role.level > 3)) {
+        if (response.locals.user.role.level > 3) {
             return response.sendStatus(403);
         }
         await db.collection('comments').deleteOne({

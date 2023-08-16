@@ -15,7 +15,7 @@ export default {
     },
 
     create: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if (response.locals.user.role.level > 1) {
             return response.sendStatus(403);
         }
         const type = { ...request.body };
@@ -25,7 +25,7 @@ export default {
     },
 
     update: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if (response.locals.user.role.level > 1) {
             return response.sendStatus(403);
         }
         const type = { ...request.body };
@@ -38,7 +38,7 @@ export default {
     },
 
     delete: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if (response.locals.user.role.level > 1) {
             return response.sendStatus(403);
         }
         const _id = new ObjectId(request.params.id);
@@ -48,9 +48,7 @@ export default {
                 Error(`Тип використаний в публікаціях (${count})`)
             )
         }
-        await db.collection('types').deleteOne(
-            { _id: new ObjectId(request.params.id) }
-        );
+        await db.collection('types').deleteOne({ _id });
         response.end();
     }
 }

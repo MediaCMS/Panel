@@ -15,7 +15,7 @@ export default {
     },
 
     create: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if (response.locals.user.role.level > 4) {
             return response.sendStatus(403);
         }
         const image = { ...request.body };
@@ -26,7 +26,7 @@ export default {
     },
 
     update: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if (response.locals.user.role.level > 3) {
             return response.sendStatus(403);
         }
         const image = { ...request.body };
@@ -41,8 +41,14 @@ export default {
     },
 
     delete: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if (response.locals.user.role.level > 3) {
             return response.sendStatus(403);
+        }
+        const count = await db.collection('posts').count({ image: _id });
+        if (count > 0) {
+            return next(
+                Error(`Зображення використане в публікаціях (${count})`)
+            )
         }
         await db.collection('images')
             .deleteOne({ _id: new ObjectId(request.params.id) });

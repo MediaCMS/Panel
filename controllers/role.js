@@ -31,7 +31,7 @@ export default {
     },
 
     create: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if (response.locals.user.role.level > 1) {
             return response.sendStatus(403);
         }
         const role = { ...request.body };
@@ -42,7 +42,7 @@ export default {
     },
 
     update: async (request, response) => {
-        if ((response.locals.user.role.level > 1)) {
+        if (response.locals.user.role.level > 1) {
             return response.sendStatus(403);
         }
         const role = { ...request.body };
@@ -56,7 +56,7 @@ export default {
     },
 
     delete: async (request, response, next) => {
-        if ((response.locals.user.role.level > 1)) {
+        if (response.locals.user.role.level > 1) {
             return response.sendStatus(403);
         }
         const _id = new ObjectId(request.params.id);

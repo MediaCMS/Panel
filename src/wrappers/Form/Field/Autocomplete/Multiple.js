@@ -7,8 +7,8 @@ export default function (props) {
 
     const [prompt, setPrompt] = useState('')
     const [items, setItems] = useState([])
-    const contextForm = useContext(Context)
     const contextOutlet = useOutletContext()
+    const contextForm = useContext(Context)
     const ref = useRef()
 
     const handleChange = async event => {
@@ -25,7 +25,8 @@ export default function (props) {
         if (props.value.length) {
             params._exclude = props.value.map(v => v._id).join()
         }
-        const items = await contextOutlet.api.panel.get(props.path, { params })
+        const items = await contextOutlet.api.panel
+            .get(props.path, { params })
         setItems(items)
     }
 
@@ -49,39 +50,46 @@ export default function (props) {
 
     useEffect(() => {
         if (props?.required) {
-            console.log(ref.current.required, props.value)
             ref.current.required = Array.isArray(props.value)
                 && props.value.length ? false : true
-            console.log(ref.current.required)
         }
     }, [props.value])
 
     return (
-        <Form.Group style={{padding: '0 -0.25rem'}}
-            className={'autocomplete multiple dropdown ' + (props?.className ?? '')}>
-            <Form.Label className="d-block">{props.label ?? 'Автозаповнення'}</Form.Label>
-            <Form.Control type="text" name="prompt" value={prompt} pattern={props.pattern ?? '.{1,10}'}
-                onChange={handleChange} onBlur={handleBlur} ref={ref} autoComplete="off"
-                title={props.title ?? 'Введіть символи для пошуку'}
-                className="m-1 d-inline" style={{ width: '120px' }} />
-            {!!items.length && (
-                <ul className="dropdown-menu show mx-1">
-                    {items.map(item => (
-                        <li key={item._id} className="dropdown-item" onMouseDown={handleClick}
-                            id={item._id}>{item.title}
-                        </li>
-                    ))}
-                </ul>
-            )}
-            {props?.value &&
-                props.value.map(v =>
-                    <Button onClick={handleDelete} variant="outline-dark"
-                        className="m-1" id={v._id} key={v._id}
-                        title="Видалити">
-                        {v.title}
-                    </Button>
-                )
-            }
+        <Form.Group className={
+            'autocomplete multiple dropdown' + (props?.className ?? '')          
+        }>
+            <Form.Label className="d-block">
+                {props.label ?? 'Автозаповнення'}
+            </Form.Label>
+            <div className="d-flex flex-wrap row-gap-3 column-gap-2">
+                <div style={{ width: '120px' }}>
+                    <Form.Control type="text" name="prompt" value={prompt} 
+                        pattern={props.pattern ?? '.{1,10}'}
+                        onChange={handleChange} onBlur={handleBlur}
+                        title={props.title ?? 'Введіть символи для пошуку'}
+                        autoComplete="off" ref={ref} />
+                    {!!items.length && (
+                        <ul className="dropdown-menu show">
+                            {items.map(item => (
+                                <li id={item._id} className="dropdown-item"
+                                    onMouseDown={handleClick} key={item._id}>
+                                    {item.title}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+                {props?.value &&
+                    props.value.map(v =>
+                        <Button onClick={handleDelete} variant="outline-dark"
+                            title="Видалити" id={v._id} key={v._id}>
+                            {v.title}
+                        </Button>
+                    )
+                }
+            </div>
         </Form.Group>
     )
+    
 }

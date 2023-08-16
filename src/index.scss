@@ -1,5 +1,6 @@
-html { min-height: 100%; font-size: calc(12px + 0.5vw);
-  --bs-secondary-color: #e9ecef;
+html {
+   min-height: 100%; font-size: calc(12px + 0.5vw);
+   --bs-secondary-color: #e9ecef;
   body {
     min-height: 100vh; color: #303030; line-height: calc(130% + 0.5vw); background-color: #ffffff;
     padding: 0; margin: 0; position: relative;

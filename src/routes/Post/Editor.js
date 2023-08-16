@@ -16,9 +16,7 @@ export default function () {
 
     const handleSubmit = async () => {
         const postExport = { ...post }
-        console.log(postExport.time)
         postExport.time = new Date(postExport.time).toISOString()
-        console.log(postExport.time)
         if (postExport?.tags) {
             postExport.tags = postExport.tags.map(tag => tag._id)
         }

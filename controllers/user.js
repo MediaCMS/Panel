@@ -67,7 +67,7 @@ export default {
         user.role = ObjectId(user.role);
         const role = await db.collection('roles')
             .find({ _id: user.role }).next();
-        if (response.locals.user.role.level >= role.level) {
+        if (role.level <= response.locals.user.role.level) {
             return response.sendStatus(403);
         }
         const result = await db.collection('users')
@@ -81,7 +81,7 @@ export default {
         }
         const _id = new ObjectId(request.params.id);
         const role = await roleController.readByUser(_id);
-        if (response.locals.user.role.level >= role.level) {
+        if (role.level <= response.locals.user.role.level) {
             return response.sendStatus(403);
         }
         const user = { ...request.body };
@@ -101,8 +101,21 @@ export default {
         }
         const _id = new ObjectId(request.params.id);
         const role = await roleController.readByUser(_id);
-        if (response.locals.user.role.level >= role.level) {
+        if (role.level <= response.locals.user.role.level) {
             return response.sendStatus(403);
+        }
+        const count = { posts: 0, logs: 0 };
+        count.posts = await db.collection('posts').count({ user: _id });
+        if (count.posts > 0) {
+            return next(
+                Error(`Користувач використаний в публікаціях (${count.posts})`)
+            )
+        }
+        count.logs = await db.collection('logs').count({ user: _id });
+        if (count.logs > 0) {
+            return next(
+                Error(`Користувач використаний в логах (${count.logs})`)
+            )
         }
         await db.collection('users').deleteOne({ _id });
         response.end();

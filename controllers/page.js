@@ -15,7 +15,7 @@ export default {
     },
 
     create: async (request, response) => {
-        if ((response.locals.user.role.level > 2)) {
+        if (response.locals.user.role.level > 2) {
             return response.sendStatus(403);
         }
         const page = { ...request.body };
@@ -25,7 +25,7 @@ export default {
     },
 
     update: async (request, response) => {
-        if ((response.locals.user.role.level > 2)) {
+        if (response.locals.user.role.level > 2) {
             return response.sendStatus(403);
         }
         const page = { ...request.body };
@@ -39,7 +39,7 @@ export default {
     },
 
     delete: async (request, response) => {
-        if ((response.locals.user.role.level > 2)) {
+        if (response.locals.user.role.level > 2) {
             return response.sendStatus(403);
         }
         await db.collection('pages')
