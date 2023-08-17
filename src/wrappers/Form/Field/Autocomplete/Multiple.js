@@ -35,6 +35,9 @@ export default function (props) {
             _id: event.target.id,
             title: event.target.innerHTML
         }])
+        setItems(itemsOld =>
+            itemsOld.filter(i => i._id !== event.target.id)
+        )
         event.preventDefault()
     }
 

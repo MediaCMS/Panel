@@ -39,17 +39,17 @@ export default function () {
         <Form id={params?.id} onChange={setType} onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
-                    <Field.Title value={type?.title} placeholder="Новина" required />
+                    <Field.Title value={type.title} placeholder="Новина" required />
                 </Cell>
                 <Cell sm="4">
-                    <Field.Slug value={type?.slug} placeholder="новина" required />
+                    <Field.Slug value={type.slug} source={type.title} placeholder="новина" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Status value={type?.status} label='Видимість типу' />
+                    <Field.Status value={type.status} label='Видимість типу' />
                 </Cell>
             </Row>
             <Row>
-                <Field.Description value={type?.description} placeholder="Опис типу" />
+                <Field.Description value={type.description} placeholder="Опис типу" />
             </Row>
         </Form>
     )

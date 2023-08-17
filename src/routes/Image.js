@@ -63,4 +63,4 @@ export function Editor() {
     return <></>
 }
 
-export default {Index, Editor}
+export default { Index, Editor }

@@ -42,7 +42,7 @@ export default function () {
                     <Field.Title value={tag.title} placeholder="Львів" required />
                 </Cell>
                 <Cell sm="4">
-                    <Field.Slug value={tag.slug} placeholder="львів" required />
+                    <Field.Slug value={tag.slug} source={tag.title} placeholder="львів" required />
                 </Cell>
                 <Cell sm="3">
                     <Field.Status value={tag.status} label='Видимість мітки' />

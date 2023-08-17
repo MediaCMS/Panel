@@ -63,7 +63,7 @@ export default function Editor() {
                     <Field.Title value={user.title} placeholder="Леся Українка" required />
                 </Cell>
                 <Cell sm="6">
-                    <Field.Slug value={user.slug} placeholder="леся-українка" required />
+                    <Field.Slug value={user.slug} source={user.title} placeholder="леся-українка" required />
                 </Cell>
             </Row>
             <Row>

@@ -72,7 +72,7 @@ export default function () {
     return (
         <Form id={params.id} onChange={setPost} onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
-                <Cell sm="4">
+                <Cell sm="5">
                     <Field.DateTime value={post.time} />
                 </Cell>
                 <Cell sm="4">
@@ -82,7 +82,7 @@ export default function () {
                         ))}
                     </Field>
                 </Cell>
-                <Cell sm="4">
+                <Cell sm="3">
                     <Field type="select" name="type" value={post.type} label="Тип">
                         {types.map(type => (
                             <option value={type._id} key={type._id}>{type.title}</option>
@@ -95,7 +95,7 @@ export default function () {
                     placeholder="Десь колись з кимось відбулась якась подія" />
             </Row>
             <Row>
-                <Field.Slug value={post.slug} required
+                <Field.Slug value={post.slug} source={post.title} required
                     placeholder="десь-колись-з-кимось-відбулась-якась-подія" />
             </Row>
             <Row><Field.Image value={post.image} /></Row>

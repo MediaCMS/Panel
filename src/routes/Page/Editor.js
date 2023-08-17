@@ -47,7 +47,7 @@ export default function () {
                     <Field.Title value={page.title} placeholder="Про проєкт" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Slug value={page.slug} placeholder="про-проєкт" required />
+                    <Field.Slug value={page.slug} source={page.title} placeholder="про-проєкт" required />
                 </Cell>
                 <Cell sm="3">
                     <Field.Status value={page.status} label="Видимість сторінки" />

@@ -47,7 +47,7 @@ export default function () {
                     <Field.Title value={category.title} placeholder="Політика" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Slug value={category.slug} placeholder="політика" required />
+                    <Field.Slug value={category.slug} source={category.title} placeholder="політика" required />
                 </Cell>
                 <Cell sm="2">
                     <Field type="number" name="order" value={category.order}
