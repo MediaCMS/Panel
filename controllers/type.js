@@ -15,9 +15,6 @@ export default {
     },
 
     create: async (request, response) => {
-        if (response.locals.user.role.level > 1) {
-            return response.sendStatus(403);
-        }
         const type = { ...request.body };
         const result = await db.collection('types')
             .insertOne(type);
@@ -25,9 +22,6 @@ export default {
     },
 
     update: async (request, response) => {
-        if (response.locals.user.role.level > 1) {
-            return response.sendStatus(403);
-        }
         const type = { ...request.body };
         type._id = ObjectId(type._id);
         await db.collection('types').updateOne(
@@ -38,9 +32,6 @@ export default {
     },
 
     delete: async (request, response) => {
-        if (response.locals.user.role.level > 1) {
-            return response.sendStatus(403);
-        }
         const _id = new ObjectId(request.params.id);
         const count = await db.collection('posts').count({ type: _id });
         if (count > 0) {

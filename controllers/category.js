@@ -15,9 +15,6 @@ export default {
     },
 
     create: async (request, response) => {
-        if (response.locals.user.role.level > 2) {
-            return response.sendStatus(403);
-        }
         const category = { ...request.body };
         category.order = parseInt(category.order);
         const result = await db.collection('categories')
@@ -26,9 +23,6 @@ export default {
     },
 
     update: async (request, response) => {
-        if (response.locals.user.role.level > 2) {
-            return response.sendStatus(403);
-        }
         const category = { ...request.body };
         category._id = ObjectId(category._id);
         category.order = parseInt(category.order);
@@ -40,9 +34,6 @@ export default {
     },
 
     delete: async (request, response, next) => {
-        if (response.locals.user.role.level > 2) {
-            return response.sendStatus(403);
-        }
         const _id = new ObjectId(request.params.id);
         const count = await db.collection('posts').count({ category: _id });
         if (count > 0) {

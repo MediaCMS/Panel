@@ -12,16 +12,14 @@ export default function (props) {
             </div>
             <ul className="nav justify-content-center">
                 {props?.menu && props.menu.map((item, index) => (
-                    (item.access >= props.user.role.level) ? (
-                        <li className="nav-item" key={index}>
-                            <NavLink
-                                to={encodeURI(item.path)}
-                                className="nav-link small p-2"
-                                title={item.description}>
-                                {item.title}
-                            </NavLink>
-                        </li>
-                    ) : null
+                    <li className="nav-item" key={index}>
+                        <NavLink
+                            to={encodeURI(item.path)}
+                            className="nav-link small p-2"
+                            title={item.description}>
+                            {item.title}
+                        </NavLink>
+                    </li>
                 ))}
             </ul>
             <p className="text-muted small mt-3" title={config.brand}>

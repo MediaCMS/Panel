@@ -24,15 +24,6 @@ export default function (props) {
     const [spinner, setSpinner] = useState(false)
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if (!user) return
-        setMenu(
-            menuSource.filter(item => 
-                item.access >= user.role.level
-            )
-        )
-    }, [user])
-
     const init = paramsNew => {
         setParams({ ...paramsDefault, ...paramsNew })
     }
@@ -60,6 +51,14 @@ export default function (props) {
         panel: APIFactory.createPanel(setSpinner, setAlert, navigate),
         image: APIFactory.createImage(setSpinner, setAlert)
     }), [])
+
+    useEffect(() => {
+        if (!user) return
+        const menuNew = menuSource.filter(item => 
+            item.level >= user.role.level
+        )
+        setMenu(menuNew)
+    }, [user])
 
     return (
         <React.StrictMode>

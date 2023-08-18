@@ -60,9 +60,6 @@ export default {
     },
 
     create: async (request, response) => {
-        if (response.locals.user.role.level > 2) {
-            return response.sendStatus(403);
-        }
         const user = { ...request.body };
         user.role = ObjectId(user.role);
         const role = await db.collection('roles')
@@ -76,9 +73,6 @@ export default {
     },
 
     update: async (request, response) => {
-        if (response.locals.user.role.level > 2) {
-            return response.sendStatus(403);
-        }
         const _id = new ObjectId(request.params.id);
         const role = await roleController.readByUser(_id);
         if (role.level <= response.locals.user.role.level) {
@@ -96,9 +90,6 @@ export default {
     },
 
     delete: async (request, response) => {
-        if (response.locals.user.role.level > 2) {
-            return response.sendStatus(403);
-        }
         const _id = new ObjectId(request.params.id);
         const role = await roleController.readByUser(_id);
         if (role.level <= response.locals.user.role.level) {
@@ -167,6 +158,7 @@ export default {
             maxAge: config.cookie.maxAge, httpOnly: true
         });
         delete user._id;
+        console.log(user)
         response.json(user);
     },
 

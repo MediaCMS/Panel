@@ -15,9 +15,6 @@ export default {
     },
 
     create: async (request, response) => {
-        if (response.locals.user.role.level > 2) {
-            return response.sendStatus(403);
-        }
         const page = { ...request.body };
         const result = await db.collection('pages')
             .insertOne(page);
@@ -25,9 +22,6 @@ export default {
     },
 
     update: async (request, response) => {
-        if (response.locals.user.role.level > 2) {
-            return response.sendStatus(403);
-        }
         const page = { ...request.body };
         page._id = ObjectId(page._id);
         await db.collection('pages')
@@ -39,9 +33,6 @@ export default {
     },
 
     delete: async (request, response) => {
-        if (response.locals.user.role.level > 2) {
-            return response.sendStatus(403);
-        }
         await db.collection('pages')
             .deleteOne(
                 { _id: new ObjectId(request.params.id) }

@@ -31,9 +31,6 @@ export default {
     },
 
     create: async (request, response) => {
-        if (response.locals.user.role.level > 1) {
-            return response.sendStatus(403);
-        }
         const role = { ...request.body };
         role.level = parseInt(role.level);
         const result = await db.collection('roles')
@@ -42,9 +39,6 @@ export default {
     },
 
     update: async (request, response) => {
-        if (response.locals.user.role.level > 1) {
-            return response.sendStatus(403);
-        }
         const role = { ...request.body };
         role._id = ObjectId(role._id);
         role.level = parseInt(role.level);
@@ -56,9 +50,6 @@ export default {
     },
 
     delete: async (request, response, next) => {
-        if (response.locals.user.role.level > 1) {
-            return response.sendStatus(403);
-        }
         const _id = new ObjectId(request.params.id);
         const count = await db.collection('users').count({ role: _id });
         if (count > 0) {

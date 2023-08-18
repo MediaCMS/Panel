@@ -1,0 +1,55 @@
+import express from 'express';
+import routes from './routes.js';
+import config from './config.js';
+
+const router = express.Router();
+
+const controllers = {};
+for (const name of Object.keys(routes)) {
+    controllers[name] = (await import(`./controllers/${name}.js`)).default;
+}
+
+console.log();
+for (let route of Object.entries(routes)) {
+    if (typeof route[1] === 'string') {
+        route[1] = { path: route[1] };
+    }
+    route = { name: route[0], ...route[1] };
+    const controller = controllers[route.name];
+    console.log(
+        (!('crud' in route) || route.crud) ? '+' : '-',
+        route.name.padEnd(16, ' '),
+        route.path
+    );
+    if (route?.actions) {
+        for (let action of Object.entries(route.actions)) {
+            if (typeof action[1] === 'string') {
+                action[1] = { path: action[1] };
+            }
+            action = { name: action[0], ...action[1] };
+            console.log(
+                '   ',
+                action.name.padEnd(14, ' '), route.path + action.path,
+                ` [${action?.method ?? 'get'}]`
+            );
+            router[action?.method ?? 'get'](
+                encodeURI(route.path + action.path), controller[action.name]
+            );
+        }
+    }
+    if (!('crud' in route) || route.crud) {
+        router.get(encodeURI(route.path), controller.list);
+        router.get(encodeURI(route.path) + '/:id', controller.read);
+        router.post(encodeURI(route.path), controller.create);
+        router.put(encodeURI(route.path) + '/:id', controller.update);
+        router.delete(encodeURI(route.path) + '/:id', controller.delete);
+    }
+}
+
+router.all('*', async (request, response, next) => {
+    console.log('404', encodeURI(request.path))
+    response.sendStatus(404);
+    next();
+});
+
+export { router as default };

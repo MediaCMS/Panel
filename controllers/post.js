@@ -47,9 +47,6 @@ export default {
     },
 
     create: async (request, response) => {
-        if (response.locals.user.role.level > 4) {
-            return response.sendStatus(403);
-        }
         const post = { ...request.body };
         post.time = new Date(post.time);
         post.category = ObjectId(post.category);
@@ -63,9 +60,6 @@ export default {
     },
 
     update: async (request, response) => {
-        if (response.locals.user.role.level > 4) {
-            return response.sendStatus(403);
-        }
         const post = { ...request.body };
         post._id = ObjectId(post._id);
         if (response.locals.user.role.level === 4) {
@@ -90,9 +84,6 @@ export default {
     },
 
     delete: async (request, response) => {
-        if (response.locals.user.role.level > 4) {
-            return response.sendStatus(403);
-        }
         const _id = new ObjectId(request.params.id);
         if (response.locals.user.role.level === 4) {
             const post = await db.collection('posts')

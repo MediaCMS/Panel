@@ -35,9 +35,6 @@ export default {
     },
 
     create: async (request, response) => {
-        if (response.locals.user.role.level > 3) {
-            return response.sendStatus(403);
-        }
         const tag = { ...request.body };
         const result = await db.collection('tags')
             .insertOne(tag);
@@ -45,9 +42,6 @@ export default {
     },
 
     update: async (request, response) => {
-        if (response.locals.user.role.level > 3) {
-            return response.sendStatus(403);
-        }
         const tag = { ...request.body };
         tag._id = ObjectId(tag._id);
         await db.collection('tags').updateOne(
@@ -58,9 +52,6 @@ export default {
     },
 
     delete: async (request, response) => {
-        if (response.locals.user.role.level > 3) {
-            return response.sendStatus(403);
-        }
         const _id = new ObjectId(request.params.id);
         const count = await db.collection('posts').count({ tags: _id });
         if (count > 0) {

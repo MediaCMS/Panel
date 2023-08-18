@@ -13,6 +13,8 @@ const server = app.listen(config.port, config.ip, () => {
     console.log(`Listening at ${config.ip}:${config.port}`);
 });
 //const session = cookieSession(config.session);
+
+// ToDo: filter from menu by `level` present
 const exclude = [
     config.path + routes.user.path + routes.user.actions.login.path
 ];

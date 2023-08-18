@@ -19,13 +19,13 @@ export default function (props) {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         {props?.menu && (
                             <ul className="navbar-nav me-auto mb-lg-0">
-                                {props.menu.map((item, index) => (
+                                {props.menu.map((item, index) =>
                                     <li className="nav-item" key={index} title={item.description}>
                                         <NavLink to={encodeURI(item.path)} className="nav-link" >
                                             {item.title}
                                         </NavLink>
                                     </li>
-                                ))}
+                                )}
                                 <li className="nav-item" title="Вихід з панелі куерування">
                                     <NavLink to={encodeURI('/доступ/вихід')} className="nav-link">
                                         Вихід

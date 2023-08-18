@@ -48,9 +48,6 @@ export default {
     },
 
     create: async (request, response) => {
-        if (response.locals.user.role.level > 5) {
-            return response.sendStatus(403);
-        }
         const comment = { ...request.body };
         const result = await db.collection('comments')
             .insertOne(comment);
@@ -58,9 +55,6 @@ export default {
     },
 
     update: async (request, response) => {
-        if (response.locals.user.role.level > 3) {
-            return response.sendStatus(403);
-        }
         const comment = { ...request.body };
         comment._id = ObjectId(comment._id);
         await db.collection('comments')
@@ -72,9 +66,6 @@ export default {
     },
 
     delete: async (request, response) => {
-        if (response.locals.user.role.level > 3) {
-            return response.sendStatus(403);
-        }
         await db.collection('comments').deleteOne({
             _id: new ObjectId(request.params.id)
         });
