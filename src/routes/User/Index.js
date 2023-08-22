@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useOutletContext, generatePath } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import Table, { Row, Cell } from '../../wrappers/Table.js'
 
 export default function Index() {

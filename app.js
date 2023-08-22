@@ -14,10 +14,9 @@ const server = app.listen(config.port, config.ip, () => {
 });
 //const session = cookieSession(config.session);
 
-// ToDo: filter from menu by `level` present
-const exclude = [
-    config.path + routes.user.path + routes.user.actions.login.path
-];
+const pathLogin = config.path
+    + routes.user.path
+    + routes.user.actions.login.path;
 
 app.use(cookieParser());
 app.use(express.json());
@@ -34,7 +33,7 @@ app.use(function (request, response, next) {
     console.log(decodeURI(request.path), request.method, request.params, request.query);
     //console.log('app.use.request.cookies', request.cookies);
     if (!request.cookies?.token) {
-        if (exclude.includes(decodeURI(request.path))) {
+        if (decodeURI(request.path) === pathLogin) {
             return next();
         } 
         return response.sendStatus(401);
