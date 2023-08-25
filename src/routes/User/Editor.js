@@ -3,7 +3,7 @@ import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../wrappers/Form.js'
 import MD5 from 'crypto-js/md5.js'
 
-export default function Editor() {
+export default function () {
 
     const [user, setUser] = useState({
         title: '', description: '', phone: '', email: '',

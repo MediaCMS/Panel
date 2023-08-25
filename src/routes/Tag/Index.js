@@ -27,7 +27,7 @@ export default function () {
             title: 'Мітки / Cписок',
             submenu: [
                 { title: 'Створити', path: '/мітки/редактор' },
-                { title: 'Фільтр', onClick: () => setFilter(!filter) }
+                { title: 'Фільтр', onClick: () => setFilter(true) }
             ]
         })
         handleLoad()

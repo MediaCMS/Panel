@@ -1,12 +1,9 @@
-import db, { ObjectId, sort, skip, limit } from '../db.js';
+import db, { ObjectId, filter } from '../db.js';
 
 export default {
 
     list: async (request, response) => {
-        //const filter = this.getFilter(request.query);
-        const match = {};
         const pipeline = [
-            { $match: match },
             { $lookup: {
                 from: 'users',
                 localField: 'user',
@@ -17,11 +14,21 @@ export default {
                 time: 1, title: 1, status: 1, user: {
                     $arrayElemAt: ['$user.title', 0]
                 }
-            } },
-            { $sort: sort(request.query?.sort, { time: -1 }) },
-            { $skip: skip(request.query?.page) },
-            { $limit: limit }
-        ]
+            } }
+        ];
+        filter(pipeline, request.query, match => {
+            if (request.query?.email) {
+                match.email = {
+                    '$regex' : request.query.email, '$options' : 'i'
+                }
+            }
+            if (request.query?.role) {
+                match.role = {
+                    '$regex' : request.query.role, '$options' : 'i'
+                }
+            }
+        })
+        console.log(pipeline)
         const posts = await db.collection('posts')
             .aggregate(pipeline).toArray()
         response.json(posts);

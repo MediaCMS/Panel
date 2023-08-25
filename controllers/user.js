@@ -1,4 +1,4 @@
-import db, { ObjectId, sort, skip, limit } from '../db.js';
+import db, { ObjectId, filter } from '../db.js';
 import roleController from './role.js';
 import axios from 'axios';
 import config from '../config.js';
@@ -27,26 +27,19 @@ export default {
                 } }
             );
         }
-        const match = {}
-        if (request.query?.title) {
-            match.title = {
-                '$regex' : request.query.title,
-                '$options' : 'i'
+        filter(pipeline, request.query, match => {
+            if (request.query?.email) {
+                match.email = {
+                    '$regex' : request.query.email, '$options' : 'i'
+                }
             }
-        }
-        if (request.query?.status) {
-            match.status = request.query?.status === 'true'
-        }
-        if (request.query?._exclude) {
-            match._id = {
-                $nin: request.query._exclude
-                    .split(',').map(id => ObjectId(id))
+            if (request.query?.role) {
+                match.role = {
+                    '$regex' : request.query.role, '$options' : 'i'
+                }
             }
-        }
-        pipeline.push({ $match: match });
-        pipeline.push({ $sort: sort(request.query?.sort) });
-        pipeline.push({ $skip: skip(request.query?.page) });
-        pipeline.push({ $limit: limit });
+        })
+        console.log(pipeline)
         const users = await db.collection('users')
             .aggregate(pipeline).toArray();
         response.json(users);

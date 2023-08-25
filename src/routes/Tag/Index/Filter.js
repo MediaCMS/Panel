@@ -7,7 +7,7 @@ export default function (props) {
         <Filter setParams={props.setParams} onSubmit={props.onSubmit}
             status={props.status} setStatus={props.setStatus}>
             <Row>
-                <Cell sm={4}>
+                <Cell sm={6}>
                     <Field type="text" name="title" value={props.params.title} label="Назва"
                         title="Фільтр за назвою" placeholder="львів" />
                 </Cell>

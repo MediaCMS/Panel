@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
-import Table, { Row, Cell } from '../../wrappers/Table.js'
+import Table from './Index/Table.js'
+import Filter from './Index/Filter.js'
 
-export default function Index() {
+export default function () {
 
+    const [filter, setFilter] = useState(false)
+    const [params, setParams] = useState({
+        title: null, status: true
+    })
     const [users, setUsers] = useState([])
     const context = useOutletContext()
     const navigate = useNavigate()
@@ -12,27 +17,27 @@ export default function Index() {
         navigate('/користувачі/редактор/' + id)
     }
 
+    const handleLoad = async () => {
+        const users = await context.api.panel.get('/користувачі', { params })
+        setUsers(users)
+    }
+
     useEffect(async () => {
         context.init({
             title: 'Користувачі / Список',
             submenu: [
-                { title: 'Створити', path: '/користувачі/редактор' }
+                { title: 'Створити', path: '/користувачі/редактор' },
+                { title: 'Фільтр', onClick: () => setFilter(true) }
             ]
         })
-        const users = await context.api.panel.get('/користувачі')
-        setUsers(users)
+        handleLoad()
     }, [])
 
-    return (
-        <Table columns={['Назва', 'Пошта', 'Роль']}>
-            {users.map(user => (
-                <Row status={user.status} key={user._id}
-                    onClick={() => handleClick(user._id)}>
-                    <Cell className="text-left">{user.title}</Cell>
-                    <Cell className="text-left">{user.email}</Cell>
-                    <Cell className="text-left">{user.role}</Cell>
-                </Row>
-            ))}
-        </Table>
-    )
+    return <>
+        <Table users={users} onClick={handleClick} />
+        {filter && 
+            <Filter params={params} setParams={setParams}
+                status={filter} setStatus={setFilter}
+                onSubmit={handleLoad} />}
+    </>
 }

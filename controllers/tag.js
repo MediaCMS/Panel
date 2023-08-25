@@ -1,30 +1,13 @@
-import db, { ObjectId, sort, skip, limit } from '../db.js';
+import db, { ObjectId, filter } from '../db.js';
 
 export default {
 
     list: async (request, response) => {
-        const match = {}
-        if (request.query?.title) {
-            match.title = {
-                '$regex' : request.query.title,
-                '$options' : 'i'
-            }
-        }
-        if (request.query?.status) {
-            match.status = request.query?.status === 'true'
-        }
-        if (request.query?._exclude) {
-            match._id = {
-                $nin: request.query._exclude
-                    .split(',').map(id => ObjectId(id))
-            }
-        }
+        const pipeline = [];
+        filter(pipeline, request.query)
+        console.log(pipeline)
         const tags = await db.collection('tags')
-            .find(match)
-            .sort(sort(request.query?.sort))
-            .skip(skip(request.query?.page))
-            .limit(limit)
-            .toArray();
+            .aggregate(pipeline).toArray()
         response.json(tags);
     },
 

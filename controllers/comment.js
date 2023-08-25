@@ -1,26 +1,34 @@
-import db, { ObjectId, sort, skip, limit } from '../db.js';
+import db, { ObjectId, filter } from '../db.js';
 
 export default {
 
     list: async (request, response) => {
-        const match = {};
         const pipeline = [
-                { $lookup: {
-                    from: 'users',
-                    localField: 'user',
-                    foreignField: '_id',
-                    as: 'user'
-                } },
-                { $match: match },
-                { $project: {
-                    time: 1, body: 1, user: {
-                        $arrayElemAt: ['$user.title', 0]
-                    }, status: 1
-                } },
-                { $sort: sort(request.query?.sort, { time: -1 }) },
-                { $skip: skip(request.query?.page) },
-                { $limit: limit }
-            ]
+            { $lookup: {
+                from: 'users',
+                localField: 'user',
+                foreignField: '_id',
+                as: 'user'
+            } },
+            { $project: {
+                time: 1, body: 1, user: {
+                    $arrayElemAt: ['$user.title', 0]
+                }, status: 1
+            } }
+        ];
+        filter(pipeline, request.query, match => {
+            if (request.query?.body) {
+                match.body = {
+                    '$regex' : request.query.body, '$options' : 'i'
+                }
+            }
+            if (request.query?.user) {
+                match.user = {
+                    '$regex' : request.query.user, '$options' : 'i'
+                }
+            }
+        })
+        console.log(pipeline)
         const comments = await db.collection('comments')
             .aggregate(pipeline).toArray()
         response.json(comments);
