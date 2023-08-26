@@ -19,8 +19,7 @@
 
 #### Застереження
 
-Для коректної роботи необхідно спочатку в БД MongoDB імпортувати колекції з репозиторію \
-[MediaCMS Data](`https://github.com/MediaCMS/Data.git`)
+Для коректної роботи необхідно спочатку в БД MongoDB імпортувати колекції з репозиторію [MediaCMS Data](https://github.com/MediaCMS/Data.git)
 
 #### Допомога
 
