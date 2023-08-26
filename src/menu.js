@@ -2,61 +2,61 @@ export default [
     {
         title: 'Публікації', 
         description: 'Список публікацій сайту',
-        path: '/публікації/список',
+        path: '/posts/list',
         level: 3
     },
     {
         title: 'Зображення',
         description: 'Список зображень публікацій',
-        path: '/зображення/список',
+        path: '/images/list',
         level: 3
     },
     {
         title: 'Мітки',
         description: 'Список міток публікацій',
-        path: '/мітки/список',
+        path: '/tags/list',
         level: 3
     },
     {
         title: 'Коментарі',
         description: 'Список коментаurlрів користувачыв',
-        path: '/коментарі/список',
+        path: '/comments/list',
         level: 3
     },
     {
         title: 'Користувачі',
         description: 'Список користувачів сайту',
-        path: '/користувачі/список',
+        path: '/users/list',
         level: 3
     },
     {
         title: 'Сторінки',
         description: 'Список сторінок сайту',
-        path: '/сторінки/список',
+        path: '/pages/list',
         level: 2
     },
     {
         title: 'Категорії',
         description: 'Список категорій публікацій',
-        path: '/категорії/список',
+        path: '/categories/list',
         level: 2
     },
     {
         title: 'Типи',
         description: 'Список типів публікацій',
-        path: '/типи/список',
+        path: '/types/list',
         level: 1
     },
     {
         title: 'Ролі',
         description: 'Список ролей користувачів',
-        path: '/ролі/список',
+        path: '/roles/list',
         level: 1
     },
     {
         title: 'Логи',
         description: 'Список логів користувачів',
-        path: '/логи/список',
+        path: '/log/list',
         level: 1
     }
 ]

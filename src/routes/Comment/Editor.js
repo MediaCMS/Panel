@@ -13,34 +13,34 @@ export default function () {
 
     const handleSubmit = async () => {
         params?.id
-            ? await context.api.panel.put('/коментарі/' + params.id, comment)
-            : await context.api.panel.post('/коментарі', comment)
-        navigate('/коментарі/список')
+            ? await context.api.panel.put('/comments/' + params.id, comment)
+            : await context.api.panel.post('/comments', comment)
+        navigate('/comments/list')
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/коментарі/' + params.id)
-        navigate('/коментарі/список')
+        await context.api.panel.delete('/comments/' + params.id)
+        navigate('/comments/list')
     }
 
     useEffect(async () => {
         context.setParams({
             title: 'Коментарі / Редактор',
             submenu: [
-                { title: 'Закрити', url: '/коментарі/список' }
+                { title: 'Закрити', url: '/comments/list' }
             ]
         })
         if (!params?.id) return
         setType(
-            await context.api.panel.get('/коментарі/' + params.id)
+            await context.api.panel.get('/comments/' + params.id)
         )
     }, [])
 
     return (
-        <Form id={params?.id} onChange={setComment} onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form id={params.id} onChange={setComment} onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
-                    <Field.DateTime value={comment?.time} required disabled />
+                    <Field.DateTime value={comment.time} required disabled />
                 </Cell>
                 <Cell sm="4">
                     <Field.Text value={comment.user} required disabled />

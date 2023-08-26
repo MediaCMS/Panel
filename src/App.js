@@ -15,23 +15,23 @@ import Role from './routes/Role.js'
 import Access from './routes/Access.js'
 
 const routes = [
-    { path: '/доступ', element: <Layout template={false} />, children: [
-        { path: 'вхід', element: <Access.Login /> },
-        { path: 'вихід', element: <Access.Logout /> }
+    { path: '/access', element: <Layout template={false} />, children: [
+        { path: 'login', element: <Access.Login /> },
+        { path: 'logout', element: <Access.Logout /> }
     ] },
     { path: '/', element: <Layout template={true} />, children: [
-        { index: true,           element: <Main /> },
-        { path: 'публікації',   module: Post },
-        //{ path: 'зображення',   module: Image },
-        { path: 'мітки',        module: Tag },
-        { path: 'коментарі',    module: Comment },
-        { path: 'користувачі',  module: User },
-        { path: 'сторінки',     module: Page },
-        { path: 'категорії',    module: Category },
-        { path: 'типи',         module: Type },
-        { path: 'ролі',          module: Role },
-        //{ path: 'логи/список',  element: <Log.Index /> },
-        { path: '*',             element: <NotFound /> }
+        { index: true, element: <Main /> },
+        { path: 'posts', module: Post },
+        //{ path: 'photo', module: Image },
+        { path: 'tags', module: Tag },
+        { path: 'comments', module: Comment },
+        { path: 'users', module: User },
+        { path: 'pages', module: Page },
+        { path: 'categories', module: Category },
+        { path: 'types', module: Type },
+        { path: 'roles', module: Role },
+        //{ path: 'log/list', element: <Log.Index /> },
+        { path: '*', element: <NotFound /> }
     ] }
 ]
 
@@ -39,13 +39,13 @@ for await (const route of routes[1].children) {
     if (route?.module) {
         route.children = [...route.children ?? [], ...[
             {
-                path: 'список',
+                path: 'list',
                 element: React.createElement(route.module['Index'])
             }, {
-                path: 'редактор',
+                path: 'editor',
                 element: React.createElement(route.module['Editor'])
             }, {
-                path: 'редактор/:id',
+                path: 'editor/:id',
                 element: React.createElement(route.module['Editor'])
             },
             { path: '*', element: <NotFound /> }

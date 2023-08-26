@@ -9,18 +9,18 @@ export default function () {
     const navigate = useNavigate()
 
     const handleClick = id => {
-        navigate('/типи/редактор/' + id)
+        navigate('/types/editor/' + id)
     }
 
     useEffect(async () => {
         context.init({
             title: 'Типи / Список',
             submenu: [
-                { title: 'Створити', path: '/типи/редактор' }
+                { title: 'Створити', path: '/types/editor' }
             ],
             width: 'small'
         })
-        const types = await context.api.panel.get('/типи')
+        const types = await context.api.panel.get('/types')
         setTypes(types)
     }, [])
 

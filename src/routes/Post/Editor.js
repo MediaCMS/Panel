@@ -21,24 +21,24 @@ export default function () {
             postExport.tags = postExport.tags.map(tag => tag._id)
         }
         postExport?._id
-            ? await context.api.panel.put('/публікації/' + params.id, postExport)
-            : await context.api.panel.post('/публікації', postExport)
-        navigate('/публікації/список')
+            ? await context.api.panel.put('/posts/' + params.id, postExport)
+            : await context.api.panel.post('/posts', postExport)
+        navigate('/posts/list')
     }
 
     const handleDelete = async () => {
         if (post?.image) {
             //await context.api.image.delete(post?.image)
         }
-        //await context.api.panel.delete('/публікації/' + params.id)
-        navigate('/публікації/список')
+        //await context.api.panel.delete('/posts/' + params.id)
+        navigate('/posts/list')
     }
 
     useEffect(async () => {
         context.init({
             title: 'Публікації / Редактор',
             submenu: [
-                { title: 'Закрити', path: '/публікації/список' }
+                { title: 'Закрити', path: '/posts/list' }
             ]
         })
         if (params?.id) return
@@ -46,14 +46,14 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        const categories = await context.api.panel.get('/категорії')
+        const categories = await context.api.panel.get('/categories')
         setCategories(categories)
         if (params?.id) return
         setPost(post => ({ ...post, category: categories[0]._id }))
     }, [])
 
     useEffect(async () => {
-        const types = await context.api.panel.get('/типи')
+        const types = await context.api.panel.get('/types')
         setTypes(types)
         if (params?.id) return
         setPost(post => ({ ...post, type: types[0]._id }))
@@ -61,7 +61,7 @@ export default function () {
 
     useEffect(async () => {
         if (!params?.id) return
-        const post = await context.api.panel.get('/публікації/' + params.id)
+        const post = await context.api.panel.get('/posts/' + params.id)
         setPost(post)
     }, [])
 
@@ -105,12 +105,12 @@ export default function () {
             <Row><Field.Body value={post.body} /></Row>
             <Row>
                 <Field.Autocomplete name="tags" value={post.tags} label="Мітки"
-                    path="/мітки" multiple required />
+                    path="/tags" multiple required />
             </Row>
             <Row>
                 <Cell sm="6">
                     <Field.Autocomplete name="user" value={post.user} label="Автор"
-                        path="/користувачі" required />
+                        path="/users" required />
                 </Cell>
                 <Cell sm="6">
                     <Field.Status value={post.status} label="Видимість публікації" />

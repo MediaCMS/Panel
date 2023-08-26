@@ -82,7 +82,7 @@ export default function (props) {
                         </main>
                         <Footer menu={menu} user={user} />
                     </>
-                ) : <Navigate to={encodeURI('/доступ/вхід')} replace />
+                ) : <Navigate to="/access/login" replace />
             : <Outlet context={{api, setUser, setAlert, setSpinner}} />}
             <Message {...message} setMessage={setMessage} />
             {spinner && (

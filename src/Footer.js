@@ -14,7 +14,7 @@ export default function (props) {
                 {props?.menu && props.menu.map((item, index) => (
                     <li className="nav-item" key={index}>
                         <NavLink
-                            to={encodeURI(item.path)}
+                            to={item.path}
                             className="nav-link small p-2"
                             title={item.description}>
                             {item.title}

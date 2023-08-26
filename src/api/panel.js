@@ -32,7 +32,7 @@ export default (setSpinner, setAlert, navigate) => {
                 switch(error.response.status) {
                     case 401: {
                         setAlert('В авторизації відмовлено')
-                        navigate('/доступ/вхід')
+                        navigate('/access/login')
                         break
                     }
                     case 403: setAlert('Доступ заборонено'); break;

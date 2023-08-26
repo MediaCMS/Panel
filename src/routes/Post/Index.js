@@ -10,17 +10,17 @@ export default function () {
     const navigate = useNavigate()
 
     const handleClick = id => {
-        navigate('/публікації/редактор/' + id)
+        navigate('/posts/editor/' + id)
     }
 
     useEffect(async () => {
         context.init({
             title: 'Публікації / Cписок',
             submenu: [
-                { title: 'Створити', path: '/публікації/редактор' }
+                { title: 'Створити', path: '/posts/editor' }
             ]
         })
-        const posts = await context.api.panel.get('/публікації')
+        const posts = await context.api.panel.get('/posts')
         setPosts(posts)
     }, [])
 

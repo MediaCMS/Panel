@@ -13,28 +13,28 @@ export default function () {
 
     const handleSubmit = async () => {
         params?.id
-            ? await context.api.panel.put('/категорії/' + params.id, category)
-            : await context.api.panel.post('/категорії', category)
-        navigate('/категорії/список')
+            ? await context.api.panel.put('/categories/' + params.id, category)
+            : await context.api.panel.post('/categories', category)
+        navigate('/categories/list')
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/категорії/' + params.id)
-        navigate('/категорії/список')
+        await context.api.panel.delete('/categories/' + params.id)
+        navigate('/categories/list')
     }
 
     useEffect(async () => {
         context.init({
             title: 'Категорії / Редактор',
             submenu: [
-                { title: 'Закрити', path: '/категорії/список' }
+                { title: 'Закрити', path: '/categories/list' }
             ]
         })
         if (!params?.id) return
-        const category = await context.api.panel.get('/категорії/' + params.id)
+        const category = await context.api.panel.get('/categories/' + params.id)
         if (!category) {
             context.setMessage('Категорія не знайдена')
-            navigate('/категорії/список')
+            navigate('/categories/list')
             return
         }
         setCategory(category)

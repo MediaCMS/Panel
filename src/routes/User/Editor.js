@@ -29,27 +29,27 @@ export default function () {
         }
         delete userNew.password2
         userNew?._id
-            ? await context.api.panel.put('/користувачі/' + params.id, userNew)
-            : await context.api.panel.post('/користувачі', userNew)
-        navigate('/користувачі/список')
+            ? await context.api.panel.put('/users/' + params.id, userNew)
+            : await context.api.panel.post('/users', userNew)
+        navigate('/users/list')
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/користувачі/' + params.id)
-        navigate('/користувачі/список')
+        await context.api.panel.delete('/users/' + params.id)
+        navigate('/users/list')
     }
 
     useEffect(async () => {
         context.init({
             title: 'Користувачі / Редактор',
             submenu: [
-                { title: 'Закрити', path: '/користувачі/список' }
+                { title: 'Закрити', path: '/users/list' }
             ]
         })
-        const roles = await context.api.panel.get('/ролі')
+        const roles = await context.api.panel.get('/roles')
         setRoles(roles)
         if (params?.id) {
-            const user = await context.api.panel.get('/користувачі/' + params.id)
+            const user = await context.api.panel.get('/users/' + params.id)
             setUser(user)
         } else {
             setUser(user => ({ ...user, role: roles.at(-1)._id }))

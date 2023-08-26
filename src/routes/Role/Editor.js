@@ -13,28 +13,28 @@ export default function () {
 
     const handleSubmit = async () => {
         params?.id
-            ? await context.api.panel.put('/ролі/' + params.id, role)
-            : await context.api.panel.post('/ролі', role)
-        navigate('/ролі/список')
+            ? await context.api.panel.put('/roles/' + params.id, role)
+            : await context.api.panel.post('/roles', role)
+        navigate('/roles/list')
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/ролі/' + params.id)
-        navigate('/ролі/список')
+        await context.api.panel.delete('/roles/' + params.id)
+        navigate('/roles/list')
     }
 
     useEffect(async () => {
         context.init({
             title: 'Ролі / Редактор',
             submenu: [
-                { title: 'Закрити', path: '/ролі/список' }
+                { title: 'Закрити', path: '/roles/list' }
             ]
         })
         if (!params?.id) return
-        const role = await context.api.panel.get('/ролі/' + params.id)
+        const role = await context.api.panel.get('/roles/' + params.id)
         if (!role) {
             context.setAlert('Роль не знайдена')
-            navigate('/ролі/список')
+            navigate('/roles/list')
             return
         }
         setRole(role)

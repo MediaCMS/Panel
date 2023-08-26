@@ -13,25 +13,25 @@ export default function () {
 
     const handleSubmit = async () => {
         params?.id
-            ? await context.api.panel.put('/мітки/' + params.id, tag)
-            : await context.api.panel.post('/мітки', tag)
-        navigate('/мітки/список')
+            ? await context.api.panel.put('/tags/' + params.id, tag)
+            : await context.api.panel.post('/tags', tag)
+        navigate('/tags/list')
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/мітки/' + params.id)
-        navigate('/мітки/список')
+        await context.api.panel.delete('/tags/' + params.id)
+        navigate('/tags/list')
     }
 
     useEffect(async () => {
         context.init({
             title: 'Мітки / Редактор',
             submenu: [
-                { title: 'Закрити', path: '/мітки/список' }
+                { title: 'Закрити', path: '/tags/list' }
             ]
         })
         if (!params?.id) return
-        const tags = await context.api.panel.get('/мітки/' + params.id)
+        const tags = await context.api.panel.get('/tags/' + params.id)
         setTag(tags)
     }, [])
 

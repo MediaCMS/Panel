@@ -13,28 +13,28 @@ export default function () {
 
     const handleSubmit = async () => {
         params?.id
-            ? await context.api.panel.put('/сторінки/' + params.id, page)
-            : await context.api.panel.post('/сторінки', page)
-        navigate('/сторінки/список')
+            ? await context.api.panel.put('/pages/' + params.id, page)
+            : await context.api.panel.post('/pages', page)
+        navigate('/pages/list')
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/сторінки/' + params.id)
-        navigate('/сторінки/список')
+        await context.api.panel.delete('/pages/' + params.id)
+        navigate('/pages/list')
     }
 
     useEffect(async () => {
         context.init({
             title: 'Сторінки / Редактор',
             submenu: [
-                { title: 'Закрити', path: '/сторінки/список' }
+                { title: 'Закрити', path: '/pages/list' }
             ]
         })
         if (!params?.id) return
-        const page = await context.api.panel.get('/сторінки/' + params.id)
+        const page = await context.api.panel.get('/pages/' + params.id)
         if (!page) {
             context.setMessage('Сторінка не знайдена')
-            navigate('/сторінки/список')
+            navigate('/pages/list')
             return
         }
         setPage(page)

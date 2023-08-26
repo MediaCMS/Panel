@@ -13,25 +13,25 @@ export default function () {
 
     const handleSubmit = async () => {
         params?.id
-            ? await context.api.panel.put('/типи/' + params.id, type)
-            : await context.api.panel.post('/типи', type)
-        navigate('/типи/список')
+            ? await context.api.panel.put('/types/' + params.id, type)
+            : await context.api.panel.post('/types', type)
+        navigate('/types/list')
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/типи/' + params.id)
-        navigate('/типи/список')
+        await context.api.panel.delete('/types/' + params.id)
+        navigate('/types/list')
     }
 
     useEffect(async () => {
         context.init({
             title: 'Типи / Редактор',
             submenu: [
-                { title: 'Закрити', path: '/типи/список' }
+                { title: 'Закрити', path: '/types/list' }
             ]
         })
         if (!params?.id) return
-        const types = await context.api.panel.get('/типи/' + params.id)
+        const types = await context.api.panel.get('/types/' + params.id)
         setType(types)
     }, [])
 

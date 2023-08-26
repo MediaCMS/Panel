@@ -14,11 +14,11 @@ export default function () {
     const navigate = useNavigate()
 
     const handleClick = id => {
-        navigate('/мітки/редактор/' + id)
+        navigate('/tags/editor/' + id)
     }
 
     const handleLoad = async () => {
-        const tags = await context.api.panel.get('/мітки', { params })
+        const tags = await context.api.panel.get('/tags', { params })
         setTags(tags)
     }
 
@@ -26,7 +26,7 @@ export default function () {
         context.init({
             title: 'Мітки / Cписок',
             submenu: [
-                { title: 'Створити', path: '/мітки/редактор' },
+                { title: 'Створити', path: '/tags/editor' },
                 { title: 'Фільтр', onClick: () => setFilter(true) }
             ]
         })

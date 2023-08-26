@@ -9,7 +9,7 @@ export default function () {
     const navigate = useNavigate()
 
     const handleClick = id => {
-        navigate('/категорії/редактор/' + id)
+        navigate('/categories/editor/' + id)
     }
 
     useEffect(async () => {
@@ -17,10 +17,10 @@ export default function () {
             title: 'Категорії / Список',
             width: 'small',
             submenu: [
-                { title: 'Створити', path: '/категорії/редактор' }
+                { title: 'Створити', path: '/categories/editor' }
             ]
         })
-        const categories = await context.api.panel.get('/категорії')
+        const categories = await context.api.panel.get('/categories')
         setCategories(categories)
     }, [])
 

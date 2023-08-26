@@ -1,8 +1,8 @@
 export default {
-    brand: 'Медіа',
+    brand: 'MediaCMS',
     title: 'Панель керування',
     api: {
-        url: 'https://cp.example.com/api',
+        url: 'https://panel.example.com/api',
         timeout: 5_000 
     },
     main: {
@@ -11,7 +11,7 @@ export default {
         timeout: 3_000 
     },
     images: {
-        url: 'https://images.example.com/',
+        url: 'https://image.example.com/',
         widths: [320, 480, 640, 960, 1280, 1600, 1920, 2560, 3840],
         key: '',
         timeout: 7_000

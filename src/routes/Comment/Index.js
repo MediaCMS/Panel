@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import Table, { Row, Cell } from '../../wrappers/Table.js'
 
 export default function () {
 
     const [comments, setComments] = useState([])
     const context = useOutletContext()
-    const navigate = useNavigate()
 
     useEffect(async () => {
         context.init({
             title: 'Коментарі / Cписок'
         })
-        const comments = await context.api.panel.get('/коментарі')
+        const comments = await context.api.panel.get('/comments')
         setComments(comments)
     }, [])
 

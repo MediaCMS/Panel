@@ -14,11 +14,11 @@ export default function () {
     const navigate = useNavigate()
 
     const handleClick = id => {
-        navigate('/користувачі/редактор/' + id)
+        navigate('/users/editor/' + id)
     }
 
     const handleLoad = async () => {
-        const users = await context.api.panel.get('/користувачі', { params })
+        const users = await context.api.panel.get('/users', { params })
         setUsers(users)
     }
 
@@ -26,7 +26,7 @@ export default function () {
         context.init({
             title: 'Користувачі / Список',
             submenu: [
-                { title: 'Створити', path: '/користувачі/редактор' },
+                { title: 'Створити', path: '/users/editor' },
                 { title: 'Фільтр', onClick: () => setFilter(true) }
             ]
         })

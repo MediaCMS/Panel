@@ -7,10 +7,10 @@ export default function () {
     const navigate = useNavigate()
 
     useEffect(async () => {
-        await context.api.panel.delete('/користувачі/вихід')
+        await context.api.panel.delete('/users/logout')
         context.setUser(null)
         localStorage.removeItem('user')
-        navigate('/доступ/вхід')
+        navigate('/access/login')
     }, [])
 
     return <></>

@@ -1,6 +1,6 @@
 export default {
     post: {
-        path: '/публікації',
+        path: '/posts',
         actions: {
             list: { path: '', method: 'get', level: 5 },
             read: { path: '/:id', method: 'get', level: 4 },
@@ -9,9 +9,18 @@ export default {
             delete: { path: '/:id', method: 'delete', level: 4 }
         }
     },
-    //image: '/зображення',
+    image:  {
+        path: '/images',
+        actions: {
+            list: { path: '', method: 'get', level: 5 },
+            read: { path: '/:id', method: 'get', level: 4 },
+            create: { path: '', method: 'post', level: 4 },
+            update: { path: '/:id', method: 'put', level: 4 },
+            delete: { path: '/:id', method: 'delete', level: 4 }
+        }
+    },
     tag:  {
-        path: '/мітки',
+        path: '/tags',
         actions: {
             list: { path: '', method: 'get', level: 5 },
             read: { path: '/:id', method: 'get', level: 4 },
@@ -21,7 +30,7 @@ export default {
         }
     },
     comment:  {
-        path: '/коментарі',
+        path: '/comments',
         actions: {
             list: { path: '', method: 'get', level: 3 },
             read: { path: '/:id', method: 'get', level: 3 },
@@ -30,19 +39,19 @@ export default {
         }
     },
     user: {
-        path: '/користувачі',
+        path: '/users',
         actions: {
             list: { path: '', method: 'get', level: 5 },
             read: { path: '/:id', method: 'get', level: 4 },
-            login: { path: '/вхід', method: 'post' },
+            login: { path: '/login', method: 'post' },
             create: { path: '', method: 'post', level: 2 },
             update: { path: '/:id', method: 'put', level: 2 },
-            logout: { path: '/вихід', method: 'delete', level: 4 },
+            logout: { path: '/logout', method: 'delete', level: 4 },
             delete: { path: '/:id', method: 'delete', level: 2 }
         }
     },
     page: {
-        path: '/сторінки',
+        path: '/pages',
         actions: {
             list: { path: '', method: 'get', level: 2 },
             read: { path: '/:id', method: 'get', level: 2 },
@@ -52,7 +61,7 @@ export default {
         }
     },
     category: {
-        path: '/категорії',
+        path: '/categories',
         actions: {
             list: { path: '', method: 'get', level: 4 },
             read: { path: '/:id', method: 'get', level: 4 },
@@ -62,7 +71,7 @@ export default {
         }
     },
     type: {
-        path: '/типи',
+        path: '/types',
         actions: {
             list: { path: '', method: 'get', level: 5 },
             read: { path: '/:id', method: 'get', level: 4 },
@@ -72,7 +81,7 @@ export default {
         }
     },
     role: {
-        path: '/ролі',
+        path: '/roles',
         actions: {
             list: { path: '', method: 'get', level: 5 },
             read: { path: '/:id', method: 'get', level: 4 },
@@ -83,7 +92,7 @@ export default {
     },
     /*
     log: {
-        path: '/лог',
+        path: '/log',
         actions: {
             read: '/:id',
             list: ''

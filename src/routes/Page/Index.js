@@ -9,17 +9,17 @@ export default function () {
     const navigate = useNavigate()
 
     const handleClick = id => {
-        navigate('/сторінки/редактор/' + id)
+        navigate('/pages/editor/' + id)
     }
 
     useEffect(async () => {
         context.init({
             title: 'Сторінки / Список',
             submenu: [
-                { title: 'Створити', path: '/сторінки/редактор' }
+                { title: 'Створити', path: '/pages/editor' }
             ]
         })
-        const pages = await context.api.panel.get('/сторінки')
+        const pages = await context.api.panel.get('/pages')
         setPages(pages)
     }, [])
 

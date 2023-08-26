@@ -1,28 +1,23 @@
-"use strict"
-
-import React, { useState, useEffect } from "react"
-import {
-    useParams, useSearchParams, useNavigate, useOutletContext, generatePath
-} from "react-router-dom"
-//import Form, { Image, Autocomplete, Switch } from "../Form.js"
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
+//import Form, { Image, Autocomplete, Switch } from '../Form.js'
 
 export function Index() {
 
     const context = useOutletContext()
-    const [photos, setPhotos] = useState({ items: [] })
+    const [images, setImages] = useState([])
 
     useEffect(async () => {
         context.setParams({
-            title: 'Фото (cписок)',
-            router: ['photo', 'index'],
+            title: 'Зображення (cписок)',
             submenu: [
-                { title: 'Завантажити', url: '/фото/редактор' }
+                { title: 'Завантажити', url: '/images/editor' }
             ]
         })
         /*
-        setPhotos({ items:
-            await context.api.get('/фото')
-        })
+        setImages(
+            await context.api.get('/images')
+        )
         */
     }, [])
 
@@ -32,7 +27,7 @@ export function Index() {
 export function Editor() {
 
     const params = useParams()
-    const [photo, setPhoto] = useState({
+    const [images, setImages] = useState({
         time: new Date().toISOString(), title: '', description: '', body: '', 
         image: null, category: '', tags: null, status: false
     })
@@ -41,20 +36,19 @@ export function Editor() {
 
     const handleSave = async data => {
         // ...
-         navigate('/фото/список')
+         navigate('/images/list')
     }
 
     const handleDelete = async () => {
         // ...
-        navigate('/фото/список')
+        navigate('/images/list')
     }
 
     useEffect(async () => {
         context.setParams({
             title: 'Фото (редактор)',
-            router: ['photo', 'editor'],
             submenu: [
-                { title: 'Закрити', url: '/фото/список' }
+                { title: 'Закрити', url: '/images/list' }
             ]
         })
         // ...

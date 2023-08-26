@@ -1,11 +1,9 @@
-"use strict"
-
-import React, { useState, useEffect } from "react"
-import { useOutletContext } from "react-router-dom"
+import React, { useState, useEffect } from 'react'
+import { useOutletContext } from 'react-router-dom'
 
 export function Index() {
 
-    const [logs, setLogs] = useState({ items: [] })
+    const [logs, setLogs] = useState([])
     const context = useOutletContext()
 
     useEffect(async () => {
@@ -14,9 +12,9 @@ export function Index() {
             router: ['log', 'index']
         })
         /*
-        setLogs({ items:
-            await context.api.get('/логи')
-        })
+        setLogs(
+            await context.api.get('/log')
+        )
         */
     }, [])
 

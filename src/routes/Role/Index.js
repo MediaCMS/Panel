@@ -9,17 +9,17 @@ export default function () {
     const navigate = useNavigate()
 
     const handleClick = id => {
-        navigate('/ролі/редактор/' + id)
+        navigate('/roles/editor/' + id)
     }
 
     useEffect(async () => {
         context.init({
             title: 'Ролі / Список',
             submenu: [
-                { title: 'Створити', path: '/ролі/редактор' }
+                { title: 'Створити', path: '/roles/editor' }
             ]
         })
-        const roles = await context.api.panel.get('/ролі')
+        const roles = await context.api.panel.get('/roles')
         setRoles(roles)
     }, [])
 
