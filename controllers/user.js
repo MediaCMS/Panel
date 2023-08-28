@@ -67,11 +67,9 @@ export default {
     update: async (request, response) => {
         const _id = new ObjectId(request.params.id);
         const role = await roleController.readByUser(_id);
-        console.log(role, response.locals.user.role.level)
         if (role.level < response.locals.user.role.level) {
             return response.sendStatus(403);
         }
-        console.log(request.params.id, response.locals.user._id)
         if (role.level === response.locals.user.role.level) {
             if (request.params.id !== response.locals.user._id) {
                 return response.sendStatus(403);
@@ -157,7 +155,6 @@ export default {
             maxAge: config.cookie.maxAge, httpOnly: true
         });
         delete user._id;
-        console.log(user)
         response.json(user);
     },
 

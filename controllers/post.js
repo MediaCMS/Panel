@@ -28,7 +28,6 @@ export default {
                 }
             }
         })
-        console.log(pipeline)
         const posts = await db.collection('posts')
             .aggregate(pipeline).toArray()
         response.json(posts);

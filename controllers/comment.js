@@ -28,7 +28,6 @@ export default {
                 }
             }
         })
-        console.log(pipeline)
         const comments = await db.collection('comments')
             .aggregate(pipeline).toArray()
         response.json(comments);

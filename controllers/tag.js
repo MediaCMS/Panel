@@ -5,7 +5,6 @@ export default {
     list: async (request, response) => {
         const pipeline = [];
         filter(pipeline, request.query)
-        console.log(pipeline)
         const tags = await db.collection('tags')
             .aggregate(pipeline).toArray()
         response.json(tags);

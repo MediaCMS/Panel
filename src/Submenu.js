@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 export default function (props) {
     return props.items.map(item => (
         <li className="nav-item" key={item.title}>
-            <NavLink to={encodeURI(item?.path ?? '#')}
+            <NavLink to={item.path ?? '#'}
                 onClick={() => {
                     if (item?.onClick) {
                         if (item?.confirm) {

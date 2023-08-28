@@ -30,10 +30,10 @@ if (app.get('env') === 'production') {
 
 app.use(function (request, response, next) {
     //console.log(decodeURI(request.originalUrl));
-    console.log(decodeURI(request.path), request.method, request.params, request.query);
+    console.log(request.path, request.method, request.params, request.query);
     //console.log('app.use.request.cookies', request.cookies);
     if (!request.cookies?.token) {
-        if (decodeURI(request.path) === pathLogin) {
+        if (request.path === pathLogin) {
             return next();
         } 
         return response.sendStatus(401);
@@ -46,10 +46,10 @@ app.use(function (request, response, next) {
     next();
 });
 
-app.use(encodeURI(config.path), router);
+app.use(config.path, router);
 
 app.use('/*', (request, response) => {
-    console.log('302', encodeURI(request.path))
+    console.log('302', request.path)
     response.sendFile(config.root + '/dist/index.html')
 });
 
