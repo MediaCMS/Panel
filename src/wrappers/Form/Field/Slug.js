@@ -1,4 +1,5 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
+import translit from 'ua-en-translit'
 import Context from '../Context.js'
 import Field from './Field.js'
 
@@ -9,14 +10,14 @@ export default function (props) {
 
     const handleChange = event => {
         if (!props?.source || event.target.value) return
-        const value = props.source.toLowerCase().replace(/\s/g, '-')
-            .replace(/[^a-zа-яіїґє0-9\-]/g, '')
+        const value = translit(props.source.toLowerCase())
+            .replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-')
         context.onChange(props.name ?? name, value)
     }
 
     return <Field type="text" name={name}
         onFocus={handleChange} onBlur={handleChange} label="Посилання"
-        pattern="[a-zа-яіїґє0-9\-]{2,64}" placeholder="відносне-посилання"
-        title="Посилання (від 2 до 64 прописних букв, цифр або дефісів)"
+        pattern="[a-z0-9\-]{1,128}" placeholder="відносне-посилання"
+        title="Посилання (від 1 до 128 прописних букв, цифр або дефісів)"
         {...props} />
 }
