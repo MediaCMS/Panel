@@ -1,8 +1,9 @@
 import React from 'react'
-import Field from './Field.js'
+import Text from './Text.js'
 
 export default function (props) {
 
-    return <Field type="text" name="title" pattern=".{1,128}" label="Назва"
-        placeholder="Назва" title="Назва (від 1 до 128 символів)" {...props} />
+    return <Text name="title"
+        label="Назва" placeholder="Назва ..."
+        maxLength="128" {...props} />
 }

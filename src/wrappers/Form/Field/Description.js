@@ -1,11 +1,8 @@
 import React from 'react'
-import Field from './Field.js'
+import Text from './Text.js'
 
 export default function (props) {
 
-    return (
-        <Field type="textarea" name="description" pattern=".{3,256}" label="Опис"
-            placeholder="Опис" title="Опис (від 3 до 256 символів)" rows="3"
-            {...props} />
-    )
+    return <Text name="description" rows="3" label="Опис"
+        placeholder="Опис ..." maxLength="256" {...props} />
 }

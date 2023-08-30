@@ -1,11 +1,8 @@
 import React from 'react'
-import Field from './Field.js'
+import Text from './Text.js'
 
 export default function (props) {
 
-    return (
-        <Field type="textarea" name="body" pattern="." label="Текст"
-            placeholder="Текст ..." rows="10"
-            {...props} />
-    )
+    return <Text name="body" rows="10" label="Текст"
+         placeholder="Текст ..." maxLength="32768" {...props} />
 }

@@ -23,23 +23,26 @@ export default function () {
         navigate('/types/list')
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Типи / Редактор',
             submenu: [
                 { title: 'Закрити', path: '/types/list' }
             ]
         })
+    }, [])
+
+    useEffect(async () => {
         if (!params?.id) return
         const types = await context.api.panel.get('/types/' + params.id)
         setType(types)
     }, [])
 
     return (
-        <Form id={params?.id} onChange={setType} onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form id={params.id} onChange={setType} onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
-                    <Field.Title value={type.title} placeholder="Новина" required />
+                    <Field.Title value={type.title} placeholder="Новина" maxLength="16" required />
                 </Cell>
                 <Cell sm="4">
                     <Field.Slug value={type.slug} source={type.title} placeholder="новина" required />

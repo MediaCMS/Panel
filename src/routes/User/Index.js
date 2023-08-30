@@ -7,7 +7,8 @@ export default function () {
 
     const [filter, setFilter] = useState(false)
     const [params, setParams] = useState({
-        title: null, status: true
+        title: null, email: null, role: null, status: true,
+        _sort: { field: 'title', order: 1 }
     })
     const [users, setUsers] = useState([])
     const context = useOutletContext()

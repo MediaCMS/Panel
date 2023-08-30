@@ -11,22 +11,20 @@ function filter(pipeline, query, callback) {
         match.title = { '$regex' : query.title, '$options' : 'i' }
     }
     if (callback) callback(match);
-    if (query?.status) {
-        match.status = query?.status === 'true'
-    }   
+    if (('status' in query) && (query.status !== '')) {
+        match.status = query.status === 'true';
+    }
     if (query?._exclude) {
         match._id = {
             $nin: request.query._exclude
                 .split(',').map(id => ObjectId(id))
         }
     }
-    if (query?._sort) {
-        const sort = {}
-        query._sort.split(',').forEach(item => {
-            const [field, order] = item.split(':');
-            pipeline[field] = parseInt(order ?? 1);
-        })
-        pipeline.push({ '$sort': sort })
+    pipeline.push({ '$match': match })
+    if (query?._sortField) {
+        pipeline.push({ '$sort': {
+            [query._sortField]: parseInt(query?._sortOrder ?? 1)
+        }})
     }
     if (query?._skip) {
         pipeline.push({ '$skip': query._skip })
