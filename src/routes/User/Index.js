@@ -7,7 +7,7 @@ export default function () {
 
     const [filter, setFilter] = useState(false)
     const [params, setParams] = useState({
-        title: null, email: null, role: null, status: true,
+        title: '', email: '', role: '', status: true,
         _sort: { field: 'title', order: 1 }
     })
     const [users, setUsers] = useState([])
@@ -23,7 +23,7 @@ export default function () {
         setUsers(users)
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Користувачі / Список',
             submenu: [
@@ -31,14 +31,16 @@ export default function () {
                 { title: 'Фільтр', onClick: () => setFilter(true) }
             ]
         })
-        handleLoad()
     }, [])
+
+    useEffect(async () => handleLoad(), [])
 
     return <>
         <Table users={users} onClick={handleClick} />
         {filter && 
-            <Filter params={params} setParams={setParams}
-                status={filter} setStatus={setFilter}
-                onSubmit={handleLoad} />}
+            <Filter data={params} onChange={setParams}
+                show={filter} onChangeShow={setFilter}
+                onSubmit={handleLoad} />
+        }
     </>
 }

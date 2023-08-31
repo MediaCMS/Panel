@@ -11,14 +11,14 @@ export default function (props) {
             {props?.children
                  ?  (<>
                         <Form.Label>{props.label ?? 'Сортування (поле)'}</Form.Label>
-                        <Control type="select" name="_sortField"
+                        <Control type="select" name="_sort.field"
                             title="Сортування за полем" {...propsNew} >
                             {propsNew.children}
                         </Control>
                     </>)
                  :  (<>
                         <Form.Label>{props.label ?? 'Сортування (напрям)'}</Form.Label>
-                        <Control type="select" name="_sortOrder"
+                        <Control type="select" name="_sort.order"
                             title="Напрям сортування" {...propsNew} >
                             <option value={1}>Низхідний</option>
                             <option value={-1}>Виcхідний</option>

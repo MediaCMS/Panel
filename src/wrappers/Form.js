@@ -1,6 +1,6 @@
 import React from 'react'
 import { useOutletContext } from 'react-router-dom'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Modal, Button } from 'react-bootstrap'
 import Context from './Form/Context.js'
 import Field from './Form/Field.js'
 import Control from './Form/Control.js'
@@ -40,6 +40,7 @@ function FormWrapper(props) {
                 new FormData(event.target)
             )
         )
+        if (props?.show) handleHide()
     }
 
     const handleDelete = async () => {
@@ -48,21 +49,39 @@ function FormWrapper(props) {
         }
     }
 
+    const handleHide = () => {
+        props.onChangeShow(false)
+    }
+
     return (
         <Context.Provider value={{ onChange: handleChange }}>
-            <Form onSubmit={handleSubmit}>
-                <div className=" mx-auto" style={{ maxWidth: '720px' }}>
-                    <div>{props.children}</div>
-                    <div className="text-center my-5">
-                        {props?.id && props?.onDelete && (
-                            <Button onClick={handleDelete} variant="danger" className="me-2">
-                                Видалити
-                            </Button>
-                        )}
-                        <Button type="submit">Зберегти</Button>
-                    </div>
-                </div>
-            </Form>
+            {props?.show
+                ?   <Modal show={props.show} onHide={handleHide} animation={true}>
+                        <Form onSubmit={handleSubmit}>
+                            <Modal.Header closeButton>
+                                <Modal.Title id="filterLabel">Фільтрування даних</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>{props.children}</Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleHide}>Закрити</Button>
+                                <Button type="submit">Фільтрувати</Button>
+                            </Modal.Footer>
+                        </Form>
+                    </Modal>
+                :   <Form onSubmit={handleSubmit}>
+                        <div className="mx-auto" style={{ maxWidth: '720px' }}>
+                            <div>{props.children}</div>
+                            <div className="text-center my-5">
+                                {props?.id && props?.onDelete && (
+                                    <Button onClick={handleDelete} variant="danger" className="me-2">
+                                        Видалити
+                                    </Button>
+                                )}
+                                <Button type="submit">Зберегти</Button>
+                            </div>
+                        </div>
+                    </Form>
+            }
         </Context.Provider>
     )
 }

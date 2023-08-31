@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import Moment from 'moment'
-import Table, { Row, Cell } from '../../wrappers/Table.js'
+import Table from './Index/Table.js'
+import Filter from './Index/Filter.js'
+
+const dateFormat = 'YYYY-MM-DD HH:mm'
 
 export default function () {
 
     const [posts, setPosts] = useState([])
+    const [filter, setFilter] = useState(false)
+    const [params, setParams] = useState({
+        time: {
+            start: Moment().add(-5, 'years').format(dateFormat),
+            end: Moment().format(dateFormat),
+        },
+        title: '', user: '', status: true,
+        _sort: { field: 'time', order: 1 }
+    })
     const context = useOutletContext()
     const navigate = useNavigate()
 
@@ -13,27 +25,31 @@ export default function () {
         navigate('/posts/editor/' + id)
     }
 
-    useEffect(async () => {
+    const handleLoad = async () => {
+        const posts = await context.api.panel.get('/posts', { params })
+        setPosts(posts)
+    }
+
+    useEffect(() => {
         context.init({
-            title: 'Публікації / Cписок',
+            title: 'Публікації / Список',
             submenu: [
-                { title: 'Створити', path: '/posts/editor' }
+                { title: 'Створити', path: '/posts/editor' },
+                { title: 'Фільтр', onClick: () => setFilter(true) }
             ]
         })
-        const posts = await context.api.panel.get('/posts')
-        setPosts(posts)
     }, [])
 
-    return (
-        <Table columns={['Дата', 'Назва', 'Автор']}>
-            {posts.map(post => (
-                <Row status={post.status} key={post._id}
-                    onClick={() => handleClick(post._id)}>
-                    <Cell className="text-nowrap">{Moment(post.time).format('YYYY-MM-DD HH:mm')}</Cell>
-                    <Cell className="text-start overflow-hidden">{post.title}</Cell>
-                    <Cell className="text-start text-nowrap">{post.user}</Cell>
-                </Row>
-            ))}
-        </Table>
-    )
+    useEffect(async () => handleLoad(), [])
+
+    useEffect(async () => console.log(params), [params])
+
+    return <>
+        <Table posts={posts} onClick={handleClick} />
+        {filter && 
+            <Filter data={params} onChange={setParams}
+                show={filter} onChangeShow={setFilter}
+                onSubmit={handleLoad} />
+        }
+    </>
 }

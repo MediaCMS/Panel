@@ -5,12 +5,11 @@ import Filter from './Index/Filter.js'
 
 export default function () {
 
+    const [tags, setTags] = useState([])
     const [filter, setFilter] = useState(false)
     const [params, setParams] = useState({
-        title: null, status: true,
-        _sort: { field: 'title', order: 1 }
+        title: '', status: true
     })
-    const [tags, setTags] = useState([])
     const context = useOutletContext()
     const navigate = useNavigate()
 
@@ -25,20 +24,22 @@ export default function () {
 
     useEffect(async () => {
         context.init({
-            title: 'Мітки / Cписок',
+            title: 'Мітки / Список',
             submenu: [
                 { title: 'Створити', path: '/tags/editor' },
                 { title: 'Фільтр', onClick: () => setFilter(true) }
             ]
         })
-        handleLoad()
     }, [])
+
+    useEffect(async () => handleLoad(), [])
 
     return <>
         <Table tags={tags} onClick={handleClick} />
-        {filter && 
-            <Filter params={params} setParams={setParams}
-                status={filter} setStatus={setFilter}
-                onSubmit={handleLoad} />}
+        {filter &&
+            <Filter data={params} onChange={setParams}
+                show={filter} onChangeShow={setFilter}
+                onSubmit={handleLoad} />
+        }
     </>
 }

@@ -1,31 +1,19 @@
 import React from 'react'
-import Filter, { Field, Row, Cell } from '../../../wrappers/Filter.js'
+import Form, { Field, Row, Cell } from '../../../wrappers/Form.js'
 
 export default function (props) {
 
     return (
-        <Filter {...props}>
+        <Form {...props}>
             <Row>
                 <Cell sm={6}>
-                    <Field.Title value={props.params.title}
+                    <Field.Title value={props.data.title}
                         title="Фільтр за назвою" placeholder="львів" />
                 </Cell>
                 <Cell sm={6}>
-                    <Field.Status as="select" value={props.params.status} />
+                    <Field.Status as="select" value={props.data.status} />
                 </Cell>
             </Row>
-            <Row>
-                <Cell sm={6}>
-                    <Field.Sort value={props.params._sort.field}>
-                        <option value="title">Назва</option>
-                        <option value="email">Пошта</option>
-                        <option value="role">Роль</option>
-                    </Field.Sort>
-                </Cell>
-                <Cell sm={6}>
-                    <Field.Sort value={props.params._sort.order} />
-                </Cell>
-            </Row>
-        </Filter>
+        </Form>
     )
 }

@@ -17,14 +17,18 @@ export default {
             } }
         ];
         filter(pipeline, request.query, match => {
-            if (request.query?.email) {
-                match.email = {
-                    '$regex' : request.query.email, '$options' : 'i'
+            if (request.query?.user) {
+                match.user = {
+                    $regex : request.query.user, '$options' : 'i'
                 }
             }
-            if (request.query?.role) {
-                match.role = {
-                    '$regex' : request.query.role, '$options' : 'i'
+            if (request.query?.time) {
+                match.time = {}
+                if (request.query.time?.start) {
+                    match.time.$gte = new Date(request.query.time.start)
+                }
+                if (request.query.time?.end) {
+                    match.time.$lte = new Date(request.query.time.end)
                 }
             }
         })
