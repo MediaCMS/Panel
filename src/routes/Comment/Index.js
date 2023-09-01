@@ -7,10 +7,11 @@ export default function () {
     const [comments, setComments] = useState([])
     const context = useOutletContext()
 
+    useEffect(() => {
+        context.init({ title: 'Коментарі / Список' })
+    }, [])
+
     useEffect(async () => {
-        context.init({
-            title: 'Коментарі / Cписок'
-        })
         const comments = await context.api.panel.get('/comments')
         setComments(comments)
     }, [])

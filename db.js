@@ -21,7 +21,7 @@ function filter(pipeline, query, callback) {
         }
     }
     pipeline.push({ '$match': match })
-    if (query?._sort.field) {
+    if (query?._sort) {
         pipeline.push({ '$sort': {
             [query._sort.field]: parseInt(query._sort.order ?? 1)
         }})

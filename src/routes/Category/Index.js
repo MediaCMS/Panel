@@ -12,7 +12,7 @@ export default function () {
         navigate('/categories/editor/' + id)
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Категорії / Список',
             width: 'small',
@@ -20,6 +20,9 @@ export default function () {
                 { title: 'Створити', path: '/categories/editor' }
             ]
         })
+    }, [])
+
+    useEffect(async () => {
         const categories = await context.api.panel.get('/categories')
         setCategories(categories)
     }, [])

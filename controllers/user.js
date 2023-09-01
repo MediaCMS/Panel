@@ -130,7 +130,7 @@ export default {
             .toString().split(':');
         const pipeline = [
             { $match: {
-                email: email, password: password, status: true
+                email, password, status: true
             } },
             { $lookup: {
                 from: 'roles',

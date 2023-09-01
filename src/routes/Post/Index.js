@@ -15,12 +15,11 @@ export default function () {
             start: Moment().add(-5, 'years').format(dateFormat),
             end: Moment().format(dateFormat),
         },
-        title: '', user: '', status: true,
         _sort: { field: 'time', order: 1 }
     })
     const context = useOutletContext()
     const navigate = useNavigate()
-
+console.log(params)
     const handleClick = id => {
         navigate('/posts/editor/' + id)
     }
@@ -42,11 +41,9 @@ export default function () {
 
     useEffect(async () => handleLoad(), [])
 
-    useEffect(async () => console.log(params), [params])
-
     return <>
         <Table posts={posts} onClick={handleClick} />
-        {filter && 
+        {filter &&
             <Filter data={params} onChange={setParams}
                 show={filter} onChangeShow={setFilter}
                 onSubmit={handleLoad} />

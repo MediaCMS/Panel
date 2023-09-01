@@ -17,7 +17,7 @@ export default function (props) {
                         <option value={true}>Видимі</option>
                         <option value={false}>Приховані</option>
                     </Control>)
-                 : <Control type="switch" className="mt-2"
+                 : <Control type="switch" className="mt-2" value={true}
                  title="Дозвіл на використання" {...propsNew} />
             }
         </Form.Group>

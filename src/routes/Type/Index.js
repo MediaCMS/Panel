@@ -12,7 +12,7 @@ export default function () {
         navigate('/types/editor/' + id)
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Типи / Список',
             submenu: [
@@ -20,6 +20,9 @@ export default function () {
             ],
             width: 'small'
         })
+    }, [])
+
+    useEffect(async () => {
         const types = await context.api.panel.get('/types')
         setTypes(types)
     }, [])

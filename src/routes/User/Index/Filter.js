@@ -7,34 +7,32 @@ export default function (props) {
         <Form {...props}>
             <Row>
                 <Cell sm={6}>
-                    <Field.Title value={props.data.title}
-                        title="Фільтр за назвою" placeholder="Леся Українка" />
+                    <Field.Title title="Фільтр за назвою"
+                        placeholder="Леся Українка" />
                 </Cell>
                 <Cell sm={6}>
-                    <Field.Text name="email" value={props.data.email}
-                        label="Пошта" title="Фільтр за поштою" placeholder="user@gmail.com" />
+                    <Field.Text name="email" label="Пошта"
+                        title="Фільтр за поштою" placeholder="user@gmail.com" />
                 </Cell>
             </Row>
             <Row>
                 <Cell sm={6}>
-                    <Field.Text name="role" value={props.data.role} label="Роль"
+                    <Field.Text name="role" label="Роль"
                         title="Фільтр за роллю" placeholder="Читач" />
                 </Cell>
                 <Cell sm={6}>
-                    <Field.Status as="select" value={props.data.status} />
+                    <Field.Status as="select" />
                 </Cell>
             </Row>
             <Row>
                 <Cell sm={6}>
-                    <Field.Sort value={props.data._sort.field}>
+                    <Field.Sort>
                         <option value="title">Назва</option>
                         <option value="email">Пошта</option>
                         <option value="role">Роль</option>
                     </Field.Sort>
                 </Cell>
-                <Cell sm={6}>
-                    <Field.Sort value={props.data._sort.order} />
-                </Cell>
+                <Cell sm={6}><Field.Sort /></Cell>
             </Row>
         </Form>
     )

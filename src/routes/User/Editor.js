@@ -5,10 +5,7 @@ import MD5 from 'crypto-js/md5.js'
 
 export default function () {
 
-    const [user, setUser] = useState({
-        title: '', description: '', phone: '', email: '',
-        password: '', password2: '', role: '', slug: '', status: false
-    })
+    const [user, setUser] = useState({})
     const [roles, setRoles] = useState()
     const context = useOutletContext()
     const navigate = useNavigate()
@@ -39,13 +36,16 @@ export default function () {
         navigate('/users/list')
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Користувачі / Редактор',
             submenu: [
                 { title: 'Закрити', path: '/users/list' }
             ]
         })
+    }, [])
+
+    useEffect(async () => {
         const roles = await context.api.panel.get('/roles')
         setRoles(roles)
         if (params?.id) {
@@ -57,38 +57,39 @@ export default function () {
     }, [])
 
     return (
-        <Form id={user._id} onChange={setUser} onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form id={user._id} data={user} onChange={setUser}
+            onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="6">
-                    <Field.Title value={user.title} placeholder="Леся Українка" required />
+                    <Field.Title placeholder="Леся Українка" required />
                 </Cell>
                 <Cell sm="6">
-                    <Field.Slug value={user.slug} source={user.title} placeholder="леся-українка" required />
+                    <Field.Slug source={user.title} placeholder="леся-українка" required />
                 </Cell>
             </Row>
             <Row>
                 <Cell sm="6">
-                    <Field type="tel" name="phone" value={user.phone} label='Телефон'
+                    <Field type="tel" name="phone" label='Телефон'
                         placeholder="+38 098 765-43-21" />
                 </Cell>
                 <Cell sm="6">
-                    <Field type="email" name="email" value={user.email} label='Пошта'
+                    <Field type="email" name="email" label='Пошта'
                         placeholder="lesya.ukrainka@gmail.com" required />
                 </Cell>
             </Row>
             <Row>
                 <Cell sm="4">
-                    <Field type="password" name="password" value={user.password}
-                        label="Пароль" pattern="[a-zA-Z0-9$_\-]{8,32}" autoComplete="off"
+                    <Field type="password" name="password"
+                        label="Пароль" pattern="[a-zA-Z0-9$_\-]{8,32}"
                         title="Латиниця, цифри, підкреслення (від 8 до 32 символів)" />
                 </Cell>
                 <Cell sm="4">
-                    <Field type="password" name="password2"  value={user.password2}
-                        label="Пароль (повторно)" pattern="[a-zA-Z0-9$_\-]{8,32}" autoComplete="off"
+                    <Field type="password" name="password2"
+                        label="Пароль (повторно)" pattern="[a-zA-Z0-9$_\-]{8,32}"
                         title="Латиниця, цифри, підкреслення (від 8 до 32 символів)" />
                 </Cell>
                 <Cell sm="4">
-                    <Field type="select" name="role" value={user.role} label='Роль'>
+                    <Field type="select" name="role" label='Роль'>
                         {roles?.map(role => (
                             <option value={role._id} key={role._id}>{role.title}</option>
                         ))}
@@ -96,12 +97,12 @@ export default function () {
                 </Cell>
             </Row>
             <Row>
-                <Field.Description value={user.description} label="Нотатки"
+                <Field.Description label="Нотатки"
                     placeholder="Заміжня, має двох дітей та собаку" />
             </Row>
             <Row>
                 <Cell sm="6">
-                    <Field.Status value={user.status} label='Видимість користувача' />
+                    <Field.Status label='Видимість користувача' />
                 </Cell>
             </Row>
         </Form>

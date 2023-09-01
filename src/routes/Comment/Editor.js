@@ -4,9 +4,7 @@ import Form, { Field, Row, Cell } from '../../wrappers/Form.js'
 
 export default function () {
 
-    const [comment, setComment] = useState({
-        time: '', body: '', user: null, status: false
-    })
+    const [comment, setComment] = useState({})
     const context = useOutletContext()
     const navigate = useNavigate()
     const params = useParams()
@@ -23,34 +21,37 @@ export default function () {
         navigate('/comments/list')
     }
 
-    useEffect(async () => {
-        context.setParams({
+    useEffect(() => {
+        context.init({
             title: 'Коментарі / Редактор',
             submenu: [
                 { title: 'Закрити', url: '/comments/list' }
             ]
         })
+    }, [])
+
+    useEffect(async () => {
         if (!params?.id) return
-        setType(
-            await context.api.panel.get('/comments/' + params.id)
-        )
+        const comment = await context.api.panel.get('/comments/' + params.id)
+        setComment(comment)
     }, [])
 
     return (
-        <Form id={params.id} onChange={setComment} onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form id={params.id} data={comment} onChange={setComment}
+            onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
-                    <Field.DateTime value={comment.time} required disabled />
+                    <Field.DateTime required disabled />
                 </Cell>
                 <Cell sm="4">
-                    <Field.Text value={comment.user} required disabled />
+                    <Field.Text required disabled />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Status value={comment.status} label='Видимість коментаря' />
+                    <Field.Status label='Видимість коментаря' />
                 </Cell>
             </Row>
             <Row>
-                <Field.Description value={comment.body} placeholder="Текст коментаря" />
+                <Field.Description placeholder="Текст коментаря" />
             </Row>
         </Form>
     )

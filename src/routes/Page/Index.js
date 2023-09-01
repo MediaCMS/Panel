@@ -12,13 +12,16 @@ export default function () {
         navigate('/pages/editor/' + id)
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Сторінки / Список',
             submenu: [
                 { title: 'Створити', path: '/pages/editor' }
             ]
         })
+    }, [])
+
+    useEffect(async () => {
         const pages = await context.api.panel.get('/pages')
         setPages(pages)
     }, [])

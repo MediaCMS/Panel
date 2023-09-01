@@ -4,9 +4,7 @@ import Form, { Field, Row, Cell } from '../../wrappers/Form.js'
 
 export default function () {
 
-    const [category, setCategory] = useState({
-        title: '', description: '', order: 30, slug: '', status: false
-    })
+    const [category, setCategory] = useState({ order: 30 })
     const context = useOutletContext()
     const navigate = useNavigate()
     const params = useParams()
@@ -23,43 +21,42 @@ export default function () {
         navigate('/categories/list')
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Категорії / Редактор',
             submenu: [
                 { title: 'Закрити', path: '/categories/list' }
             ]
         })
+    }, [])
+
+    useEffect(async () => {
         if (!params?.id) return
         const category = await context.api.panel.get('/categories/' + params.id)
-        if (!category) {
-            context.setMessage('Категорія не знайдена')
-            navigate('/categories/list')
-            return
-        }
         setCategory(category)
     }, [])
 
     return (
-        <Form id={params.id} onChange={setCategory} onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form id={params.id} data={category} onChange={setCategory}
+            onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="3">
-                    <Field.Title value={category.title} placeholder="Політика" required />
+                    <Field.Title placeholder="Політика" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Slug value={category.slug} source={category.title} placeholder="політика" required />
+                    <Field.Slug source={category.title} placeholder="політика" required />
                 </Cell>
                 <Cell sm="2">
-                    <Field type="number" name="order" value={category.order}
+                    <Field type="number" name="order"
                         min="1" max="30" step="1" placeholder="30" label="Сортування"
                         title="Рівень доступу (число від 1 до 30)" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Status value={category.status} label='Видимість категорії' />
+                    <Field.Status label='Видимість категорії' />
                 </Cell>
             </Row>
             <Row>
-                <Field.Description value={category.description} placeholder="Опис категорії" />
+                <Field.Description placeholder="Опис категорії" />
             </Row>
         </Form>
      )

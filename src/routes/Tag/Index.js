@@ -7,9 +7,7 @@ export default function () {
 
     const [tags, setTags] = useState([])
     const [filter, setFilter] = useState(false)
-    const [params, setParams] = useState({
-        title: '', status: true
-    })
+    const [params, setParams] = useState({ status: true })
     const context = useOutletContext()
     const navigate = useNavigate()
 
@@ -22,7 +20,7 @@ export default function () {
         setTags(tags)
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Мітки / Список',
             submenu: [

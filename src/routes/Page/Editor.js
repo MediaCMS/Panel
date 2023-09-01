@@ -4,9 +4,7 @@ import Form, { Field, Row, Cell } from '../../wrappers/Form.js'
 
 export default function () {
 
-    const [page, setPage] = useState({
-        title: '', description: '', slug: '', status: false
-    })
+    const [page, setPage] = useState({})
     const context = useOutletContext()
     const navigate = useNavigate()
     const params = useParams()
@@ -23,41 +21,40 @@ export default function () {
         navigate('/pages/list')
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Сторінки / Редактор',
             submenu: [
                 { title: 'Закрити', path: '/pages/list' }
             ]
         })
+    }, [])
+
+    useEffect(async () => {
         if (!params?.id) return
         const page = await context.api.panel.get('/pages/' + params.id)
-        if (!page) {
-            context.setMessage('Сторінка не знайдена')
-            navigate('/pages/list')
-            return
-        }
         setPage(page)
     }, [])
 
     return (
-        <Form id={params.id} onChange={setPage} onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form id={params.id} data={page} onChange={setPage}
+            onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="3">
-                    <Field.Title value={page.title} placeholder="Про проєкт" required />
+                    <Field.Title placeholder="Про проєкт" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Slug value={page.slug} source={page.title} placeholder="про-проєкт" required />
+                    <Field.Slug source={page.title} placeholder="про-проєкт" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Status value={page.status} label="Видимість сторінки" />
+                    <Field.Status label="Видимість сторінки" />
                 </Cell>
             </Row>
             <Row>
-                <Field.Description value={page.description} placeholder="Опис сторінки" />
+                <Field.Description placeholder="Опис сторінки" />
             </Row>
-            <Row><Field.Body value={page.body} /></Row>
-            <Row><Field.Image value={page.image} /></Row>
+            <Row><Field.Body placeholder="Текст сторінки" /></Row>
+            <Row><Field.Image /></Row>
         </Form>
      )
 }

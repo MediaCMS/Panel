@@ -12,13 +12,16 @@ export default function () {
         navigate('/roles/editor/' + id)
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Ролі / Список',
             submenu: [
                 { title: 'Створити', path: '/roles/editor' }
             ]
         })
+    }, [])
+
+    useEffect(async () => {
         const roles = await context.api.panel.get('/roles')
         setRoles(roles)
     }, [])

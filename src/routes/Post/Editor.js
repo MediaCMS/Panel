@@ -5,10 +5,7 @@ import Form, { Field, Row, Cell } from '../../wrappers/Form.js'
 export default function () {
 
     const params = useParams()
-    const [post, setPost] = useState({
-        time: null, title: '', description: '', body: '',
-        image: null, category: '', tags: [], user: null, status: false
-    })
+    const [post, setPost] = useState({ tags: [] })
     const [categories, setCategories] = useState([])
     const [types, setTypes] = useState([])
     const context = useOutletContext()
@@ -34,7 +31,7 @@ export default function () {
         navigate('/posts/list')
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({
             title: 'Публікації / Редактор',
             submenu: [
@@ -70,20 +67,21 @@ export default function () {
     }, [post])
 
     return (
-        <Form id={params.id} onChange={setPost} onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form id={params.id} data={post} onChange={setPost}
+            onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="5">
-                    <Field.DateTime value={post.time} />
+                    <Field.DateTime />
                 </Cell>
                 <Cell sm="4">
-                    <Field type="select" name="category" value={post.category} label="Категорія">
+                    <Field type="select" name="category" label="Категорія">
                         {categories.map(category => (
                             <option value={category._id} key={category._id}>{category.title}</option>
                         ))}
                     </Field>
                 </Cell>
                 <Cell sm="3">
-                    <Field type="select" name="type" value={post.type} label="Тип">
+                    <Field type="select" name="type" label="Тип">
                         {types.map(type => (
                             <option value={type._id} key={type._id}>{type.title}</option>
                         ))}
@@ -91,18 +89,18 @@ export default function () {
                 </Cell>
             </Row>
             <Row>
-                <Field.Title value={post.title} required
+                <Field.Title required
                     placeholder="Десь колись з кимось відбулась якась подія" />
             </Row>
             <Row>
-                <Field.Slug value={post.slug} source={post.title} required
+                <Field.Slug source={post.title} required
                     placeholder="десь-колись-з-кимось-відбулась-якась-подія" />
             </Row>
-            <Row><Field.Image value={post.image} /></Row>
+            <Row><Field.Image /></Row>
             <Row>
-                <Field.Description value={post.description} placeholder="Опис сторінки" required />
+                <Field.Description placeholder="Опис сторінки" required />
             </Row>
-            <Row><Field.Body value={post.body} /></Row>
+            <Row><Field.Body /></Row>
             <Row>
                 <Field.Autocomplete name="tags" value={post.tags} label="Мітки"
                     path="/tags" multiple required />
@@ -113,7 +111,7 @@ export default function () {
                         path="/users" required />
                 </Cell>
                 <Cell sm="6">
-                    <Field.Status value={post.status} label="Видимість публікації" />
+                    <Field.Status label="Видимість публікації" />
                 </Cell>
             </Row>
         </Form>

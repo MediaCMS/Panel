@@ -54,7 +54,7 @@ function FormWrapper(props) {
     }
 
     return (
-        <Context.Provider value={{ onChange: handleChange }}>
+        <Context.Provider value={{ data: props.data, onChange: handleChange }}>
             {props?.show
                 ?   <Modal show={props.show} onHide={handleHide} animation={true}>
                         <Form onSubmit={handleSubmit}>

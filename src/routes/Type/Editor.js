@@ -4,9 +4,7 @@ import Form, { Field, Row, Cell } from '../../wrappers/Form.js'
 
 export default function () {
 
-    const [type, setType] = useState({
-        title: '', description: '', slug: '', status: false
-    })
+    const [type, setType] = useState({})
     const context = useOutletContext()
     const navigate = useNavigate()
     const params = useParams()
@@ -39,20 +37,21 @@ export default function () {
     }, [])
 
     return (
-        <Form id={params.id} onChange={setType} onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form id={params.id} data={type} onChange={setType}
+            onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
-                    <Field.Title value={type.title} placeholder="Новина" maxLength="16" required />
+                    <Field.Title placeholder="Новина" maxLength="16" required />
                 </Cell>
                 <Cell sm="4">
-                    <Field.Slug value={type.slug} source={type.title} placeholder="новина" required />
+                    <Field.Slug source={type.title} placeholder="новина" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Status value={type.status} label='Видимість типу' />
+                    <Field.Status label='Видимість типу' />
                 </Cell>
             </Row>
             <Row>
-                <Field.Description value={type.description} placeholder="Опис типу" />
+                <Field.Description placeholder="Опис типу" />
             </Row>
         </Form>
     )
