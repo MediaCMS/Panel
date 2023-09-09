@@ -4,17 +4,16 @@ import Moment from 'moment'
 import Table from './Index/Table.js'
 import Filter from './Index/Filter.js'
 
-const dateFormat = 'YYYY-MM-DD HH:mm'
-
 export default function () {
 
     const [posts, setPosts] = useState([])
     const [filter, setFilter] = useState(false)
     const [params, setParams] = useState({
-        time: {
-            start: Moment().add(-5, 'years').format(dateFormat),
-            end: Moment().format(dateFormat),
+        date: {
+            start: Moment().add(-5, 'years').format('YYYY-MM-DD'),
+            end: Moment().format('YYYY-MM-DD'),
         },
+        status: true,
         _sort: { field: 'time', order: 1 }
     })
     const context = useOutletContext()

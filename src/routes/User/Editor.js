@@ -57,7 +57,7 @@ export default function () {
     }, [])
 
     return (
-        <Form id={user._id} data={user} onChange={setUser}
+        <Form data={user} onChange={setUser}
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="6">

@@ -37,7 +37,7 @@ export default function () {
     }, [])
 
     return (
-        <Form id={params?.id} data={role} onChange={setRole}
+        <Form data={role} onChange={setRole}
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="6">

@@ -37,7 +37,7 @@ export default function () {
     }, [])
 
     return (
-        <Form id={params.id} data={category} onChange={setCategory}
+        <Form data={category} onChange={setCategory}
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="3">

@@ -7,30 +7,39 @@ import Control from './Form/Control.js'
 import Row from './Form/Row.js'
 import Cell from './Form/Cell.js'
 
-function FormWrapper(props) {
+const FormWrapper = props => {
 
     const outletContext = useOutletContext()
 
-    const handleChange = (name, value) => {
-        props.onChange(dataOld => {
-            const dataNew = { ...dataOld }
-            change(dataNew, name.split('.'), value)
-            return dataNew
-            function change(o,k,v) {
-                if (k.length>1) {
-                    if (typeof o[k[0]] === 'undefined') {
-                        o[k[0]] = {}
-                    }
-                    return change(o[k[0]],k.slice(1), v)
-                } else {
-                    return o[k[0]] = (
-                        (typeof v == 'string') 
-                        && !isNaN(v) 
-                        && !isNaN(parseFloat(v)))
-                        ? +v : v
-                }
+    const actions = { 
+        set: (name, value, override = true) => {
+            props.onChange(dataOld => {
+                const dataNew = { ...dataOld }
+                handleChange(dataNew, name.split('.'), value, override)
+                return dataNew
+            })
+        },
+        get: name => {
+            return handleChange(props.data, name.split('.'))
+        }
+    }
+
+    const handleChange = (data, name, value, override) => {
+        if (name.length > 1) {
+            if (typeof data[name[0]] === 'undefined') {
+                data[name[0]] = {}
             }
-        })
+            handleChange(data[name[0]], name.slice(1), value)
+        } else {
+            if (typeof value === undefined) return data[name[0]]
+            if ((name[0] in data) && !override) return
+            console.log(data, name, value, override)
+            data[name[0]] = (
+                (typeof value == 'string') 
+                && !isNaN(value) 
+                && !isNaN(parseFloat(value)))
+                ? +value : value
+        }
     }
 
     const handleSubmit = event => {
@@ -54,7 +63,7 @@ function FormWrapper(props) {
     }
 
     return (
-        <Context.Provider value={{ data: props.data, onChange: handleChange }}>
+        <Context.Provider value={actions}>
             {props?.show
                 ?   <Modal show={props.show} onHide={handleHide} animation={true}>
                         <Form onSubmit={handleSubmit}>
@@ -69,10 +78,10 @@ function FormWrapper(props) {
                         </Form>
                     </Modal>
                 :   <Form onSubmit={handleSubmit}>
-                        <div className="mx-auto" style={{ maxWidth: '720px' }}>
+                        <div className="mx-auto" style={{ maxWidth: '840px' }}>
                             <div>{props.children}</div>
                             <div className="text-center my-5">
-                                {props?.id && props?.onDelete && (
+                                {props?.data._id && props?.onDelete && (
                                     <Button onClick={handleDelete} variant="danger" className="me-2">
                                         Видалити
                                     </Button>

@@ -22,13 +22,13 @@ export default {
                     $regex : request.query.user, '$options' : 'i'
                 }
             }
-            if (request.query?.time) {
+            if (request.query?.date) {
                 match.time = {}
-                if (request.query.time?.start) {
-                    match.time.$gte = new Date(request.query.time.start)
+                if (request.query.date?.start) {
+                    match.time.$gte = new Date(request.query.date.start)
                 }
-                if (request.query.time?.end) {
-                    match.time.$lte = new Date(request.query.time.end)
+                if (request.query.date?.end) {
+                    match.time.$lte = new Date(request.query.date.end)
                 }
             }
         })

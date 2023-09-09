@@ -7,11 +7,11 @@ export default function (props) {
         <Form {...props}>
             <Row>
                 <Cell sm={6}>
-                    <Field.DateTime name="time.start" label="Дата (початкова)"
+                    <Field.Date name="date.start" label="Дата (початкова)"
                         title="Фільтр за періодом (початок)" />
                 </Cell>
                 <Cell sm={6}>
-                    <Field.DateTime name="time.end" label="Дата (кінцева)"
+                    <Field.Date name="date.end" label="Дата (кінцева)"
                         title="Фільтр за періодом (кінець)" />
                 </Cell>
             </Row>

@@ -2,22 +2,15 @@ import React, { useEffect, useContext } from 'react'
 import { Form } from 'react-bootstrap'
 import Context from './Context.js'
 
-export default function (propsDefault) {
-console.log(propsDefault)
-    const context = useContext(Context)
-    const props = { ...propsDefault }
+export default function (props) {
 
-    if (context.data) {
-        if (props.name in context.data) {
-            props.value = context.data[props.name]
-        }
-    }
+    const data = useContext(Context)
 
     const handleChange = event => {
         if (props?.onChange) {
             props?.onChange(event)
         } else {
-            context.onChange(
+            data.set(
                 event.target.name, 
                 event.target.type === 'checkbox'
                     ? event.target.checked
@@ -43,30 +36,39 @@ console.log(propsDefault)
         }
         event.target.reportValidity()
     }
-
+/*
     useEffect(async () => {
+        console.log(props.name, props.value)
         if ('value' in props) {
-            context.onChange(props.name, props.value)
+            console.log(props.name, props.value)
+            data.set(props.name, props.value, false)
         }
     }, [])
-
+*/
     switch(props.type) {
         case 'radio':
         case 'switch':
         case 'checkbox':
             return <Form.Check {...props}
-                onChange={handleChange} checked={props.value ?? false} />
+                checked={data.get(props.name) ?? false}
+                onChange={handleChange} />
         case 'select':
-            return <Form.Select {...props} onChange={handleChange}>
+            return <Form.Select {...props}
+                value={data.get(props.name)}
+                onChange={handleChange}>
                 {props?.children}
             </Form.Select>
         case 'textarea':
             return <Form.Control as="textarea" {...props}
-                onChange={handleChange} onBlur={handleBlur} />
-        case 'input': props.autoComplete = 'off'
+                value={data.get(props.name)}
+                onChange={handleChange}
+                onBlur={handleBlur} />
         default: {
-            return <Form.Control {...props} value={props.value ?? ''}
-                onChange={handleChange} onBlur={handleBlur} />
+            return <Form.Control
+                autoComplete="off" {...props}
+                value={data.get(props.name) ?? ''}
+                onChange={handleChange}
+                onBlur={handleBlur} />
         }
     }
 }

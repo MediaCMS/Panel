@@ -37,7 +37,7 @@ export default function () {
     }, [])
 
     return (
-        <Form id={params.id} data={comment} onChange={setComment}
+        <Form data={comment} onChange={setComment}
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
@@ -47,7 +47,7 @@ export default function () {
                     <Field.Text required disabled />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Status label='Видимість коментаря' />
+                    <Field.Status label="Видимість коментаря" />
                 </Cell>
             </Row>
             <Row>

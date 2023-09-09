@@ -67,7 +67,7 @@ export default function () {
     }, [post])
 
     return (
-        <Form id={params.id} data={post} onChange={setPost}
+        <Form data={post} onChange={setPost}
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="5">

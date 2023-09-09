@@ -12,7 +12,7 @@ export default function (props) {
         <Form.Group className={props.className}>
             <Form.Label>{props.label ?? 'Статус'}</Form.Label>
             {(props?.as && props.as === 'select')
-                 ? (<Control type="select" {...propsNew} title="Фільтр за статусом" >
+                 ? (<Control type="select" {...propsNew} title="Фільтр за статусом" value={true}>
                         <option value="">Всі</option>
                         <option value={true}>Видимі</option>
                         <option value={false}>Приховані</option>

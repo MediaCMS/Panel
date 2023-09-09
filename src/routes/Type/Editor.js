@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../wrappers/Form.js'
 
-export default function () {
+export default () => {
 
     const [type, setType] = useState({})
     const context = useOutletContext()
@@ -37,7 +37,7 @@ export default function () {
     }, [])
 
     return (
-        <Form id={params.id} data={type} onChange={setType}
+        <Form data={type} onChange={setType}
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
@@ -46,7 +46,7 @@ export default function () {
                 <Cell sm="4">
                     <Field.Slug source={type.title} placeholder="новина" required />
                 </Cell>
-                <Cell sm="3">
+                <Cell sm="4">
                     <Field.Status label='Видимість типу' />
                 </Cell>
             </Row>
