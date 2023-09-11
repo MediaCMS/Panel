@@ -31,9 +31,8 @@ const FormWrapper = props => {
             }
             handleChange(data[name[0]], name.slice(1), value)
         } else {
-            if (typeof value === undefined) return data[name[0]]
+            if (typeof value === 'undefined') return data[name[0]]
             if ((name[0] in data) && !override) return
-            console.log(data, name, value, override)
             data[name[0]] = (
                 (typeof value == 'string') 
                 && !isNaN(value) 
