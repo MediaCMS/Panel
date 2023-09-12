@@ -6,13 +6,13 @@ import Field from './Field.js'
 export default function (props) {
 
     const name = 'slug'
-    const context = useContext(Context)
+    const data = useContext(Context)
 
     const handleChange = event => {
         if (!props?.source || event.target.value) return
         const value = translit(props.source.toLowerCase())
             .replace(/[^a-z0-9 ]/g, '').replace(/\s+/g, '-')
-        context.onChange(props.name ?? name, value)
+        data.set(props.name ?? name, value)
     }
 
     return <Field type="text" name={name}

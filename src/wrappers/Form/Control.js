@@ -36,15 +36,13 @@ export default function (props) {
         }
         event.target.reportValidity()
     }
-/*
+
     useEffect(async () => {
-        console.log(props.name, props.value)
         if ('value' in props) {
-            console.log(props.name, props.value)
             data.set(props.name, props.value, false)
         }
     }, [])
-*/
+
     switch(props.type) {
         case 'radio':
         case 'switch':

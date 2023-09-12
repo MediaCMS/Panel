@@ -12,7 +12,7 @@ const FormWrapper = props => {
     const outletContext = useOutletContext()
 
     const actions = { 
-        set: (name, value, override = true) => {
+        set: (name, value, override) => {
             props.onChange(dataOld => {
                 const dataNew = { ...dataOld }
                 handleChange(dataNew, name.split('.'), value, override)
@@ -24,12 +24,12 @@ const FormWrapper = props => {
         }
     }
 
-    const handleChange = (data, name, value, override) => {
+    const handleChange = (data, name, value, override = true) => {
         if (name.length > 1) {
             if (typeof data[name[0]] === 'undefined') {
                 data[name[0]] = {}
             }
-            handleChange(data[name[0]], name.slice(1), value)
+            return handleChange(data[name[0]], name.slice(1), value, override)
         } else {
             if (typeof value === 'undefined') return data[name[0]]
             if ((name[0] in data) && !override) return

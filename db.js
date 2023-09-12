@@ -16,7 +16,7 @@ function filter(pipeline, query, callback) {
     }
     if (query?._exclude) {
         match._id = {
-            $nin: request.query._exclude
+            $nin: query._exclude
                 .split(',').map(id => ObjectId(id))
         }
     }

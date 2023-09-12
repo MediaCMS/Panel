@@ -14,11 +14,11 @@ export default function () {
             end: Moment().format('YYYY-MM-DD'),
         },
         status: true,
-        _sort: { field: 'time', order: 1 }
+        _sort: { field: 'time', order: -1 }
     })
     const context = useOutletContext()
     const navigate = useNavigate()
-console.log(params)
+
     const handleClick = id => {
         navigate('/posts/editor/' + id)
     }
@@ -43,8 +43,8 @@ console.log(params)
     return <>
         <Table posts={posts} onClick={handleClick} />
         {filter &&
-            <Filter data={params} onChange={setParams}
-                show={filter} onChangeShow={setFilter}
+            <Filter show={filter} data={params}
+                onChange={setParams} onChangeShow={setFilter}
                 onSubmit={handleLoad} />
         }
     </>
