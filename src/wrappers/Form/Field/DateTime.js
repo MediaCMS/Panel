@@ -1,9 +1,25 @@
-import React from 'react'
-import Moment from 'moment'
+import React, { useContext, useEffect } from 'react'
 import Field from './Field.js'
+import Context from '../Context.js'
 
 export default function (props) {
 
-    return <Field type="datetime-local" name="time" label="Час"
-        value={Moment().format('YYYY-MM-DD HH:mm:ss')} {...props} />
+    const data = useContext(Context)
+    const name = props?.name ?? 'time'
+    const value = data.get(name)
+
+    const handleChange = event => {
+         data.set(
+            event.target.name, 
+            new Date(event.target.value).toISOString()
+        )
+    }
+
+    useEffect(async () => {
+        if (value) return
+        data.set(name, new Date().toISOString())
+    }, [])
+
+    return <Field type="datetime-local" name={name} label="Час" {...props}
+        onChange={handleChange} />
 }

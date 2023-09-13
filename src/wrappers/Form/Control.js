@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from 'react'
 import { Form } from 'react-bootstrap'
+import Moment from 'moment'
 import Context from './Context.js'
 
 export default function (props) {
@@ -61,6 +62,12 @@ export default function (props) {
                 value={data.get(props.name)}
                 onChange={handleChange}
                 onBlur={handleBlur} />
+        case 'datetime-local': {
+            return <Form.Control {...props}
+                value={Moment(data.get(props.name)).format('YYYY-MM-DDTHH:mm')}
+                onChange={handleChange}
+                onBlur={handleBlur} />
+        }
         default: {
             return <Form.Control
                 autoComplete="off" {...props}
