@@ -7,8 +7,8 @@ export default function (props) {
 
     const [prompt, setPrompt] = useState('')
     const [items, setItems] = useState([])
-    const contextOutlet = useOutletContext()
-    const contextForm = useContext(Context)
+    const context = useOutletContext()
+    const data = useContext(Context)
     const ref = useRef()
 
     const handleChange = async event => {
@@ -25,13 +25,13 @@ export default function (props) {
         if (props.value.length) {
             params._exclude = props.value.map(v => v._id).join()
         }
-        const items = await contextOutlet.api.panel
+        const items = await context.api.panel
             .get(props.path, { params })
         setItems(items)
     }
 
     const handleClick = event => {
-        contextForm.onChange(props.name, [ ...props.value, {
+        data.set(props.name, [ ...props.value, {
             _id: event.target.id,
             title: event.target.innerHTML
         }])
@@ -43,7 +43,7 @@ export default function (props) {
 
     const handleDelete = event => {
         const value = props.value.filter(v => v._id !== event.target.id)
-        contextForm.onChange(props.name, value)
+        data.set(props.name, value)
     }
 
     const handleBlur = () => {
