@@ -1,5 +1,6 @@
 import React from 'react'
 import Field from './Field.js'
+import '../../../assets/styles/ui/fields/image.css'
 
 export default function (props) {
 

@@ -3,6 +3,7 @@ import { Table, Button } from 'react-bootstrap'
 import Row from './Table/Row.js'
 import Cell from './Table/Cell.js'
 import config from '../config.js'
+import '../assets/styles/components/table.css'
 
 function TableWrapper(props) {
 

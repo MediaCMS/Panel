@@ -1,0 +1,5 @@
+form {
+    & input[type='datetime-local'],
+    input[type='number'],
+    select { width: auto; }
+}

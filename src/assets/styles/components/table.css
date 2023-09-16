@@ -1,0 +1,8 @@
+table {
+  & tr.text-muted {
+    &:hover {
+      th, td { color: initial !important; }
+    }
+    & th, td { color: #c2c9d6 !important; }
+  }
+}

@@ -6,6 +6,7 @@ import Field from './Form/Field.js'
 import Control from './Form/Control.js'
 import Row from './Form/Row.js'
 import Cell from './Form/Cell.js'
+import '../assets/styles/components/form.css'
 
 const FormWrapper = props => {
 

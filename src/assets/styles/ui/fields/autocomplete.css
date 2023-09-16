@@ -1,0 +1,8 @@
+.autocomplete {
+  & button {
+    &:hover {
+      color: var(--bs-white); border-color: var(--bs-danger);
+      background-color: var(--bs-danger); text-decoration: line-through;
+    }
+  }
+}
