@@ -1,6 +1,6 @@
 import React from 'react'
 import Moment from 'moment'
-import Table, { Row, Cell } from '../../../wrappers/Table.js'
+import Table, { Row, Cell } from '../../../components/Table.js'
 
 export default function (props) {
 

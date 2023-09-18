@@ -1,13 +1,13 @@
 import axios from 'axios'
-import config from '../config.js'
+import config from '../../config.js'
 
 export default (setSpinner, setAlert) => {
 
     const api = axios.create({
-        baseURL: config.main.url,
-        timeout: config.main.timeout,
+        baseURL: config.images.url,
+        timeout: config.images.timeout,
         headers: {
-            common: { 'X-API-Key': config.main.key }
+            common: { 'X-API-Key': config.images.key }
         }
     })
 

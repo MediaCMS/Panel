@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import translit from 'ua-en-translit'
-import Context from '../Context.js'
+import Context from '../../../contexts/Form.js'
 import Field from './Field.js'
 
 export default function (props) {

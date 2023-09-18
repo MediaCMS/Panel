@@ -4,8 +4,8 @@ import Header from './Header.js'
 import Submenu from './Submenu.js'
 import Message from './Message.js'
 import Footer from './Footer.js'
-import APIFactory from './api.js'
-import menuSource from './menu.js'
+import APIFactory from '../services/api.js'
+import menuSource from '../menu.js'
 
 const userStorage = JSON.parse(
     localStorage.getItem('user')

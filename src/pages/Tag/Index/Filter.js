@@ -1,5 +1,5 @@
 import React from 'react'
-import Form, { Field, Row, Cell } from '../../../wrappers/Form.js'
+import Form, { Field, Row, Cell } from '../../../components/Form.js'
 
 export default function (props) {
 

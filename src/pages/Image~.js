@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext, generatePath } from 'react-router-dom'
-import Table, { Row, Cell } from '../Table.js'
-import Form, { Field } from '../Form.js'
-import config from '../../config.js'
+import Table, { Row, Cell } from '../components/Table.js'
+import Form, { Field } from '../components/Form.js'
+import config from '../config.js'
 
 const uri = '/редактор/зображення'
 const endpoint = '/зображення'

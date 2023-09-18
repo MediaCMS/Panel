@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import config from './config.js'
+import config from '../config.js'
 
 export default function (props) {
 

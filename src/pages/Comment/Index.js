@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import Table, { Row, Cell } from '../../wrappers/Table.js'
+import Table, { Row, Cell } from '../../components/Table.js'
 
 export default function () {
 
