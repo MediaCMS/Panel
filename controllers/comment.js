@@ -33,7 +33,7 @@ export default {
         response.json(comments);
     },
 
-    read: async (request, response) => {
+    read: async (request, response, next) => {
         const comment = await db.collection('comments')
             .aggregate([
                 { $match: {
@@ -52,16 +52,18 @@ export default {
                 } }
             ]).next();
         response.json(comment);
+        next();
     },
 
-    create: async (request, response) => {
+    create: async (request, response, next) => {
         const comment = { ...request.body };
         const result = await db.collection('comments')
             .insertOne(comment);
         response.end(result.insertedId.toString());
+        next();
     },
 
-    update: async (request, response) => {
+    update: async (request, response, next) => {
         const comment = { ...request.body };
         comment._id = ObjectId(comment._id);
         await db.collection('comments')
@@ -70,12 +72,14 @@ export default {
                 { $set: comment }
             );
         response.end();
+        next();
     },
 
-    delete: async (request, response) => {
+    delete: async (request, response, next) => {
         await db.collection('comments').deleteOne({
             _id: new ObjectId(request.params.id)
         });
         response.end();
+        next();
     }
 }

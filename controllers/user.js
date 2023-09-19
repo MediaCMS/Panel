@@ -44,14 +44,15 @@ export default {
         response.json(users);
     },
 
-    read: async (request, response) => {
+    read: async (request, response, next) => {
         const user = await db.collection('users')
             .find({ _id: ObjectId(request.params.id) })
             .project({ password: false }).next();
         response.json(user);
+        next();
     },
 
-    create: async (request, response) => {
+    create: async (request, response, next) => {
         const user = { ...request.body };
         user.role = ObjectId(user.role);
         const role = await db.collection('roles')
@@ -62,9 +63,10 @@ export default {
         const result = await db.collection('users')
             .insertOne(user);
         response.end(result.insertedId.toString());
+        next();
     },
 
-    update: async (request, response) => {
+    update: async (request, response, next) => {
         const _id = new ObjectId(request.params.id);
         const role = await roleController.readByUser(_id);
         if (role.level < response.locals.user.role.level) {
@@ -84,9 +86,10 @@ export default {
         await db.collection('users')
             .updateOne({ _id }, { $set: user });
         response.end();
+        next();
     },
 
-    delete: async (request, response) => {
+    delete: async (request, response, next) => {
         const _id = new ObjectId(request.params.id);
         const role = await roleController.readByUser(_id);
         if (role.level <= response.locals.user.role.level) {
@@ -107,6 +110,7 @@ export default {
         }
         await db.collection('users').deleteOne({ _id });
         response.end();
+        next();
     },
 
     login: async (request, response, next) => {
@@ -156,10 +160,13 @@ export default {
         });
         delete user._id;
         response.json(user);
+        response.locals.user = user;
+        next();
     },
 
-    logout: async (request, response) => {
+    logout: async (request, response, next) => {
         response.clearCookie('token');
         response.end();
+        next();
     }
 }

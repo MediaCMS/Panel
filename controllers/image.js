@@ -8,13 +8,14 @@ export default {
         response.json(images);
     },
 
-    read: async (request, response) => {
+    read: async (request, response, next) => {
         const image = await db.collection('images')
             .find({ _id: ObjectId(request.params.id) }).next();
         response.json(image);
+        next();
     },
 
-    create: async (request, response) => {
+    create: async (request, response, next) => {
         if (response.locals.user.role.level > 4) {
             return response.sendStatus(403);
         }
@@ -23,9 +24,10 @@ export default {
         const result = await db.collection('images')
             .insertOne(image);
         response.end(result.insertedId.toString());
+        next();
     },
 
-    update: async (request, response) => {
+    update: async (request, response, next) => {
         if (response.locals.user.role.level > 3) {
             return response.sendStatus(403);
         }
@@ -38,9 +40,10 @@ export default {
                 { $set: image }
             );
         response.end();
+        next();
     },
 
-    delete: async (request, response) => {
+    delete: async (request, response, next) => {
         if (response.locals.user.role.level > 3) {
             return response.sendStatus(403);
         }
@@ -53,5 +56,6 @@ export default {
         await db.collection('images')
             .deleteOne({ _id: new ObjectId(request.params.id) });
         response.end();
+        next();
     }
 }

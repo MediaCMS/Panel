@@ -1,5 +1,6 @@
 import express from 'express';
 import routes from './routes.js';
+import log from './controllers/log.js';
 
 const router = express.Router();
 
@@ -13,18 +14,24 @@ for (let route of Object.entries(routes)) {
     const controller = controllers[route.name];
     for (let action of Object.entries(route.actions)) {
         action = { name: action[0], ...action[1] };
-        router[action.method](
-            route.path + action.path,
-            (request, response, next) => {
-                if ('level' in action) {
+        const callbacks = [];
+        if ('level' in action) {
+            callbacks.push(
+                (request, response, next) => {
                     if (response.locals.user.role.level > action.level) {
                         return response.sendStatus(403);
                     }
+                    next();
                 }
-                next();
-            },
-            controller[action.name]
-        );
+            );
+        }
+        callbacks.push(controller[action.name]);
+        if (!('log' in action) || action.log) {
+            callbacks.push((request, response) => 
+                log.create.bind(request, response, route.name, action.name),
+            )
+        }
+        router[action.method](route.path + action.path, callbacks);
     }
 }
 

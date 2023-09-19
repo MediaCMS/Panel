@@ -2,7 +2,7 @@ export default {
     post: {
         path: '/posts',
         actions: {
-            list: { path: '', method: 'get', level: 5 },
+            list: { path: '', method: 'get', level: 5, log: false },
             read: { path: '/:id', method: 'get', level: 4 },
             create: { path: '', method: 'post', level: 4 },
             update: { path: '/:id', method: 'put', level: 4 },
@@ -12,7 +12,7 @@ export default {
     image:  {
         path: '/images',
         actions: {
-            list: { path: '', method: 'get', level: 5 },
+            list: { path: '', method: 'get', level: 5, log: false },
             read: { path: '/:id', method: 'get', level: 4 },
             create: { path: '', method: 'post', level: 4 },
             update: { path: '/:id', method: 'put', level: 4 },
@@ -22,7 +22,7 @@ export default {
     tag:  {
         path: '/tags',
         actions: {
-            list: { path: '', method: 'get', level: 5 },
+            list: { path: '', method: 'get', level: 5, log: false },
             read: { path: '/:id', method: 'get', level: 4 },
             create: { path: '', method: 'post', level: 3 },
             update: { path: '/:id', method: 'put', level: 3 },
@@ -32,7 +32,7 @@ export default {
     comment:  {
         path: '/comments',
         actions: {
-            list: { path: '', method: 'get', level: 3 },
+            list: { path: '', method: 'get', level: 3, log: false },
             read: { path: '/:id', method: 'get', level: 3 },
             update: { path: '/:id', method: 'put', level: 3 },
             delete: { path: '/:id', method: 'delete', level: 3 }
@@ -41,7 +41,7 @@ export default {
     user: {
         path: '/users',
         actions: {
-            list: { path: '', method: 'get', level: 5 },
+            list: { path: '', method: 'get', level: 5, log: false },
             read: { path: '/:id', method: 'get', level: 4 },
             login: { path: '/login', method: 'post' },
             create: { path: '', method: 'post', level: 2 },
@@ -53,7 +53,7 @@ export default {
     page: {
         path: '/pages',
         actions: {
-            list: { path: '', method: 'get', level: 2 },
+            list: { path: '', method: 'get', level: 2, log: false },
             read: { path: '/:id', method: 'get', level: 2 },
             create: { path: '', method: 'post', level: 2 },
             update: { path: '/:id', method: 'put', level: 2 },
@@ -63,7 +63,7 @@ export default {
     category: {
         path: '/categories',
         actions: {
-            list: { path: '', method: 'get', level: 4 },
+            list: { path: '', method: 'get', level: 4, log: false },
             read: { path: '/:id', method: 'get', level: 4 },
             create: { path: '', method: 'post', level: 2 },
             update: { path: '/:id', method: 'put', level: 2 },
@@ -73,7 +73,7 @@ export default {
     type: {
         path: '/types',
         actions: {
-            list: { path: '', method: 'get', level: 5 },
+            list: { path: '', method: 'get', level: 5, log: false },
             read: { path: '/:id', method: 'get', level: 4 },
             create: { path: '', method: 'post', level: 1 },
             update: { path: '/:id', method: 'put', level: 1 },
@@ -83,20 +83,17 @@ export default {
     role: {
         path: '/roles',
         actions: {
-            list: { path: '', method: 'get', level: 5 },
+            list: { path: '', method: 'get', level: 5, log: false },
             read: { path: '/:id', method: 'get', level: 4 },
             create: { path: '', method: 'post', level: 1 },
             update: { path: '/:id', method: 'put', level: 1 },
             delete: { path: '/:id', method: 'delete', level: 1 }
         }
     },
-    /*
     log: {
         path: '/log',
         actions: {
-            read: '/:id',
-            list: ''
+            list: { path: '', method: 'get', level: 3, log: false }
         }
     }
-    */
 }
