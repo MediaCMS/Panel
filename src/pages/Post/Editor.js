@@ -13,7 +13,7 @@ export default function () {
 
     const handleSubmit = async () => {
         const postExport = { ...post }
-        postExport.time = new Date(postExport.time).toISOString()
+        postExport.date = new Date(postExport.date).toISOString()
         if (postExport?.tags) {
             postExport.tags = postExport.tags.map(tag => tag._id)
         }

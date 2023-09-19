@@ -33,7 +33,7 @@ export default function (props) {
                 <Cell sm={6}>
                     <Field.Sort>
                         <option value="title">Назва</option>
-                        <option value="time">Дата</option>
+                        <option value="date">Дата</option>
                         <option value="user">Автор</option>
                     </Field.Sort>
                 </Cell>

@@ -10,7 +10,7 @@ export default function (props) {
                 <Row status={post.status} key={post._id}
                     onClick={() => props.onClick(post._id)}>
                     <Cell className="text-nowrap">{
-                        Moment(post.time).format('YYYY-MM-DD HH:mm')
+                        Moment(post.date).format('YYYY-MM-DD HH:mm')
                     }</Cell>
                     <Cell className="text-start overflow-hidden">{post.title}</Cell>
                     <Cell className="text-start text-nowrap">{post.user}</Cell>

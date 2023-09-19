@@ -14,7 +14,7 @@ export default function () {
             end: Moment().format('YYYY-MM-DD'),
         },
         status: true,
-        _sort: { field: 'time', order: -1 }
+        _sort: { field: 'date', order: -1 }
     })
     const context = useOutletContext()
     const navigate = useNavigate()

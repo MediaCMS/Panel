@@ -5,7 +5,7 @@ import Context from '../../../contexts/Form.js'
 export default function (props) {
 
     const data = useContext(Context)
-    const name = props?.name ?? 'time'
+    const name = props?.name ?? 'date'
     const value = data.get(name)
 
     const handleChange = event => {
@@ -20,6 +20,6 @@ export default function (props) {
         data.set(name, new Date().toISOString())
     }, [])
 
-    return <Field type="datetime-local" name={name} label="Час" {...props}
+    return <Field type="datetime-local" name={name} label="Дата" {...props}
         onChange={handleChange} />
 }

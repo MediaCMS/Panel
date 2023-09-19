@@ -11,7 +11,7 @@ export default {
                 as: 'user'
             } },
             { $project: {
-                time: 1, title: 1, status: 1, user: {
+                date: 1, title: 1, status: 1, user: {
                     $arrayElemAt: ['$user.title', 0]
                 }
             } }
@@ -23,12 +23,12 @@ export default {
                 }
             }
             if (request.query?.date) {
-                match.time = {}
+                match.date = {}
                 if (request.query.date?.start) {
-                    match.time.$gte = new Date(request.query.date.start)
+                    match.date.$gte = new Date(request.query.date.start)
                 }
                 if (request.query.date?.end) {
-                    match.time.$lte = new Date(request.query.date.end)
+                    match.date.$lte = new Date(request.query.date.end)
                 }
             }
         })
@@ -48,7 +48,7 @@ export default {
                     as: 'tags'
                 } },
                 { $project: {
-                    time: 1, title: 1, description: 1, body: 1, image: 1,
+                    date: 1, title: 1, description: 1, body: 1, image: 1,
                     category: 1, tags: { _id: 1, title: 1 }, type: 1,
                     user: 1, slug: 1, status: 1
                 }}
@@ -58,7 +58,7 @@ export default {
 
     create: async (request, response) => {
         const post = { ...request.body };
-        post.time = new Date(post.time);
+        post.date = new Date(post.date);
         post.category = ObjectId(post.category);
         if (post?.tags) {
             post.tags = post.tags.map(tag => ObjectId(tag));
@@ -79,7 +79,7 @@ export default {
                 return response.sendStatus(403);
             }
         }
-        post.time = new Date(post.time);
+        post.date = new Date(post.date);
         post.category = ObjectId(post.category);
         if (post?.tags) {
             post.tags = post.tags.map(tag => ObjectId(tag));
