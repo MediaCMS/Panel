@@ -10,15 +10,11 @@ export default {
     },
 
     create: async (request, response, collection, action) => {
-        console.log('log', collection, action, request.locals)
         const log = { date: new Date(), collection, action };
         if (request.params?.id) {
             log.document = new ObjectId(request.params.id)
         }
         log.user = new ObjectId(response.locals.user._id);
-        console.log(log)
-        const { insertedId } = db.collection('logs').insertOne(log);
-        console.log(insertedId)
-        //response.end(insertedId);
+        db.collection('logs').insertOne(log);
     }
 }

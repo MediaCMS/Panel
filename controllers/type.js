@@ -8,24 +8,21 @@ export default {
         response.json(types);
     },
 
-    read: async (request, response, next) => {
+    read: async (request, response) => {
         const type = await db.collection('types')
             .find({ _id: ObjectId(request.params.id) }).next()
         response.json(type);
-        next();
     },
 
-    create: async (request, response, next) => {
+    create: async (request, response) => {
         const type = { ...request.body };
         const result = await db.collection('types')
             .insertOne(type);
         request.params.id = result.insertedId.toString();
-        log('type', 'create', id, response.locals.user._id);
         response.end(request.params.id);
-        next()
     },
 
-    update: async (request, response, next) => {
+    update: async (request, response) => {
         const type = { ...request.body };
         type._id = ObjectId(type._id);
         await db.collection('types').updateOne(
@@ -33,7 +30,6 @@ export default {
             { $set: type }
         );
         response.end();
-        next();
     },
 
     delete: async (request, response, next) => {
@@ -46,6 +42,5 @@ export default {
         }
         await db.collection('types').deleteOne({ _id });
         response.end();
-        next();
     }
 }

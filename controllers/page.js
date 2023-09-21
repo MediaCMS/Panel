@@ -8,22 +8,20 @@ export default {
         response.json(pages);
     },
 
-    read: async (request, response, next) => {
+    read: async (request, response) => {
         const page = await db.collection('pages')
             .find({ _id: ObjectId(request.params.id) }).next();
         response.json(page);
-        next();
     },
 
-    create: async (request, response, next) => {
+    create: async (request, response) => {
         const page = { ...request.body };
         const result = await db.collection('pages')
             .insertOne(page);
         response.end(result.insertedId.toString());
-        next();
     },
 
-    update: async (request, response, next) => {
+    update: async (request, response) => {
         const page = { ...request.body };
         page._id = ObjectId(page._id);
         await db.collection('pages')
@@ -32,15 +30,13 @@ export default {
                 { $set: page }
             );
         response.end();
-        next();
     },
 
-    delete: async (request, response, next) => {
+    delete: async (request, response) => {
         await db.collection('pages')
             .deleteOne(
                 { _id: new ObjectId(request.params.id) }
             );
         response.end();
-        next();
     }
 }

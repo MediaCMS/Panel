@@ -37,7 +37,7 @@ export default {
         response.json(posts);
     },
 
-    read: async (request, response, next) => {
+    read: async (request, response) => {
         const post = await db.collection('posts')
             .aggregate([
                 { $match: { _id: ObjectId(request.params.id) } },
@@ -54,10 +54,9 @@ export default {
                 }}
             ]).next();
         response.json(post);
-        next();
     },
 
-    create: async (request, response, next) => {
+    create: async (request, response) => {
         const post = { ...request.body };
         post.date = new Date(post.date);
         post.category = ObjectId(post.category);
@@ -68,10 +67,9 @@ export default {
         const result = await db.collection('posts')
             .insertOne(post);
         response.end(result.insertedId.toString());
-        next();
     },
 
-    update: async (request, response, next) => {
+    update: async (request, response) => {
         const post = { ...request.body };
         post._id = ObjectId(post._id);
         if (response.locals.user.role.level === 4) {
@@ -93,10 +91,9 @@ export default {
                 { $set: post }
             );
         response.end();
-        next();
     },
 
-    delete: async (request, response, next) => {
+    delete: async (request, response) => {
         const _id = new ObjectId(request.params.id);
         if (response.locals.user.role.level === 4) {
             const post = await db.collection('posts')
@@ -107,6 +104,5 @@ export default {
         }
         await db.collection('posts').deleteOne({ _id });
         response.end();
-        next();
     }
 }

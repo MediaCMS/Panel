@@ -8,11 +8,10 @@ export default {
         response.json(roles);
     },
 
-    read: async (request, response, next) => {
+    read: async (request, response) => {
         const role = await db.collection('roles')
             .find({ _id: ObjectId(request.params.id) }).next()
         response.json(role);
-        next();
     },
 
     readByUser: async (userID) => {
@@ -31,16 +30,15 @@ export default {
         return user.role[0];
     },
 
-    create: async (request, response, next) => {
+    create: async (request, response) => {
         const role = { ...request.body };
         role.level = parseInt(role.level);
         const result = await db.collection('roles')
             .insertOne(role);
         response.end(result.insertedId.toString());
-        next();
     },
 
-    update: async (request, response, next) => {
+    update: async (request, response) => {
         const role = { ...request.body };
         role._id = ObjectId(role._id);
         role.level = parseInt(role.level);
@@ -49,7 +47,6 @@ export default {
             { $set: role }
         );
         response.end();
-        next();
     },
 
     delete: async (request, response, next) => {
@@ -62,6 +59,5 @@ export default {
         }
         await db.collection('roles').deleteOne({ _id });
         response.end();
-        next();
     }
 }

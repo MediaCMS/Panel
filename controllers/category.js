@@ -8,23 +8,21 @@ export default {
         response.json(category);
     },
 
-    read: async (request, response, next) => {
+    read: async (request, response) => {
         const category = await db.collection('categories')
             .find({ _id: ObjectId(request.params.id) }).next()
         response.json(category);
-        next();
     },
 
-    create: async (request, response, next) => {
+    create: async (request, response) => {
         const category = { ...request.body };
         category.order = parseInt(category.order);
         const result = await db.collection('categories')
             .insertOne(category);
         response.end(result.insertedId.toString());
-        next();
     },
 
-    update: async (request, response, next) => {
+    update: async (request, response) => {
         const category = { ...request.body };
         category._id = ObjectId(category._id);
         category.order = parseInt(category.order);
@@ -33,10 +31,9 @@ export default {
             { $set: category }
         );
         response.end();
-        next();
     },
 
-    delete: async (request, response, next) => {
+    delete: async (request, response) => {
         const _id = new ObjectId(request.params.id);
         const count = await db.collection('posts').count({ category: _id });
         if (count > 0) {
@@ -46,6 +43,5 @@ export default {
         }
         await db.collection('categories').deleteOne({ _id });
         response.end();
-        next();
     }
 }

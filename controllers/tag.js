@@ -10,22 +10,20 @@ export default {
         response.json(tags);
     },
 
-    read: async (request, response, next) => {
+    read: async (request, response) => {
         const tag = await db.collection('tags')
             .find({ _id: ObjectId(request.params.id) }).next();            
         response.json(tag)
-        next();
     },
 
-    create: async (request, response, next) => {
+    create: async (request, response) => {
         const tag = { ...request.body };
         const result = await db.collection('tags')
             .insertOne(tag);
         response.end(result.insertedId.toString());
-        next();
     },
 
-    update: async (request, response, next) => {
+    update: async (request, response) => {
         const tag = { ...request.body };
         tag._id = ObjectId(tag._id);
         await db.collection('tags').updateOne(
@@ -33,7 +31,6 @@ export default {
             { $set: tag }
         );
         response.end();
-        next();
     },
 
     delete: async (request, response, next) => {
@@ -48,6 +45,5 @@ export default {
             { _id: new ObjectId(request.params.id) }
         );
         response.end();
-        next();
     }
 }

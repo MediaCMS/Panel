@@ -16,29 +16,27 @@ for (let route of Object.entries(routes)) {
         action = { name: action[0], ...action[1] };
         const callbacks = [];
         if ('level' in action) {
-            callbacks.push(
-                (request, response, next) => {
-                    if (response.locals.user.role.level > action.level) {
-                        return response.sendStatus(403);
-                    }
-                    next();
+            callbacks.push((request, response, next) => {
+                if (response.locals.user.role.level > action.level) {
+                    return response.sendStatus(403);
                 }
-            );
+                next();
+            })
         }
-        callbacks.push(controller[action.name]);
-        if (!('log' in action) || action.log) {
-            callbacks.push((request, response) => 
-                log.create.bind(request, response, route.name, action.name),
+        if (('log' in action) && action.log) {
+            callbacks.push(
+                new Proxy(controller[action.name], {
+                    apply: async (target, thisArg, args) => {
+                        await target(...args);
+                        log.create(args[0], args[1], route.name, action.name);
+                    }
+                })
             )
+        } else {
+            callbacks.push(controller[action.name]);
         }
         router[action.method](route.path + action.path, callbacks);
     }
 }
-
-router.all('*', async (request, response, next) => {
-    console.log('404', request.path)
-    response.sendStatus(404);
-    next();
-});
 
 export { router as default };
