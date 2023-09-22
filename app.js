@@ -49,9 +49,7 @@ app.use(function (request, response, next) {
 app.use(config.path, router);
 
 app.use(async (request, response, next) => {
-    console.log('last', request.path, request.method, request.params, request.route)
     if (typeof request.route !== 'undefined') return next();
-    console.log(request.path.slice(0, 4))
     let message;
     if (request.path.slice(0, 4) === '/api') {
         message = '404 Not Found';
@@ -60,9 +58,8 @@ app.use(async (request, response, next) => {
         message = '302 Found';
         response.status(302).sendFile(config.root + '/dist/index.html');
     }
-    message += ` (${request.path}, ${request.method})`
+    message += ` (${request.method} ${request.path})`
     console.error(message);
-    next(new Error(message));
 });
 
 app.use((error, request, response, next) => {
