@@ -31,7 +31,7 @@ export default {
                 }
             }
             if (request.query?.document) {
-                match.document = { $regex: request.query.document }
+                match.document = new ObjectId(request.query.document)
             }
         })
         const logs = await db.collection('logs')

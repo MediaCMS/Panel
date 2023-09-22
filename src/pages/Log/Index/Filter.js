@@ -7,32 +7,33 @@ export default function (props) {
         <Form {...props}>
             <Row>
                 <Cell sm={6}>
-                    <Field.Title title="Фільтр за назвою"
-                        placeholder="Леся Українка" />
+                    <Field.Date name="date.start" label="Дата (початкова)"
+                        title="Фільтр за періодом (початок)" />
                 </Cell>
                 <Cell sm={6}>
-                    <Field.Text name="email" label="Пошта"
-                        title="Фільтр за поштою" placeholder="user@gmail.com" />
+                    <Field.Date name="date.end" label="Дата (кінцева)"
+                        title="Фільтр за періодом (кінець)" />
                 </Cell>
             </Row>
             <Row>
                 <Cell sm={6}>
-                    <Field.Text name="role" label="Роль"
-                        title="Фільтр за роллю" placeholder="Читач" />
+                    <Field.Text name="controller" label="Контролер"
+                        title="Фільтр за контролером" placeholder="post" />
                 </Cell>
                 <Cell sm={6}>
-                    <Field.Status as="select" />
+                    <Field.Text name="action" label="Дія"
+                        title="Фільтр за дією" placeholder="update" />
                 </Cell>
             </Row>
             <Row>
                 <Cell sm={6}>
-                    <Field.Sort>
-                        <option value="title">Назва</option>
-                        <option value="email">Пошта</option>
-                        <option value="role">Роль</option>
-                    </Field.Sort>
+                    <Field.Text name="user" label="Користувач"
+                        title="Фільтр за користувачем" placeholder="Леся Українка" />
                 </Cell>
-                <Cell sm={6}><Field.Sort /></Cell>
+                <Cell sm={6}>
+                    <Field.Text name="document" label="Документ"
+                        title="Фільтр за документом" placeholder="64be976269a893de210bd7d8" />
+                </Cell>
             </Row>
         </Form>
     )
