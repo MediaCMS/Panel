@@ -11,7 +11,7 @@ import Page from './pages/Page.js'
 import Category from './pages/Category.js'
 import Type from './pages/Type.js'
 import Role from './pages/Role.js'
-//import Log from './pages/Log.js'
+import Log from './pages/Log.js'
 import Access from './pages/Access.js'
 
 const routes = [
@@ -30,7 +30,9 @@ const routes = [
         { path: 'categories', module: Category },
         { path: 'types', module: Type },
         { path: 'roles', module: Role },
-        //{ path: 'log/list', element: <Log.Index /> },
+        { path: 'logs', children: [
+            { path: 'list', element: <Log.Index /> }
+        ] },
         { path: '*', element: <NotFound /> }
     ] }
 ]

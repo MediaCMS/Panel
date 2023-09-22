@@ -91,7 +91,7 @@ export default {
         }
     },
     log: {
-        path: '/log',
+        path: '/logs',
         actions: {
             list: { path: '', method: 'get', level: 3 }
         }

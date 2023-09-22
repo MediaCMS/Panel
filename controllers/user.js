@@ -30,12 +30,14 @@ export default {
         filter(pipeline, request.query, match => {
             if (request.query?.email) {
                 match.email = {
-                    '$regex' : request.query.email, '$options' : 'i'
+                    '$regex': request.query.email,
+                    '$options': 'i'
                 }
             }
             if (request.query?.role) {
                 match.role = {
-                    '$regex' : request.query.role, '$options' : 'i'
+                    '$regex': request.query.role,
+                    '$options': 'i'
                 }
             }
         })

@@ -16,22 +16,7 @@ export default {
                 }
             } }
         ];
-        filter(pipeline, request.query, match => {
-            if (request.query?.user) {
-                match.user = {
-                    $regex : request.query.user, '$options' : 'i'
-                }
-            }
-            if (request.query?.date) {
-                match.date = {}
-                if (request.query.date?.start) {
-                    match.date.$gte = new Date(request.query.date.start)
-                }
-                if (request.query.date?.end) {
-                    match.date.$lte = new Date(request.query.date.end)
-                }
-            }
-        })
+        filter(pipeline, request.query)
         const posts = await db.collection('posts')
             .aggregate(pipeline).toArray()
         response.json(posts);
