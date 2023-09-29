@@ -29,19 +29,29 @@ if (app.get('env') === 'production') {
 }
 
 app.use(function (request, response, next) {
+    console.log(request.path, config.path, request.path.indexOf(config.path))
+    if (request.path.indexOf(config.path) !== 0) {
+        console.error(`302 Found (${request.path})`);
+        return response.status(302)
+            .sendFile(config.root + '/dist/index.html');
+    }
+    next();
+});
+
+app.use(function (request, response, next) {
     //console.log(decodeURI(request.originalUrl));
     console.log(request.path, request.method, request.params, request.query);
     //console.log('app.use.request.cookies', request.cookies);
-    if (!request.cookies?.token) {
-        if (request.path === pathLogin) {
-            return next();
-        } 
-        return response.sendStatus(403);
-    }
-    try {
-        response.locals.user = jwt.verify(request.cookies.token, config.jwt.key);
-    } catch (error) {
-        return response.status(401).end(error);
+    if (request.cookies?.token) {
+        try {
+            response.locals.user = jwt.verify(request.cookies.token, config.jwt.key);
+        } catch (error) {
+            return response.status(401).end(error);
+        }
+    } else {
+        if (request.path !== pathLogin) {
+            return response.sendStatus(403);
+        }
     }
     next();
 });
@@ -49,17 +59,11 @@ app.use(function (request, response, next) {
 app.use(config.path, router);
 
 app.use(async (request, response, next) => {
-    if (typeof request.route !== 'undefined') return next();
-    let message;
-    if (request.path.slice(0, 4) === '/api') {
-        message = '404 Not Found';
-        response.sendStatus(404);
-    } else {
-        message = '302 Found';
-        response.status(302).sendFile(config.root + '/dist/index.html');
+    if (typeof request.route !== 'undefined') {
+        console.error(`404 Not Found (${request.method} ${request.path})`);
+        return response.sendStatus(404);
     }
-    message += ` (${request.method} ${request.path})`
-    console.error(message);
+    next();
 });
 
 app.use((error, request, response, next) => {
@@ -83,10 +87,9 @@ process.on('unhandledRejection', async error => {
 });
 
 process.on('SIGINT', async () => {
-    console.log('\nSIGINT signal received')
+    console.log('\nSIGINT signal received');
     await client.close();
     server.close();
     console.log(`HTTP server closed`);
-    await client.close()
     process.exit(0);
 });

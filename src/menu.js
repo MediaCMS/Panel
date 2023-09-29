@@ -55,7 +55,7 @@ export default [
     },
     {
         title: 'Логи',
-        description: 'Список логів користувачів',
+        description: 'Список дій користувачів',
         path: '/logs/list',
         level: 1
     }
