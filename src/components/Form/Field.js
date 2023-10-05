@@ -1,7 +1,7 @@
 import Field from './Field/Field.js'
 
 const modules = [
-    'Date', 'DateTime', 'Title', 'Description', 'Body', 'Text', 'Image',
+    'Date', 'DateTime', 'Title', 'Description', 'Body', 'Text', 'Image', 'Image3',
     'Autocomplete', 'Latitude', 'Longitude', 'Slug', 'Status', 'Sort'
 ]
 

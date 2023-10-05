@@ -7,7 +7,7 @@ export default (setSpinner, setAlert) => {
         baseURL: config.images.url,
         timeout: config.images.timeout,
         headers: {
-            common: { 'X-API-Key': config.images.key }
+            common: { 'x-api-key': config.images.key }
         }
     })
 

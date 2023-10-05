@@ -13,7 +13,7 @@ export default {
     read: async (request, response) => {
         const tag = await db.collection('tags')
             .find({ _id: ObjectId(request.params.id) }).next();            
-        response.json(tag)
+        response.json(tag);
     },
 
     create: async (request, response) => {

@@ -47,7 +47,6 @@ export default {
     },
 
     read: async (request, response) => {
-        console.log(request.params)
         const user = await db.collection('users')
             .find({ _id: ObjectId(request.params.id) })
             .project({ password: false }).next();

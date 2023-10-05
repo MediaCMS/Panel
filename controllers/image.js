@@ -1,10 +1,12 @@
-import db, { ObjectId } from '../db.js';
+import db, { ObjectId, filter } from '../db.js';
 
 export default {
 
     list: async (request, response) => {
+        const pipeline = [];
+        filter(pipeline, request.query)
         const images = await db.collection('images')
-            .find().sort({ title: 1 }).toArray();
+            .aggregate(pipeline).toArray()
         response.json(images);
     },
 
@@ -15,9 +17,6 @@ export default {
     },
 
     create: async (request, response) => {
-        if (response.locals.user.role.level > 4) {
-            return response.sendStatus(403);
-        }
         const image = { ...request.body };
         image.level = parseInt(image.level);
         const result = await db.collection('images')
@@ -26,9 +25,6 @@ export default {
     },
 
     update: async (request, response) => {
-        if (response.locals.user.role.level > 3) {
-            return response.sendStatus(403);
-        }
         const image = { ...request.body };
         image._id = ObjectId(image._id);
         image.level = parseInt(image.level);
@@ -41,17 +37,21 @@ export default {
     },
 
     delete: async (request, response, next) => {
-        if (response.locals.user.role.level > 3) {
-            return response.sendStatus(403);
-        }
         const count = await db.collection('posts').count({ image: _id });
         if (count > 0) {
             return next(
                 Error(`Зображення використане в публікаціях (${count})`)
             )
         }
+        // check posts (main and body)
+        // check pages (main and body)
+        // check categories
+        // check tags
+        // check users
+        /*
         await db.collection('images')
             .deleteOne({ _id: new ObjectId(request.params.id) });
+        */
         response.end();
     }
 }

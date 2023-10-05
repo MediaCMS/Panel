@@ -30,12 +30,12 @@ export default (setSpinner, setAlert, navigate) => {
             console.log('api.response.error.response', error.response)
             if (error.response?.status) {
                 switch(error.response.status) {
-                    case 401: {
-                        setAlert('В авторизації відмовлено')
+                    case 401: setAlert('В авторизації відмовлено'); break;
+                    case 403: {
+                        setAlert('Доступ заборонено')
                         navigate('/access/login')
                         break
-                    }
-                    case 403: setAlert('Доступ заборонено'); break;
+                    } 
                     case 404: setAlert('Невідомий запит REST API'); break;
                     case 500: {
                         if (error.response?.data?.message) {

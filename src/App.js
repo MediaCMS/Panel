@@ -3,7 +3,7 @@ import { useRoutes, useOutletContext } from 'react-router-dom'
 import Layout from './layouts/Layout.js'
 import Main from './pages/Main.js'
 import Post from './pages/Post.js'
-//import Image from './pages/Image.js'
+import Image from './pages/Image.js'
 import Tag from './pages/Tag.js'
 import Comment from './pages/Comment.js'
 import User from './pages/User.js'
@@ -22,7 +22,7 @@ const routes = [
     { path: '/', element: <Layout template={true} />, children: [
         { index: true, element: <Main /> },
         { path: 'posts', module: Post },
-        //{ path: 'photo', module: Image },
+        { path: 'images', module: Image },
         { path: 'tags', module: Tag },
         { path: 'comments', module: Comment },
         { path: 'users', module: User },
