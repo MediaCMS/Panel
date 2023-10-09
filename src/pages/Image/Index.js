@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
+import Moment from 'moment'
 import Images from './Index/Images.js'
 import Filter from './Index/Filter.js'
 
@@ -7,7 +8,14 @@ export default function () {
 
     const [images, setImages] = useState([])
     const [filter, setFilter] = useState(false)
-    const [params, setParams] = useState({ status: true })
+    const [params, setParams] = useState({
+        date: {
+            start: Moment().add(-10, 'years').format('YYYY-MM-DD'),
+            end: Moment().format('YYYY-MM-DD'),
+        },
+        status: true,
+        _sort: { field: 'date', order: -1 }
+    })
     const context = useOutletContext()
     const navigate = useNavigate()
 
@@ -33,7 +41,7 @@ export default function () {
     useEffect(async () => handleLoad(), [])
 
     return <>
-        <Images data={images} onClick={handleClick} />
+        <Images list={images} onClick={handleClick} />
         {filter &&
             <Filter data={params} onChange={setParams}
                 show={filter} onChangeShow={setFilter}

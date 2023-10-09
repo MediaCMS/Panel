@@ -5,10 +5,9 @@ export default function (props) {
 
     return (
         <Images>
-            {props.data.map(image => (
-                <Image title={image.title} path={image.path} status={image.status}
-                    onClick={() => props.onClick(image._id)}
-                    id={image._id} key={image._id} />
+            {props.list.map(image => (
+                <Image {...image} key={image._id}
+                    onClick={() => props.onClick(image._id)} />
             ))}
         </Images>
     )

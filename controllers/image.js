@@ -3,7 +3,17 @@ import db, { ObjectId, filter } from '../db.js';
 export default {
 
     list: async (request, response) => {
-        const pipeline = [];
+        const pipeline = [
+            { $lookup: {
+                from: 'tags',
+                localField: 'tags',
+                foreignField: '_id',
+                as: 'tags'
+            } },
+            { $project: {
+                date: 1, title: 1, path: 1, tags: '$tags.title', status: 1
+            } }
+        ];
         filter(pipeline, request.query)
         const images = await db.collection('images')
             .aggregate(pipeline).toArray()

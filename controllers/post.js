@@ -10,15 +10,22 @@ export default {
                 foreignField: '_id',
                 as: 'user'
             } },
+            { $lookup: {
+                from: 'tags',
+                localField: 'tags',
+                foreignField: '_id',
+                as: 'tags'
+            } },
             { $project: {
-                date: 1, title: 1, status: 1, user: {
+                date: 1, title: 1, tags: '$tags.title', user: {
                     $arrayElemAt: ['$user.title', 0]
-                }
+                }, status: 1
             } }
         ];
         filter(pipeline, request.query)
         const posts = await db.collection('posts')
             .aggregate(pipeline).toArray()
+        console.log(posts)
         response.json(posts);
     },
 

@@ -4,36 +4,36 @@ import Form, { Field, Row, Cell } from '../../components/Form.js'
 
 export default function () {
 
-    const [category, setCategory] = useState({ order: 30 })
+    const [image, setImage] = useState({ tags: [] })
     const context = useOutletContext()
     const navigate = useNavigate()
     const params = useParams()
 
     const handleSubmit = async () => {
         params?.id
-            ? await context.api.panel.put('/categories/' + params.id, category)
-            : await context.api.panel.post('/categories', category)
-        navigate('/categories/list')
+            ? await context.api.panel.put('/images/' + params.id, image)
+            : await context.api.panel.post('/images', image)
+        navigate('/images/list')
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/categories/' + params.id)
-        navigate('/categories/list')
+        await context.api.panel.delete('/images/' + params.id)
+        navigate('/images/list')
     }
 
     useEffect(() => {
         context.init({
-            title: 'Категорії / Редактор',
+            title: 'Зображення / Редактор',
             submenu: [
-                { title: 'Закрити', path: '/categories/list' }
+                { title: 'Закрити', path: '/images/list' }
             ]
         })
     }, [])
 
     useEffect(async () => {
         if (!params?.id) return
-        const category = await context.api.panel.get('/categories/' + params.id)
-        setCategory(category)
+        const image = await context.api.panel.get('/images/' + params.id)
+        setImage(image)
     }, [])
 
     return (

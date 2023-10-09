@@ -17,14 +17,17 @@ export default function (props) {
             </Row>
             <Row>
                 <Cell sm={6}>
-                    <Field.Title title="Фільтр за назвою" placeholder="Львів" />
+                    <Field.Title title="Фільтр за назвою" placeholder="львів" />
                 </Cell>
                 <Cell sm={6}>
-                    <Field.Text name="user" label="Пошта" title="Фільтр за поштою"
-                        placeholder="Леся Українка" />
+                    <Field.Tag />
                 </Cell>
             </Row>
             <Row>
+                <Cell sm={6}>
+                    <Field.Text name="user" label="автором" title="Фільтр за автором"
+                        placeholder="вовчок" />
+                </Cell>
                 <Cell sm={6}>
                     <Field.Status as="select" />
                 </Cell>

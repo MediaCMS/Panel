@@ -19,6 +19,9 @@ function filter(pipeline, query, callback) {
     if (query?.title) {
         match.title = { $regex : query.title, $options : 'i' }
     }
+    if (query?.tag) {
+        match.tags = { $regex : query.tag, $options : 'i' }
+    }
     if (callback) callback(match);
     if (query?.user) {
         match.user = { $regex : query.user, $options : 'i' }
