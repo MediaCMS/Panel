@@ -4,6 +4,11 @@ export default {
 
     list: async (request, response) => {
         const pipeline = [];
+        if (request.query?._compact) {
+            pipeline.push(
+                { $project: { title: 1, status: 1 } }
+            );
+        }
         filter(pipeline, request.query)
         const tags = await db.collection('tags')
             .aggregate(pipeline).toArray()

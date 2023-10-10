@@ -8,6 +8,7 @@ export default function (props) {
     const [prompt, setPrompt] = useState('')
     const [items, setItems] = useState([])
     const [title, setTitle] = useState()
+    const [value, setValue] = useState()
     const context = useOutletContext()
     const data = useContext(Context)
 
@@ -23,12 +24,10 @@ export default function (props) {
         }
         const params = {
             title: event.target.value,
-            _compact: true,
-            status: true
+            status: true,
+            _compact: true
         }
-        if (props?.value) {
-            params._exclude = props.value
-        }
+        if (value) params._exclude = value
         const items = await context.api.panel
             .get(props.path, { params })
         setItems(items)
@@ -36,10 +35,7 @@ export default function (props) {
 
     const handleClick = async event => {
         data.set(props.name, event.target.id)
-        setTitle({
-            _id: event.target.id,
-            title: event.target.innerHTML
-        })
+        setTitle(event.target.innerHTML)
         setItems([])
     }
 
@@ -56,11 +52,13 @@ export default function (props) {
     }
 
     useEffect(async () => {
-        if (!props?.value) return
-        const value = await context.api.panel
-            .get(props.path + '/' + props.value)
-        setTitle(value.title)
-    }, [props.value])
+        const value = data.get(props.name)
+        if (!value) return
+        const item = await context.api.panel
+            .get(props.path + '/' + value)
+        setTitle(item.title)
+        setValue(value)
+    }, [data.get(props.name)])
 
     useEffect(async () => {
         if (!title) return

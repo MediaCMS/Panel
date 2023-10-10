@@ -17,9 +17,9 @@ export default {
                 as: 'tags'
             } },
             { $project: {
-                date: 1, title: 1, tags: '$tags.title', user: {
-                    $arrayElemAt: ['$user.title', 0]
-                }, status: 1
+                date: 1, title: 1, tags: '$tags.title', 
+                user: { $arrayElemAt: ['$user.title', 0] },
+                status: 1
             } }
         ];
         filter(pipeline, request.query)
@@ -33,15 +33,9 @@ export default {
         const post = await db.collection('posts')
             .aggregate([
                 { $match: { _id: ObjectId(request.params.id) } },
-                { $lookup: {
-                    from: 'tags',
-                    localField: 'tags',
-                    foreignField: '_id',
-                    as: 'tags'
-                } },
                 { $project: {
-                    date: 1, title: 1, description: 1, body: 1, image: 1,
-                    category: 1, tags: { _id: 1, title: 1 }, type: 1,
+                    date: 1, title: 1, description: 1, body: 1,
+                    image: 1,category: 1, tags: 1, type: 1,
                     user: 1, slug: 1, status: 1
                 }}
             ]).next();

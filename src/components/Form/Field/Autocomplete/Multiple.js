@@ -7,6 +7,8 @@ export default function (props) {
 
     const [prompt, setPrompt] = useState('')
     const [items, setItems] = useState([])
+    const [value, setValue] = useState([])
+    const [list, setList] = useState([])
     const context = useOutletContext()
     const data = useContext(Context)
     const ref = useRef()
@@ -14,49 +16,67 @@ export default function (props) {
     const handleChange = async event => {
         setPrompt(event.target.value)
         if (event.target.value.length < 1) {
-            setItems([])
+            setList([])
             return
         }
         const params = {
             title: event.target.value,
-            _compact: true,
-            status: true
+            status: true,
+            _compact: true
         }
-        if (props.value.length) {
-            params._exclude = props.value.map(v => v._id).join()
+        if (value.length) {
+            params._exclude = value.join()
         }
-        const items = await context.api.panel
+        const listNew = await context.api.panel
             .get(props.path, { params })
-        setItems(items)
+        setList(listNew)
     }
 
     const handleClick = event => {
-        data.set(props.name, [ ...props.value, {
-            _id: event.target.id,
-            title: event.target.innerHTML
-        }])
-        setItems(itemsOld =>
-            itemsOld.filter(i => i._id !== event.target.id)
+        const valueNew = [...value, event.target.id]
+        data.set(props.name, valueNew)
+        const itemsNew = [ ...items, {
+            _id: event.target.id, title: event.target.title
+        }]
+        setItems(itemsNew)
+        const listNew = list.filter(item =>
+            item._id !== event.target.id
         )
+        setList(listNew)
         event.preventDefault()
     }
 
     const handleDelete = event => {
-        const value = props.value.filter(v => v._id !== event.target.id)
-        data.set(props.name, value)
+        const valueNew = value.filter(
+            id => id !== event.target.id
+        )
+        data.set(props.name, valueNew)
+        const itemsNew = items.filter(v =>
+            v._id !== event.target.id
+        )
+        setItems(itemsNew)
     }
 
     const handleBlur = () => {
-        setItems([])
+        setList([])
         setPrompt('')
     }
 
+    useEffect(async () => {
+        const value = data.get(props.name)
+        if (!value || !value.length) return
+        const itemsNew = await context.api.panel.get(props.path, {
+            params: { _id: value, _compact: true }})
+        setItems(itemsNew)
+        setValue(value)
+    }, [data.get(props.name)])
+
     useEffect(() => {
         if (props?.required) {
-            ref.current.required = Array.isArray(props.value)
-                && props.value.length ? false : true
+            ref.current.required = Array.isArray(items)
+                && items.length ? false : true
         }
-    }, [props.value])
+    }, [items])
 
     return (
         <Form.Group className={
@@ -72,25 +92,23 @@ export default function (props) {
                         onChange={handleChange} onBlur={handleBlur}
                         title={props.title ?? 'Введіть символи для пошуку'}
                         autoComplete="off" ref={ref} />
-                    {!!items.length && (
+                    {!!list.length && (
                         <ul className="dropdown-menu show">
-                            {items.map(item => (
-                                <li id={item._id} className="dropdown-item"
-                                    onMouseDown={handleClick} key={item._id}>
-                                    {item.title}
+                            {list.map(l => (
+                                <li id={l._id} className="dropdown-item"
+                                    onMouseDown={handleClick} key={l._id}>
+                                    {l.title}
                                 </li>
                             ))}
                         </ul>
                     )}
                 </div>
-                {props?.value &&
-                    props.value.map(v =>
-                        <Button onClick={handleDelete} variant="outline-dark"
-                            title="Видалити" id={v._id} key={v._id}>
-                            {v.title}
-                        </Button>
-                    )
-                }
+                {items.map(item =>
+                    <Button onClick={handleDelete} variant="outline-dark"
+                        title="Видалити" id={item._id} key={item._id}>
+                        {item.title}
+                    </Button>
+                )}
             </div>
         </Form.Group>
     )

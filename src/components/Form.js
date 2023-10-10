@@ -16,29 +16,12 @@ const FormWrapper = props => {
         set: (name, value, override) => {
             props.onChange(dataOld => {
                 const dataNew = { ...dataOld }
-                handleChange(dataNew, name.split('.'), value, override)
+                recurse(dataNew, name.split('.'), value, override)
                 return dataNew
             })
         },
         get: name => {
-            return handleChange(props.data, name.split('.'))
-        }
-    }
-
-    const handleChange = (data, name, value, override = true) => {
-        if (name.length > 1) {
-            if (typeof data[name[0]] === 'undefined') {
-                data[name[0]] = {}
-            }
-            return handleChange(data[name[0]], name.slice(1), value, override)
-        } else {
-            if (typeof value === 'undefined') return data[name[0]]
-            if ((name[0] in data) && !override) return
-            data[name[0]] = (
-                (typeof value == 'string') 
-                && !isNaN(value) 
-                && !isNaN(parseFloat(value)))
-                ? +value : value
+            return recurse(props.data, name.split('.'))
         }
     }
 
@@ -81,7 +64,7 @@ const FormWrapper = props => {
                         <div className="mx-auto" style={{ maxWidth: '840px' }}>
                             <div>{props.children}</div>
                             <div className="text-center my-5">
-                                {props?.data._id && props?.onDelete && (
+                                {props?.data?._id && props?.onDelete && (
                                     <Button onClick={handleDelete} variant="danger" className="me-2">
                                         Видалити
                                     </Button>
@@ -93,6 +76,23 @@ const FormWrapper = props => {
             }
         </Context.Provider>
     )
+}
+
+function recurse(data, name, value, override = true) {
+    if (name.length > 1) {
+        if (typeof data[name[0]] === 'undefined') {
+            data[name[0]] = {}
+        }
+        return recurse(data[name[0]], name.slice(1), value, override)
+    } else {
+        if (typeof value === 'undefined') return data[name[0]]
+        if ((name[0] in data) && !override) return
+        data[name[0]] = (
+            (typeof value == 'string') 
+            && !isNaN(value) 
+            && !isNaN(parseFloat(value)))
+            ? +value : value
+    }
 }
 
 export { FormWrapper as default, Field, Control, Row, Cell }

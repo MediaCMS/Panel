@@ -4,19 +4,34 @@ import Form, { Field, Row, Cell } from '../../components/Form.js'
 
 export default function () {
 
-    const [image, setImage] = useState({ tags: [] })
+    const [image, setImage] = useState({})
     const context = useOutletContext()
     const navigate = useNavigate()
     const params = useParams()
 
-    const handleSubmit = async () => {
-        params?.id
-            ? await context.api.panel.put('/images/' + params.id, image)
-            : await context.api.panel.post('/images', image)
+    const handleSubmit = async event => {
+        if (params?.id) {
+            await context.api.panel.put('/images/' + params.id, image)
+        } else {
+            console.log(event.target.files)
+            const formData = new FormData()
+            formData.append('image', event.target.files[0])
+            /*
+            const response = await context.api.image.post(
+                config.images.api, formData, { headers: {
+                    'Content-Type': 'multipart/form-data'
+                }}
+            )
+            */
+            //await context.api.panel.post('/images', image)
+        }
         navigate('/images/list')
     }
 
     const handleDelete = async () => {
+        await context.api.image.delete(
+            config.images.api + '///' + image.path.substr(7, 32)
+        )
         await context.api.panel.delete('/images/' + params.id)
         navigate('/images/list')
     }
@@ -37,29 +52,33 @@ export default function () {
     }, [])
 
     return (
-        <Form data={category} onChange={setCategory}
+        <Form data={image} onChange={setImage}
             onSubmit={handleSubmit} onDelete={handleDelete}>
+            <Row className="text-center">
+                <div className="w-auto border p-3 my-1 mx-auto d-inline-block">{
+                    image?.path
+                        ? <img src={config.images.url + image.path} />
+                        : <input type="file" required
+                            title="Виберіть зображення для завантаження" />
+                }</div>
+            </Row>
             <Row>
-                <Cell sm="3">
-                    <Field.Title placeholder="Політика" required />
+                <Cell sm="5">
+                    <Field.Title placeholder="Заголовок зображення" required />
                 </Cell>
                 <Cell sm="3">
-                    <Field.Slug source={category.title} placeholder="політика" required />
+                    <Field.Date label='Дата зображення' />
                 </Cell>
-                <Cell sm="2">
-                    <Field type="number" name="order"
-                        min="1" max="30" step="1" placeholder="30" label="Сортування"
-                        title="Рівень доступу (число від 1 до 30)" required />
-                </Cell>
-                <Cell sm="3">
-                    <Field.Status label='Видимість категорії' />
+                <Cell sm="4">
+                    <Field.Status label='Видимість зображення' />
                 </Cell>
             </Row>
             <Row>
-                <Field.Description placeholder="Опис категорії" />
+                <Field.Description placeholder="Опис зображення" />
             </Row>
             <Row>
-                <Field.Image3 placeholder="Зображення категорії" />
+                <Field.Autocomplete name="tags" label="Мітки зображення"
+                    path="/tags" multiple />
             </Row>
         </Form>
      )

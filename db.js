@@ -7,6 +7,11 @@ await client.connect();
 
 function filter(pipeline, query, callback) {
     const match = {};
+    if (query?._id) {
+        match._id = {
+            $in: query._id.map(id => ObjectId(id))
+        }
+    }
     if (query?.date) {
         match.date = {}
         if (query.date?.start) {
