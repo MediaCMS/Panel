@@ -1,37 +1,35 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
+import config from '../../config.js'
 
 export default function () {
 
     const [image, setImage] = useState({})
+    const [file, setFile] = useState()
     const context = useOutletContext()
     const navigate = useNavigate()
     const params = useParams()
 
-    const handleSubmit = async event => {
+    const handleSubmit = async () => {
         if (params?.id) {
             await context.api.panel.put('/images/' + params.id, image)
         } else {
-            console.log(event.target.files)
+            const imageExport = { ...image }
             const formData = new FormData()
-            formData.append('image', event.target.files[0])
-            /*
-            const response = await context.api.image.post(
-                config.images.api, formData, { headers: {
-                    'Content-Type': 'multipart/form-data'
-                }}
+            formData.append('image', file)
+            const response = await context.api.image.post('', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }}
             )
-            */
-            //await context.api.panel.post('/images', image)
+            imageExport.path = response.path
+            await context.api.panel.post('/images', imageExport)
         }
         navigate('/images/list')
     }
 
     const handleDelete = async () => {
-        await context.api.image.delete(
-            config.images.api + '///' + image.path.substr(7, 32)
-        )
+        console.log(image.path.substr(7, 32))
+        await context.api.image.delete('/' + image.path.substr(7, 32))
         await context.api.panel.delete('/images/' + params.id)
         navigate('/images/list')
     }
@@ -54,27 +52,25 @@ export default function () {
     return (
         <Form data={image} onChange={setImage}
             onSubmit={handleSubmit} onDelete={handleDelete}>
-            <Row className="text-center">
-                <div className="w-auto border p-3 my-1 mx-auto d-inline-block">{
-                    image?.path
-                        ? <img src={config.images.url + image.path} />
-                        : <input type="file" required
-                            title="Виберіть зображення для завантаження" />
-                }</div>
+            <Row>
+                <Field.Image as="upload" name="path" onChange={setFile}
+                    label="Файл зображення" required />
             </Row>
             <Row>
-                <Cell sm="5">
-                    <Field.Title placeholder="Заголовок зображення" required />
-                </Cell>
-                <Cell sm="3">
-                    <Field.Date label='Дата зображення' />
+                <Cell sm="4">
+                    <Field.Title label="Заголовок зображення"
+                        placeholder="Основна інформація" required />
                 </Cell>
                 <Cell sm="4">
-                    <Field.Status label='Видимість зображення' />
+                    <Field.DateTime label="Дата зображення" />
+                </Cell>
+                <Cell sm="4">
+                    <Field.Status label="Видимість зображення" />
                 </Cell>
             </Row>
             <Row>
-                <Field.Description placeholder="Опис зображення" />
+                <Field.Description label="Опис зображення"
+                    placeholder="Додаткова нформація" />
             </Row>
             <Row>
                 <Field.Autocomplete name="tags" label="Мітки зображення"

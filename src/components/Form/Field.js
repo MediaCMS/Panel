@@ -2,7 +2,7 @@ import Field from './Field/Field.js'
 
 const modules = [
     'Date', 'DateTime', 'Title', 'Description', 'Body', 'Text', 'Tag', 'Image',
-    'Image3', 'Autocomplete', 'Latitude', 'Longitude', 'Slug', 'Status', 'Sort'
+    'Autocomplete', 'Latitude', 'Longitude', 'Slug', 'Status', 'Sort'
 ]
 
 const components = {}

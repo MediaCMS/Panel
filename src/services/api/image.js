@@ -4,7 +4,7 @@ import config from '../../config.js'
 export default (setSpinner, setAlert) => {
 
     const api = axios.create({
-        baseURL: config.images.url,
+        baseURL: config.images.url + '/api',
         timeout: config.images.timeout,
         headers: {
             common: { 'x-api-key': config.images.key }

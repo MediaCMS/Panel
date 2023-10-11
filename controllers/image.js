@@ -28,7 +28,10 @@ export default {
 
     create: async (request, response) => {
         const image = { ...request.body };
-        image.level = parseInt(image.level);
+        image.date = new Date(image.date);
+        if (image?.tags) {
+            image.tags = image.tags.map(tag => ObjectId(tag));
+        }
         const result = await db.collection('images')
             .insertOne(image);
         response.end(result.insertedId.toString());
@@ -37,7 +40,10 @@ export default {
     update: async (request, response) => {
         const image = { ...request.body };
         image._id = ObjectId(image._id);
-        image.level = parseInt(image.level);
+        image.date = new Date(image.date);
+        if (image?.tags) {
+            image.tags = image.tags.map(tag => ObjectId(tag));
+        }
         await db.collection('images')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
@@ -47,7 +53,9 @@ export default {
     },
 
     delete: async (request, response, next) => {
+        const _id = new ObjectId(request.params.id)
         const count = await db.collection('posts').count({ image: _id });
+        console.log(count)
         if (count > 0) {
             return next(
                 Error(`Зображення використане в публікаціях (${count})`)
@@ -58,10 +66,7 @@ export default {
         // check categories
         // check tags
         // check users
-        /*
-        await db.collection('images')
-            .deleteOne({ _id: new ObjectId(request.params.id) });
-        */
+        //await db.collection('images').deleteOne({ _id });
         response.end();
     }
 }

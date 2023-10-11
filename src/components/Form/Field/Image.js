@@ -1,10 +1,17 @@
 import React from 'react'
 import Field from './Field.js'
-import '../../../assets/styles/ui/fields/image.css'
+import Upload from './Image/Upload.js'
+import Choose from './Image/Choose.js'
+//import '../../../assets/styles/ui/fields/image.css'
 
 export default function (props) {
 
-    return <Field type="text" name="image" pattern=".{2,128}" label="Зображення"
-        placeholder="/x/y/z/zyzqwertyuioplkjhgfdsazxcvbnm.320.jpg"
-        title="Зображення (від 2 до 128 символів)" {...props} />
+    return (
+        <Field label={props?.label ?? 'Зображення'}>
+            {props?.as && (props.as === 'upload') 
+                ? <Upload {...props} />
+                : <Choose {...props} />}
+        </Field>
+
+    )
 }
