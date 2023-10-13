@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import Moment from 'moment'
 import Index from './Images/Index.js'
-import Filter from './Images/Filter.js'
+//import Filter from './Images/Filter.js'
 
 export default function (props) {
 
@@ -17,6 +17,7 @@ export default function (props) {
         status: true,
         _sort: { field: 'date', order: -1 }
     })
+    const context = useOutletContext()
 
     const handleChoose = id => {
     }
@@ -39,11 +40,13 @@ export default function (props) {
     useEffect(async () => handleLoad(), [])
 
     return <>
-        <Index images={images} onClick={props.onClick} />
+        <Index images={images} onChoose={props.onChoose} />
+        {/* 
         {filter &&
             <Filter data={params} onChange={setParams}
                 show={filter} onChangeShow={setFilter}
                 onSubmit={handleLoad} />
         }
+        */}
     </>
 }

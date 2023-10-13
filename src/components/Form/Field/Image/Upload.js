@@ -14,7 +14,7 @@ export default function (props) {
     }
 
     return value
-        ? <img src={config.images.url + value} style={{ maxWidth: '100%' }} />
+        ? <img src={config.images.url + value} className="mw-100" />
         : <Form.Control type="file" onChange={handleChange}
             title="Виберіть зображення для завантаження"
             required={props.required ?? false} />

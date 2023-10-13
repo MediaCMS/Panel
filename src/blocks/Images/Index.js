@@ -7,7 +7,7 @@ export default function (props) {
         <Images>
             {props.images.map(image => (
                 <Image {...image} key={image._id}
-                    onClick={() => props.onClick(image._id)} />
+                    onClick={() => props.onChoose(image)} />
             ))}
         </Images>
     )
