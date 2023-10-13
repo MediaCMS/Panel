@@ -1,9 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
-import Moment from 'moment'
-import Images from './Index/Images.js'
-import Filter from './Index/Filter.js'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import Images from '../../blocks/Images.js'
+//import Moment from 'moment'
+//import Images from './Index/Images.js'
+//import Filter from './Index/Filter.js'
 
+export default function () {
+
+    const context = useOutletContext()
+    const navigate = useNavigate()
+
+    const handleClick = image => {
+        console.log('Index.handleClick', image)
+        navigate('/images/editor/' + image._id)
+    }
+
+    const handleLoad = init => {
+        console.log('Index.handleLoad', init)
+        init.submenu[0].path = '/images/editor'
+        context.init(init)
+    }
+
+    return <Images onClick={handleClick} onLoad={handleLoad} />
+}
+/*
 export default function () {
 
     const [images, setImages] = useState([])
@@ -32,7 +52,7 @@ export default function () {
         context.init({
             title: 'Зображення / Список',
             submenu: [
-                { title: 'Створити', path: '/images/editor' },
+                { title: 'Завантажити', path: '/images/editor' },
                 { title: 'Фільтр', onClick: () => setFilter(true) }
             ]
         })
@@ -49,3 +69,4 @@ export default function () {
         }
     </>
 }
+*/

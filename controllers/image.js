@@ -54,7 +54,12 @@ export default {
 
     delete: async (request, response, next) => {
         const _id = new ObjectId(request.params.id)
-        const count = await db.collection('posts').count({ image: _id });
+        const image = await db.collection('images')
+            .find({ _id }).next();
+        console.log(image)
+        const count = await db.collection('posts').count({ $or: [
+            { image: image.path }, { body: { $regex : image.path } }
+        ]});
         console.log(count)
         if (count > 0) {
             return next(
@@ -64,9 +69,14 @@ export default {
         // check posts (main and body)
         // check pages (main and body)
         // check categories
+        // check types
         // check tags
         // check users
         //await db.collection('images').deleteOne({ _id });
+        console.log('image deleted')
+        return next(
+            Error(`Не можу визначити використання зображення`)
+        )
         response.end();
     }
 }

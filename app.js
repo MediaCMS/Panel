@@ -68,13 +68,10 @@ app.use(async (request, response, next) => {
 
 app.use((error, request, response, next) => {
     console.error(error);
-    console.log(response.headersSent)
     if (!response.headersSent) {
-    /*
         response.status(500).json({
             message: error.message, name: error.name
         });
-    */
         next(error);
     }
     log(error);

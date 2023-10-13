@@ -1,0 +1,17 @@
+div.image { position: relative;
+  & img { max-width: 100%; }
+  &:after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    zoom: 999;
+    content: "\274c";
+    font-size: 50px; 
+    color: #FFF;
+    line-height: 100px;
+    text-align: center;
+  }
+  &:hover { opacity: 0.3; cursor: pointer; }
+}

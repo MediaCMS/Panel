@@ -28,9 +28,8 @@ export default function () {
     }
 
     const handleDelete = async () => {
-        console.log(image.path.substr(7, 32))
-        await context.api.image.delete('/' + image.path.substr(7, 32))
         await context.api.panel.delete('/images/' + params.id)
+        await context.api.image.delete('/' + image.path.substr(7, 32))
         navigate('/images/list')
     }
 

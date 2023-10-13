@@ -53,6 +53,9 @@ export default () => {
             <Row>
                 <Field.Description placeholder="Опис типу" />
             </Row>
+            <Row>
+                <Field.Image />
+            </Row>
         </Form>
     )
 }

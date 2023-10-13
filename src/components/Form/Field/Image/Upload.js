@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { Form } from 'react-bootstrap'
 import Context from '../../../../contexts/Form.js'
 import config from '../../../../config.js'
-//import '../../../../assets/styles/ui/fields/image.css'
 
 export default function (props) {
 
