@@ -10,24 +10,26 @@ export default (setSpinner, setAlert, navigate) => {
 
     api.interceptors.request.use(function (conf) {
         setSpinner(true)
+        if (config.debug) {
+            console.debug('api.panel.request', conf)
+        }
         return conf
     }, function (error) {
-        console.log('api.request.error.message', error.message)
-        if (error?.request) {
-            console.log('api.response.error.request', error.request)
-        }
+        console.error(error)
         setSpinner(false)
         return Promise.reject(error)
     })
 
     api.interceptors.response.use(function (response) {
         setSpinner(false)
+        if (config.debug) {
+            console.debug('api.panel.response', response)
+        }
         return response.data
     }, function (error) {
-        console.dir(error)
+        console.error(error)
         setSpinner(false)
         if ('response' in error) {
-            console.log('api.response.error.response', error.response)
             if (error.response?.status) {
                 switch(error.response.status) {
                     case 401: setAlert('В авторизації відмовлено'); break;

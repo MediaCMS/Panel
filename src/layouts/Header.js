@@ -38,7 +38,7 @@ export default function (props) {
                         title={props.user.role.title + ' ' + props.user.description}>
                         {props.user.title}
                         {props.user.image ? (
-                            <img src={config.images.url + props.user.image}
+                            <img src={config.images.url + '/' + props.user.image}
                                 height="36px" className="rounded-3 ms-3" />
                         ) : null}
                     </div>

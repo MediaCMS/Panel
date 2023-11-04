@@ -25,7 +25,7 @@ export default {
         filter(pipeline, request.query)
         const posts = await db.collection('posts')
             .aggregate(pipeline).toArray()
-        console.log(posts)
+        //console.log(posts)
         response.json(posts);
     },
 

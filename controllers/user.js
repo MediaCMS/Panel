@@ -48,8 +48,20 @@ export default {
 
     read: async (request, response) => {
         const user = await db.collection('users')
-            .find({ _id: ObjectId(request.params.id) })
-            .project({ password: false }).next();
+            .aggregate([
+                { $match: { _id: ObjectId(request.params.id) } },
+                { $lookup: {
+                    from: 'images',
+                    localField: 'image',
+                    foreignField: '_id',
+                    as: 'image'
+                } },
+                { $project: {
+                    title: 1, description: 1, phone: 1, skype: 1, email: 1,
+                    image: { $arrayElemAt: ['$image.slug', 0] },
+                    role: 1, slug: 1, status: 1
+                } }
+            ]).next();
         response.json(user);
     },
 
@@ -135,13 +147,20 @@ export default {
                 email, password, status: true
             } },
             { $lookup: {
+                from: 'images',
+                localField: 'image',
+                foreignField: '_id',
+                as: 'image'
+            } },
+            { $lookup: {
                 from: 'roles',
                 localField: 'role',
                 foreignField: '_id',
                 as: 'role'
             } },
             { $project: {
-                title: 1, description: 1, image: 1, slug: 1, 
+                title: 1, description: 1, slug: 1,
+                image: { $arrayElemAt: ["$image.slug", 0] }, 
                 role: { $arrayElemAt: ["$role", 0] }
             } }
         ];

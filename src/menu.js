@@ -54,9 +54,9 @@ export default [
         level: 1
     },
     {
-        title: 'Логи',
+        title: 'Журнал',
         description: 'Список дій користувачів',
-        path: '/logs/list',
+        path: '/log/list',
         level: 1
     }
 ]

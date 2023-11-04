@@ -34,7 +34,7 @@ export default {
                 match.document = new ObjectId(request.query.document)
             }
         })
-        const logs = await db.collection('logs')
+        const logs = await db.collection('log')
             .aggregate(pipeline).toArray();
         response.json(logs);
     },
@@ -45,6 +45,6 @@ export default {
             log.document = new ObjectId(request.params.id)
         }
         log.user = new ObjectId(response.locals.user._id);
-        db.collection('logs').insertOne(log);
+        db.collection('log').insertOne(log);
     }
 }

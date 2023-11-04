@@ -12,24 +12,27 @@ export default (setSpinner, setAlert) => {
     })
 
     api.interceptors.request.use(function (conf) {
-        //console.log('api.image.request.config', conf)
         setSpinner(true)
+        if (config.debug) {
+            console.debug('api.image.request', conf)
+        }
         return conf
     }, function (error) {
-        console.log('api.image.request.error', error)
+        console.error(error)
         setSpinner(false)
         return Promise.reject(error)
     })
 
     api.interceptors.response.use(function (response) {
         setSpinner(false)
+        if (config.debug) {
+            console.debug('api.image.response', response)
+        }
         return response.data
     }, function (error) {
-        console.log('api.image.response.error', error)
-        console.log('api.image.response.error.message', error.message)
+        console.error(error)
         setSpinner(false)
         if (error?.response) {
-            console.log('api.image.response.error.response', error.response)
             if (error.response?.status) {
                 if (error.response.status === 403) {
                     setAlert('Доступ заборонено')

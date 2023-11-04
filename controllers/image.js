@@ -11,7 +11,7 @@ export default {
                 as: 'tags'
             } },
             { $project: {
-                date: 1, title: 1, path: 1, tags: '$tags.title', status: 1
+                date: 1, title: 1, slug: 1, tags: '$tags.title', status: 1
             } }
         ];
         filter(pipeline, request.query)

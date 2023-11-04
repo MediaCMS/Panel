@@ -1,47 +1,43 @@
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { Form, Modal, Button } from 'react-bootstrap'
 import Images from '../../../../blocks/Images.js'
-import Context from '../../../../contexts/Form.js'
 import config from '../../../../config.js'
 
 export default function (props) {
 
     const [show, setShow] = useState(false)
     const [init, setInit] = useState()
-    const data = useContext(Context)
-    const name = props.name ?? 'image'
-    const value = data.get(name)
 
     const handleShow = event => {
         event.preventDefault();
         setShow(true)
-     }
+    }
 
-     const handleClose = () => {
+    const handleClose = () => {
         setShow(false)
-     }
+    }
 
     const handleChoose = image => {
-        data.set(name, image.path)
+        props.onChange(image._id)
         setShow(false)
     }
 
     const handleDelete = () => {
-        data.set(name, null)
+        props.onChange(null)
     }
 
     const handleLoad = init => {
-        console.log('Choose.handleLoad', init)
         init.submenu[0].onClick = () => setEdit(true)
         setInit(init)
     }
 
-    return value
+    return props?.slug
         ? (
             <div className="image">
                 <div className="delete">
-                    <img src={config.images.url + value} onClick={handleDelete}
-                    title="Видалити зображення" className="mw-100" />
+                    <img src={config.images.url + '/' + props.slug}
+                        onClick={handleDelete} title="Видалити зображення"
+                        className="mw-100" />
                 </div>
             </div>
         )
