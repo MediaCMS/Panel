@@ -5,7 +5,6 @@ import Form, { Field, Row, Cell } from '../../components/Form.js'
 export default () => {
 
     const [type, setType] = useState({})
-    const [image, setImage] = useState({})
     const context = useOutletContext()
     const navigate = useNavigate()
     const params = useParams()
@@ -33,13 +32,9 @@ export default () => {
 
     useEffect(async () => {
         if (!params?.id) return
-        const types = await context.api.panel.get('/types/' + params.id)
-        if (types?.image) {
-            setImage(
-                await context.api.panel.get('/images/' + types.image)
-            )
-        }
-        setType(types)
+        setType(
+            await context.api.panel.get('/types/' + params.id)
+        )
     }, [])
 
     return (
@@ -60,7 +55,7 @@ export default () => {
                 <Field.Description placeholder="Опис типу" />
             </Row>
             <Row>
-                <Field.Image data={image} />
+                <Field.Image />
             </Row>
         </Form>
     )
