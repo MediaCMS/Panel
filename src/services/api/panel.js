@@ -11,7 +11,7 @@ export default (setSpinner, setAlert, navigate) => {
     api.interceptors.request.use(function (conf) {
         setSpinner(true)
         if (config.debug) {
-            console.debug('api.panel.request', conf)
+            console.debug('api.panel.request', conf.url, conf)
         }
         return conf
     }, function (error) {
@@ -23,7 +23,7 @@ export default (setSpinner, setAlert, navigate) => {
     api.interceptors.response.use(function (response) {
         setSpinner(false)
         if (config.debug) {
-            console.debug('api.panel.response', response)
+            console.debug('api.panel.response', response.config.url, response)
         }
         return response.data
     }, function (error) {

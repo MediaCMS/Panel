@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
+//import { useOutletContext } from 'react-router-dom'
 import { Form, Modal, Button } from 'react-bootstrap'
+//import Context from '../../../../contexts/Form.js'
 import Images from '../../../../blocks/Images.js'
 import config from '../../../../config.js'
 
 export default function (props) {
 
+   // const [image, setImage] = useState({})
     const [show, setShow] = useState(false)
     const [init, setInit] = useState()
+    //const context = useOutletContext()
 
     const handleShow = event => {
         event.preventDefault();
@@ -18,7 +22,7 @@ export default function (props) {
     }
 
     const handleChoose = image => {
-        props.onChange(image._id)
+        props.onChange(props.image._id)
         setShow(false)
     }
 
@@ -30,12 +34,20 @@ export default function (props) {
         init.submenu[0].onClick = () => setEdit(true)
         setInit(init)
     }
-
-    return props?.slug
+/*
+    useEffect(async () => {
+        setImage(
+            props?.value
+                ? await context.api.panel.get('/images/' + props.value)
+                : {}
+        )
+    }, [props.value])
+*/
+    return props?.image
         ? (
             <div className="image">
                 <div className="delete">
-                    <img src={config.images.url + '/' + props.slug}
+                    <img src={config.images.url + '/' + props.image.slug}
                         onClick={handleDelete} title="Видалити зображення"
                         className="mw-100" />
                 </div>

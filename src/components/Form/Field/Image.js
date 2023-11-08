@@ -1,14 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import Field from './Field.js'
-import Upload from './Image/Upload.js'
-import Choose from './Image/Choose.js'
-import '../../../assets/styles/components/fields/image.css'
+import { Form, Modal, Button } from 'react-bootstrap'
 import Context from '../../../contexts/Form.js'
+import Images from '../../../blocks/Images.js'
+import Field from './Field.js'
+import '../../../assets/styles/components/fields/image.css'
 
 export default function (props) {
 
     const [image, setImage] = useState({})
+    const [show, setShow] = useState(false)
+    const [init, setInit] = useState()
     const context = useOutletContext()
     const data = useContext(Context)
     const name = props?.name ?? 'image'
@@ -16,6 +18,29 @@ export default function (props) {
 
     const handleChange = value => {
         data.set(name, value)
+    }
+
+    const handleShow = event => {
+        event.preventDefault();
+        setShow(true)
+    }
+
+    const handleClose = () => {
+        setShow(false)
+    }
+
+    const handleChoose = image => {
+        data.set(name, image._id)
+        setShow(false)
+    }
+
+    const handleDelete = () => {
+        data.set(name, null)
+    }
+
+    const handleLoad = init => {
+        init.submenu[0].onClick = () => setEdit(true)
+        setInit(init)
     }
 
     useEffect(async () => {
@@ -26,10 +51,35 @@ export default function (props) {
 
     return (
         <Field label={props?.label ?? 'Зображення'}>
-            {props?.as && (props.as === 'upload')
-                ? <Upload {...props} slug={image.slug} />
-                : <Choose {...props} slug={image.slug}
-                    onChange={handleChange} />}
+            {props?.image
+                ? (
+                    <div className="image">
+                        <div className="delete">
+                            <img src={config.images.url + '/' + props.image.slug}
+                                onClick={handleDelete} title="Видалити зображення"
+                                className="mw-100" />
+                        </div>
+                    </div>
+                )
+                : (<>
+                    <Form.Control type="file" onClick={handleShow}
+                    required={props.required ?? false}
+                    title="Вибрати зображення" />
+                    <Modal show={show} onHide={handleClose} /*size="xl"*/ fullscreen={true}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{init?.title}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Images onChoose={handleChoose} onLoad={handleLoad} />
+                        </Modal.Body>
+                        {/*
+                        <Modal.Footer>
+                            <Button onClick={handleClose}>Закрити</Button>
+                        </Modal.Footer>
+                        */}
+                    </Modal>
+                </>)
+            }
         </Field>
     )
 }

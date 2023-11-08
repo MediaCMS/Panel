@@ -10,9 +10,7 @@ export default {
                 foreignField: '_id',
                 as: 'tags'
             } },
-            { $project: {
-                date: 1, title: 1, slug: 1, tags: '$tags.title', status: 1
-            } }
+            { $addFields: { tags: '$tags.title' } }
         ];
         filter(pipeline, request.query)
         const images = await db.collection('images')

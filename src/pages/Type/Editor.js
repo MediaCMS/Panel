@@ -31,8 +31,7 @@ export default () => {
     }, [])
 
     useEffect(async () => {
-        if (!params?.id) return
-        setType(
+        params?.id && setType(
             await context.api.panel.get('/types/' + params.id)
         )
     }, [])
