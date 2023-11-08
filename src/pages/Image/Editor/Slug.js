@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import translit from 'ua-en-translit'
+import React, { useState, useContext, useEffect } from 'react'
 import { Form, InputGroup } from 'react-bootstrap'
 import Context from '../../../contexts/Form.js'
-import Field from '../../../components/Form/Field/Field.js'
-import config from '../../../config.js'
+import { transliterate } from '../../../utils.js'
 
 export default function (props) {
 
     const [name, setName] = useState('')
     const [extension, setExtension] = useState('jpg')
+    const data = useContext(Context)
 
     const handleChange = event => {
         setName(event.target.value)
@@ -16,42 +15,37 @@ export default function (props) {
 
     const handleFocus = event => {
         if (!props?.title || event.target.value) return
-        const name = translit(props.title.toLowerCase())
-            .replace(/[^a-z0-9- ]/g, '').replace(/\s+/g, '-')
-        setName(name)
+        setName(transliterate(props.title))
     }
+    
+    useEffect(async () => {
+        if (!props.value || name) return
+        const dotIndex = props.value.lastIndexOf('.')
+        setName(props.value.substring(0, dotIndex))
+        setExtension(props.value.substring(dotIndex + 1))
+    }, [props.value])
 
     useEffect(async () => {
-        console.log('image.slug.value', props.value)
-        if (!props.value) return
-        const dotIndex = value.lastIndexOff('.')
-        setName(value.substring(0, dotIndex))
-        setExtension(value.substring(dotIndex))
-    }, [props.value])
-/*
-    useEffect(async () => {
-        console.log('image.slug.title', props.title)
-    }, [props.title])
-*/
-    useEffect(async () => {
-        console.log('image.slug.file', props.file)
+        if (!props.file) return
+        const dotIndex = props.file.lastIndexOf('.')
+        setExtension(
+            props.file.substring(dotIndex + 1)
+        )
     }, [props.file])
 
+    useEffect(async () => {
+        if (!name) return
+        data.set('slug', name + '.' + extension)
+    }, [name, extension])
+
     return (
-        <InputGroup className="mb-3">
-            <Form.Control value={name} pattern="[a-z0-9\-]{1,128}"
+        <InputGroup>
+            <Form.Control value={name} pattern="[a-z0-9\-.]{1,128}"
                 placeholder="nazva-faila-zobrajenya" onChange={handleChange}
                 onFocus={handleFocus} onBlur={handleFocus} required
-                title="Посилання (від 1 до 128 прописних букв, цифр та дефісів)" />
+                title="Посилання (від 1 до 128 прописних букв, цифр, дефісів та крапок)" />
             <InputGroup.Text>.{extension}</InputGroup.Text>
         </InputGroup>
     )
-/*
-    return <Field type="text" name={name}
-        
-        
-        
-        {...propsNew} />
-*/
     
 }

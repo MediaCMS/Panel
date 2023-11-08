@@ -14,7 +14,7 @@ export default (setSpinner, setAlert) => {
     api.interceptors.request.use(function (conf) {
         setSpinner(true)
         if (config.debug) {
-            console.debug('api.main.request', conf)
+            console.debug('api.main.request', conf.url, conf)
         }
         return conf
     }, function (error) {
@@ -26,11 +26,10 @@ export default (setSpinner, setAlert) => {
     api.interceptors.response.use(function (response) {
         setSpinner(false)
         if (config.debug) {
-            console.debug('api.main.response', response)
+            console.debug('api.main.response', response.config.url, response)
         }
         return response.data
     }, function (error) {
-        console.error(error)
         setSpinner(false)
         if (error?.response) {
             if (error.response?.status) {

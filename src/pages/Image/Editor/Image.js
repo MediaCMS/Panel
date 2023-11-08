@@ -8,7 +8,7 @@ export default function (props) {
         props.onChange(event.target.files[0])
     }
 
-    return props?.id
+    return (props?.id && props?.slug)
         ? <img src={config.images.url + '/' + props.slug}
             className="mw-100" />
         : <Form.Control type="file" onChange={handleChange}

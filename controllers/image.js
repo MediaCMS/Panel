@@ -21,7 +21,7 @@ export default {
     read: async (request, response) => {
         const image = await db.collection('images')
             .find({ _id: ObjectId(request.params.id) }).next();
-        response.json(image);
+        image ? response.json(image) : response.sendStatus(404);        
     },
 
     create: async (request, response) => {
@@ -56,7 +56,7 @@ export default {
             .find({ _id }).next();
         console.log(image)
         const count = await db.collection('posts').count({ $or: [
-            { image: image.path }, { body: { $regex : image.path } }
+            { image: _id }, { body: { $regex : _id } }
         ]});
         console.log(count)
         if (count > 0) {

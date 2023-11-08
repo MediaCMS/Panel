@@ -27,7 +27,6 @@ export default (setSpinner, setAlert, navigate) => {
         }
         return response.data
     }, function (error) {
-        console.error(error)
         setSpinner(false)
         if ('response' in error) {
             if (error.response?.status) {
