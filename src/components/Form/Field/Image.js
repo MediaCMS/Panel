@@ -1,16 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form, Modal, Button } from 'react-bootstrap'
+import Submenu from '../../../layouts/Main/Submenu.js'
 import Context from '../../../contexts/Form.js'
 import Images from '../../../blocks/Images.js'
 import Field from './Field.js'
+import config from '../../../config.js'
 import '../../../assets/styles/components/fields/image.css'
 
 export default function (props) {
 
     const [image, setImage] = useState({})
     const [show, setShow] = useState(false)
-    const [init, setInit] = useState()
+    const [init, setInit] = useState({})
     const context = useOutletContext()
     const data = useContext(Context)
     const name = props?.name ?? 'image'
@@ -51,11 +53,11 @@ export default function (props) {
 
     return (
         <Field label={props?.label ?? 'Зображення'}>
-            {props?.image
+            {image?.slug
                 ? (
                     <div className="image">
                         <div className="delete">
-                            <img src={config.images.url + '/' + props.image.slug}
+                            <img src={config.images.url + '/' + image.slug}
                                 onClick={handleDelete} title="Видалити зображення"
                                 className="mw-100" />
                         </div>
@@ -63,11 +65,12 @@ export default function (props) {
                 )
                 : (<>
                     <Form.Control type="file" onClick={handleShow}
-                    required={props.required ?? false}
-                    title="Вибрати зображення" />
+                        required={props.required ?? false}
+                        title="Вибрати зображення" />
                     <Modal show={show} onHide={handleClose} /*size="xl"*/ fullscreen={true}>
                         <Modal.Header closeButton>
-                            <Modal.Title>{init?.title}</Modal.Title>
+                            <Modal.Title className="flex-grow-1">{init.title}</Modal.Title>
+                            <Submenu items={init.submenu} setConfirm={context.setConfirm} />
                         </Modal.Header>
                         <Modal.Body>
                             <Images onChoose={handleChoose} onLoad={handleLoad} />

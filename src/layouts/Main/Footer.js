@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import config from '../config.js'
-import '../assets/styles/layouts/footer.css'
+import config from '../../config.js'
+import '../../assets/styles/layouts/main/footer.css'
 
 export default function (props) {
 

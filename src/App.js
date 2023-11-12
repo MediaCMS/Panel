@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useRoutes, useOutletContext } from 'react-router-dom'
-import Layout from './layouts/Layout.js'
+import Layout from './layouts/Main.js'
 import Main from './pages/Main.js'
 import Post from './pages/Post.js'
 import Image from './pages/Image.js'

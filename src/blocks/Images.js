@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Moment from 'moment'
 import Index from './Images/Index.js'
-//import Filter from './Images/Filter.js'
+import Filter from './Images/Filter.js'
 
 export default function (props) {
 
@@ -19,12 +19,10 @@ export default function (props) {
     })
     const context = useOutletContext()
 
-    const handleChoose = id => {
-    }
-
     const handleLoad = async () => {
-        const images = await context.api.panel.get('/images', { params })
-        setImages(images)
+        setImages(
+            await context.api.panel.get('/images', { params })
+        )
     }
 
     useEffect(() => {
@@ -41,12 +39,8 @@ export default function (props) {
 
     return <>
         <Index images={images} onChoose={props.onChoose} />
-        {/* 
-        {filter &&
-            <Filter data={params} onChange={setParams}
-                show={filter} onChangeShow={setFilter}
-                onSubmit={handleLoad} />
-        }
-        */}
+        <Filter data={params} onChange={setParams}
+            show={filter} onChangeShow={setFilter}
+            onSubmit={handleLoad} />
     </>
 }

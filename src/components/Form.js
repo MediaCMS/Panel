@@ -1,7 +1,7 @@
-import React from 'react'
-import { useOutletContext } from 'react-router-dom'
-import { Form, Modal, Button } from 'react-bootstrap'
+import React, { useEffect } from 'react'
 import Context from '../contexts/Form.js'
+import Standard from './Form/Standard.js'
+import Filter from './Form/Filter.js'
 import Field from './Form/Field.js'
 import Control from './Form/Control.js'
 import Row from './Form/Row.js'
@@ -9,8 +9,6 @@ import Cell from './Form/Cell.js'
 import '../assets/styles/components/form.css'
 
 const FormWrapper = props => {
-
-    const outletContext = useOutletContext()
 
     const actions = { 
         set: (name, value, override) => {
@@ -27,52 +25,19 @@ const FormWrapper = props => {
 
     const handleSubmit = event => {
         event.preventDefault()
+        event.stopPropagation()
         props.onSubmit(
             Object.fromEntries(
                 new FormData(event.target)
             )
         )
-        if (props?.show) handleHide()
-    }
-
-    const handleDelete = async () => {
-        if (await outletContext.setConfirm('Ви впевненні?')) {
-            props.onDelete()
-        }
-    }
-
-    const handleHide = () => {
-        props.onChangeShow(false)
     }
 
     return (
         <Context.Provider value={actions}>
-            {props?.show
-                ?   <Modal show={props.show} onHide={handleHide} animation={true}>
-                        <Form onSubmit={handleSubmit}>
-                            <Modal.Header closeButton>
-                                <Modal.Title id="filterLabel">Фільтрування даних</Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>{props.children}</Modal.Body>
-                            <Modal.Footer>
-                                <Button variant="secondary" onClick={handleHide}>Закрити</Button>
-                                <Button type="submit">Фільтрувати</Button>
-                            </Modal.Footer>
-                        </Form>
-                    </Modal>
-                :   <Form onSubmit={handleSubmit}>
-                        <div className="mx-auto" style={{ maxWidth: '840px' }}>
-                            <div>{props.children}</div>
-                            <div className="text-center my-5">
-                                {props?.data?._id && props?.onDelete && (
-                                    <Button onClick={handleDelete} variant="danger" className="me-2">
-                                        Видалити
-                                    </Button>
-                                )}
-                                <Button type="submit">Зберегти</Button>
-                            </div>
-                        </div>
-                    </Form>
+            {('show' in props)
+                ?   <Filter {...props} onSubmit={handleSubmit} />
+                :   <Standard {...props} onSubmit={handleSubmit} />
             }
         </Context.Provider>
     )

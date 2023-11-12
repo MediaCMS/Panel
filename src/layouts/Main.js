@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Outlet, Navigate, useNavigate } from 'react-router-dom'
-import Header from './Header.js'
-import Submenu from './Submenu.js'
-import Message from './Message.js'
-import Footer from './Footer.js'
+import Header from './Main/Header.js'
+import Submenu from './Main/Submenu.js'
+import Message from './Main/Message.js'
+import Footer from './Main/Footer.js'
 import APIFactory from '../services/api.js'
 import menuSource from '../menu.js'
 
@@ -68,11 +68,8 @@ export default function (props) {
                         <Header menu={menu} user={user} />
                         <main className="container" >
                             <div id="header" className="my-5 d-flex">
-                                <h1 className="me-auto">{params?.title}</h1>
-                                <ul className="nav">
-                                    {params?.submenu &&
-                                        <Submenu items={params.submenu} setConfirm={setConfirm} />}
-                                </ul>
+                                <h1 className="me-auto">{params?.title}</h1>                                
+                                <Submenu items={params?.submenu} setConfirm={setConfirm} />
                             </div>
                             <div id="body" className={' width-' + params?.width}>
                                 <Outlet context={{

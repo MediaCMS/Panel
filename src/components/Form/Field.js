@@ -1,16 +1,17 @@
 import Field from './Field/Field.js'
+import Image from './Field/Image.js'
 
 const modules = [
     'Date', 'DateTime', 'Title', 'Description', 'Body', 'Text', 'Tag', 'Image',
     'Autocomplete', 'Latitude', 'Longitude', 'Slug', 'Status', 'Sort'
 ]
 
-const components = {}
+const fields = {}
 
-for await(const module of modules) {
-    components[module] = (await import(
+for (const module of modules) {
+    fields[module] = (await import(
         /* webpackMode: "eager" */`./Field/${module}.js`)
     ).default
 }
 
-export default Object.assign(Field, components)
+export default Object.assign(Field, fields)
