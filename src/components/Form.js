@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React/*, { useEffect }*/ from 'react'
 import Context from '../contexts/Form.js'
 import Standard from './Form/Standard.js'
-import Filter from './Form/Filter.js'
+import Modal from './Form/Modal.js'
 import Field from './Form/Field.js'
 import Control from './Form/Control.js'
 import Row from './Form/Row.js'
@@ -35,8 +35,8 @@ const FormWrapper = props => {
 
     return (
         <Context.Provider value={actions}>
-            {('show' in props)
-                ?   <Filter {...props} onSubmit={handleSubmit} />
+            {(props?.as && (props.as === 'modal')) 
+                ?   <Modal {...props} onSubmit={handleSubmit} />
                 :   <Standard {...props} onSubmit={handleSubmit} />
             }
         </Context.Provider>

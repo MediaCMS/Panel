@@ -1,14 +1,11 @@
-import React/*, { useState, useEffect }*/ from 'react'
-//import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
-//import Form, { Field, Row, Cell } from '../../components/Form.js'
-import Editor from '../../blocks/Images/Editor.js'
-//import Image from './Editor/Image.js'
-//import Slug from './Editor/Slug.js'
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
+import Form, { Field, Row, Cell } from '../../components/Form.js'
+import Image from './Editor/Image.js'
+import Slug from './Editor/Slug.js'
 
 export default function () {
 
-    return <Editor />
-/*
     const [image, setImage] = useState({})
     const [slug, setSlug] = useState()
     const [file, setFile] = useState({})
@@ -34,9 +31,11 @@ export default function () {
     }
 
     const handleDelete = async () => {
+        /**/
         await context.api.image.delete(slug)
         await context.api.panel.delete('/images/' + params.id)
         navigate('/images/list')
+        /**/
     }
 
     useEffect(() => {
@@ -91,6 +90,5 @@ export default function () {
                 </Cell>
             </Row>
         </Form>
-    )
-*/
+     )
 }

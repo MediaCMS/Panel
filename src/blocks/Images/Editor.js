@@ -1,14 +1,11 @@
-import React/*, { useState, useEffect }*/ from 'react'
-//import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
-//import Form, { Field, Row, Cell } from '../../components/Form.js'
-import Editor from '../../blocks/Images/Editor.js'
-//import Image from './Editor/Image.js'
-//import Slug from './Editor/Slug.js'
+import React, { useState, useEffect } from 'react'
+import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
+import Form, { Field, Row, Cell } from '../../components/Form.js'
+import Image from './Editor/Image.js'
+import Slug from './Editor/Slug.js'
 
-export default function () {
+export default function (props) {
 
-    return <Editor />
-/*
     const [image, setImage] = useState({})
     const [slug, setSlug] = useState()
     const [file, setFile] = useState({})
@@ -17,6 +14,7 @@ export default function () {
     const params = useParams()
 
     const handleSubmit = async () => {
+        console.log('handleSubmit', params)
         if (params?.id) {
             if (image.slug !== slug) {
                 await context.api.image.patch(slug, { slug: image.slug })
@@ -56,8 +54,9 @@ export default function () {
     }, [])
 
     return (
-        <Form data={image} onChange={setImage}
-            onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form data={image} onChange={setImage} title={props.title}
+            show={props.show} onChangeShow={props.onChangeShow} as={props.as}
+            onSubmit={handleSubmit} onDelete={handleDelete} size={props.size}>
             <Row>
                 <Field label="Файл зображення">
                     <Image id={params.id} slug={slug} required
@@ -91,6 +90,5 @@ export default function () {
                 </Cell>
             </Row>
         </Form>
-    )
-*/
+     )
 }

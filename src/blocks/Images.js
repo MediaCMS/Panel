@@ -3,6 +3,7 @@ import { useOutletContext } from 'react-router-dom'
 import Moment from 'moment'
 import Index from './Images/Index.js'
 import Filter from './Images/Filter.js'
+import Upload from './Images/Editor.js'
 
 export default function (props) {
 
@@ -26,13 +27,10 @@ export default function (props) {
     }
 
     useEffect(() => {
-        props.onLoad({
-            title: 'Зображення / Список',
-            submenu: [
-                { title: 'Завантажити', onClick: () => setUpload(true) },
-                { title: 'Фільтр', onClick: () => setFilter(true) }
-            ]
-        })
+        props.onLoad([
+            { title: 'Завантажити', onClick: () => setUpload(true) },
+            { title: 'Фільтр', onClick: () => setFilter(true) }
+        ])
     }, [])
 
     useEffect(async () => handleLoad(), [])
@@ -41,6 +39,8 @@ export default function (props) {
         <Index images={images} onChoose={props.onChoose} />
         <Filter data={params} onChange={setParams}
             show={filter} onChangeShow={setFilter}
-            onSubmit={handleLoad} />
+            onSubmit={handleLoad} as="modal" />
+        <Upload show={upload} title="Завантажити зображення" size="lg"
+            onChangeShow={setUpload} onSubmit={handleLoad} as="modal" />
     </>
 }

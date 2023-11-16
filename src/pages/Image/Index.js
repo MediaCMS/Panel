@@ -11,9 +11,12 @@ export default function () {
         navigate('/images/editor/' + image._id)
     }
 
-    const handleLoad = init => {
-        init.submenu[0].path = '/images/editor'
-        context.init(init)
+    const handleLoad = menu => {
+        menu[0].path = '/images/editor'
+        context.init({
+            title: 'Зображення / Список',
+            submenu: menu
+        })
     }
 
     return <Images onChoose={handleChoose} onLoad={handleLoad} />
