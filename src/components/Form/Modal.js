@@ -4,7 +4,7 @@ import ButtonsStandard from './Buttons/Standard.js'
 import ButtonsFilter from './Buttons/Filter.js'
 
 export default props => {
-console.log(props)
+
     const title = props.title ?? 'Фільтрування даних'
 
     const handleHide = () => {
@@ -20,7 +20,7 @@ console.log(props)
                 </Modal.Header>
                 <Modal.Body>{props.children}</Modal.Body>
                 <Modal.Footer>
-                    {props?.onChangeShow
+                    {(props?.as && (props.as === 'modal') && !props?.title)
                         ? <ButtonsFilter onClick={handleHide} />
                         : <ButtonsStandard {...props}  />
                     }
@@ -28,5 +28,4 @@ console.log(props)
             </Form>
         </Modal>
     )
-
 }

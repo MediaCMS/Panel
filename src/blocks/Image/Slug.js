@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Form, InputGroup } from 'react-bootstrap'
-import Context from '../../../contexts/Form.js'
-import { transliterate } from '../../../utils.js'
+import Context from '../../contexts/Form.js'
+import { transliterate } from '../../utils.js'
 
 export default function (props) {
 

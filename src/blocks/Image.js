@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
-import Form, { Field, Row, Cell } from '../../components/Form.js'
-import Image from './Editor/Image.js'
-import Slug from './Editor/Slug.js'
+import { useNavigate, useOutletContext } from 'react-router-dom'
+import Form, { Field, Row, Cell } from '../components/Form.js'
+import Image from './Image/Image.js'
+import Slug from './Image/Slug.js'
 
-export default function () {
+export default function (props) {
 
     const [image, setImage] = useState({})
     const [slug, setSlug] = useState()
     const [file, setFile] = useState({})
     const context = useOutletContext()
     const navigate = useNavigate()
-    const params = useParams()
 
     const handleSubmit = async () => {
-        if (params?.id) {
+        if (image?._id) {
             if (image.slug !== slug) {
                 await context.api.image.patch(slug, { slug: image.slug })
             }
-            await context.api.panel.put('/images/' + params.id, image)
+            await context.api.panel.put('/images/' + image._id, image)
         } else {
             const formData = new FormData()
             formData.append('image', file)
@@ -27,39 +26,34 @@ export default function () {
             )
             await context.api.panel.post('/images', image)
         }
-        navigate('/images/list')
+        handleClose()
     }
 
     const handleDelete = async () => {
-        /**/
         await context.api.image.delete(slug)
-        await context.api.panel.delete('/images/' + params.id)
-        navigate('/images/list')
-        /**/
+        await context.api.panel.delete('/images/' + image._id)
+        handleClose()
     }
 
-    useEffect(() => {
-        context.init({
-            title: 'Зображення / Редактор',
-            submenu: [
-                { title: 'Закрити', path: '/images/list' }
-            ]
-        })
-    }, [])
+    const handleClose = () => {
+        if (props?.navigate) navigate(props.navigate)
+        if (props?.onChangeShow) props.onChangeShow(false)
+        if (props?.onSubmit) props.onSubmit()
+    }
 
     useEffect(async () => {
-        if (!params?.id) return
-        const image = await context.api.panel.get('/images/' + params.id)
+        if (!props?.id) return
+        const image = await context.api.panel.get('/images/' + props.id)
         setImage(image)
         setSlug(image.slug)
     }, [])
 
     return (
-        <Form data={image} onChange={setImage}
+        <Form {...props} data={image} onChange={setImage} 
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Field label="Файл зображення">
-                    <Image id={params.id} slug={slug} required
+                    <Image id={image._id} slug={slug} required
                         onChange={setFile} />
                 </Field>
             </Row>

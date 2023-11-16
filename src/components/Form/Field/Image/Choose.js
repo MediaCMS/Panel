@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Form, Modal } from 'react-bootstrap'
-import Menu from '../../../../layouts/Main/Submenu.js'
+import Menu from '../../../../components/Menu.js'
 import Images from '../../../../blocks/Images.js'
 
 export default function (props) {

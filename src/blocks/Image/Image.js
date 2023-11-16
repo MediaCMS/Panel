@@ -1,6 +1,6 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
-import config from '../../../config.js'
+import config from '../../config.js'
 
 export default function (props) {
 

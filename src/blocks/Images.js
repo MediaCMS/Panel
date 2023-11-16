@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom'
 import Moment from 'moment'
 import Index from './Images/Index.js'
 import Filter from './Images/Filter.js'
-import Upload from './Images/Editor.js'
+import Upload from './Image.js'
 
 export default function (props) {
 
@@ -13,7 +13,7 @@ export default function (props) {
     const [params, setParams] = useState({
         date: {
             start: Moment().add(-10, 'years').format('YYYY-MM-DD'),
-            end: Moment().format('YYYY-MM-DD'),
+            end: Moment().add(1, 'days').format('YYYY-MM-DD'),
         },
         status: true,
         _sort: { field: 'date', order: -1 }

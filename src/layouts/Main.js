@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Outlet, Navigate, useNavigate } from 'react-router-dom'
 import Header from './Main/Header.js'
-import Submenu from './Main/Submenu.js'
+import Submenu from '../components/Menu.js'
 import Message from './Main/Message.js'
 import Footer from './Main/Footer.js'
 import APIFactory from '../services/api.js'
