@@ -27,8 +27,7 @@ export default function (props) {
         <Field label={props?.label ?? 'Зображення'}>
             {image?.slug
                 ? <Show slug={image.slug} onChange={handleChange} />
-                : <Choose onChange={handleChange} required={props.required}
-                    setConfirm={context.setConfirm} />
+                : <Choose onChange={handleChange} required={props.required} />
             }
         </Field>
     )

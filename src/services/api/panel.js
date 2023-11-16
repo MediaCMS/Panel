@@ -1,7 +1,7 @@
 import axios from 'axios'
 import config from '../../config.js'
 
-export default (setSpinner, setAlert, navigate) => {
+export default (setWait, setAlert, navigate) => {
 
     const api = axios.create({
         baseURL: config.api.url,
@@ -9,25 +9,25 @@ export default (setSpinner, setAlert, navigate) => {
     })
 
     api.interceptors.request.use(function (conf) {
-        setSpinner(true)
+        setWait(true)
         if (config.debug) {
             console.debug('api.panel.request', conf.url, conf)
         }
         return conf
     }, function (error) {
         console.error(error)
-        setSpinner(false)
+        setWait(false)
         return Promise.reject(error)
     })
 
     api.interceptors.response.use(function (response) {
-        setSpinner(false)
+        setWait(false)
         if (config.debug) {
             console.debug('api.panel.response', response.config.url, response)
         }
         return response.data
     }, function (error) {
-        setSpinner(false)
+        setWait(false)
         if ('response' in error) {
             if (error.response?.status) {
                 switch(error.response.status) {

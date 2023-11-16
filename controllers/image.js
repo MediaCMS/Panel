@@ -52,11 +52,13 @@ export default {
 
     delete: async (request, response, next) => {
         const _id = new ObjectId(request.params.id)
+        console.log(request.params, _id)
         const image = await db.collection('images')
             .find({ _id }).next();
         console.log(image)
+        /*
         const count = await db.collection('posts').count({ $or: [
-            { image: _id }, { body: { $regex : _id } }
+            { image: _id }, { body: { $regex : request.params.id } }
         ]});
         console.log(count)
         if (count > 0) {
@@ -64,17 +66,19 @@ export default {
                 Error(`Зображення використане в публікаціях (${count})`)
             )
         }
+        */
         // check posts (main and body)
         // check pages (main and body)
         // check categories
         // check types
         // check tags
         // check users
-        //await db.collection('images').deleteOne({ _id });
-        console.log('image deleted')
+        /*
         return next(
             Error(`Не можу визначити використання зображення`)
         )
+        */
+        await db.collection('images').deleteOne({ _id });
         response.end();
     }
 }

@@ -31,9 +31,8 @@ export default function (props) {
             { title: 'Завантажити', onClick: () => setUpload(true) },
             { title: 'Фільтр', onClick: () => setFilter(true) }
         ])
+        handleLoad()
     }, [])
-
-    useEffect(async () => handleLoad(), [])
 
     return <>
         <Index images={images} onChoose={props.onChoose} />

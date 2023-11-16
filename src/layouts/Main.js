@@ -21,7 +21,7 @@ export default function (props) {
     const [user, setUser] = useState(userStorage)
     const [params, setParams] = useState(userStorage)
     const [message, setMessage] = useState()
-    const [spinner, setSpinner] = useState(false)
+    const [wait, setWait] = useState(false)
     const navigate = useNavigate()
 
     const init = paramsNew => {
@@ -47,9 +47,9 @@ export default function (props) {
     }
 
     const api = useMemo(() => ({
-        main: APIFactory.createMain(setSpinner, setAlert),
-        panel: APIFactory.createPanel(setSpinner, setAlert, navigate),
-        image: APIFactory.createImage(setSpinner, setAlert)
+        main: APIFactory.createMain(setWait, setAlert),
+        panel: APIFactory.createPanel(setWait, setAlert, navigate),
+        image: APIFactory.createImage(setWait, setAlert)
     }), [])
 
     useEffect(() => {
@@ -73,16 +73,16 @@ export default function (props) {
                             </div>
                             <div id="body" className={' width-' + params?.width}>
                                 <Outlet context={{
-                                    init, api, user, setSpinner, setAlert, setConfirm, setMessage
+                                    init, api, user, setWait, setAlert, setConfirm, setMessage
                                 }} />
                             </div>
                         </main>
                         <Footer menu={menu} user={user} />
                     </>
                 ) : <Navigate to="/access/login" replace />
-            : <Outlet context={{api, setUser, setAlert, setSpinner}} />}
+            : <Outlet context={{api, setUser, setAlert, setWait}} />}
             <Message {...message} setMessage={setMessage} />
-            {spinner && (
+            {wait && (
                 <div className="spinner-border position-fixed bottom-50 start-50"
                     role="status" style={{ zIndex: 9999 }}>
                     <span className="visually-hidden">Loading...</span>

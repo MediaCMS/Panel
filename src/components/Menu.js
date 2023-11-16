@@ -1,7 +1,9 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { useOutletContext, NavLink } from 'react-router-dom'
 
 export default function (props) {
+
+    const context = useOutletContext()
 
     return (
         <ul className="nav">
@@ -11,7 +13,7 @@ export default function (props) {
                         onClick={() => {
                             if (item?.onClick) {
                                 if (item?.confirm) {
-                                    if (!props.setConfirm(item.description + '?')) {
+                                    if (!context.setConfirm(item.description + '?')) {
                                         return
                                     }
                                 }

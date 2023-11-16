@@ -1,10 +1,13 @@
 import React from 'react'
+import { useOutletContext } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 
 export default props => {
 
+    const context = useOutletContext()
+
     const handleDelete = async () => {
-        if (await outletContext.setConfirm('Ви впевненні?')) {
+        if (await context.setConfirm('Ви впевненні?')) {
             props.onDelete()
         }
     }

@@ -1,4 +1,4 @@
-import React/*, { useEffect }*/ from 'react'
+import React from 'react'
 import Context from '../contexts/Form.js'
 import Standard from './Form/Standard.js'
 import Modal from './Form/Modal.js'

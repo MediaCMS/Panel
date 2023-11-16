@@ -33,7 +33,7 @@ export default function (props) {
         <Modal show={show} onHide={handleClose} fullscreen={true}>
             <Modal.Header closeButton>
                 <Modal.Title className="flex-grow-1">Зображення</Modal.Title>
-                <Menu items={menu} setConfirm={props.setConfirm} />
+                <Menu items={menu} />
             </Modal.Header>
             <Modal.Body>
                 <Images onChoose={handleChoose} onLoad={handleLoad} />

@@ -16,7 +16,7 @@ export default props => {
             size={props.size} animation={true}>
             <Form onSubmit={props.onSubmit}>
                 <Modal.Header closeButton>
-                    <Modal.Title id="filterLabel">{title}</Modal.Title>
+                    <Modal.Title>{title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>{props.children}</Modal.Body>
                 <Modal.Footer>
