@@ -18,8 +18,9 @@ export default function () {
     }
 
     const handleLoad = async () => {
-        const users = await context.api.panel.get('/users', { params })
-        setUsers(users)
+        setUsers(
+            await context.api.panel.get('/users', { params })
+        )
     }
 
     useEffect(() => {
@@ -36,10 +37,8 @@ export default function () {
 
     return <>
         <Table users={users} onClick={handleClick} />
-        {filter && 
-            <Filter data={params} onChange={setParams}
-                show={filter} onChangeShow={setFilter}
-                onSubmit={handleLoad} />
-        }
+        <Filter data={params} onChange={setParams}
+            show={filter} onChangeShow={setFilter}
+            onSubmit={handleLoad} />
     </>
 }

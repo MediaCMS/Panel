@@ -12,8 +12,9 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        const comments = await context.api.panel.get('/comments')
-        setComments(comments)
+        setComments(
+            await context.api.panel.get('/comments')
+        )
     }, [])
 
     return (

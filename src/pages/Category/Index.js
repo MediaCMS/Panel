@@ -23,8 +23,9 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        const categories = await context.api.panel.get('/categories')
-        setCategories(categories)
+        setCategories(
+            await context.api.panel.get('/categories')
+        )
     }, [])
 
     return (

@@ -22,8 +22,9 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        const roles = await context.api.panel.get('/roles')
-        setRoles(roles)
+        setRoles(
+            await context.api.panel.get('/roles')
+        )
     }, [])
 
     return (

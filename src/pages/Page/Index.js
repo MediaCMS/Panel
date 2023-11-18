@@ -22,8 +22,9 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        const pages = await context.api.panel.get('/pages')
-        setPages(pages)
+        setPages(
+            await context.api.panel.get('/pages')
+        )
     }, [])
 
     return (

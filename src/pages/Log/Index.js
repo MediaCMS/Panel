@@ -18,8 +18,9 @@ export default function () {
     const context = useOutletContext()
 
     const handleLoad = async () => {
-        const logs = await context.api.panel.get('/logs', { params })
-        setLogs(logs)
+        setLogs(
+            await context.api.panel.get('/logs', { params })
+        )
     }
 
     useEffect(() => {
@@ -35,10 +36,8 @@ export default function () {
 
     return <>
         <Table logs={logs} />
-        {filter &&
-            <Filter data={params} onChange={setParams}
-                show={filter} onChangeShow={setFilter}
-                onSubmit={handleLoad} />
-        }
+        <Filter data={params} onChange={setParams}
+            show={filter} onChangeShow={setFilter}
+            onSubmit={handleLoad} />
     </>
 }

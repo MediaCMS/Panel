@@ -23,8 +23,9 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        const types = await context.api.panel.get('/types')
-        setTypes(types)
+        setTypes(
+            await context.api.panel.get('/types')
+        )
     }, [])
 
     return (
