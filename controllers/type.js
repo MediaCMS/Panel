@@ -11,7 +11,7 @@ export default {
     read: async (request, response) => {
         const type = await db.collection('types')
             .find({ _id: ObjectId(request.params.id) }).next()
-        response.json(type);
+        type ? response.json(type) : response.sendStatus(404);
     },
 
     create: async (request, response) => {

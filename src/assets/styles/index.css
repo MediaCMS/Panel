@@ -12,14 +12,21 @@ html {
     & img { border-radius: 1%; }
     & main {
       #body { min-height: 50vh; margin: 0 auto;
-        &.width-small { max-width: 640px;}
-        &.width-medium { max-width: 768px;}
-        &.width-large { max-width: 960px;}
-        &.width-full { max-width: initial;}
+        &.width-small { max-width: 640px; }
+        &.width-medium { max-width: 768px; }
+        &.width-large { max-width: 960px; }
+        &.width-full { max-width: initial; }
+        & table {
+          & tr {
+            &.text-muted {
+              & th, td { color: var(--bs-gray) !important; }
+            }
+          }
+        }
       }
-      .mw-sm { max-width: 576px;}
-      .mw-md { max-width: 768px;}
-      .mw-lg { max-width: 992px;}
+      .mw-sm { max-width: 576px; }
+      .mw-md { max-width: 768px; }
+      .mw-lg { max-width: 992px; }
       .screen {
         min-width: 100vw; height: 50vh;text-align: center;vertical-align: middle; display: table-cell;
       }

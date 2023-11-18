@@ -48,13 +48,10 @@ export default function () {
     useEffect(async () => {
         const roles = await context.api.panel.get('/roles')
         setRoles(roles)
-        if (params?.id) {
-            const user = await context.api.panel.get('/users/' + params.id)
-            setUser(user)
-        } else {
-            setUser(user => ({ ...user, role: roles.at(-1)._id }))
-        }
-    }, [])
+        params?.id
+            ? setUser(await context.api.panel.get('/users/' + params.id))
+            : setUser(user => ({ ...user, role: roles.at(-1)._id }))
+   }, [])
 
     return (
         <Form data={user} onChange={setUser}
@@ -105,6 +102,7 @@ export default function () {
                     <Field.Status label='Видимість користувача' />
                 </Cell>
             </Row>
+            <Row><Field.Image /></Row>
         </Form>
     )
 }

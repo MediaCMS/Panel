@@ -31,9 +31,9 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        if (!params?.id) return
-        const comment = await context.api.panel.get('/comments/' + params.id)
-        setComment(comment)
+        params?.id && setComment(
+            await context.api.panel.get('/comments/' + params.id)
+        )
     }, [])
 
     return (

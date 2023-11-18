@@ -31,9 +31,9 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        if (!params?.id) return
-        const page = await context.api.panel.get('/pages/' + params.id)
-        setPage(page)
+        params?.id && setPage(
+            await context.api.panel.get('/pages/' + params.id)
+        )
     }, [])
 
     return (

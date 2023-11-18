@@ -18,11 +18,14 @@ export default {
     read: async (request, response) => {
         const tag = await db.collection('tags')
             .find({ _id: ObjectId(request.params.id) }).next();            
-        response.json(tag);
+        tag ? response.json(tag) : response.sendStatus(404);
     },
 
     create: async (request, response) => {
         const tag = { ...request.body };
+        if (tag?.image) {
+            tag.image = ObjectId(tag.image);
+        }
         const result = await db.collection('tags')
             .insertOne(tag);
         response.end(result.insertedId.toString());
@@ -31,6 +34,9 @@ export default {
     update: async (request, response) => {
         const tag = { ...request.body };
         tag._id = ObjectId(tag._id);
+        if (tag?.image) {
+            tag.image = ObjectId(tag.image);
+        }
         await db.collection('tags').updateOne(
             { _id: ObjectId(request.params.id) },
             { $set: tag }

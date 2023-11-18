@@ -11,11 +11,14 @@ export default {
     read: async (request, response) => {
         const category = await db.collection('categories')
             .find({ _id: ObjectId(request.params.id) }).next()
-        response.json(category);
+        category ? response.json(category) : response.sendStatus(404);
     },
 
     create: async (request, response) => {
         const category = { ...request.body };
+        if (category?.image) {
+            category.image = ObjectId(category.image);
+        }
         category.order = parseInt(category.order);
         const result = await db.collection('categories')
             .insertOne(category);
@@ -25,6 +28,9 @@ export default {
     update: async (request, response) => {
         const category = { ...request.body };
         category._id = ObjectId(category._id);
+        if (category?.image) {
+            category.image = ObjectId(category.image);
+        }
         category.order = parseInt(category.order);
         await db.collection('categories').updateOne(
             { _id: ObjectId(request.params.id) },

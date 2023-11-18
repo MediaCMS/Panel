@@ -12,16 +12,13 @@ export default function () {
     const navigate = useNavigate()
 
     const handleSubmit = async () => {
-        post?._id
+        params?.id
             ? await context.api.panel.put('/posts/' + params.id, post)
             : await context.api.panel.post('/posts', post)
         navigate('/posts/list')
     }
 
     const handleDelete = async () => {
-        if (post?.image) {
-            //await context.api.image.delete(post?.image)
-        }
         //await context.api.panel.delete('/posts/' + params.id)
         navigate('/posts/list')
     }
@@ -33,28 +30,21 @@ export default function () {
                 { title: 'Закрити', path: '/posts/list' }
             ]
         })
-        if (params?.id) return
-        setPost(post => ({ ...post, user: context.user._id }))
     }, [])
 
     useEffect(async () => {
         const categories = await context.api.panel.get('/categories')
         setCategories(categories)
-        if (params?.id) return
-        setPost(post => ({ ...post, category: categories[0]._id }))
-    }, [])
-
-    useEffect(async () => {
         const types = await context.api.panel.get('/types')
         setTypes(types)
-        if (params?.id) return
-        setPost(post => ({ ...post, type: types[0]._id }))
-    }, [])
-
-    useEffect(async () => {
-        if (!params?.id) return
-        const post = await context.api.panel.get('/posts/' + params.id)
-        setPost(post)
+        params?.id
+            ? setPost(await context.api.panel.get('/posts/' + params.id))
+            : setPost(post => ({
+                ...post, 
+                category: categories[0]._id,
+                type: types[0]._id,
+                user: context.user._id
+            }))
     }, [])
 
     useEffect(async () => {

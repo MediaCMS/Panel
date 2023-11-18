@@ -31,21 +31,17 @@ export default {
 
     read: async (request, response) => {
         const post = await db.collection('posts')
-            .aggregate([
-                { $match: { _id: ObjectId(request.params.id) } },
-                { $project: {
-                    date: 1, title: 1, description: 1, body: 1,
-                    image: 1,category: 1, tags: 1, type: 1,
-                    user: 1, slug: 1, status: 1
-                }}
-            ]).next();
-        response.json(post);
+            .find({ _id: ObjectId(request.params.id) }).next();
+        post ? response.json(post) : response.sendStatus(404);
     },
 
     create: async (request, response) => {
         const post = { ...request.body };
         post.date = new Date(post.date);
         post.category = ObjectId(post.category);
+        if (post?.image) {
+            post.image = ObjectId(post.image);
+        }
         if (post?.tags) {
             post.tags = post.tags.map(tag => ObjectId(tag));
         }
@@ -67,6 +63,9 @@ export default {
         }
         post.date = new Date(post.date);
         post.category = ObjectId(post.category);
+        if (post?.image) {
+            post.image = ObjectId(post.image);
+        }
         if (post?.tags) {
             post.tags = post.tags.map(tag => ObjectId(tag));
         }

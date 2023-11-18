@@ -31,9 +31,9 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        if (!params?.id) return
-        const role = await context.api.panel.get('/roles/' + params.id)
-        setRole(role)
+        params?.id && setRole(
+            await context.api.panel.get('/roles/' + params.id)
+        )
     }, [])
 
     return (
@@ -52,9 +52,7 @@ export default function () {
                     <Field.Status label="Видимість ролі" />
                 </Cell>
             </Row>
-            <Row>
-                <Field.Description placeholder="Опис ролі" />
-            </Row>
+            <Row><Field.Description placeholder="Опис ролі" /></Row>
         </Form>
     )
 }

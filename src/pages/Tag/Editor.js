@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default function () {
+export default () => {
 
     const [tag, setTag] = useState({})
     const context = useOutletContext()
@@ -31,9 +31,9 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        if (!params?.id) return
-        const tags = await context.api.panel.get('/tags/' + params.id)
-        setTag(tags)
+        params?.id && setTag(
+            await context.api.panel.get('/tags/' + params.id)
+        )
     }, [])
 
     return (
@@ -41,18 +41,17 @@ export default function () {
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
-                    <Field.Title placeholder="Львів" required />
+                    <Field.Title placeholder="Львів" maxLength="32" required />
                 </Cell>
                 <Cell sm="4">
                     <Field.Slug source={tag.title} placeholder="львів" required />
                 </Cell>
-                <Cell sm="3">
+                <Cell sm="4">
                     <Field.Status label='Видимість мітки' />
                 </Cell>
             </Row>
-            <Row>
-                <Field.Description placeholder="Опис мітки" />
-            </Row>
+            <Row><Field.Description placeholder="Опис мітки" /></Row>
+            <Row><Field.Image /></Row>
         </Form>
     )
 }

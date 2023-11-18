@@ -5,6 +5,7 @@ import config from '../../config.js'
 export default function (props) {
 
     const handleChange = event => {
+        console.log(event.target.files)
         props.onChange(event.target.files[0])
     }
 

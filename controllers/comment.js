@@ -51,7 +51,7 @@ export default {
                     }, status: 1
                 } }
             ]).next();
-        response.json(comment);
+        comment ? response.json(comment) : response.sendStatus(404);
     },
 
     create: async (request, response) => {

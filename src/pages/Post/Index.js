@@ -24,8 +24,9 @@ export default function () {
     }
 
     const handleLoad = async () => {
-        const posts = await context.api.panel.get('/posts', { params })
-        setPosts(posts)
+        setPosts(
+            await context.api.panel.get('/posts', { params })
+        )
     }
 
     useEffect(() => {
@@ -42,10 +43,8 @@ export default function () {
 
     return <>
         <Table posts={posts} onClick={handleClick} />
-        {filter &&
-            <Filter show={filter} data={params}
-                onChange={setParams} onChangeShow={setFilter}
-                onSubmit={handleLoad} />
-        }
+        <Filter show={filter} data={params}
+            onChange={setParams} onChangeShow={setFilter}
+            onSubmit={handleLoad} />
     </>
 }

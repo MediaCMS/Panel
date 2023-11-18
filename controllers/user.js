@@ -48,25 +48,17 @@ export default {
 
     read: async (request, response) => {
         const user = await db.collection('users')
-            .aggregate([
-                { $match: { _id: ObjectId(request.params.id) } },
-                { $lookup: {
-                    from: 'images',
-                    localField: 'image',
-                    foreignField: '_id',
-                    as: 'image'
-                } },
-                { $project: {
-                    title: 1, description: 1, phone: 1, skype: 1, email: 1,
-                    image: { $arrayElemAt: ['$image.slug', 0] },
-                    role: 1, slug: 1, status: 1
-                } }
-            ]).next();
-        response.json(user);
+            .find({ _id: ObjectId(request.params.id) })
+            .project({ password: 0, token: 0 })
+            .next();
+        user ? response.json(user) : response.sendStatus(404);
     },
 
     create: async (request, response) => {
         const user = { ...request.body };
+        if (user?.image) {
+            user.image = ObjectId(user.image);
+        }
         user.role = ObjectId(user.role);
         const role = await db.collection('roles')
             .find({ _id: user.role }).next();
@@ -91,6 +83,9 @@ export default {
         }
         const user = { ...request.body };
         user._id = ObjectId(user._id);
+        if (user?.image) {
+            user.image = ObjectId(user.image);
+        }
         user.role = ObjectId(user.role);
         if (!user.password) {
             delete user.password;

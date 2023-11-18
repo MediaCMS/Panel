@@ -9,7 +9,7 @@ export default () => {
     const navigate = useNavigate()
     const params = useParams()
 
-    const handleSubmitType = async () => {
+    const handleSubmit = async () => {
         params?.id
             ? await context.api.panel.put('/types/' + params.id, type)
             : await context.api.panel.post('/types', type)
@@ -38,7 +38,7 @@ export default () => {
 
     return (
         <Form data={type} onChange={setType}
-            onSubmit={handleSubmitType} onDelete={handleDelete}>
+            onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">
                     <Field.Title placeholder="Новина" maxLength="16" required />
@@ -50,12 +50,8 @@ export default () => {
                     <Field.Status label='Видимість типу' />
                 </Cell>
             </Row>
-            <Row>
-                <Field.Description placeholder="Опис типу" />
-            </Row>
-            <Row>
-                <Field.Image />
-            </Row>
+            <Row><Field.Description placeholder="Опис типу" /></Row>
+            <Row><Field.Image /></Row>
         </Form>
     )
 }

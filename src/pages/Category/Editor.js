@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default function () {
+export default () => {
 
     const [category, setCategory] = useState({ order: 30 })
     const context = useOutletContext()
@@ -31,9 +31,9 @@ export default function () {
     }, [])
 
     useEffect(async () => {
-        if (!params?.id) return
-        const category = await context.api.panel.get('/categories/' + params.id)
-        setCategory(category)
+        params?.id && setCategory(
+            await context.api.panel.get('/categories/' + params.id)
+        )
     }, [])
 
     return (
@@ -41,7 +41,7 @@ export default function () {
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="3">
-                    <Field.Title placeholder="Політика" required />
+                    <Field.Title placeholder="Політика" maxLength="16" required />
                 </Cell>
                 <Cell sm="3">
                     <Field.Slug source={category.title} placeholder="політика" required />
@@ -55,12 +55,8 @@ export default function () {
                     <Field.Status label='Видимість категорії' />
                 </Cell>
             </Row>
-            <Row>
-                <Field.Description placeholder="Опис категорії" />
-            </Row>
-            <Row>
-                <Field.Image3 placeholder="Зображення категорії" />
-            </Row>
+            <Row><Field.Description placeholder="Опис категорії" /></Row>
+            <Row><Field.Image /></Row>
         </Form>
      )
 }
