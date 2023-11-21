@@ -8,12 +8,13 @@ export default function (props) {
     }
 
     return (
-        <Modal show={!!props?.type} onHide={handleClose}>
+        <Modal show={!!props?.type} onHide={handleClose}
+            size={React.isValidElement(props.body) ? 'lg' : 'md'}>
             <Modal.Header closeButton>
                 <Modal.Title>{props?.title ?? 'Повідомлення'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>{props.body}</p>
+                {React.isValidElement(props.body) ? props.body : <p>{props.body}</p>}
             </Modal.Body>
             <Modal.Footer>
                 {props.type === 'alert' ? (

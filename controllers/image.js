@@ -51,23 +51,19 @@ export default {
     },
 
     delete: async (request, response, next) => {
+        const usage = {};
         const _id = new ObjectId(request.params.id)
-        console.log(request.params, _id)
+        //console.log(request.params, _id)
         const image = await db.collection('images')
             .find({ _id }).next();
-        console.log(image)
-        /*
-        const count = await db.collection('posts').count({ $or: [
-            { image: _id }, { body: { $regex : request.params.id } }
-        ]});
-        console.log(count)
-        if (count > 0) {
-            return next(
-                Error(`Зображення використане в публікаціях (${count})`)
-            )
-        }
-        */
-        // check posts (main and body)
+        //console.log(image);
+        usage.posts = await db.collection('posts')
+            .find({ $or: [
+                { image: _id },
+                { body: { $regex : request.params.id } }
+            ]})
+            .project({ date: 1, title: 1, slug: 1, status: 1 })
+            .toArray();
         // check pages (main and body)
         // check categories
         // check types
@@ -78,7 +74,8 @@ export default {
             Error(`Не можу визначити використання зображення`)
         )
         */
-        await db.collection('images').deleteOne({ _id });
-        response.end();
+        console.log('delete image', _id, usage)
+        //await db.collection('images').deleteOne({ _id });
+        Object.keys(usage).length ? response.json(usage) : response.end();
     }
 }

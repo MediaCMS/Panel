@@ -4,6 +4,7 @@ import Layout from './layouts/Main.js'
 import Main from './pages/Main.js'
 import Post from './pages/Post.js'
 import Image from './pages/Image.js'
+import Gallery from './pages/Gallery.js'
 import Tag from './pages/Tag.js'
 import Comment from './pages/Comment.js'
 import User from './pages/User.js'
@@ -23,6 +24,7 @@ const routes = [
         { index: true, element: <Main /> },
         { path: 'posts', module: Post },
         { path: 'images', module: Image },
+        { path: 'galleries', module: Gallery },
         { path: 'tags', module: Tag },
         { path: 'comments', module: Comment },
         { path: 'users', module: User },

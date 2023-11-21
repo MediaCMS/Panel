@@ -19,6 +19,16 @@ export default {
             delete: { path: '/:id', method: 'delete', level: 4, log: true }
         }
     },
+    gallery:  {
+        path: '/galleries',
+        actions: {
+            list: { path: '', method: 'get', level: 5 },
+            read: { path: '/:id', method: 'get', level: 4 },
+            create: { path: '', method: 'post', level: 4, log: true },
+            update: { path: '/:id', method: 'put', level: 4, log: true },
+            delete: { path: '/:id', method: 'delete', level: 4, log: true }
+        }
+    },
     tag:  {
         path: '/tags',
         actions: {

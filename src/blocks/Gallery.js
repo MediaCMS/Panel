@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createElement } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../components/Form.js'
 import Image from './Image/Image.js'
@@ -30,35 +30,9 @@ export default function (props) {
     }
 
     const handleDelete = async () => {
-        const usage = await context.api.panel.delete('/images/' + image._id)
-        console.debug(usage)
-        if (usage) {
-            const list = []
-            const createList = (title, items) => {
-                return createElement('li', { key: title }, title,
-                    createElement('ul', {},
-                        items.map(item => (
-                            createElement('li', { key: item.title }, item.title)
-                        ))
-                    )
-                )
-            }
-            if (usage?.posts) {
-                list.push(createList('В публікаціях:', usage.posts))
-            }
-            context.setAlert(
-                createElement('div', {}, [
-                    createElement('p', { key: 'message' }, 
-                        'Неможливо видалити зображення яке використовується.'
-                    ),
-                    createElement('ul', { key: 'list' }, list)
-                ])
-            )
-        } else {
-            //await context.api.image.delete(slug)
-            console.log('delete image', slug)
-            handleClose()
-        }
+        await context.api.image.delete(slug)
+        await context.api.panel.delete('/images/' + image._id)
+        handleClose()
     }
 
     const handleClose = () => {

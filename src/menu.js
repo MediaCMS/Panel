@@ -7,8 +7,14 @@ export default [
     },
     {
         title: 'Зображення',
-        description: 'Список зображень публікацій',
+        description: 'Список зображень сайту',
         path: '/images/list',
+        level: 3
+    },
+    {
+        title: 'Галереї',
+        description: 'Список галерей публікацій',
+        path: '/galleries/list',
         level: 3
     },
     {
