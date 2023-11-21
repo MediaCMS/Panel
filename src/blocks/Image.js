@@ -32,33 +32,36 @@ export default function (props) {
     const handleDelete = async () => {
         const usage = await context.api.panel.delete('/images/' + image._id)
         console.debug(usage)
-        if (usage) {
-            const list = []
-            const createList = (title, items) => {
-                return createElement('li', { key: title }, title,
-                    createElement('ul', {},
-                        items.map(item => (
-                            createElement('li', { key: item.title }, item.title)
-                        ))
-                    )
-                )
-            }
-            if (usage?.posts) {
-                list.push(createList('В публікаціях:', usage.posts))
-            }
-            context.setAlert(
-                createElement('div', {}, [
-                    createElement('p', { key: 'message' }, 
-                        'Неможливо видалити зображення яке використовується.'
-                    ),
-                    createElement('ul', { key: 'list' }, list)
-                ])
-            )
-        } else {
+        if (!usage) {
             //await context.api.image.delete(slug)
             console.log('delete image', slug)
             handleClose()
+            return
         }
+        const list = []
+        const createList = (title, items) => {
+            return createElement('li', { key: title }, title,
+                createElement('ul', {},
+                    items.map(item => (
+                        createElement('li', { key: item.title }, item.title)
+                    ))
+                )
+            )
+        }
+        usage?.posts && list.push(createList('Публікації:', usage.posts))
+        usage?.pages && list.push(createList('Сторінки:', usage.pages))
+        usage?.categories && list.push(createList('Категорії:', usage.categories))
+        usage?.types && list.push(createList('Типи:', usage.types))
+        usage?.tags && list.push(createList('Мітки:', usage.tags))
+        usage?.users && list.push(createList('Користувачі:', usage.users))
+        context.setAlert(
+            createElement('div', {}, [
+                createElement('p', { key: 'message' }, 
+                    'Неможливо видалити зображення яке вже використовується.'
+                ),
+                createElement('ul', { key: 'list' }, list)
+            ])
+        )
     }
 
     const handleClose = () => {

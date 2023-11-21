@@ -54,28 +54,38 @@ export default {
         const usage = {};
         const _id = new ObjectId(request.params.id)
         //console.log(request.params, _id)
-        const image = await db.collection('images')
-            .find({ _id }).next();
-        //console.log(image);
-        usage.posts = await db.collection('posts')
+        const posts = await db.collection('posts')
             .find({ $or: [
                 { image: _id },
                 { body: { $regex : request.params.id } }
             ]})
-            .project({ date: 1, title: 1, slug: 1, status: 1 })
-            .toArray();
-        // check pages (main and body)
-        // check categories
-        // check types
-        // check tags
-        // check users
-        /*
-        return next(
-            Error(`Не можу визначити використання зображення`)
-        )
-        */
-        console.log('delete image', _id, usage)
-        //await db.collection('images').deleteOne({ _id });
-        Object.keys(usage).length ? response.json(usage) : response.end();
+            .project({ title: 1 }).toArray();
+        if (posts.length) usage.posts = posts;
+        const pages = await db.collection('pages')
+            .find({ $or: [
+                { image: _id },
+                { body: { $regex : request.params.id } }
+            ]})
+            .project({ title: 1 }).toArray();
+        if (pages.length) usage.pages = pages;
+        const categories = await db.collection('categories')
+            .find({ image: _id }).project({ title: 1 }).toArray();
+        if (categories.length) usage.categories = categories;
+        const types = await db.collection('types')
+            .find({ image: _id }).project({ title: 1 }).toArray();
+        if (types.length) usage.types = types;
+        const tags = await db.collection('tags')
+            .find({ image: _id }).project({ title: 1 }).toArray();
+        if (tags.length) usage.tags = tags;
+        const users = await db.collection('users')
+            .find({ image: _id }).project({ title: 1 }).toArray();
+        if (users.length) usage.users = users;
+        if (!Object.keys(usage).length) {
+            console.log('delete image', _id, usage)
+            //await db.collection('images').deleteOne({ _id });
+            response.end();
+        } else {
+            response.json(usage)
+        }
     }
 }
