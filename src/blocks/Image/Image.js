@@ -23,11 +23,10 @@ export default function (props) {
         props.onChange(file)
     }
 
-    return (props?.id && props?.slug)
-        ? <img src={config.images.url + '/' + props.slug}
+    return (props?.id && props?.name)
+        ? <img src={config.images.url + '/' + props.name}
             className="d-block mw-100" />
         : <Form.Control type="file" onChange={handleChange}
             title="Виберіть зображення для завантаження"
             required={props.required ?? false} />
-    
 }

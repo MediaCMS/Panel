@@ -39,9 +39,6 @@ export default {
         const post = { ...request.body };
         post.date = new Date(post.date);
         post.category = ObjectId(post.category);
-        if (post?.image) {
-            post.image = ObjectId(post.image);
-        }
         if (post?.tags) {
             post.tags = post.tags.map(tag => ObjectId(tag));
         }
@@ -63,9 +60,6 @@ export default {
         }
         post.date = new Date(post.date);
         post.category = ObjectId(post.category);
-        if (post?.image) {
-            post.image = ObjectId(post.image);
-        }
         if (post?.tags) {
             post.tags = post.tags.map(tag => ObjectId(tag));
         }

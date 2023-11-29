@@ -11,7 +11,7 @@ export default function (props) {
     return (
         <div className="image">
             <div className="delete">
-                <img src={config.images.url + '/' + props.slug}
+                <img src={config.images.url + '/' + props.name}
                     onClick={handleDelete} title="Видалити зображення"
                     className="mw-100" />
             </div>

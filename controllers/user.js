@@ -56,9 +56,6 @@ export default {
 
     create: async (request, response) => {
         const user = { ...request.body };
-        if (user?.image) {
-            user.image = ObjectId(user.image);
-        }
         user.role = ObjectId(user.role);
         const role = await db.collection('roles')
             .find({ _id: user.role }).next();
@@ -83,9 +80,6 @@ export default {
         }
         const user = { ...request.body };
         user._id = ObjectId(user._id);
-        if (user?.image) {
-            user.image = ObjectId(user.image);
-        }
         user.role = ObjectId(user.role);
         if (!user.password) {
             delete user.password;

@@ -8,7 +8,7 @@ export default function (props) {
     return (  
         <div className="image border border-white bg-secondary d-inline-block"
             onClick={props.onClick}>
-            <img src={config.images.url + '/' + props.slug + '?width=320'}
+            <img src={config.images.url + '/' + props.name + '?width=320'}
                 className={props.status ? '' : 'image-muted'}
                 title={title} alt={props.title} />
         </div>

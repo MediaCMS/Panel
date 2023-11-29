@@ -27,6 +27,7 @@ function filter(pipeline, query, callback) {
     if (query?.tag) {
         match.tags = { $regex : query.tag, $options : 'i' }
     }
+    if (query?.tagID) match.tags = ObjectId(query.tagID);
     if (callback) callback(match);
     if (query?.user) {
         match.user = { $regex : query.user, $options : 'i' }

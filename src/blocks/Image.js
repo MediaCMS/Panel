@@ -2,26 +2,21 @@ import React, { useState, useEffect, createElement } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../components/Form.js'
 import Image from './Image/Image.js'
-import Slug from './Image/Slug.js'
 
 export default function (props) {
 
     const [image, setImage] = useState({})
-    const [slug, setSlug] = useState()
     const [file, setFile] = useState({})
     const context = useOutletContext()
     const navigate = useNavigate()
 
     const handleSubmit = async () => {
         if (image?._id) {
-            if (image.slug !== slug) {
-                await context.api.image.patch(slug, { slug: image.slug })
-            }
             await context.api.panel.put('/images/' + image._id, image)
         } else {
             const formData = new FormData()
             formData.append('image', file)
-            await context.api.image.post(image.slug, formData, {
+            await context.api.image.post('/', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }}
             )
             await context.api.panel.post('/images', image)
@@ -30,38 +25,7 @@ export default function (props) {
     }
 
     const handleDelete = async () => {
-        const usage = await context.api.panel.delete('/images/' + image._id)
-        console.debug(usage)
-        if (!usage) {
-            //await context.api.image.delete(slug)
-            console.log('delete image', slug)
-            handleClose()
-            return
-        }
-        const list = []
-        const createList = (title, items) => {
-            return createElement('li', { key: title }, title,
-                createElement('ul', {},
-                    items.map(item => (
-                        createElement('li', { key: item.title }, item.title)
-                    ))
-                )
-            )
-        }
-        usage?.posts && list.push(createList('Публікації:', usage.posts))
-        usage?.pages && list.push(createList('Сторінки:', usage.pages))
-        usage?.categories && list.push(createList('Категорії:', usage.categories))
-        usage?.types && list.push(createList('Типи:', usage.types))
-        usage?.tags && list.push(createList('Мітки:', usage.tags))
-        usage?.users && list.push(createList('Користувачі:', usage.users))
-        context.setAlert(
-            createElement('div', {}, [
-                createElement('p', { key: 'message' }, 
-                    'Неможливо видалити зображення яке вже використовується.'
-                ),
-                createElement('ul', { key: 'list' }, list)
-            ])
-        )
+        await context.api.panel.delete('/images/' + image._id)
     }
 
     const handleClose = () => {
@@ -71,18 +35,17 @@ export default function (props) {
     }
 
     useEffect(async () => {
-        if (!props?.id) return
-        const image = await context.api.panel.get('/images/' + props.id)
-        setImage(image)
-        setSlug(image.slug)
-    }, [])
+        props?.id && setImage(
+            await context.api.panel.get('/images/' + props.id)
+        )
+    }, [props.id])
 
     return (
         <Form {...props} data={image} onChange={setImage} 
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Field label="Файл зображення">
-                    <Image id={image._id} slug={slug} required
+                    <Image id={image._id} name={image.name} required
                         onChange={setFile} />
                 </Field>
             </Row>
@@ -91,18 +54,12 @@ export default function (props) {
                     placeholder="Основна інформація" />
             </Row>
             <Row>
-                <Field label="Назва файла зображення">
-                    <Slug value={image.slug} title={image.title}
-                        file={file.name} required />
-                </Field>
-            </Row>
-            <Row>
                 <Field.Description label="Опис зображення"
                     placeholder="Додаткова інформація" />
             </Row>
             <Row>
                 <Field.Autocomplete name="tags" label="Мітки зображення"
-                    path="/tags" multiple />
+                    path="/tags" multiple required />
             </Row>
             <Row>
                 <Cell sm="6">

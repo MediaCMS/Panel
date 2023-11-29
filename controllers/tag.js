@@ -4,6 +4,19 @@ export default {
 
     list: async (request, response) => {
         const pipeline = [];
+        if (request.query?._images) {
+            pipeline.push(
+                { $lookup: {
+                    from: 'images',
+                    localField: '_id',
+                    foreignField: 'tags',
+                    as: 'images'
+                } },
+                { $match: {
+                    images: { $ne: [] }
+                }}
+            )
+        }
         if (request.query?._compact) {
             pipeline.push(
                 { $project: { title: 1, status: 1 } }
@@ -23,9 +36,6 @@ export default {
 
     create: async (request, response) => {
         const tag = { ...request.body };
-        if (tag?.image) {
-            tag.image = ObjectId(tag.image);
-        }
         const result = await db.collection('tags')
             .insertOne(tag);
         response.end(result.insertedId.toString());
@@ -34,9 +44,6 @@ export default {
     update: async (request, response) => {
         const tag = { ...request.body };
         tag._id = ObjectId(tag._id);
-        if (tag?.image) {
-            tag.image = ObjectId(tag.image);
-        }
         await db.collection('tags').updateOne(
             { _id: ObjectId(request.params.id) },
             { $set: tag }

@@ -1,18 +1,14 @@
 import db, { ObjectId, filter } from '../db.js';
 
+
+const check = async image => {
+}
+
 export default {
 
     list: async (request, response) => {
-        const pipeline = [
-            { $lookup: {
-                from: 'tags',
-                localField: 'tags',
-                foreignField: '_id',
-                as: 'tags'
-            } },
-            { $addFields: { tags: '$tags.title' } }
-        ];
-        filter(pipeline, request.query)
+        const pipeline = [];
+        filter(pipeline, request.query);
         const images = await db.collection('images')
             .aggregate(pipeline).toArray()
         response.json(images);
@@ -27,9 +23,7 @@ export default {
     create: async (request, response) => {
         const image = { ...request.body };
         image.date = new Date(image.date);
-        if (image?.tags) {
-            image.tags = image.tags.map(tag => ObjectId(tag));
-        }
+        image.tags = image.tags.map(tag => ObjectId(tag));
         const result = await db.collection('images')
             .insertOne(image);
         response.end(result.insertedId.toString());
@@ -39,9 +33,7 @@ export default {
         const image = { ...request.body };
         image._id = ObjectId(image._id);
         image.date = new Date(image.date);
-        if (image?.tags) {
-            image.tags = image.tags.map(tag => ObjectId(tag));
-        }
+        image.tags = image.tags.map(tag => ObjectId(tag));
         await db.collection('images')
             .updateOne(
                 { _id: ObjectId(request.params.id) },
@@ -50,10 +42,9 @@ export default {
         response.end();
     },
 
-    delete: async (request, response, next) => {
+    check: async (request, response) => {
         const usage = {};
         const _id = new ObjectId(request.params.id)
-        //console.log(request.params, _id)
         const posts = await db.collection('posts')
             .find({ $or: [
                 { image: _id },
@@ -80,12 +71,14 @@ export default {
         const users = await db.collection('users')
             .find({ image: _id }).project({ title: 1 }).toArray();
         if (users.length) usage.users = users;
-        if (!Object.keys(usage).length) {
-            console.log('delete image', _id, usage)
-            //await db.collection('images').deleteOne({ _id });
-            response.end();
-        } else {
-            response.json(usage)
-        }
+        response.end(
+            await check(request.params.name)
+        );
+    },
+
+    delete: async (request, response, next) => {
+        response.end(
+            await db.collection('images').deleteOne({ _id: request.params._id })
+        );
     }
 }

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Moment from 'moment'
 import Index from './Images/Index.js'
-import Filter from './Images/Filter.js'
-import Upload from './Image.js'
+//import Filter from './Images/Filter.js'
+import Upload from './Gallery.js'
 
 export default function (props) {
 
@@ -39,9 +39,11 @@ export default function (props) {
 
     return <>
         <Index images={images} onChoose={props.onChoose} />
+        {/*
         <Filter data={params} onChange={setParams}
             show={filter} onChangeShow={setFilter}
             onSubmit={handleLoad} as="modal" />
+        */}
         <Upload show={upload} title="Завантажити зображення" size="lg"
             onChangeShow={setUpload} onSubmit={handleLoad} as="modal" />
     </>

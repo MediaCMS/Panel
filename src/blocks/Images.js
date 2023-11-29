@@ -1,45 +1,41 @@
 import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import Moment from 'moment'
+import Tags from './Images/Tags.js'
 import Index from './Images/Index.js'
-import Filter from './Images/Filter.js'
 import Upload from './Image.js'
 
 export default function (props) {
 
-    const [images, setImages] = useState([])
-    const [filter, setFilter] = useState(false)
+    const [tag, setTag] = useState({})
+    const [tags, setTags] = useState([])
+    const [image, setImage] = useState({})
     const [upload, setUpload] = useState(false)
-    const [params, setParams] = useState({
-        date: {
-            start: Moment().add(-10, 'years').format('YYYY-MM-DD'),
-            end: Moment().add(1, 'days').format('YYYY-MM-DD'),
-        },
-        status: true,
-        _sort: { field: 'date', order: -1 }
-    })
     const context = useOutletContext()
 
     const handleLoad = async () => {
-        setImages(
-            await context.api.panel.get('/images', { params })
+        setTags(
+            await context.api.panel.get('/tags', {
+                params: { _images: true, _compact: true }
+            })
         )
     }
 
-    useEffect(() => {
+    const handleChoose = async image => {
+        setImage(image)
+        setUpload(true)
+    }
+
+    useEffect(async () => {
         props.onLoad([
             { title: 'Завантажити', onClick: () => setUpload(true) },
-            { title: 'Фільтр', onClick: () => setFilter(true) }
         ])
         handleLoad()
     }, [])
 
     return <>
-        <Index images={images} onChoose={props.onChoose} />
-        <Filter data={params} onChange={setParams}
-            show={filter} onChangeShow={setFilter}
-            onSubmit={handleLoad} as="modal" />
-        <Upload show={upload} title="Завантажити зображення" size="lg"
-            onChangeShow={setUpload} onSubmit={handleLoad} as="modal" />
+        <Tags items={tags} onClick={setTag} />
+        <Index id={tag._id} title={tag.title} onClick={handleChoose} />
+        <Upload id={image._id} show={upload} title="Редагування зображення"
+            onChangeShow={setUpload} onSubmit={handleLoad} size="lg" as="modal" />
     </>
 }

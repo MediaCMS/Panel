@@ -16,9 +16,6 @@ export default {
 
     create: async (request, response) => {
         const page = { ...request.body };
-        if (page?.image) {
-            page.image = ObjectId(page.image);
-        }
         const result = await db.collection('pages')
             .insertOne(page);
         response.end(result.insertedId.toString());
@@ -27,9 +24,6 @@ export default {
     update: async (request, response) => {
         const page = { ...request.body };
         page._id = ObjectId(page._id);
-        if (page?.image) {
-            page.image = ObjectId(page.image);
-        }
         await db.collection('pages')
             .updateOne(
                 { _id: ObjectId(request.params.id) },

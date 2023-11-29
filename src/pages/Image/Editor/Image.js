@@ -8,8 +8,8 @@ export default function (props) {
         props.onChange(event.target.files[0])
     }
 
-    return (props?.id && props?.slug)
-        ? <img src={config.images.url + '/' + props.slug}
+    return (props?.id && props?.name)
+        ? <img src={config.images.url + '/' + props.name}
             className="mw-100" />
         : <Form.Control type="file" onChange={handleChange}
             title="Виберіть зображення для завантаження"

@@ -16,9 +16,6 @@ export default {
 
     create: async (request, response) => {
         const type = { ...request.body };
-        if (type?.image) {
-            type.image = ObjectId(type.image);
-        }
         const result = await db.collection('types')
             .insertOne(type);
         request.params.id = result.insertedId.toString();
@@ -28,9 +25,6 @@ export default {
     update: async (request, response) => {
         const type = { ...request.body };
         type._id = ObjectId(type._id);
-        if (type?.image) {
-            type.image = ObjectId(type.image);
-        }
         await db.collection('types').updateOne(
             { _id: ObjectId(request.params.id) },
             { $set: type }

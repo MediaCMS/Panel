@@ -18,7 +18,7 @@ export default function (props) {
     }
 
     const handleChoose = image => {
-        props.onChange(image._id)
+        props.onChange(image.name)
         setShow(false)
     }
 
@@ -27,9 +27,16 @@ export default function (props) {
     }
 
     return <>
-        <Form.Control type="file" onClick={handleShow}
-            required={props.required ?? false}
-            title="Вибрати зображення" />
+        <div>
+            <span>
+                <Form.Control type="file" on={handleShow}
+                    title="Виберіть зображення для завантаження"
+                    required={props.required ?? false} />
+            </span>
+            <span>
+                <Button onClick={handleShow}>Бібліотека</Button>
+            </span>
+        </div>
         <Modal show={show} onHide={handleClose} fullscreen={true}>
             <Modal.Header closeButton>
                 <Modal.Title className="flex-grow-1">Зображення</Modal.Title>
