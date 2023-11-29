@@ -6,21 +6,25 @@ import Images, { Image } from '../../components/Images.js'
 export default function (props) {
 
     const [images, setImages] = useState([])
+    const [fullScreen, setFullScreen] = useState(false)
+    const [size, setSize] = useState('lg')
     const [show, setShow] = useState(!!props?.id)
     const context = useOutletContext()
 
     useEffect(async () => {
         if (!props?.id) return
-        setImages(
-            await context.api.panel.get('/images', {
-                params: { 'tagID': props.id }
-            })
-        )
+        const images = await context.api.panel.get('/images', {
+            params: { 'tagID': props.id }
+        })
+        setFullScreen(images.length > 5 ? true : false)
+        setSize(images.length > 2 ? 'xl' : 'lg')
+        setImages(images)
         setShow(true)
     }, [props.id])
 
     return <>
-        <Modal show={show} onHide={() => setShow(false)} fullscreen={true}>
+        <Modal show={show} size={size} fullscreen={fullScreen}
+            onHide={() => setShow(false)}>
             <Modal.Header closeButton>
                 <Modal.Title className="flex-grow-1">{props.title}</Modal.Title>
             </Modal.Header>

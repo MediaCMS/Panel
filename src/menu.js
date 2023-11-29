@@ -7,8 +7,8 @@ export default [
     },
     {
         title: 'Зображення',
-        description: 'Список зображень сайту',
-        path: '/images/list',
+        description: 'Хмара міток зображень',
+        path: '/images',
         level: 3
     },
     {

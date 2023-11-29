@@ -15,12 +15,13 @@ export default function (props) {
     const handleLoad = async () => {
         setTags(
             await context.api.panel.get('/tags', {
-                params: { _images: true, _compact: true }
+                params: { _images: true }
             })
         )
     }
 
     const handleChoose = async image => {
+        console.log(image)
         setImage(image)
         setUpload(true)
     }

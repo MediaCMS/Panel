@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Form, Modal } from 'react-bootstrap'
+import { Form, Modal, Button } from 'react-bootstrap'
 import Menu from '../../../../components/Menu.js'
 import Images from '../../../../blocks/Images.js'
 
@@ -13,7 +13,7 @@ export default function (props) {
     }
 
     const handleShow = event => {
-        event.preventDefault();
+        event.preventDefault()
         setShow(true)
     }
 
@@ -26,10 +26,10 @@ export default function (props) {
         setShow(false)
     }
 
-    return <>
+    return <> 
         <div>
             <span>
-                <Form.Control type="file" on={handleShow}
+                <Form.Control type="file" onClick={handleShow}
                     title="Виберіть зображення для завантаження"
                     required={props.required ?? false} />
             </span>

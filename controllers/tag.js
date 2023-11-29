@@ -12,15 +12,20 @@ export default {
                     foreignField: 'tags',
                     as: 'images'
                 } },
+                { $project: {
+                    title: 1, description: 1, 
+                    images: { $size: '$images' }
+                } },
                 { $match: {
-                    images: { $ne: [] }
-                }}
+                    images: { $gt: 0 }
+                }},
+                { $sort: { title: 1 }}
             )
         }
         if (request.query?._compact) {
             pipeline.push(
                 { $project: { title: 1, status: 1 } }
-            );
+            )
         }
         filter(pipeline, request.query)
         const tags = await db.collection('tags')

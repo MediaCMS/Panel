@@ -1,4 +1,22 @@
-import Index from './Image/Index.js'
-import Editor from './Image/Editor.js'
+import React from 'react'
+import { useOutletContext, useNavigate } from 'react-router-dom'
+import Images from '../blocks/Images.js'
 
-export default { Index, Editor }
+export default function () {
+
+    const context = useOutletContext()
+    const navigate = useNavigate()
+
+    const handleChoose = image => {
+        navigate('/images/editor/' + image._id)
+    }
+
+    const handleLoad = menu => {
+        menu[0].path = '/images/editor'
+        context.init({
+            title: 'Зображення', submenu: menu, width: 'small'
+        })
+    }
+
+    return <Images onChoose={handleChoose} onLoad={handleLoad} />
+}

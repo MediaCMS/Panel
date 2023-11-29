@@ -23,7 +23,7 @@ const routes = [
     { path: '/', element: <Layout template={true} />, children: [
         { index: true, element: <Main /> },
         { path: 'posts', module: Post },
-        { path: 'images', module: Image },
+        { path: 'images', element: <Image /> },
         { path: 'galleries', module: Gallery },
         { path: 'tags', module: Tag },
         { path: 'comments', module: Comment },
