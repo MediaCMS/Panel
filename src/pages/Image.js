@@ -1,22 +1,21 @@
-import React from 'react'
-import { useOutletContext, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useOutletContext } from 'react-router-dom'
 import Images from '../blocks/Images.js'
 
 export default function () {
 
+    const [upload, setUpload] = useState(false)
     const context = useOutletContext()
-    const navigate = useNavigate()
 
-    const handleChoose = image => {
-        navigate('/images/editor/' + image._id)
-    }
-
-    const handleLoad = menu => {
-        menu[0].path = '/images/editor'
+    useEffect(() => {
         context.init({
-            title: 'Зображення', submenu: menu, width: 'small'
+            title: 'Зображення',
+            submenu: [
+                { title: 'Завантажити', onClick: () => setUpload(true) },
+            ], 
+            width: 'small'
         })
-    }
+    }, [])
 
-    return <Images onChoose={handleChoose} onLoad={handleLoad} />
+    return <Images upload={{get: upload, set: setUpload}} />
 }

@@ -40,7 +40,7 @@ export default function (props) {
         )
     }, [props.id])
 
-    return (<></>/*
+    return (
         <Form {...props} data={image} onChange={setImage} 
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
@@ -70,5 +70,5 @@ export default function (props) {
                 </Cell>
             </Row>
         </Form>
-     */)
+    )
 }

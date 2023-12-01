@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import Tags from './Images/Tags.js'
+import { Button } from 'react-bootstrap'
 import Index from './Images/Index.js'
-import Upload from './Image.js'
+import Editor from './Image.js'
 
 export default function (props) {
 
     const [tag, setTag] = useState({})
     const [tags, setTags] = useState([])
-    const [image, setImage] = useState({})
-    const [upload, setUpload] = useState(false)
     const context = useOutletContext()
 
     const handleLoad = async () => {
+        console.log('handleLoad')
         setTags(
             await context.api.panel.get('/tags', {
                 params: { _images: true }
@@ -20,23 +19,28 @@ export default function (props) {
         )
     }
 
-    const handleChoose = async image => {
-        console.log(image)
-        setImage(image)
-        setUpload(true)
-    }
-
-    useEffect(async () => {
-        props.onLoad([
-            { title: 'Завантажити', onClick: () => setUpload(true) },
-        ])
-        handleLoad()
-    }, [])
+    useEffect(() => handleLoad(), [])
 
     return <>
-        <Tags items={tags} onClick={setTag} />
-        <Index id={tag._id} title={tag.title} onClick={handleChoose} />
-        <Upload id={image._id} show={upload} title="Редагування зображення"
-            onChangeShow={setUpload} onSubmit={handleLoad} size="lg" as="modal" />
+        <div className="tags text-center">
+            {tags.map(tag => {
+                let size = ''
+                if (tag.images > 5) size = 'lg'
+                if (tag.images < 3) size = 'sm'
+                return (
+                    <Button size={size} className="m-2" key={tag._id}
+                        variant={tag.images === 1 ? 'outline-secondary' : 'outline-dark'}
+                        onClick={() => setTag(tag)}>
+                        <span className={tag.images > 7 ? 'fw-bold' : 'fw-normal'}>
+                            {tag.title}
+                        </span>
+                    </Button>
+                )
+            })}
+        </div>
+        <Index id={tag._id} title={tag.title} onChoose={props.onChoose} />
+        {props?.upload &&
+            <Editor show={props.upload} onSubmit={handleLoad}
+            title="Завантаження зображення" size="lg" as="modal" />}
     </>
 }

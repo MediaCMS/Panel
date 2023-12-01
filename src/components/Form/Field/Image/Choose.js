@@ -1,49 +1,49 @@
 import React, { useState } from 'react'
-import { Form, Modal, Button } from 'react-bootstrap'
-import Menu from '../../../../components/Menu.js'
+import { Form, Modal, Button, Row, Col } from 'react-bootstrap'
 import Images from '../../../../blocks/Images.js'
 
 export default function (props) {
 
     const [show, setShow] = useState(false)
-    const [menu, setMenu] = useState([])
 
-    const handleLoad = menu => {
-        setMenu(menu)
-    }
-
-    const handleShow = event => {
-        event.preventDefault()
-        setShow(true)
+    const handleUpload = async event => {
+        console.log('handleUpload', event, event.target.files)
+        /*
+        const formData = new FormData()
+        formData.append('image', event.target.files[0])
+        const image = await context.api.image.post('/', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }}
+        )
+        props.onChange(image.name)
+        */
     }
 
     const handleChoose = image => {
+        console.log('handleChoose', image)
         props.onChange(image.name)
         setShow(false)
     }
 
-    const handleClose = () => {
-        setShow(false)
-    }
-
-    return <> 
-        <div>
-            <span>
-                <Form.Control type="file" onClick={handleShow}
+    return <>
+        <Row>
+            <Col sm={9}>
+                <Form.Control type="file" onChange={handleUpload}
                     title="Виберіть зображення для завантаження"
                     required={props.required ?? false} />
-            </span>
-            <span>
-                <Button onClick={handleShow}>Бібліотека</Button>
-            </span>
-        </div>
-        <Modal show={show} onHide={handleClose} fullscreen={true}>
+            </Col>
+            <Col sm={3}>
+                <Button onClick={() => setShow(true)}
+                    title="Виберіть зображення з бібліотеки">
+                        Бібліотека
+                </Button>
+            </Col>
+        </Row>
+        <Modal show={show} onHide={() => setShow(false)} size="md" fullscreen={false}>
             <Modal.Header closeButton>
                 <Modal.Title className="flex-grow-1">Зображення</Modal.Title>
-                <Menu items={menu} />
             </Modal.Header>
             <Modal.Body>
-                <Images onChoose={handleChoose} onLoad={handleLoad} />
+                <Images onChoose={handleChoose} />
             </Modal.Body>
         </Modal>
     </>
