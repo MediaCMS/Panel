@@ -11,18 +11,17 @@ export default function (props) {
     const [fullScreen, setFullScreen] = useState(false)
     const [editor, setEditor] = useState(false)
     const [size, setSize] = useState('lg')
-    const [show, setShow] = useState(!!props?.id)
     const context = useOutletContext()
 
     const handleLoad = async () => {
-        if (!props?.id) return
+        if (!props.tag) return
         const images = await context.api.panel.get('/images', {
-            params: { 'tagID': props.id }
+            params: { 'tagID': props.tag._id }
         })
         setFullScreen(images.length > 5 ? true : false)
         setSize(images.length > 2 ? 'xl' : 'lg')
         setImages(images)
-        setShow(true)
+        props.onChange()
     }
 
     const handleClick = async image => {
@@ -31,14 +30,15 @@ export default function (props) {
             props.onChoose(image)
         } else {
             setImage(image)
+            setEditor(true)
         }
     }
 
-    useEffect(() => handleLoad(), [props.id])
+    useEffect(() => handleLoad(), [props.tag])
 
     return <>
-        <Modal show={show} size={size} fullscreen={fullScreen}
-            onHide={() => setShow(false)}>
+        <Modal show={!!props.tag} size={size} fullscreen={fullScreen}
+            onHide={() => props.setTag()}>
             <Modal.Header closeButton>
                 <Modal.Title className="flex-grow-1">{props.title}</Modal.Title>
             </Modal.Header>
@@ -51,7 +51,7 @@ export default function (props) {
                 </Images>
             </Modal.Body>
         </Modal>
-        <Editor id={image._id} show={{ get: editor, set: setEditor }}
+        <Editor id={image._id} show={editor} onHide={() => setEditor(false)}
             onSubmit={handleLoad} title="Редагування зображення"
             size="lg" as="modal" />
     </>

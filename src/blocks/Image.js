@@ -1,5 +1,5 @@
-import React, { useState, useEffect, createElement } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../components/Form.js'
 import Image from './Image/Image.js'
 
@@ -8,7 +8,6 @@ export default function (props) {
     const [image, setImage] = useState({})
     const [file, setFile] = useState({})
     const context = useOutletContext()
-    const navigate = useNavigate()
 
     const handleSubmit = async () => {
         if (image?._id) {
@@ -21,17 +20,17 @@ export default function (props) {
             )
             await context.api.panel.post('/images', image)
         }
-        handleClose()
+        props.onSubmit()
+        props.onHide()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/images/' + image._id)
-    }
-
-    const handleClose = () => {
-        if (props?.navigate) navigate(props.navigate)
-        if (props?.onChangeShow) props.onChangeShow(false)
-        if (props?.onSubmit) props.onSubmit()
+        //await context.api.panel.delete('/images/' + image._id)
+        if (!await context.api.panel.get('/images/check/' + image.name)) {
+            //context.api.image.delete('/' + image.name)
+            console.log('image.delete', image.name)
+        }
+        props.onHide()
     }
 
     useEffect(async () => {

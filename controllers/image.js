@@ -1,9 +1,5 @@
 import db, { ObjectId, filter } from '../db.js';
 
-
-const check = async image => {
-}
-
 export default {
 
     list: async (request, response) => {
@@ -43,6 +39,7 @@ export default {
     },
 
     check: async (request, response) => {
+        /*
         const usage = {};
         const _id = new ObjectId(request.params.id)
         const posts = await db.collection('posts')
@@ -71,12 +68,11 @@ export default {
         const users = await db.collection('users')
             .find({ image: _id }).project({ title: 1 }).toArray();
         if (users.length) usage.users = users;
-        response.end(
-            await check(request.params.name)
-        );
+        */
+        response.end(false);
     },
 
-    delete: async (request, response, next) => {
+    delete: async (request, response) => {
         response.end(
             await db.collection('images').deleteOne({ _id: request.params._id })
         );

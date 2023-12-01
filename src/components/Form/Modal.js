@@ -7,12 +7,8 @@ export default props => {
 
     const title = props.title ?? 'Фільтрування даних'
 
-    const handleHide = () => {
-        props.show.set(false)
-    }
-
     return (
-        <Modal show={props.show.get} onHide={handleHide}
+        <Modal show={props.show} onHide={props.onHide}
             size={props.size} animation={true}>
             <Form onSubmit={props.onSubmit}>
                 <Modal.Header closeButton>

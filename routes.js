@@ -13,6 +13,7 @@ export default {
         path: '/images',
         actions: {
             list: { path: '', method: 'get', level: 5 },
+            check: { path: '/check/:id', method: 'get', level: 4 },
             read: { path: '/:id', method: 'get', level: 4 },
             create: { path: '', method: 'post', level: 4, log: true },
             update: { path: '/:id', method: 'put', level: 4, log: true },

@@ -6,12 +6,11 @@ import Editor from './Image.js'
 
 export default function (props) {
 
-    const [tag, setTag] = useState({})
+    const [tag, setTag] = useState()
     const [tags, setTags] = useState([])
     const context = useOutletContext()
 
     const handleLoad = async () => {
-        console.log('handleLoad')
         setTags(
             await context.api.panel.get('/tags', {
                 params: { _images: true }
@@ -24,7 +23,7 @@ export default function (props) {
     return <>
         <div className="tags text-center">
             {tags.map(tag => {
-                let size = ''
+                let size = 'md'
                 if (tag.images > 5) size = 'lg'
                 if (tag.images < 3) size = 'sm'
                 return (
@@ -38,7 +37,8 @@ export default function (props) {
                 )
             })}
         </div>
-        <Index id={tag._id} title={tag.title} onChoose={props.onChoose} />
+        <Index tag={tag} setTag={setTag} onChange={handleLoad}
+            onChoose={props.onChoose} />
         {props?.upload &&
             <Editor show={props.upload} onSubmit={handleLoad}
             title="Завантаження зображення" size="lg" as="modal" />}

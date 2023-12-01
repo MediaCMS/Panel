@@ -17,5 +17,5 @@ export default function () {
         })
     }, [])
 
-    return <Images upload={{get: upload, set: setUpload}} />
+    return <Images upload={upload} setUpload={setUpload} />
 }
