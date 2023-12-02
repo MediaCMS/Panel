@@ -15,21 +15,21 @@ export default function (props) {
         } else {
             const formData = new FormData()
             formData.append('image', file)
-            await context.api.image.post('/', formData, {
+            const response = await context.api.image.post('/', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }}
             )
-            await context.api.panel.post('/images', image)
+            console.log(response)
+            await context.api.panel.post('/images', {
+                ...image, name: response.name
+            })
         }
-        props.onSubmit()
+        props.onChange()
         props.onHide()
     }
 
     const handleDelete = async () => {
-        //await context.api.panel.delete('/images/' + image._id)
-        if (!await context.api.panel.get('/images/check/' + image.name)) {
-            //context.api.image.delete('/' + image.name)
-            console.log('image.delete', image.name)
-        }
+        await context.api.panel.delete('/images/' + image._id)
+        props.onChange()
         props.onHide()
     }
 

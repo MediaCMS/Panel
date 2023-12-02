@@ -52,7 +52,7 @@ export default function (props) {
             </Modal.Body>
         </Modal>
         <Editor id={image._id} show={editor} onHide={() => setEditor(false)}
-            onSubmit={handleLoad} title="Редагування зображення"
+            onChange={handleLoad} title="Редагування зображення"
             size="lg" as="modal" />
     </>
 }

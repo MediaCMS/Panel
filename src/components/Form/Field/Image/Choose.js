@@ -1,21 +1,20 @@
 import React, { useState } from 'react'
+import { useOutletContext } from 'react-router-dom'
 import { Form, Modal, Button, Row, Col } from 'react-bootstrap'
 import Images from '../../../../blocks/Images.js'
 
 export default function (props) {
 
     const [show, setShow] = useState(false)
+    const context = useOutletContext()
 
     const handleUpload = async event => {
-        console.log('handleUpload', event, event.target.files)
-        /*
         const formData = new FormData()
         formData.append('image', event.target.files[0])
         const image = await context.api.image.post('/', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }}
         )
         props.onChange(image.name)
-        */
     }
 
     const handleChoose = image => {

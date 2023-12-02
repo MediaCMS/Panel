@@ -38,43 +38,11 @@ export default {
         response.end();
     },
 
-    check: async (request, response) => {
-        /*
-        const usage = {};
-        const _id = new ObjectId(request.params.id)
-        const posts = await db.collection('posts')
-            .find({ $or: [
-                { image: _id },
-                { body: { $regex : request.params.id } }
-            ]})
-            .project({ title: 1 }).toArray();
-        if (posts.length) usage.posts = posts;
-        const pages = await db.collection('pages')
-            .find({ $or: [
-                { image: _id },
-                { body: { $regex : request.params.id } }
-            ]})
-            .project({ title: 1 }).toArray();
-        if (pages.length) usage.pages = pages;
-        const categories = await db.collection('categories')
-            .find({ image: _id }).project({ title: 1 }).toArray();
-        if (categories.length) usage.categories = categories;
-        const types = await db.collection('types')
-            .find({ image: _id }).project({ title: 1 }).toArray();
-        if (types.length) usage.types = types;
-        const tags = await db.collection('tags')
-            .find({ image: _id }).project({ title: 1 }).toArray();
-        if (tags.length) usage.tags = tags;
-        const users = await db.collection('users')
-            .find({ image: _id }).project({ title: 1 }).toArray();
-        if (users.length) usage.users = users;
-        */
-        response.end(false);
-    },
-
     delete: async (request, response) => {
-        response.end(
-            await db.collection('images').deleteOne({ _id: request.params._id })
-        );
+        console.log(request.params)
+        await db.collection('images').deleteOne({
+            _id: ObjectId(request.params.id)
+        })
+        response.end();
     }
 }
