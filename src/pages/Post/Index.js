@@ -43,8 +43,7 @@ export default function () {
 
     return <>
         <Table posts={posts} onClick={handleClick} />
-        <Filter show={filter} data={params}
-            onChange={setParams} onChangeShow={setFilter}
-            onSubmit={handleLoad} />
+        <Filter show={filter} data={params} onSubmit={handleLoad}
+            onChange={setParams} onHide={() => setFilter(false)} />
     </>
 }

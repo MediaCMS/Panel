@@ -17,7 +17,7 @@ export default props => {
                 <Modal.Body>{props.children}</Modal.Body>
                 <Modal.Footer>
                     {(props?.as && (props.as === 'modal') && !props?.title)
-                        ? <ButtonsFilter onClick={handleHide} />
+                        ? <ButtonsFilter onClick={props.onHide} />
                         : <ButtonsStandard {...props}  />
                     }
                 </Modal.Footer>

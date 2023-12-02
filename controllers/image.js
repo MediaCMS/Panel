@@ -4,9 +4,16 @@ export default {
 
     list: async (request, response) => {
         const pipeline = [];
-        filter(pipeline, request.query);
+        filter(pipeline, request.query, match => {
+            if (request.query?.name) {
+                match.name = request.query.name
+            }
+            if (request.query?.tagID) {
+                match.tags = ObjectId(request.query.tagID)
+            }
+        });
         const images = await db.collection('images')
-            .aggregate(pipeline).toArray()
+            .aggregate(pipeline).toArray();
         response.json(images);
     },
 
@@ -39,7 +46,6 @@ export default {
     },
 
     delete: async (request, response) => {
-        console.log(request.params)
         await db.collection('images').deleteOne({
             _id: ObjectId(request.params.id)
         })

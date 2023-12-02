@@ -14,12 +14,11 @@ export default function (props) {
         data.set(name, value)
     }
 
-    return (
-        <Field label={props?.label ?? 'Зображення'}>
-            {value
-                ? <Show name={value} onChange={handleChange} />
-                : <Choose onChange={handleChange} required={props.required} />
-            }
-        </Field>
-    )
+    return <Field label={props?.label ?? 'Зображення'}>
+        {value
+            ? <Show name={value} onChange={props?.name ? null : handleChange} />
+            : <Choose onChange={handleChange} library={!props?.name}
+                required={props.required} />
+        }
+    </Field>
 }

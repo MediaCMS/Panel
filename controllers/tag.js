@@ -29,7 +29,7 @@ export default {
         }
         filter(pipeline, request.query)
         const tags = await db.collection('tags')
-            .aggregate(pipeline).toArray()
+            .aggregate(pipeline, { collation: { locale: 'uk' }}).toArray()
         response.json(tags);
     },
 

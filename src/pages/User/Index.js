@@ -5,11 +5,11 @@ import Filter from './Index/Filter.js'
 
 export default function () {
 
+    const [users, setUsers] = useState([])
     const [filter, setFilter] = useState(false)
     const [params, setParams] = useState({
         status: true, _sort: { field: 'title', order: 1 }
     })
-    const [users, setUsers] = useState([])
     const context = useOutletContext()
     const navigate = useNavigate()
 
@@ -37,8 +37,7 @@ export default function () {
 
     return <>
         <Table users={users} onClick={handleClick} />
-        <Filter data={params} onChange={setParams}
-            show={filter} onChangeShow={setFilter}
-            onSubmit={handleLoad} />
+        <Filter data={params} onChange={setParams} onSubmit={handleLoad}
+            show={filter} onHide={() => setFilter(false)} />
     </>
 }

@@ -8,26 +8,11 @@ await client.connect();
 function filter(pipeline, query, callback) {
     const match = {};
     if (query?._id) {
-        match._id = {
-            $in: query._id.map(id => ObjectId(id))
-        }
-    }
-    if (query?.date) {
-        match.date = {}
-        if (query.date?.start) {
-            match.date.$gte = new Date(query.date.start)
-        }
-        if (query.date?.end) {
-            match.date.$lte = new Date(query.date.end)
-        }
+        match._id = { $in: query._id.map(id => ObjectId(id)) }
     }
     if (query?.title) {
         match.title = { $regex : query.title, $options : 'i' }
     }
-    if (query?.tag) {
-        match.tags = { $regex : query.tag, $options : 'i' }
-    }
-    if (query?.tagID) match.tags = ObjectId(query.tagID);
     if (callback) callback(match);
     if (query?.user) {
         match.user = { $regex : query.user, $options : 'i' }
@@ -37,13 +22,12 @@ function filter(pipeline, query, callback) {
     }
     if (query?._exclude) {
         match._id = {
-            $nin: query._exclude
-                .split(',').map(id => ObjectId(id))
+            $nin: query._exclude.split(',').map(id => ObjectId(id))
         }
     }
     pipeline.push({ $match: match })
     if (query?._sort) {
-        pipeline.push({ $sort: {
+        pipeline.push({ $sort: { 
             [query._sort.field]: parseInt(query._sort.order ?? 1)
         }})
     }

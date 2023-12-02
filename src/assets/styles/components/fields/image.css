@@ -1,9 +1,7 @@
-div.image {
-  & div.delete { line-height: 100%; text-align: center; 
-    position: relative; display: inline-block;
-    &:before { position: absolute; top: 45%; bottom: 0; left: 0; right: 0;
-      z-index: -1; content: "\292c"; font-size: 20rem; color: #fd0000;
-    }
-    & img:hover { opacity: 0.5; cursor: pointer; }
+div.image { position: relative;
+  & img { max-width: 100%; }
+  & div.menu { position: absolute; top: 5px; right: 5px; z-index: 1; opacity: 0.25;
+    & button { margin: 5px; }
   }
+  &:hover  {& div.menu { opacity: 1.0; }}
 }

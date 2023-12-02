@@ -36,8 +36,7 @@ export default function () {
 
     return <>
         <Table logs={logs} />
-        <Filter data={params} onChange={setParams}
-            show={filter} onChangeShow={setFilter}
-            onSubmit={handleLoad} />
+        <Filter data={params} onChange={setParams} onSubmit={handleLoad}
+            show={filter} onHide={() => setFilter(false)} />
     </>
 }

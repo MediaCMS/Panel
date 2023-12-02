@@ -37,10 +37,10 @@ export default function (props) {
                 )
             })}
         </div>
-        <Index tag={tag} setTag={setTag} onChange={handleLoad}
-            onChoose={props.onChoose} />
-        <Editor show={props.upload} onHide={() => props.setUpload(false)}
-            onChange={handleLoad} title="Завантаження зображення"
-            size="lg" as="modal" />
+        {tag && <Index tag={tag} setTag={setTag} onChange={handleLoad}
+            onChoose={props.onChoose} />}
+        {props.upload && <Editor onChange={handleLoad}
+            show={props.upload} onHide={() => props.setUpload(false)}
+            title="Завантаження зображення" size="lg" as="modal" />}
     </>
 }

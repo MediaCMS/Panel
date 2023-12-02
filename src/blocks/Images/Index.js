@@ -14,18 +14,21 @@ export default function (props) {
     const context = useOutletContext()
 
     const handleLoad = async () => {
-        if (!props.tag) return
+        //if (!props.tag) return
         const images = await context.api.panel.get('/images', {
             params: { 'tagID': props.tag._id }
         })
-        setFullScreen(images.length > 5 ? true : false)
-        setSize(images.length > 2 ? 'xl' : 'lg')
-        setImages(images)
+        if (images.length) {
+            setFullScreen(images.length > 5 ? true : false)
+            setSize(images.length > 2 ? 'xl' : 'lg')
+            setImages(images)
+        } else {
+            props.setTag()
+        }
         props.onChange()
     }
 
     const handleClick = async image => {
-        console.log('handleClick', image)
         if (props.onChoose) {
             props.onChoose(image)
         } else {
@@ -40,7 +43,7 @@ export default function (props) {
         <Modal show={!!props.tag} size={size} fullscreen={fullScreen}
             onHide={() => props.setTag()}>
             <Modal.Header closeButton>
-                <Modal.Title className="flex-grow-1">{props.title}</Modal.Title>
+                <Modal.Title className="flex-grow-1">{props.tag.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Images>
@@ -52,7 +55,6 @@ export default function (props) {
             </Modal.Body>
         </Modal>
         <Editor id={image._id} show={editor} onHide={() => setEditor(false)}
-            onChange={handleLoad} title="Редагування зображення"
-            size="lg" as="modal" />
+            onChange={handleLoad} title="Редагування зображення" />
     </>
 }

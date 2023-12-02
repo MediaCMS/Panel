@@ -12,12 +12,6 @@ export default [
         level: 3
     },
     {
-        title: 'Галереї',
-        description: 'Список галерей публікацій',
-        path: '/galleries/list',
-        level: 3
-    },
-    {
         title: 'Мітки',
         description: 'Список міток публікацій',
         path: '/tags/list',

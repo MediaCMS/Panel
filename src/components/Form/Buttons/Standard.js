@@ -18,6 +18,6 @@ export default props => {
                 Видалити
             </Button>
         )}
-        <Button type="submit">Зберегти</Button>
+        <Button type="submit" variant="success">Зберегти</Button>
     </>
 }
