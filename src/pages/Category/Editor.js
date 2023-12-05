@@ -1,43 +1,32 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default () => {
+export default (props) => {
 
     const [category, setCategory] = useState({ order: 30 })
     const context = useOutletContext()
-    const navigate = useNavigate()
-    const params = useParams()
 
     const handleSubmit = async () => {
-        params?.id
-            ? await context.api.panel.put('/categories/' + params.id, category)
+        props?.id
+            ? await context.api.panel.put('/categories/' + props.id, category)
             : await context.api.panel.post('/categories', category)
-        navigate('/categories/list')
+        props.onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/categories/' + params.id)
-        navigate('/categories/list')
+        await context.api.panel.delete('/categories/' + props.id)
+        props.onChange()
     }
 
-    useEffect(() => {
-        context.init({
-            title: 'Категорії / Редактор',
-            submenu: [
-                { title: 'Закрити', path: '/categories/list' }
-            ]
-        })
-    }, [])
-
     useEffect(async () => {
-        params?.id && setCategory(
-            await context.api.panel.get('/categories/' + params.id)
+        props?.id && setCategory(
+            await context.api.panel.get('/categories/' + props.id)
         )
     }, [])
 
     return (
-        <Form data={category} onChange={setCategory}
+        <Form {...props} data={category} onChange={setCategory}
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="3">

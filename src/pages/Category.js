@@ -1,4 +1,56 @@
-import Index from './Category/Index.js'
+import React, { useState, useEffect } from 'react'
+import { useOutletContext } from 'react-router-dom'
+import Table, { Row, Cell } from '../components/Table.js'
 import Editor from './Category/Editor.js'
 
-export default { Index, Editor }
+export default function () {
+
+    const [id, setID] = useState()
+    const [categories, setCategories] = useState([])
+    const [editor, setEditor] = useState(false)
+    const context = useOutletContext()
+
+    const handleLoad = async () => {
+        setCategories(
+            await context.api.panel.get('/categories')
+        )
+    }
+
+    const handleClick = id => {
+        setID(id)
+        setEditor(true)
+    }
+
+    const handleHide = () => {
+        setID()
+        setEditor(false)
+    }
+
+    useEffect(() => {
+        context.init({
+            title: 'Категорії',
+            submenu: [{
+                title: 'Створити',
+                onClick: () => setEditor(true)
+            }],
+            width: 'small'
+        })
+    }, [])
+
+    useEffect(handleLoad, [])
+
+    return <>
+        <Table columns={['Назва', 'Посилання', 'Сортування']}>
+            {categories.map(category => (
+                <Row status={category.status} key={category._id}
+                    onClick={() => handleClick(category._id)}>
+                    <Cell className="text-left">{category.title}</Cell>
+                    <Cell className="text-left">{category.slug}</Cell>
+                    <Cell className="text-center">{category.order}</Cell>
+                </Row>
+            ))}
+        </Table>
+        {editor && <Editor id={id} show={editor} onHide={handleHide}
+            onChange={handleLoad} title="Редагування категорії" />}
+    </>
+}

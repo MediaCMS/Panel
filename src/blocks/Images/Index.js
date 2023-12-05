@@ -14,7 +14,7 @@ export default function (props) {
     const context = useOutletContext()
 
     const handleLoad = async () => {
-        //if (!props.tag) return
+        if (!props.tag) return
         const images = await context.api.panel.get('/images', {
             params: { 'tagID': props.tag._id }
         })

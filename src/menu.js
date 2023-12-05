@@ -38,7 +38,7 @@ export default [
     {
         title: 'Категорії',
         description: 'Список категорій публікацій',
-        path: '/categories/list',
+        path: '/categories',
         level: 2
     },
     {

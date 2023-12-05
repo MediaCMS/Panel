@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
-import Form, { Field, Row, Cell } from '../components/Form.js'
+import Form, { Field, Row } from '../components/Form.js'
 import Image from '../components/Form/Field/Image.js'
 
 export default function (props) {
 
-    const [image, setImage] = useState({})
+    const [image, setImage] = useState(props?.image ?? {})
     const context = useOutletContext()
 
     const handleSubmit = async () => {
@@ -30,14 +30,6 @@ export default function (props) {
             await context.api.panel.get('/images/' + props.id)
         )
     }, [props.id])
-
-    useEffect(async () => {
-        props?.name && setImage(
-            (await context.api.panel.get('/images', {
-                params: { name: props.name }}
-            ))[0] ?? { name: props.name }
-        )
-    }, [props.name])
 
     return (
         <Form {...props} data={image} onChange={setImage} size="lg" 

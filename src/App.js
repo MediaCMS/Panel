@@ -27,7 +27,7 @@ const routes = [
         { path: 'comments', module: Comment },
         { path: 'users', module: User },
         { path: 'pages', module: Page },
-        { path: 'categories', module: Category },
+        { path: 'categories', element: <Category /> },
         { path: 'types', element: <Type /> },
         { path: 'roles', element: <Role /> },
         { path: 'log', children: [
