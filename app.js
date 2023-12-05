@@ -29,7 +29,6 @@ if (app.get('env') === 'production') {
 }
 
 app.use(function (request, response, next) {
-    console.log(request.path, config.path, request.path.indexOf(config.path))
     if (request.path.indexOf(config.path) !== 0) {
         console.error(`302 Found (${request.path})`);
         return response.status(302)

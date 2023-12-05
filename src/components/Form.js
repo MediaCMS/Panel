@@ -1,14 +1,20 @@
 import React from 'react'
+import { Form, Modal } from 'react-bootstrap'
 import Context from '../contexts/Form.js'
-import Standard from './Form/Standard.js'
-import Modal from './Form/Modal.js'
 import Field from './Form/Field.js'
 import Control from './Form/Control.js'
 import Row from './Form/Row.js'
 import Cell from './Form/Cell.js'
+import Buttons from './Form/Buttons.js'
 import '../assets/styles/components/form.css'
 
 const FormWrapper = props => {
+
+    const title = props.title ??
+        ((props?.as && (props?.as === 'filter'))
+            ? 'Фільтрування даних'
+            : 'Редагування даних'
+        )
 
     const actions = { 
         set: (name, value, override) => {
@@ -31,14 +37,23 @@ const FormWrapper = props => {
                 new FormData(event.target)
             )
         )
+        props.onHide()
     }
 
     return (
         <Context.Provider value={actions}>
-            {(props?.as && (props.as === 'modal')) 
-                ?   <Modal {...props} onSubmit={handleSubmit} />
-                :   <Standard {...props} onSubmit={handleSubmit} />
-            }
+            <Modal show={props.show} onHide={props.onHide}
+                size={props.size ?? 'lg'} animation={true}>
+                <Form onSubmit={handleSubmit}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>{title}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>{props.children}</Modal.Body>
+                    <Modal.Footer>
+                        <Buttons {...props} />
+                    </Modal.Footer>
+                </Form>
+            </Modal>
         </Context.Provider>
     )
 }

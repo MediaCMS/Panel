@@ -1,43 +1,32 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default () => {
+export default (props) => {
 
     const [type, setType] = useState({})
     const context = useOutletContext()
-    const navigate = useNavigate()
-    const params = useParams()
 
     const handleSubmit = async () => {
-        params?.id
-            ? await context.api.panel.put('/types/' + params.id, type)
+        props?.id
+            ? await context.api.panel.put('/types/' + props.id, type)
             : await context.api.panel.post('/types', type)
-        navigate('/types/list')
+        props.onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/types/' + params.id)
-        navigate('/types/list')
+        await context.api.panel.delete('/types/' + props.id)
+        props.onChange()
     }
 
-    useEffect(() => {
-        context.init({
-            title: 'Типи / Редактор',
-            submenu: [
-                { title: 'Закрити', path: '/types/list' }
-            ]
-        })
-    }, [])
-
     useEffect(async () => {
-        params?.id && setType(
-            await context.api.panel.get('/types/' + params.id)
+        props?.id && setType(
+            await context.api.panel.get('/types/' + props.id)
         )
     }, [])
 
     return (
-        <Form data={type} onChange={setType}
+        <Form {...props} data={type} onChange={setType}
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="4">

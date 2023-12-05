@@ -41,6 +41,6 @@ export default function (props) {
             onChoose={props.onChoose} />}
         {props.upload && <Editor onChange={handleLoad}
             show={props.upload} onHide={() => props.setUpload(false)}
-            title="Завантаження зображення" size="lg" as="modal" />}
+            title="Завантаження зображення" size="lg" />}
     </>
 }

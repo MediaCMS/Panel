@@ -44,7 +44,7 @@ export default [
     {
         title: 'Типи',
         description: 'Список типів публікацій',
-        path: '/types/list',
+        path: '/types',
         level: 1
     },
     {

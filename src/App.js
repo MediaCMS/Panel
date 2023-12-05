@@ -28,7 +28,7 @@ const routes = [
         { path: 'users', module: User },
         { path: 'pages', module: Page },
         { path: 'categories', module: Category },
-        { path: 'types', module: Type },
+        { path: 'types', element: <Type /> },
         { path: 'roles', module: Role },
         { path: 'log', children: [
             { path: 'list', element: <Log.Index /> }

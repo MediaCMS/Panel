@@ -41,7 +41,7 @@ export default function (props) {
 
     return (
         <Form {...props} data={image} onChange={setImage} size="lg" 
-            onSubmit={handleSubmit} onDelete={handleDelete} as="modal">
+            onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Image name="name" label="Файл зображення" required />
             </Row>
