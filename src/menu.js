@@ -50,7 +50,7 @@ export default [
     {
         title: 'Ролі',
         description: 'Список ролей користувачів',
-        path: '/roles/list',
+        path: '/roles',
         level: 1
     },
     {

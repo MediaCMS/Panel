@@ -1,43 +1,32 @@
 import React, { useState, useEffect } from 'react'
-import { useOutletContext, useNavigate, useParams } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default function () {
+export default (props) => {
 
     const [role, setRole] = useState({ level: 5 })
     const context = useOutletContext()
-    const navigate = useNavigate()
-    const params = useParams()
 
     const handleSubmit = async () => {
-        params?.id
-            ? await context.api.panel.put('/roles/' + params.id, role)
+        props?.id
+            ? await context.api.panel.put('/roles/' + props.id, role)
             : await context.api.panel.post('/roles', role)
-        navigate('/roles/list')
+        props.onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/roles/' + params.id)
-        navigate('/roles/list')
+        await context.api.panel.delete('/roles/' + props.id)
+        props.onChange()
     }
 
-    useEffect(() => {
-        context.init({
-            title: 'Ролі / Редактор',
-            submenu: [
-                { title: 'Закрити', path: '/roles/list' }
-            ]
-        })
-    }, [])
-
     useEffect(async () => {
-        params?.id && setRole(
-            await context.api.panel.get('/roles/' + params.id)
+        props?.id && setRole(
+            await context.api.panel.get('/roles/' + props.id)
         )
     }, [])
 
     return (
-        <Form data={role} onChange={setRole}
+        <Form {...props} data={role} onChange={setRole}
             onSubmit={handleSubmit} onDelete={handleDelete}>
             <Row>
                 <Cell sm="6">

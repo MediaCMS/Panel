@@ -37,7 +37,7 @@ export default function () {
         })
     }, [])
 
-    useEffect( () => handleLoad(), [])
+    useEffect(handleLoad, [])
 
     return <>
         <Table columns={['Назва', 'Опис']}>

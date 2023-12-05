@@ -47,7 +47,11 @@ export default function (props) {
             </Row>
             <Row>
                 <Field.Title label="Заголовок зображення" required
-                    placeholder="Основна інформація" />
+                    placeholder="Львівська ратуша" />
+            </Row>
+            <Row>
+                <Field.Text name="source" label="Джерело зображення"
+                    placeholder="facebook.com" />
             </Row>
             <Row>
                 <Field.Autocomplete name="tags" label="Мітки зображення"

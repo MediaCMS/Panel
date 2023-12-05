@@ -29,7 +29,7 @@ const routes = [
         { path: 'pages', module: Page },
         { path: 'categories', module: Category },
         { path: 'types', element: <Type /> },
-        { path: 'roles', module: Role },
+        { path: 'roles', element: <Role /> },
         { path: 'log', children: [
             { path: 'list', element: <Log.Index /> }
         ] },
