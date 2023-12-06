@@ -16,16 +16,6 @@ export default () => {
         )
     }
 
-    const handleClick = id => {
-        setID(id)
-        setEditor(true)
-    }
-
-    const handleHide = () => {
-        setID()
-        setEditor(false)
-    }
-
     useEffect(() => {
         context.init({
             title: 'Категорії',
@@ -42,14 +32,15 @@ export default () => {
         <Table columns={['Назва', 'Посилання', 'Сортування']}>
             {categories.map(category => (
                 <Row status={category.status} key={category._id}
-                    onClick={() => handleClick(category._id)}>
+                    onClick={() => {setID(category._id);setEditor(true)}}>
                     <Cell className="text-left">{category.title}</Cell>
                     <Cell className="text-left">{category.slug}</Cell>
                     <Cell className="text-center">{category.order}</Cell>
                 </Row>
             ))}
         </Table>
-        {editor && <Editor id={id} show={editor} onHide={handleHide}
-            onChange={handleLoad} title="Редагування категорії" />}
+        {editor && <Editor id={id} onChange={handleLoad}
+            show={editor} onHide={() => {setID();setEditor(false)}}
+             title="Редагування категорії" />}
     </>
 }

@@ -16,16 +16,6 @@ export default () => {
         )
     }
 
-    const handleClick = id => {
-        setID(id)
-        setEditor(true)
-    }
-
-    const handleHide = () => {
-        setID()
-        setEditor(false)
-    }
-
     useEffect(() => {
         context.init({
             title: 'Ролі',
@@ -41,14 +31,15 @@ export default () => {
         <Table columns={['Назва', 'Опис', 'Рівень']}>
             {roles.map(role => (
                 <Row status={role.status} key={role._id}
-                    onClick={() => handleClick(role._id)}>
+                    onClick={() => {setID(role._id);setEditor(true)}}>
                     <Cell className="text-left">{role.title}</Cell>
                     <Cell className="text-left">{role.description}</Cell>
                     <Cell className="text-center">{role.level}</Cell>
                 </Row>
             ))}
         </Table>
-        {editor && <Editor id={id} show={editor} onHide={handleHide}
-            onChange={handleLoad} title="Редагування ролі" />}
+        {editor && <Editor id={id} onChange={handleLoad}
+            show={editor} onHide={() => {setID();setEditor(false)}}
+            title="Редагування ролі" />}
     </>
 }

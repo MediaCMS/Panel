@@ -16,16 +16,6 @@ export default () => {
         )
     }
 
-    const handleClick = id => {
-        setID(id)
-        setEditor(true)
-    }
-
-    const handleHide = () => {
-        setID()
-        setEditor(false)
-    }
-
     useEffect(() => {
         context.init({
             title: 'Типи',
@@ -42,13 +32,14 @@ export default () => {
         <Table columns={['Назва', 'Опис']}>
             {types.map(type => (
                 <Row status={type.status} key={type._id}
-                    onClick={() => handleClick(type._id)}>
+                    onClick={() => {setID(type._id);setEditor(true)}}>
                     <Cell className="text-left">{type.title}</Cell>
                     <Cell className="text-left">{type.description}</Cell>
                 </Row>
             ))}
         </Table>
-        {editor && <Editor id={id} show={editor} onHide={handleHide}
-            onChange={handleLoad} title="Редагування типу" />}
+        {editor && <Editor id={id} onChange={handleLoad}
+            show={editor} onHide={() => {setID();setEditor(false)}}
+            title="Редагування типу" />}
     </>
 }

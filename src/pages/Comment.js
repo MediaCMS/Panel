@@ -27,16 +27,6 @@ export default () => {
         )
     }
 
-    const handleClick = id => {
-        setID(id)
-        setEditor(true)
-    }
-
-    const handleHide = () => {
-        setID()
-        setEditor(false)
-    }
-
     useEffect(() => {
         context.init({
             title: 'Коментарі',
@@ -52,7 +42,7 @@ export default () => {
         <Table columns={['Дата', 'Повідомлення', 'Користувач']}>
             {comments.map(comment => (
                 <Row status={comment.status} key={comment._id}
-                    onClick={() => handleClick(comment._id)}>
+                    onClick={() => {setID(comment._id);setEditor(true)}}>
                     <Cell className="text-left text-nowrap">
                         {Moment(comment.date).format('YYYY-MM-DD')}<br /> 
                         {Moment(comment.date).format('HH:mm')}
@@ -62,9 +52,11 @@ export default () => {
                 </Row>
             ))}
         </Table>
-        {editor && <Editor id={id} show={editor} onHide={handleHide}
-            onChange={handleLoad} title="Редагування категорії" />}
-        {filter && <Filter data={params} onChange={setParams} onSubmit={handleLoad}
+        {editor && <Editor id={id} onChange={handleLoad}
+            show={editor} onHide={() => {setID();setEditor(false)}}
+            title="Редагування категорії" />}
+        {filter && <Filter data={params} 
+            onChange={setParams} onSubmit={handleLoad}
             show={filter} onHide={() => setFilter(false)} />}
     </>
 }
