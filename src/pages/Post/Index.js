@@ -1,6 +1,6 @@
+import Moment from 'moment'
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useOutletContext } from 'react-router-dom'
-import Moment from 'moment'
 import Table from './Index/Table.js'
 import Filter from './Index/Filter.js'
 
@@ -37,9 +37,8 @@ export default function () {
                 { title: 'Фільтр', onClick: () => setFilter(true) }
             ]
         })
+        handleLoad()
     }, [])
-
-    useEffect(async () => handleLoad(), [])
 
     return <>
         <Table posts={posts} onClick={handleClick} />

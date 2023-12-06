@@ -4,7 +4,7 @@ import Form, { Field, Row, Cell } from '../../../components/Form.js'
 export default (props) => {
 
     return (
-        <Form {...props}>
+        <Form {...props} as="filter">
             <Row>
                 <Cell sm={6}>
                     <Field.Date name="date.start" label="Дата (початкова)"

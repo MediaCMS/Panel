@@ -11,15 +11,15 @@ export default {
                 as: 'user'
             } },
             { $project: {
-                time: 1, body: 1, user: {
+                date: 1, text: 1, user: {
                     $arrayElemAt: ['$user.title', 0]
                 }, status: 1
             } }
         ];
         filter(pipeline, request.query, match => {
-            if (request.query?.body) {
-                match.body = {
-                    '$regex' : request.query.body, '$options' : 'i'
+            if (request.query?.text) {
+                match.text = {
+                    '$regex' : request.query.text, '$options' : 'i'
                 }
             }
             if (request.query?.user) {
@@ -29,33 +29,19 @@ export default {
             }
         })
         const comments = await db.collection('comments')
-            .aggregate(pipeline).toArray()
+            .aggregate(pipeline).toArray();
         response.json(comments);
     },
 
     read: async (request, response) => {
         const comment = await db.collection('comments')
-            .aggregate([
-                { $match: {
-                    _id: ObjectId(request.params.id) }
-                },
-                { $lookup: {
-                    from: 'users',
-                    localField: 'user',
-                    foreignField: '_id',
-                    as: 'user'
-                } },
-                { $project: {
-                    _id: 0, time: 1, body: 1, user: {
-                        $arrayElemAt: ['$user.title', 0]
-                    }, status: 1
-                } }
-            ]).next();
+            .find({ _id: ObjectId(request.params.id) }).next();
         comment ? response.json(comment) : response.sendStatus(404);
     },
 
     create: async (request, response) => {
         const comment = { ...request.body };
+        comment.date = new Date(comment.date);
         const result = await db.collection('comments')
             .insertOne(comment);
         response.end(result.insertedId.toString());
@@ -64,6 +50,8 @@ export default {
     update: async (request, response) => {
         const comment = { ...request.body };
         comment._id = ObjectId(comment._id);
+        comment.date = new Date(comment.date);
+        comment.user = ObjectId(comment.user);
         await db.collection('comments')
             .updateOne(
                 { _id: ObjectId(request.params.id) },

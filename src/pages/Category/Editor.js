@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default (props) => {
+export default props => {
 
     const [category, setCategory] = useState({ order: 30 })
     const context = useOutletContext()

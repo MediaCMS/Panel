@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useOutletContext, useNavigate } from 'react-router-dom'
 
-export default function () {
+export default () => {
 
     const context = useOutletContext()
     const navigate = useNavigate()

@@ -76,7 +76,7 @@ export default function (props) {
                 pattern={props.pattern ?? '.{1,128}'} onChange={handleChange}
                 onFocus={handleFocus} onBlur={handleBlur} autoComplete="off"
                 title={props.title ?? 'Введіть символи для пошуку'}
-                required={!!props?.required} />
+                required={!!props?.required} disabled={!!props?.disabled} />
             {!!items.length && (
                 <ul className="dropdown-menu show">
                     {items.map(item => (

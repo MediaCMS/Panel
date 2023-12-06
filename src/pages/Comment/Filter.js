@@ -1,7 +1,7 @@
 import React from 'react'
-import Form, { Field, Row, Cell } from '../../../components/Form.js'
+import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default function (props) {
+export default props => {
 
     return (
         <Form {...props} as="filter">
@@ -17,22 +17,18 @@ export default function (props) {
             </Row>
             <Row>
                 <Cell sm={6}>
-                    <Field.Text name="controller" label="Контролер"
-                        title="Фільтр за контролером" placeholder="post" />
+                    <Field.Text name="text" title="Фільтр за текстом" placeholder="львів" />
                 </Cell>
                 <Cell sm={6}>
-                    <Field.Text name="action" label="Дія"
-                        title="Фільтр за дією" placeholder="update" />
+                    <Field.Text name="user" label="Автор" title="Фільтр за автором"
+                            placeholder="вовчок" />
                 </Cell>
             </Row>
             <Row>
                 <Cell sm={6}>
-                    <Field.Text name="user" label="Користувач"
-                        title="Фільтр за користувачем" placeholder="Леся Українка" />
+                    <Field.Status as="select" />
                 </Cell>
                 <Cell sm={6}>
-                    <Field.Text name="document" label="Документ"
-                        title="Фільтр за документом" placeholder="64be976269a893de210bd7d8" />
                 </Cell>
             </Row>
         </Form>

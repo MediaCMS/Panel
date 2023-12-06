@@ -6,7 +6,7 @@ import MD5 from 'crypto-js/md5.js'
 import { Buffer } from 'buffer'
 import config from '../../config.js'
 
-export default function () {
+export default () => {
 
     const context = useOutletContext()
     const navigate = useNavigate()

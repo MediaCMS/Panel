@@ -24,7 +24,7 @@ const routes = [
         { path: 'posts', module: Post },
         { path: 'images', element: <Image /> },
         { path: 'tags', module: Tag },
-        { path: 'comments', module: Comment },
+        { path: 'comments', element: <Comment /> },
         { path: 'users', module: User },
         { path: 'pages', module: Page },
         { path: 'categories', element: <Category /> },

@@ -4,7 +4,7 @@ import Form, { Field, Row, Cell } from '../../../components/Form.js'
 export default function (props) {
 
     return (
-        <Form {...props}>
+        <Form {...props} as="filter">
             <Row>
                 <Cell sm={6}>
                     <Field.Title title="Фільтр за назвою"

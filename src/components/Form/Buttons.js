@@ -16,7 +16,7 @@ export default props => {
     return (props?.as && (props.as === 'filter'))
         ? <>
             <Button variant="secondary" onClick={props.onHide}>Закрити</Button>
-            <Button type="submit" onClick={props.onHide}>Фільтрувати</Button>
+            <Button type="submit">Фільтрувати</Button>
         </>
         : <>
             {props?.data?._id && props?.onDelete && (

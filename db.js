@@ -10,6 +10,15 @@ function filter(pipeline, query, callback) {
     if (query?._id) {
         match._id = { $in: query._id.map(id => ObjectId(id)) }
     }
+    if (query?.date) {
+        match.date = {}
+        if (query.date?.start) {
+            match.date.$gte = new Date(query.date.start)
+        }
+        if (query.date?.end) {
+            match.date.$lte = new Date(query.date.end)
+        }
+    }
     if (query?.title) {
         match.title = { $regex : query.title, $options : 'i' }
     }

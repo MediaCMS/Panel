@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom'
 import Table, { Row, Cell } from '../components/Table.js'
 import Editor from './Category/Editor.js'
 
-export default function () {
+export default () => {
 
     const [id, setID] = useState()
     const [categories, setCategories] = useState([])
@@ -35,9 +35,8 @@ export default function () {
             }],
             width: 'small'
         })
+        handleLoad()
     }, [])
-
-    useEffect(handleLoad, [])
 
     return <>
         <Table columns={['Назва', 'Посилання', 'Сортування']}>
