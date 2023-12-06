@@ -31,7 +31,7 @@ const routes = [
         { path: 'types', element: <Type /> },
         { path: 'roles', element: <Role /> },
         { path: 'log', children: [
-            { path: 'list', element: <Log.Index /> }
+            { path: 'list', element: <Log /> }
         ] },
         { path: '*', element: <NotFound /> }
     ] }

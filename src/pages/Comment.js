@@ -8,6 +8,7 @@ import Editor from './Comment/Editor.js'
 export default () => {
 
     const [id, setID] = useState()
+    const [comments, setComments] = useState([])
     const [params, setParams] = useState({
         date: {
             start: Moment().add(-5, 'years').format('YYYY-MM-DD'),
@@ -16,7 +17,6 @@ export default () => {
         status: true, 
         _sort: { field: 'date', order: -1 }
     })
-    const [comments, setComments] = useState([])
     const [filter, setFilter] = useState(false)
     const [editor, setEditor] = useState(false)
     const context = useOutletContext()
