@@ -26,8 +26,9 @@ export default props => {
     }, [])
 
     return (
-        <Form {...props} data={type} onChange={setType}
-            onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form data={type} show={props.show} onHide={props.onHide}
+            onChange={setType} onSubmit={handleSubmit} onDelete={handleDelete}
+            title="Редагування типу">
             <Row>
                 <Cell sm="4">
                     <Field.Title placeholder="Новина" maxLength="16" required />

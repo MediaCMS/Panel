@@ -2,7 +2,7 @@ export default [
     {
         title: 'Публікації', 
         description: 'Список публікацій сайту',
-        path: '/posts/list',
+        path: '/posts',
         level: 3
     },
     {
@@ -14,7 +14,7 @@ export default [
     {
         title: 'Мітки',
         description: 'Список міток публікацій',
-        path: '/tags/list',
+        path: '/tags',
         level: 3
     },
     {
@@ -26,13 +26,13 @@ export default [
     {
         title: 'Користувачі',
         description: 'Список користувачів сайту',
-        path: '/users/list',
+        path: '/users',
         level: 3
     },
     {
         title: 'Сторінки',
         description: 'Список сторінок сайту',
-        path: '/pages/list',
+        path: '/pages',
         level: 2
     },
     {
@@ -56,7 +56,7 @@ export default [
     {
         title: 'Журнал',
         description: 'Список дій користувачів',
-        path: '/log/list',
+        path: '/log',
         level: 1
     }
 ]

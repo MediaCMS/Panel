@@ -3,13 +3,11 @@ import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 import MD5 from 'crypto-js/md5.js'
 
-export default function () {
+export default props => {
 
     const [user, setUser] = useState({})
     const [roles, setRoles] = useState()
     const context = useOutletContext()
-    const navigate = useNavigate()
-    const params = useParams()
 
     const handleSubmit = async () => {
         const userNew = { ...user }
@@ -26,36 +24,28 @@ export default function () {
         }
         delete userNew.password2
         userNew?._id
-            ? await context.api.panel.put('/users/' + params.id, userNew)
+            ? await context.api.panel.put('/users/' + props.id, userNew)
             : await context.api.panel.post('/users', userNew)
-        navigate('/users/list')
+        props.onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/users/' + params.id)
-        navigate('/users/list')
+        await context.api.panel.delete('/users/' + props.id)
+        props.onChange()
     }
-
-    useEffect(() => {
-        context.init({
-            title: 'Користувачі / Редактор',
-            submenu: [
-                { title: 'Закрити', path: '/users/list' }
-            ]
-        })
-    }, [])
 
     useEffect(async () => {
         const roles = await context.api.panel.get('/roles')
         setRoles(roles)
-        params?.id
-            ? setUser(await context.api.panel.get('/users/' + params.id))
+        props?.id
+            ? setUser(await context.api.panel.get('/users/' + props.id))
             : setUser(user => ({ ...user, role: roles.at(-1)._id }))
    }, [])
 
     return (
-        <Form data={user} onChange={setUser}
-            onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form data={user} show={props.show} onHide={props.onHide}
+            onChange={setUser} onSubmit={handleSubmit} onDelete={handleDelete}
+            title="Редагування користувача">
             <Row>
                 <Cell sm="6">
                     <Field.Title placeholder="Леся Українка" required />
@@ -97,12 +87,12 @@ export default function () {
                 <Field.Description label="Нотатки"
                     placeholder="Заміжня, має двох дітей та собаку" />
             </Row>
+            <Row><Field.Image /></Row>
             <Row>
                 <Cell sm="6">
                     <Field.Status label='Видимість користувача' />
                 </Cell>
             </Row>
-            <Row><Field.Image /></Row>
         </Form>
     )
 }

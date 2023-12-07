@@ -26,8 +26,9 @@ export default props => {
     }, [])
 
     return (
-        <Form {...props} data={role} onChange={setRole}
-            onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form data={role} show={props.show} onHide={props.onHide}
+            onChange={setRole} onSubmit={handleSubmit} onDelete={handleDelete}
+            title="Редагування ролі">
             <Row>
                 <Cell sm="6">
                     <Field.Title placeholder="Читач" required />

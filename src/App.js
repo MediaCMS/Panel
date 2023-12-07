@@ -12,48 +12,28 @@ import Category from './pages/Category.js'
 import Type from './pages/Type.js'
 import Role from './pages/Role.js'
 import Log from './pages/Log.js'
-import Access from './pages/Access.js'
+import { Login, Logout } from './pages/Access.js'
 
 const routes = [
     { path: '/access', element: <Layout template={false} />, children: [
-        { path: 'login', element: <Access.Login /> },
-        { path: 'logout', element: <Access.Logout /> }
+        { path: 'login', element: <Login /> },
+        { path: 'logout', element: <Logout /> }
     ] },
     { path: '/', element: <Layout template={true} />, children: [
         { index: true, element: <Main /> },
-        { path: 'posts', module: Post },
+        { path: 'posts', element: <Post /> },
         { path: 'images', element: <Image /> },
-        { path: 'tags', module: Tag },
+        { path: 'tags', element: <Tag /> },
         { path: 'comments', element: <Comment /> },
-        { path: 'users', module: User },
-        { path: 'pages', module: Page },
+        { path: 'users', element: <User /> },
+        { path: 'pages', element: <Page /> },
         { path: 'categories', element: <Category /> },
         { path: 'types', element: <Type /> },
         { path: 'roles', element: <Role /> },
-        { path: 'log', children: [
-            { path: 'list', element: <Log /> }
-        ] },
+        { path: 'log', element: <Log /> },
         { path: '*', element: <NotFound /> }
     ] }
 ]
-
-for await (const route of routes[1].children) {
-    if (route?.module) {
-        route.children = [...route.children ?? [], ...[
-            {
-                path: 'list',
-                element: React.createElement(route.module['Index'])
-            }, {
-                path: 'editor',
-                element: React.createElement(route.module['Editor'])
-            }, {
-                path: 'editor/:id',
-                element: React.createElement(route.module['Editor'])
-            },
-            { path: '*', element: <NotFound /> }
-        ]]
-    }
-}
 
 export default function () {
 

@@ -13,10 +13,10 @@ function filter(pipeline, query, callback) {
     if (query?.date) {
         match.date = {}
         if (query.date?.start) {
-            match.date.$gte = new Date(query.date.start)
+            match.date.$gte = new Date(query.date.start + 'T00:00:00')
         }
         if (query.date?.end) {
-            match.date.$lte = new Date(query.date.end)
+            match.date.$lte = new Date(query.date.end + 'T23:59:59')
         }
     }
     if (query?.title) {

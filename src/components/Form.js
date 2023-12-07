@@ -45,7 +45,7 @@ const FormWrapper = props => {
             <Modal show={props.show} onHide={props.onHide} animation={true}
                 size={props.size ??
                     (props?.as && (props.as === 'filter') ? 'md' : 'lg')
-                }>
+                } fullscreen={props.fullscreen ?? false}>
                 <Form onSubmit={handleSubmit}>
                     <Modal.Header closeButton>
                         <Modal.Title>{title}</Modal.Title>

@@ -1,44 +1,34 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default () => {
+export default props => {
 
     const [tag, setTag] = useState({})
     const context = useOutletContext()
-    const navigate = useNavigate()
-    const params = useParams()
 
     const handleSubmit = async () => {
-        params?.id
-            ? await context.api.panel.put('/tags/' + params.id, tag)
+        props?.id
+            ? await context.api.panel.put('/tags/' + props.id, tag)
             : await context.api.panel.post('/tags', tag)
-        navigate('/tags/list')
+        props.onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/tags/' + params.id)
-        navigate('/tags/list')
+        await context.api.panel.delete('/tags/' + props.id)
+        props.onChange()
     }
 
-    useEffect(() => {
-        context.init({
-            title: 'Мітки / Редактор',
-            submenu: [
-                { title: 'Закрити', path: '/tags/list' }
-            ]
-        })
-    }, [])
-
     useEffect(async () => {
-        params?.id && setTag(
-            await context.api.panel.get('/tags/' + params.id)
+        props?.id && setTag(
+            await context.api.panel.get('/tags/' + props.id)
         )
     }, [])
 
     return (
-        <Form data={tag} onChange={setTag}
-            onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form data={tag} show={props.show} onHide={props.onHide}
+            onChange={setTag} onSubmit={handleSubmit} onDelete={handleDelete}
+            title="Редагування мітки">
             <Row>
                 <Cell sm="4">
                     <Field.Title placeholder="Львів" maxLength="32" required />

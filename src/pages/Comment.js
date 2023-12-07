@@ -17,8 +17,8 @@ export default () => {
         status: true, 
         _sort: { field: 'date', order: -1 }
     })
-    const [filter, setFilter] = useState(false)
     const [editor, setEditor] = useState(false)
+    const [filter, setFilter] = useState(false)
     const context = useOutletContext()
 
     const handleLoad = async () => {
@@ -53,8 +53,7 @@ export default () => {
             ))}
         </Table>
         {editor && <Editor id={id} onChange={handleLoad}
-            show={editor} onHide={() => {setID();setEditor(false)}}
-            title="Редагування категорії" />}
+            show={editor} onHide={() => {setID();setEditor(false)}} />}
         {filter && <Filter data={params} 
             onChange={setParams} onSubmit={handleLoad}
             show={filter} onHide={() => setFilter(false)} />}

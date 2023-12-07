@@ -5,7 +5,7 @@ export default () => {
 
     const context = useOutletContext()
 
-    useEffect(async () => {
+    useEffect(() => {
         context.init({ title: 'Головна' })
     }, [])
 

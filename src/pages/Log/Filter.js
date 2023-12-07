@@ -1,9 +1,9 @@
 import React from 'react'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default function (props) {
+export default props => {
 
-    return (
+    return <>
         <Form {...props} as="filter">
             <Row>
                 <Cell sm={6}>
@@ -38,5 +38,5 @@ export default function (props) {
                 </Cell>
             </Row>
         </Form>
-    )
+    </>
 }

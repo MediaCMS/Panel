@@ -26,8 +26,9 @@ export default props => {
     }, [])
 
     return (
-        <Form {...props} data={comment} onChange={setComment}
-            onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form data={comment} show={props.show} onHide={props.onHide}
+            onChange={setComment} onSubmit={handleSubmit} onDelete={handleDelete}
+            title="Редагування коментаря">
             <Row>
                 <Cell sm="5">
                     <Field.DateTime label="Дата коментаря" required disabled />

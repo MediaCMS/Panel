@@ -1,7 +1,7 @@
 import React from 'react'
-import Form, { Field, Row, Cell } from '../../../components/Form.js'
+import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default (props) => {
+export default props => {
 
     return (
         <Form {...props} as="filter">

@@ -39,7 +39,6 @@ export default () => {
             ))}
         </Table>
         {editor && <Editor id={id} onChange={handleLoad}
-            show={editor} onHide={() => {setID();setEditor(false)}}
-            title="Редагування ролі" />}
+            show={editor} onHide={() => {setID();setEditor(false)}} />}
     </>
 }

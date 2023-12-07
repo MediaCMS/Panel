@@ -4,7 +4,7 @@ import Moment from 'moment'
 import Table, { Row, Cell } from '../components/Table.js'
 import Filter from './Log/Filter.js'
 
-export default function () {
+export default () => {
 
     const [logs, setLogs] = useState([])
     const [params, setParams] = useState({

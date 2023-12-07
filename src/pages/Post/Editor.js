@@ -1,44 +1,33 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default function () {
+export default props => {
 
-    const params = useParams()
     const [post, setPost] = useState({})
     const [categories, setCategories] = useState([])
     const [types, setTypes] = useState([])
     const context = useOutletContext()
-    const navigate = useNavigate()
 
     const handleSubmit = async () => {
-        params?.id
-            ? await context.api.panel.put('/posts/' + params.id, post)
+        props?.id
+            ? await context.api.panel.put('/posts/' + props.id, post)
             : await context.api.panel.post('/posts', post)
-        navigate('/posts/list')
+        props.onChange()
     }
 
     const handleDelete = async () => {
-        //await context.api.panel.delete('/posts/' + params.id)
-        navigate('/posts/list')
+        await context.api.panel.delete('/posts/' + props.id)
+        props.onChange()
     }
-
-    useEffect(() => {
-        context.init({
-            title: 'Публікації / Редактор',
-            submenu: [
-                { title: 'Закрити', path: '/posts/list' }
-            ]
-        })
-    }, [])
 
     useEffect(async () => {
         const categories = await context.api.panel.get('/categories')
         setCategories(categories)
         const types = await context.api.panel.get('/types')
         setTypes(types)
-        params?.id
-            ? setPost(await context.api.panel.get('/posts/' + params.id))
+        props?.id
+            ? setPost(await context.api.panel.get('/posts/' + props.id))
             : setPost(post => ({
                 ...post, 
                 category: categories[0]._id,
@@ -47,13 +36,12 @@ export default function () {
             }))
     }, [])
 
-    useEffect(async () => {
-        console.log(post)
-    }, [post])
+    useEffect(() => console.log(post), [post])
 
     return (
-        <Form data={post} onChange={setPost}
-            onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form data={post} show={props.show} onHide={props.onHide}
+            onChange={setPost} onSubmit={handleSubmit} onDelete={handleDelete}
+            title="Редагування публікації" fullscreen={false}>
             <Row>
                 <Cell sm="5">
                     <Field.DateTime />
@@ -104,5 +92,5 @@ export default function () {
                 </Cell>
             </Row>
         </Form>
-     )
+    )
 }

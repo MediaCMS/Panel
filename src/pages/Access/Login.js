@@ -26,7 +26,7 @@ export default () => {
         )
         context.setUser(user)
         localStorage.setItem('user', JSON.stringify(user))
-        navigate('/posts/list')
+        navigate('/posts')
     }
 
     return (

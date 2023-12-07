@@ -26,8 +26,9 @@ export default props => {
     }, [])
 
     return (
-        <Form {...props} data={category} onChange={setCategory}
-            onSubmit={handleSubmit} onDelete={handleDelete}>
+        <Form data={category} show={props.show} onHide={props.onHide}
+            onChange={setCategory} onSubmit={handleSubmit} onDelete={handleDelete}
+            title="Редагування категорії">
             <Row>
                 <Cell sm="3">
                     <Field.Title placeholder="Політика" maxLength="16" required />
