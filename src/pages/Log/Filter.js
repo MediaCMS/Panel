@@ -3,7 +3,7 @@ import Form, { Field, Row, Cell } from '../../components/Form.js'
 
 export default props => {
 
-    return <>
+    return (
         <Form {...props} as="filter">
             <Row>
                 <Cell sm={6}>
@@ -38,5 +38,5 @@ export default props => {
                 </Cell>
             </Row>
         </Form>
-    </>
+    )
 }
