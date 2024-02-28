@@ -3,6 +3,7 @@ import { Form, Modal } from 'react-bootstrap'
 import Context from '../contexts/Form.js'
 import Field from './Form/Field.js'
 import Control from './Form/Control.js'
+import Table from './Form/Table.js'
 import Row from './Form/Row.js'
 import Cell from './Form/Cell.js'
 import Buttons from './Form/Buttons.js'
@@ -51,7 +52,7 @@ const FormWrapper = props => {
                         <Modal.Title>{title}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>{props.children}</Modal.Body>
-                    <Modal.Footer>
+                    <Modal.Footer className="justify-content-center">
                         <Buttons {...props} />
                     </Modal.Footer>
                 </Form>
@@ -77,4 +78,4 @@ function recurse(data, name, value, override = true) {
     }
 }
 
-export { FormWrapper as default, Field, Control, Row, Cell }
+export { FormWrapper as default, Field, Control, Table, Row, Cell }

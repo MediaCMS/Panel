@@ -1,4 +1,6 @@
 .git
+dist/tinymce
+dist/highlight
 dist/index.js
 dist/index.js.map
 node_modules

@@ -17,29 +17,30 @@ export default function (props) {
             params: { name: props.name }}
         )
         if (!images.length) return
-        setImage(images[0])
+        //setImage(images[0])
     }
 
     useEffect(handleLoad, [props.name])
 
-    return <>
-        <div className="image">
-            <img src={config.images.url + '/' + image?.name} />
-            {props.onChange &&
-                <div className="menu">
-                    {image._id
-                        ? <Button variant="danger" onClick={() => props.onChange(null)}
-                            title="Видалити зображення з поточного документа">
-                            Видалити
-                        </Button>
-                        : <Button variant="success" onClick={() => setEditor(true)}
-                            title="Зберегти зображення в бібліотеці зображень">
-                            Зберегти
-                        </Button>
-                    }
-                </div>
+    const menu = props.onChange &&
+        <div className={props?.className ?? 'menu'}>
+            {image?._id &&
+                <Button variant="success" onClick={() => setEditor(true)}
+                    title="Зберегти зображення в бібліотеці зображень">
+                    Зберегти
+                </Button>
             }
+            <Button variant="danger" onClick={() => props.onChange(null)}
+                title="Видалити зображення з поточного документа">
+                Видалити
+            </Button>
         </div>
+
+    return <>
+        {props?.as === 'menu' ? menu : <div className="image">
+            <img src={config.images.url + '/' + image?.name} />
+            {menu}
+        </div>}
         {editor && <Editor image={image} onChange={handleLoad}
             show={editor} onHide={() => setEditor(false)}
             title="Редагування зображення" />}

@@ -13,6 +13,12 @@ import Type from './pages/Type.js'
 import Role from './pages/Role.js'
 import Log from './pages/Log.js'
 import { Login, Logout } from './pages/Access.js'
+import config from './config.js'
+
+const link = document.createElement('link')
+link.setAttribute('href', config.main.url + '/article.css?v=3')
+link.setAttribute('rel', 'stylesheet')
+document.head.appendChild(link)
 
 const routes = [
     { path: '/access', element: <Layout template={false} />, children: [

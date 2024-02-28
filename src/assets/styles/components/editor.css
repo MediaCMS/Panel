@@ -1,0 +1,105 @@
+article {
+    font-size: calc(16px + 0.5vw) !important;
+    & div.block { border: solid 1px transparent;
+        &:hover { border: dashed 1px #666 !important;
+            & h2, p, figure figcaption, figure span, div.video div.url, ul,
+            table, blockquote p, blockquote span, address, pre {
+                border: dotted 1px #666;
+            }
+        }
+        > span.type { top: 5px; left: 8px; z-index: 3 }
+        & div.menu {
+            .dropdown-menu { padding: 0;
+                &[x-placement="bottom-start"],
+                &[x-placement="bottom-end"] { top: -2px !important; } 
+                &[x-placement="top-start"] { bottom: -2px !important; } 
+                & div.dropdown-item { padding: 0.1em 1em;
+                    & .btn { padding: 0; }
+                }
+            }
+        }
+        &.block-type-text {
+            p { max-width: 768px; padding: 0 5px; margin: 2em auto; }
+            &:nth-child(2) {
+                p { 
+                    color: #666 !important; 
+                    font: 300 1.1em/1.5 'Open Sans', sans-serif !important;
+                }
+           }
+        }
+        &.block-type-image {
+            figure {
+                & figcaption { padding: 8px 5px;
+                    &:empty::before { color: #000; 
+                        content: 'Садовий на лаві підсудних за корупцію';
+                    }
+                }
+                & span { padding: 5px 3px;
+                    &:empty {
+                        &.source::before { content: 'Facebook'; }
+                        &.author::before { content: 'Варіанти'; }
+                    }
+                }
+            }
+        }
+        &.block-type-video {
+            div.video { margin: 2em auto;
+                & div.url { min-width: 500px; text-align: center; margin: 2em auto;
+                    &:empty::before { content: 'https://www.youtube.com/watch?v=3JJyKWPKIcQ'; }
+                }
+            }
+        }
+        &.block-type-table {
+            & div.mce-content-body { margin: 2em auto 0;
+                & table { & tr { & td {
+                    min-width: 1em; min-height: 1em; padding: 0.4em !important;
+                }}}
+            }
+        }
+        &.block-type-list { ul { margin: 2em auto; } }
+        &.block-type-quote {
+            & blockquote { width: fit-content; margin: 2em auto;
+                & p {
+                    &:empty::before {
+                        content: '"Чужого навчайтесь та свого не цурайтеь';
+                    }
+                }
+                & footer { margin: 0.5rem; display: flex;
+                    & span { padding: 0.5rem; white-space: nowrap;
+                        &.link { color: #666; font-size: 0.7em; align-self: center;
+                            padding: 0.5rem; margin-right: auto; overflow: hidden; 
+                            &:empty::before { content: 'https://example.com'; }
+                        }
+                        &.name {
+                            &::before { content: '— '; }
+                            &:empty::before { content: 'Тарас Шевченко'; }
+                            &::after { content: ', '; }
+                        }
+                        &.work { font-style: italic;
+                            &:empty::before { content: 'Кобзар'; }
+                        }
+                    }
+                }
+            }
+        }
+        &.block-type-code { 
+            & pre {
+                &.editable { padding: 1em; }
+                & code { padding: 1em; }
+            }
+        }
+        & ul, & div.mce-content-body, & div.video figure, & div.video div.url,
+        & address, & pre {
+            width: fit-content; min-width: 150px; min-height: 1.5em;
+        }
+        & h2, & p, & figure figcaption, & figure span, & div.video div.url, & ul, 
+        & table, & blockquote p, & blockquote span, & address, & pre {
+            border: solid 1px transparent;
+        }
+        .field:empty { font-style: italic; opacity: 0.5;
+            &:focus::before { content: ''; }
+        }
+    }
+}
+.tox { width: auto !important; z-index: 9999 !important; }
+.tox-tinymce-aux { z-index: 999999!important; }

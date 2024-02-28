@@ -16,6 +16,6 @@ export default function (props) {
     return <Field type="text" name={name}
         onFocus={handleChange} onBlur={handleChange} label="Посилання"
         pattern="[a-z0-9\-]{1,128}" placeholder="відносне-посилання"
-        title="Посилання (від 1 до 128 прописних букв, цифр та дефісів)"
+        title="Посилання (від 1 до 128 прописних латинських букв, цифр та дефісів)"
         {...props} />
 }

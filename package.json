@@ -25,13 +25,16 @@
     "build": "webpack --mode production"
   },
   "dependencies": {
+    "@tinymce/tinymce-react": "^4.3.2",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "cookie-parser": "^1.4.6",
     "cookie-session": "^2.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^9.0.1",
-    "mongodb": "^4.3.1"
+    "mongodb": "^4.3.1",
+    "react-highlight": "^0.15.0",
+    "tinymce": "^6.8.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.0",

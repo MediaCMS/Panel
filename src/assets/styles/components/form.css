@@ -1,3 +1,5 @@
+
+.modal-fullscreen .modal-content { height: auto !important; }
 form {
     & input[type='datetime-local'],
     input[type='number'],

@@ -1,0 +1,104 @@
+import React,  { useState, useEffect } from 'react'
+import { Editor } from '@tinymce/tinymce-react'
+import config from '../../config.js'
+
+const initTemplate = {
+    menubar: false, width: '100%', height: '600px', resize: true, ui_mode: 'split',
+    plugins: ['charmap', 'code', 'codesample', 'link', 'nonbreaking', 'visualchars'],
+    toolbar: 'bold italic underline strikethrough subscript superscript' +
+        '| link | nonbreaking charmap | visualchars code',
+    bold: { inline: 'span', 'classes': 'bold' },
+    italic: { inline: 'span', 'classes': 'italic' },
+    underline: { inline: 'span', 'classes': 'underline', exact: true },
+    strikethrough: { inline: 'del' },
+    valid_elements: 'a[href|title|rel],strong,em,s,sup,sub,span[style]',
+    link_target_list: false,
+    link_rel_list: [
+        { title: 'No Follow', value: 'nofollow' },
+        { title: 'No Referrer', value: 'noreferrer' },
+        { title: 'External Link', value: 'external' },
+        { title: 'Empty' }
+    ]
+}
+
+export default props => {
+
+    const [init, setInit] = useState(false)
+    const [callbacks, setCallbacks] = useState([
+        editor => {
+            editor.on('init', () => {
+                const original = editor.windowManager.open
+                editor.windowManager.open = (dialog, params) => {
+                    if (dialog.title === 'Insert/Edit Link') {
+                        if (!dialog.initialData.anchor) {
+                            dialog.initialData.rel = 'nofollow'
+                        }
+                        dialog.body.items.splice(1, 1)
+                    }
+                    return original.apply(this, [dialog, params])
+                }
+                if (props?.setEditor) props.setEditor(editor)
+                if (props?.class) {
+                    editor.dom.addClass(editor.dom.getRoot(), props.class)
+                }
+            })
+        }
+    ])
+
+    const handleChange = (newValue, editor) => {
+        props.onChange(newValue, editor)
+    }
+
+    useEffect(() => {
+        const initNew = structuredClone(initTemplate)
+        const callbacksNew = [...callbacks]
+        if (props?.plugins) {
+            if (props?.reset) {
+                initNew.plugins = props.plugins
+            } else {
+                Array.isArray(props.plugins)
+                    ? initNew.plugins.push(...props.plugins)
+                    : initNew.plugins.push(props.plugins)
+            }
+        }
+        if (props?.toolbar) {
+            if (props?.reset) {
+                initNew.toolbar = props.toolbar
+            } else {
+                initNew.toolbar += ' | ' + props.toolbar
+            }
+        }
+        if (props?.valid) {
+            initNew.valid_elements += ',' + (Array.isArray(props.valid)
+                ? props.valid.join() : props.valid)
+        }
+        if (props?.class) {
+            initNew.forced_root_block_attrs = {
+                'class': props.class
+            }
+    }
+        if (props?.newline) {
+            initNew.newline_behavior = props.newline
+        }
+        if (!props?.multiline) {
+            callbacksNew.push(editor => {
+                editor.on('keydown', event => {
+                    if (event.key === 'Enter') {
+                        event.preventDefault()
+                    }
+                })
+            })
+        }
+        if (props?.callback) {
+            callbacksNew.push(props.callback)
+        }
+        initNew.setup = editor => {
+            callbacksNew.forEach(callback => callback(editor))
+        }
+        setInit(initNew)
+    }, [])
+
+    return init && <Editor tagName={props.tag ?? 'div'} value={props.value}
+        init={init} inline={true} onEditorChange={handleChange}
+        tinymceScriptSrc={config.tinymce} class="test" />
+}
