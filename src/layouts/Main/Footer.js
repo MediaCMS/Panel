@@ -7,10 +7,6 @@ export default function (props) {
 
     return (
         <footer className="text-center mt-5">
-            <div className="alert alert-info my-5 box" role="alert">
-                Демонстраційний сайт <a href="https://github.com/MediaCMS"
-                    className="alert-link">MediaCMS</a>
-            </div>
             <ul className="nav justify-content-center">
                 {props?.menu && props.menu.map((item, index) => (
                     <li className="nav-item" key={index}>

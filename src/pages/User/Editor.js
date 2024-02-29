@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 import MD5 from 'crypto-js/md5.js'
 
@@ -51,12 +51,12 @@ export default props => {
                     <Field.Title placeholder="Леся Українка" required />
                 </Cell>
                 <Cell sm="6">
-                    <Field.Slug source={user.title} placeholder="леся-українка" required />
+                    <Field.Slug source={user.title} placeholder="lesia-ukrainka" required />
                 </Cell>
             </Row>
             <Row>
                 <Cell sm="6">
-                    <Field type="tel" name="phone" label='Телефон'
+                    <Field type="text" name="phone" label='Телефон'
                         placeholder="+38 098 765-43-21" />
                 </Cell>
                 <Cell sm="6">
@@ -85,7 +85,7 @@ export default props => {
             </Row>
             <Row>
                 <Field.Description label="Нотатки"
-                    placeholder="Заміжня, має двох дітей та собаку" />
+                    placeholder="Короткий опис ..." />
             </Row>
             <Row><Field.Image /></Row>
             <Row>
