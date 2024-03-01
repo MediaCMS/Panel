@@ -27,11 +27,10 @@ export default props => {
         } else {
             delete pageNew.blocks
         }
-        console.log(pageNew, page.title, page.slug)
         setPage(pageNew)
         if (props?.id) {
             await context.api.panel.put('/pages/' + props.id, pageNew)
-            //context.api.main.delete('/cache/' + slug)
+            context.api.main.delete('/kesh/storinky/' + slug)
         } else {
             await context.api.panel.post('/pages', pageNew)
         }
@@ -60,7 +59,7 @@ export default props => {
     }, [])
 
     const url = useMemo(() => (
-        config.main.url + '/' + page.slug
+        config.main.url + '/storinky/' + page.slug
     ), [page.slug])
 
     return (
@@ -82,7 +81,7 @@ export default props => {
                 </Row>
                 <Row>
                     <Field label="Адреса сторінки">
-                        <a href={url + '?preview'} className='d-block'>{url}</a>
+                        <a href={url + '?preview=true'} className='d-block'>{url}</a>
                     </Field>
                 </Row>
             </Table>

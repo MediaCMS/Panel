@@ -43,10 +43,12 @@ const FormWrapper = props => {
 
     return (
         <Context.Provider value={actions}>
-            <Modal show={props.show} onHide={props.onHide} animation={true}
-                size={props.size ??
+            <Modal className="p-0" show={props.show} onHide={props.onHide}
+                 animation={true} size={props.size ??
                     (props?.as && (props.as === 'filter') ? 'md' : 'lg')
-                } fullscreen={props.fullscreen ?? false}>
+                } fullscreen={props.fullscreen ?? false}
+                autoFocus={true} enforceFocus={false}
+                style={{ paddingLeft: '1px' }}>
                 <Form onSubmit={handleSubmit}>
                     <Modal.Header closeButton>
                         <Modal.Title>{title}</Modal.Title>

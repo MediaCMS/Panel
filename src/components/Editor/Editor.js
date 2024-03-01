@@ -5,7 +5,7 @@ import config from '../../config.js'
 const initTemplate = {
     menubar: false, width: '100%', height: '600px', resize: true, ui_mode: 'split',
     plugins: ['charmap', 'code', 'codesample', 'link', 'nonbreaking', 'visualchars'],
-    toolbar: 'bold italic underline strikethrough subscript superscript' +
+    toolbar: 'bold italic underline strikethrough | subscript superscript' +
         '| link | nonbreaking charmap | visualchars code',
     bold: { inline: 'span', 'classes': 'bold' },
     italic: { inline: 'span', 'classes': 'italic' },
@@ -13,6 +13,12 @@ const initTemplate = {
     strikethrough: { inline: 'del' },
     valid_elements: 'a[href|title|rel],strong,em,s,sup,sub,span[style]',
     link_target_list: false,
+    formats: {
+        alignleft: { selector: 'table,tr,td,th', classes: 'left' },
+        aligncenter: { selector: 'table,tr,td,th', classes: 'center' },
+        alignright: { selector: 'table,tr,td,th', classes: 'right' },
+        alignjustify: { selector: 'table,tr,td,th', classes: 'justify' }
+    },  
     link_rel_list: [
         { title: 'No Follow', value: 'nofollow' },
         { title: 'No Referrer', value: 'noreferrer' },
@@ -76,7 +82,7 @@ export default props => {
             initNew.forced_root_block_attrs = {
                 'class': props.class
             }
-    }
+        }
         if (props?.newline) {
             initNew.newline_behavior = props.newline
         }

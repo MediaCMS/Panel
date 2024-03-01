@@ -10,8 +10,10 @@ html {
       }
     }
     & img { border-radius: 1%; }
+    h1, h2, article p, #cloud { font-weight: 500; font-family: 'Lora', serif; }
     & main {
       #body { min-height: 50vh; margin: 0 auto;
+        /*
         &.width-small { max-width: 640px; }
         &.width-medium { max-width: 768px; }
         &.width-large { max-width: 960px; }
@@ -23,6 +25,7 @@ html {
             }
           }
         }
+      */
       }
       .mw-sm { max-width: 576px; }
       .mw-md { max-width: 768px; }

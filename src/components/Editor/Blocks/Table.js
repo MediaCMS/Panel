@@ -26,6 +26,7 @@ export default props => {
 
     useEffect( () => {
         if (!editor) return
+        console.log(editor.getContent())
         const content = editor.getContent()
         const container = document.createElement('div');
         container.innerHTML = content;
@@ -34,8 +35,8 @@ export default props => {
    }, [editor, props.size])
 
     return <Editor tag="div" value={props?.text ?? tableTemplate}
-        valid={['table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'tr', 'td']}
-        toolbar="table" plugins="table" setEditor={setEditor}
+        valid={['table', 'thead', 'tbody', 'tfoot', 'tr', 'th[class]', 'td[class]']}
+        toolbar="table align" plugins="table" setEditor={setEditor}
         onChange={
             value => props.onChange('text', value.replace(/\n+/g, ''))
         } />
