@@ -26,6 +26,18 @@ export default props => {
         )
     }
 
+    const handlePaste = event => {
+        const data = (event.clipboardData
+            || window['clipboardData']).getData('text/plain')
+        const selection = window.getSelection()
+        if (!selection.rangeCount) return
+        const range = selection.getRangeAt(0)
+        range.deleteContents();
+        range.insertNode(document.createTextNode(data))
+        selection.collapseToEnd()
+        event.preventDefault()
+    }
+
     useEffect(() => {
         if (!props?.size) return
         menuDispatch(
@@ -44,15 +56,13 @@ export default props => {
         }
     }), [])
 
-    return <div
-        data-id={props.id}
-        onMouseEnter={() => setActive(true)}
-        onMouseLeave={() => setActive(false)}
+    return <div data-id={props.id}
+        onMouseEnter={() => setActive(true)} onMouseLeave={() => setActive(false)}
         className={`block block-type-${props.type} border-bottom position-relative`}>
         {React.createElement(props.component, { ...propsNew, menu: {
             state: menuState, dispatch: menuDispatch, actions: menuActions, resize 
-        }, onChange: handleChange}, null)}
-        {isActive && 
+        }, onChange: handleChange, onPaste: handlePaste }, null)}
+        {isActive &&
             (<span className="type fs-6 text-capitalize opacity-25 position-absolute">
                 <em>{props.label}</em>
             </span>)}

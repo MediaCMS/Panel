@@ -34,14 +34,10 @@ export default props => {
                 onBlur={
                     event => props.onChange('title', event.target.textContent)
                 }
-                style={{
-                    font: '600 calc(16px + 10vw) "Lora", serif',
-                    border: props?.image ? 'none' : 'dashed 1px grey; margin: 1em'
-                }}>
+                onPaste={props.onPaste}>
                 {props.title}
             </h1>
-            <div className="text-center position-absolute mx-auto"
-                style={{ maxWidth: '360px', bottom: '40px' }}>
+            <div className="text-center position-absolute mx-auto">
                 {props?.image
                     ? <Show as="menu" name={props.image} className="imageMenu"
                         onChange={() => props.onChange('image')} />

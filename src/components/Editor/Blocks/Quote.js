@@ -14,7 +14,7 @@ export default props => {
         }
     }, [])
 
-    return <blockquote data-size={props?.size}>
+    return <blockquote data-size={props?.size} onPaste={props.onPaste}>
         <Field as="p" name="text" value={props.text}
             title="Текст цитати" onChange={props.onChange} />
         <footer>

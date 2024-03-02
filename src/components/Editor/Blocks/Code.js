@@ -73,9 +73,9 @@ export default props => {
 
     return editable
         ? <pre contentEditable="true" suppressContentEditableWarning="true"
-            className="code editable" onBlur={handleChangeText}
-            dangerouslySetInnerHTML={{ __html: props.text }} />
-        : <pre data-size={props?.size} onClick={() => setEditable(true)}>
+            className="code editable" onBlur={handleChangeText} onPaste={props.onPaste}
+            dangerouslySetInnerHTML={{ __html: props.text }} key="1" />
+        : <pre data-size={props?.size} onClick={() => setEditable(true)} key="2">
             <code className="hljs" dangerouslySetInnerHTML={{ __html: text }} />
         </pre>
 }

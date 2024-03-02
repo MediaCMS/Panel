@@ -37,6 +37,7 @@ function Editor(props) {
             props.blocks.actions.remove(id)
         )
     }
+
     const menu = useMemo(() => {
         const menu = {
             insert: { 

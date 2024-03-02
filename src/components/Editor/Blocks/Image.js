@@ -44,7 +44,7 @@ export default props => {
     }, [props.url])
 
     return props?.url ? (
-        <figure>
+        <figure onPaste={props.onPaste}>
             <div className="image" data-size={props.size}>
                 {Array.isArray(props.url)
                     ? (<Carousel

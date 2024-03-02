@@ -18,6 +18,12 @@ article {
                 }
             }
         }
+        &.block-type-main {
+            div.main {
+                &.image h1 { border: dashed 1px grey; margin: 1em }
+                & > div { max-width: 360px; bottom: 40px }
+            }
+        }
         &.block-type-text {
             p { max-width: 768px; padding: 0 5px; margin: 2em auto; }
             &:nth-child(2) {

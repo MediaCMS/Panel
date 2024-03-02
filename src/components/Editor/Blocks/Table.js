@@ -26,7 +26,6 @@ export default props => {
 
     useEffect( () => {
         if (!editor) return
-        console.log(editor.getContent())
         const content = editor.getContent()
         const container = document.createElement('div');
         container.innerHTML = content;

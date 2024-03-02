@@ -13,6 +13,7 @@ const initTemplate = {
     strikethrough: { inline: 'del' },
     valid_elements: 'a[href|title|rel],strong,em,s,sup,sub,span[style]',
     link_target_list: false,
+    paste_as_text: true,
     formats: {
         alignleft: { selector: 'table,tr,td,th', classes: 'left' },
         aligncenter: { selector: 'table,tr,td,th', classes: 'center' },
