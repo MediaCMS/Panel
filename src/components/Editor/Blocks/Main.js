@@ -1,25 +1,10 @@
 import React, { useEffect } from 'react'
-//import { useOutletContext } from 'react-router-dom'
 import Show from '../../Form/Field/Image/Show.js'
 import Choose from '../../Form/Field/Image/Choose.js'
 import config from '../../../config.js'
 
 export default props => {
 
-    //const context = useOutletContext()
-
-    const handleImageUpload = image => {
-        console.log(image)
-        props.onChange('image', image)
-    }
-    /*
-    const handleImageRemove = async () => {
-        await context.api.image.delete(null, {
-            data: { image: props.image }
-        })
-        props.onChange('image')
-    }
-    */
     useEffect(() => {
         props.menu.dispatch(
             props.menu.actions.remove(['move', 'remove'])
@@ -41,7 +26,8 @@ export default props => {
                 {props?.image
                     ? <Show as="menu" name={props.image} className="imageMenu"
                         onChange={() => props.onChange('image')} />
-                    : <Choose onChange={handleImageUpload} library={true} />
+                    : <Choose library={true}
+                        onChange={value => props.onChange('image', value)} />
                 }
             </div>
         </div>

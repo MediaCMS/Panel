@@ -21,20 +21,8 @@ export default props => {
             )
         }
         props.onChange('url', url.length > 1 ? url : url[0])
-        console.log(url)
     }
-/*
-    const handleRemove = async () => {
-        const images = Array.isArray(props.url)
-            ? props.url : [props.url]
-        for await (const image of images) {
-            await context.api.image.delete(
-                null, { params: { image } }
-            )
-        }
-        props.onChange()
-    }
-*/
+
     useEffect(() => {
         if (!props?.url) return
         props.menu.dispatch(
@@ -43,8 +31,8 @@ export default props => {
         if (!props?.size) props.onChange('size', 'full')
     }, [props.url])
 
-    return props?.url ? (
-        <figure onPaste={props.onPaste}>
+    return props?.url
+        ? <figure onPaste={props.onPaste}>
             <div className="image" data-size={props.size}>
                 {Array.isArray(props.url)
                     ? (<Carousel
@@ -69,9 +57,7 @@ export default props => {
             <Field as="figcaption" name="title" value={props.title}
                 title="Підпис зображення" onChange={props.onChange} />
         </figure>
-    ) : (
-        <Form.Control type="file" onChange={handleUpload}
+        : <Form.Control type="file" onChange={handleUpload}
             title="Оберіть зображення для заантаження" multiple
             className="my-5 mx-auto" style={{ maxWidth: '320px' }} />
-    )
 }
