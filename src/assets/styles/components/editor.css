@@ -20,8 +20,35 @@ article {
         }
         &.block-type-main {
             div.main {
-                &.image h1 { border: dashed 1px grey; margin: 1em }
-                & > div { max-width: 360px; bottom: 40px }
+                &:not(.image) div.text h1 { color: #333; }
+                &.image div.text h1 { border: dashed 1px grey; }
+                & div.text {
+                    & select, & input {
+                        width: auto !important; 
+                        text-align: center; background-color: transparent;
+                        text-shadow: 1px 1px black;
+                    }
+                    & div.category { width: fit-content;
+                        & select { color: black; font-weight: bold; font-size: 1.3em;
+                            letter-spacing: 0.3em; -webkit-text-stroke: 1px white;
+                            margin: 0 auto;
+                        }
+                    }
+                    & div.user { width: fit-content; 
+                        & input { 
+                            max-width: 350px; color: white; 
+                            font-style: italic; font-size: 1.3em;
+                        }
+                        ul { width: 100%; font-style: normal; text-align: center;
+                            text-shadow: none; margin: 0 auto; display: block; 
+                            li { padding: 3px 8px; margin: 0; }
+                        }
+                    }
+                    & div.date { width: fit-content; 
+                        & input { font-size: 1.3em; color: white; }
+                    }
+            }
+                & div.image { max-width: 360px; bottom: 40px }
             }
         }
         &.block-type-text {

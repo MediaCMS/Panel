@@ -6,18 +6,19 @@ import config from '../../config.js'
 
 export default props => {
 
+    const context = useOutletContext()
     const [post, setPost] = useState({})
     const [state, dispatch] = useReducer(Reducer, [{
-        id: 0, type: 'main', title: 'Найменування'
+        id: 0, type: 'main', title: 'Найменування',
+        user: context.user._id
     }])
-    const [categories, setCategories] = useState([])
     const [types, setTypes] = useState([])
     const [slug, setSlug] = useState()
-    const context = useOutletContext()
 
     const handleSubmit = async () => {
+        console.log(state[0])
         const postNew = {
-            ...post, title: state[0].title
+            ...post, title: state[0].title, category: state[0].category
         }
         if (state[0]?.image) {
             postNew.image = state[0].image
@@ -30,6 +31,7 @@ export default props => {
             delete postNew.blocks
         }
         setPost(postNew)
+        console.log(postNew)
         if (props?.id) {
             await context.api.panel.put('/posts/' + props.id, postNew)
             context.api.main.delete('/kesh/publikatsiyi/' + slug)
@@ -38,14 +40,7 @@ export default props => {
         }
         props.onChange()
     }
-/*
-    const handleSubmit = async () => {
-        props?.id
-            ? await context.api.panel.put('/posts/' + props.id, post)
-            : await context.api.panel.post('/posts', post)
-        props.onChange()
-    }
-*/
+
     const handleDelete = async () => {
         await context.api.panel.delete('/posts/' + props.id)
         props.onChange()
@@ -54,7 +49,11 @@ export default props => {
     useEffect(async () => {
         if (!props?.id) return
         const postNew = await context.api.panel.get('/posts/' + props.id)
-        const blocks = [{ id: 0, type: 'main', title: postNew?.title }]
+        console.log(postNew)
+        const blocks = [{
+            id: 0, type: 'main', date: postNew.date, title: postNew?.title,
+            category: postNew.category, user: postNew.user
+        }]
         if (postNew?.image) {
             blocks[0].image = postNew.image
         }
@@ -67,20 +66,8 @@ export default props => {
     }, [])
 
     useEffect(async () => {
-        const categories = await context.api.panel.get('/categories')
-        setCategories(categories)
         const types = await context.api.panel.get('/types')
         setTypes(types)
-        /*
-        props?.id
-            ? setPost(await context.api.panel.get('/posts/' + props.id))
-            : setPost(post => ({
-                ...post,
-                category: categories[0]._id,
-                type: types[0]._id,
-                user: context.user._id
-            }))
-        */
     }, [])
 
     const url = useMemo(() => (
@@ -89,6 +76,8 @@ export default props => {
 
     useEffect(() => console.log(post), [post])
 
+    useEffect(() => console.log(state[0]), [state])
+
     return (
         <Form data={post} show={props.show} onHide={props.onHide}
             onChange={setPost} onSubmit={handleSubmit} onDelete={handleDelete}
@@ -96,17 +85,12 @@ export default props => {
             <Editor blocks={{ state, dispatch, actions }} />
             <Table size="medium">
                 <Row>
+                    <Field.Description placeholder="Опис сторінки" required />
+                </Row>
+                <Row>
                     <Cell sm="5">
-                        <Field.DateTime />
-                    </Cell>
-                    <Cell sm="4">
-                        <Field type="select" name="category" label="Категорія">
-                            {categories.map(category => (
-                                <option value={category._id} key={category._id}>
-                                    {category.title}
-                                </option>
-                            ))}
-                        </Field>
+                        <Field.Slug source={post?.title} required
+                            placeholder="десь-колись-з-кимось-відбулась-якась-подія" />
                     </Cell>
                     <Cell sm="3">
                         <Field type="select" name="type" label="Тип">
@@ -117,34 +101,14 @@ export default props => {
                             ))}
                         </Field>
                     </Cell>
+                    <Cell sm="4">
+                        <Field.Status label="Видимість публікації" />
+                    </Cell>
                 </Row>
-                {/*
-                <Row>
-                    <Field.Title required
-                        placeholder="Десь колись з кимось відбулась якась подія" />
-                </Row>
-                */}
-                <Row>
-                    <Field.Slug source={post?.title} required
-                        placeholder="десь-колись-з-кимось-відбулась-якась-подія" />
-                </Row>
-                {/*<Row><Field.Image /></Row>*/}
-                <Row>
-                    <Field.Description placeholder="Опис сторінки" required />
-                </Row>
-                {/*<Row><Field.Body /></Row>*/}
+                
                 <Row>
                     <Field.Autocomplete name="tags" label="Мітки"
                         path="/tags" multiple required />
-                </Row>
-                <Row>
-                    <Cell sm="6">
-                        <Field.Autocomplete name="user" label="Автор"
-                            path="/users" required />
-                    </Cell>
-                    <Cell sm="6">
-                        <Field.Status label="Видимість публікації" />
-                    </Cell>
                 </Row>
                 <Row>
                     <Field label="Адреса сторінки">

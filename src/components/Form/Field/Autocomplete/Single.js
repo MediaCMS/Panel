@@ -67,11 +67,11 @@ export default function (props) {
 
     return (
         <Form.Group className={
-            'autocomplete single dropdown' + (props?.className ?? '')
+            'autocomplete single dropdown ' + (props.className ?? '')
         }>
-            <Form.Label className="d-block">
+            {props?.label && <Form.Label className="d-block">
                 {props.label ?? 'Автозаповнення'}
-            </Form.Label>
+            </Form.Label>}
             <Form.Control type="text" name="prompt" value={prompt}
                 pattern={props.pattern ?? '.{1,128}'} onChange={handleChange}
                 onFocus={handleFocus} onBlur={handleBlur} autoComplete="off"

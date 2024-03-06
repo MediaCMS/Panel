@@ -80,11 +80,11 @@ export default function (props) {
 
     return (
         <Form.Group className={
-            'autocomplete multiple dropdown' + (props?.className ?? '')          
+            'autocomplete multiple dropdown ' + (props.className ?? '')          
         }>
-            <Form.Label className="d-block">
+            {props?.label && <Form.Label className="d-block">
                 {props.label ?? 'Автозаповнення'}
-            </Form.Label>
+            </Form.Label>}
             <div className="d-flex flex-wrap row-gap-3 column-gap-2">
                 <div style={{ width: '120px' }}>
                     <Form.Control type="text" name="prompt" value={prompt} 

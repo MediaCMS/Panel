@@ -8,10 +8,10 @@ export default function (props) {
 
     return (
         <Form.Group className={props?.className}>
-            <Form.Label>{props.label}</Form.Label>
+            {props?.label && <Form.Label>{props.label}</Form.Label>}
             {props?.type
                 ? <Control {...propsNew}>{props?.children}</Control>
-                :  props.children}
+                : props.children}
         </Form.Group>
     )
 }

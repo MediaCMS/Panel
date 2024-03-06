@@ -164,8 +164,7 @@ export default {
             maxAge: config.cookie.maxAge, httpOnly: true
         });
         response.locals.user = user;
-        const { _id, ...userNew } = user;
-        response.json(userNew);
+        response.json(user);
     },
 
     logout: async (request, response) => {

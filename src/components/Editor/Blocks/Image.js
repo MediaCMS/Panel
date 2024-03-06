@@ -35,15 +35,12 @@ export default props => {
         ? <figure onPaste={props.onPaste}>
             <div className="image" data-size={props.size}>
                 {Array.isArray(props.url)
-                    ? (<Carousel
-                        nextLabel="Наступний"
-                        prevLabel="Попередній"
-                        data-bs-interval="false"
-                        data-bs-ride="false">
-                            {props.url.map((image, index) => (
-                            <Carousel.Item data-bs-interval="false" data-bs-ride="false" key={index}>
-                                    <img src={config.images.url + '/' + image} className="d-block w-100"
-                                    alt={'Зображення №' + (index + 1)} />
+                    ? (<Carousel slide={false} interval={null}
+                        nextLabel="Наступний" prevLabel="Попередній">
+                        {props.url.map((image, index) => (
+                            <Carousel.Item key={index}>
+                                <img src={config.images.url + '/' + image} className="d-block w-100"
+                                alt={'Зображення №' + (index + 1)} />
                             </Carousel.Item>
                         ))}
                     </Carousel>)

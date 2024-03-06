@@ -17,16 +17,17 @@ export default function (props) {
             params: { name: props.name }}
         )
         if (!images.length) return
-        //setImage(images[0])
+        setImage(images[0])
     }
 
     useEffect(handleLoad, [props.name])
 
     const menu = props.onChange &&
         <div className={props?.className ?? 'menu'}>
-            {image?._id &&
+            {!image?._id &&
                 <Button variant="success" onClick={() => setEditor(true)}
-                    title="Зберегти зображення в бібліотеці зображень">
+                    title="Зберегти зображення в бібліотеці зображень"
+                    className="me-2">
                     Зберегти
                 </Button>
             }
