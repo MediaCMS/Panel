@@ -5,6 +5,7 @@ import Autocomplete from '../../Form/Field/Autocomplete/Single.js'
 import DateTime from '../../Form/Field/DateTime.js'
 import Show from '../../Form/Field/Image/Show.js'
 import Choose from '../../Form/Field/Image/Choose.js'
+import Field from '../Field.js'
 import config from '../../../config.js'
 
 export default props => {
@@ -66,6 +67,12 @@ export default props => {
                     : <Choose library={true}
                         onChange={value => props.onChange('image', value)} />
                 }
+            </div>
+            <div className="copyright">
+                <Field name="source" value={props.source}
+                    title="Джерело зображення" onChange={props.onChange} />
+                <Field name="author" value={props.author}
+                    title="Автор зображення" onChange={props.onChange} />
             </div>
         </div>
     )

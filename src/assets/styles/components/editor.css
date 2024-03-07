@@ -47,8 +47,16 @@ article {
                     & div.date { width: fit-content; 
                         & input { font-size: 1.3em; color: white; }
                     }
-            }
-                & div.image { max-width: 360px; bottom: 40px }
+                }
+                & div.image { max-width: 360px; bottom: 40px; }
+                & div.copyright {
+                    & div {
+                        &:empty {
+                            &.source::before { content: 'Facebook'; }
+                            &.author::before { content: 'MediaCMS'; }
+                        }
+                    }    
+                }
             }
         }
         &.block-type-text {
@@ -67,10 +75,12 @@ article {
                         content: 'Чиновник на лаві підсудних за корупцію';
                     }
                 }
-                & span { padding: 5px 3px;
-                    &:empty {
-                        &.source::before { content: 'Facebook'; }
-                        &.author::before { content: 'MediaCMS'; }
+                & div.copyright {
+                    & div {
+                        &:empty {
+                            &.source::before { content: 'Facebook'; }
+                            &.author::before { content: 'MediaCMS'; }
+                        }
                     }
                 }
             }

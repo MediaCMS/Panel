@@ -46,10 +46,12 @@ export default props => {
                     </Carousel>)
                     : <img src={config.images.url + '/' + props.url} alt={props.title} />
                 }
-                <Field as="span" name="source" value={props.source}
-                    title="Джерело зображення" onChange={props.onChange} />
-                <Field as="span" name="author" value={props.author}
-                    title="Автор зображення" onChange={props.onChange} />
+                <div className="copyright">
+                    <Field name="source" value={props.source}
+                        title="Джерело зображення" onChange={props.onChange} />
+                    <Field name="author" value={props.author}
+                        title="Автор зображення" onChange={props.onChange} />
+                </div>
             </div>
             <Field as="figcaption" name="title" value={props.title}
                 title="Підпис зображення" onChange={props.onChange} />
