@@ -25,15 +25,13 @@ export default props => {
         }
     }, [])
 
-    return <div className="video" data-size={props.size} data-ratio={props.ratio}>{
-        props?.url 
-        ?
-            <iframe src={'https://www.youtube.com/embed/' + props.url}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen title="YouTube video player">
-            </iframe>
-        :
-            <Field as="div" name="url" value={props.url}
-                title="Посилання на відео" onChange={handleChange} />
-        }</div>
+    return props?.url 
+        ? <iframe src={'https://www.youtube.com/embed/' + props.url}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen title="YouTube video player"
+            data-size={props.size} data-ratio={props.ratio}
+            className="video">
+        </iframe>
+        : <Field as="div" name="url" value={props.url}
+            title="Посилання на відео" onChange={handleChange} />
 }

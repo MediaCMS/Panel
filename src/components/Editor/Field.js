@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 
 export default props => {
 
-    const { as, name, value, ...propsNew } = { ...props }
+    const { as, name, value, className, ...propsNew } = { ...props }
     const ref = useRef(null)
 
     const handleChange = event => {
@@ -15,7 +15,7 @@ export default props => {
         props.as ?? 'div', {
             contentEditable: "true",
             suppressContentEditableWarning: "true",
-            className: 'field ' + props.name,
+            className: 'editable ' + (props.className ?? props.name),
             onBlur: handleChange,
             onKeyDown: event => {
                 if (event.key === 'Enter') event.preventDefault()

@@ -16,9 +16,9 @@ export default props => {
     const [slug, setSlug] = useState()
 
     const handleSubmit = async () => {
-        console.log(state[0])
-        const postNew = {
-            ...post, title: state[0].title, category: state[0].category
+        const postNew = { ...post,
+            title: state[0].title,
+            category: state[0].category
         }
         if (state[0]?.image) {
             postNew.image = state[0].image
@@ -75,8 +75,6 @@ export default props => {
     ), [post.slug])
 
     useEffect(() => console.log(post), [post])
-
-    useEffect(() => console.log(state[0]), [state])
 
     return (
         <Form data={post} show={props.show} onHide={props.onHide}

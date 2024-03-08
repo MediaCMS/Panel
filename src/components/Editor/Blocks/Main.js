@@ -25,55 +25,55 @@ export default props => {
         setCategories(categories)
     }, [])
 
-    return (
-        <div className={'main' + (props?.image ? ' image' : '')}
-            style={{ backgroundImage: props?.image
-                ? `url(${config.images.url + '/' + props.image})` : ''}}>
-            <div className="text">
-                {extended && 
-                    <div className="category">
-                        <Form.Select value={props.category} title="Категорія"
-                            onChange={
-                                event => props.onChange('category', event.target.value)
-                            }>
-                            {categories.map(category => (
-                                <option value={category._id} key={category._id}>
-                                    {category.title}
-                                </option>
-                            ))}
-                        </Form.Select>
-                    </div>
+    return <div className={'main' + (props?.image ? ' image' : '')}
+        style={{ backgroundImage: props?.image?.url
+            ? `url(${config.images.url + '/' + props.image.url})` : ''}}>
+        <div className="text">
+            {extended && 
+                <div className="category">
+                    <Form.Select value={props.category} title="Категорія"
+                        onChange={
+                            event => props.onChange('category', event.target.value)
+                        }>
+                        {categories.map(category => (
+                            <option value={category._id} key={category._id}>
+                                {category.title}
+                            </option>
+                        ))}
+                    </Form.Select>
+                </div>
+            }
+            <h1 contentEditable="true" suppressContentEditableWarning="true"
+                onBlur={
+                    event => props.onChange('title', event.target.textContent)
                 }
-                <h1 contentEditable="true" suppressContentEditableWarning="true"
-                    onBlur={
-                        event => props.onChange('title', event.target.textContent)
-                    }
-                    onPaste={props.onPaste}>
-                    {props.title}
-                </h1>
-                {extended &&
-                    <Autocomplete name="user" value={props.category} label=""
-                        title="Автор" path="/users" className="user" required />
-                }
-                {extended &&
-                    <DateTime className="date" label="" />
-                }
-            </div>
-            <div className="image text-center position-absolute mx-auto">
-                {props?.image
-                    ? <Show as="menu" name={props.image} className="imageMenu"
-                        onChange={() => props.onChange('image')}
+                onPaste={props.onPaste} className="editable">
+                {props.title}
+            </h1>
+            {extended &&
+                <Autocomplete name="user" value={props.category} label=""
+                    title="Автор" path="/users" className="user" required />
+            }
+            {extended &&
+                <DateTime className="date" label="" />
+            }
+        </div>
+        <div className="image">
+            <Field name="image.source" value={props.image?.source}
+                title="Джерело зображення" className="source"
+                onChange={props.onChange} />
+            <div className="buttons">
+                {props?.image?.url
+                    ? <Show as="menu" name={props.image.url} className="menu"
+                        onChange={() => props.onChange('image.url')}
                         label="Видалити зображення" />
                     : <Choose library={true}
-                        onChange={value => props.onChange('image', value)} />
+                        onChange={value => props.onChange('image.url', value)} />
                 }
             </div>
-            <div className="copyright">
-                <Field name="source" value={props.source}
-                    title="Джерело зображення" onChange={props.onChange} />
-                <Field name="author" value={props.author}
-                    title="Автор зображення" onChange={props.onChange} />
-            </div>
+            <Field name="image.author" value={props.image?.author}
+                title="Автор зображення" className="author"
+                onChange={props.onChange} />
         </div>
-    )
+    </div>
 }

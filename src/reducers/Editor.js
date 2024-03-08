@@ -5,14 +5,14 @@ const MOVE = 'move'
 const REMOVE = 'remove'
 
 export const actions = {
-    load: (blocks, merge = false) => {
-        return { type: LOAD, payload: { blocks, merge } }
+    load: blocks => {
+        return { type: LOAD, payload: { blocks } }
     },
     insert: (id, type) => {
         return { type: INSERT, payload: { id, type } }
     },
-    update: (id, block, merge = true) => {
-        return { type: UPDATE, payload: { id, block, merge } }
+    update: (id, name, value) => {
+        return { type: UPDATE, payload: { id, name, value } }
     },
     move: (id, direction) => {
         return { type: MOVE, payload: { id, direction } }
@@ -24,11 +24,7 @@ export const actions = {
 
 export default function (state, action) {
     switch (action.type) {
-        case LOAD: {
-            return action.payload.merge
-                ? [ ...state, ...action.payload.blocks ]
-                : action.payload.blocks
-        }
+        case LOAD: return action.payload.blocks
         case INSERT: {
             const blocks = state.map(block => block)
             blocks.splice(
@@ -39,13 +35,22 @@ export default function (state, action) {
             return blocks
         }
         case UPDATE: {
-            return state.map(block => (
-                (block.id === action.payload.id) 
-                    ? action.payload.merge 
-                        ? { ...block, ...action.payload.block }
-                        : action.payload.block
-                    : block
-            ))
+            return state.map(block => {
+                if (block.id !== action.payload.id) return block
+                const names = action.payload.name.split('.')
+                const last = names.length - 1
+                names.reduce((branch, name, index) => {
+                    if (index === last) {
+                        branch[name] = action.payload.value
+                    } else {
+                        if (!(name in branch)) {
+                            branch[name] = {}
+                        }
+                        return branch[name]
+                    }
+                }, block)
+                return block
+            })
         }
         case MOVE: {
             const blocks = state.map(block => ({ ...block }))
@@ -70,7 +75,15 @@ export default function (state, action) {
                     return block
                 }
                 if (typeof action.payload.name !== 'undefined') {
-                    delete block[action.payload.name]
+                    const names = action.payload.name.split('.')
+                    const last = names.length - 1
+                    names.reduce((branch, name, index) => {
+                        if (index === last) {
+                            delete branch[name]
+                        } else {
+                            return branch[name]
+                        }
+                    }, block)
                     return block
                 }
             })

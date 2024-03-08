@@ -20,9 +20,7 @@ export default props => {
             )
         }
         props.blocks.dispatch(
-            props.blocks.actions.update(
-                props.id, { [name]: value }
-            )
+            props.blocks.actions.update(props.id, name, value)
         )
     }
 

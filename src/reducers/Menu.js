@@ -35,7 +35,6 @@ export default function (state, action) {
                         ? { ...item, ...action.payload.item }
                         : action.payload.item
                     : item
-                
             }
             break
         }

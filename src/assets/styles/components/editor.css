@@ -1,10 +1,9 @@
 article {
     font-size: calc(16px + 0.5vw) !important;
     & div.block { border: solid 1px transparent;
-        &:hover { border: dashed 1px #666 !important;
-            & h2, p, figure figcaption, figure span, div.video div.url, ul,
-            table, blockquote p, blockquote span, address, pre {
-                border: dotted 1px #666;
+        &:hover { border: dashed 1px #888 !important;
+            .editable, .field, .form-control, .form-select {
+                border: dotted 1px #888 !important;;
             }
         }
         > span.type { top: 5px; left: 8px; z-index: 3 }
@@ -21,7 +20,6 @@ article {
         &.block-type-main {
             div.main {
                 &:not(.image) div.text h1 { color: #333; }
-                &.image div.text h1 { border: dashed 1px grey; }
                 & div.text {
                     & select, & input {
                         width: auto !important; 
@@ -48,8 +46,8 @@ article {
                         & input { font-size: 1.3em; color: white; }
                     }
                 }
-                & div.image { max-width: 360px; bottom: 40px; }
-                & div.copyright {
+                & div.image {
+                    & div.buttons { max-width: 500px; bottom: 40px; padding: 5px 3px; }
                     & div {
                         &:empty {
                             &.source::before { content: 'Facebook'; }
@@ -86,15 +84,15 @@ article {
             }
         }
         &.block-type-video {
-            div.video { margin: 2em auto;
-                & div.url { min-width: 500px; text-align: center; margin: 2em auto;
-                    &:empty::before { content: 'https://www.youtube.com/watch?v=3JJyKWPKIcQ'; }
+            & div.url { min-width: 500px; text-align: center; margin: 2em auto;
+                &:empty::before {
+                    content: 'https://www.youtube.com/watch?v=3JJyKWPKIcQ';
                 }
             }
         }
         &.block-type-table {
             & div.mce-content-body { margin: 2em auto 0;
-                & table { & tr { & td {
+                & table { margin: 1em !important; & tr { & td {
                     min-width: 1em; min-height: 1em; padding: 0.4em !important;
                 }}}
             }
@@ -131,15 +129,16 @@ article {
                 & code { padding: 1em; }
             }
         }
+        /*
         & ul, & div.mce-content-body, & div.video figure, & div.video div.url,
-        & address, & pre {
-            width: fit-content; min-width: 150px; min-height: 1.5em;
+        & address, & pre, .field {
+            width: fit-content; height: fit-content; min-width: 150px; min-height: 2em;
         }
-        & h2, & p, & figure figcaption, & figure span, & div.video div.url, & ul, 
-        & table, & blockquote p, & blockquote span, & address, & pre {
-            border: solid 1px transparent;
+        */
+        .editable, .form-control, .form-select { border: dotted 1px transparent;
+            width: fit-content; height: fit-content; min-width: 150px; min-height: 1em;
         }
-        .field:empty { font-style: italic; opacity: 0.5;
+        .editable:empty { font-style: italic; opacity: 0.5;
             &:focus::before { content: ''; }
         }
     }

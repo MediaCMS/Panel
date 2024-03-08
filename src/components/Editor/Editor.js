@@ -45,9 +45,9 @@ export default props => {
                     return original.apply(this, [dialog, params])
                 }
                 if (props?.setEditor) props.setEditor(editor)
-                if (props?.class) {
-                    editor.dom.addClass(editor.dom.getRoot(), props.class)
-                }
+                editor.dom.addClass(
+                    editor.dom.getRoot(), 'editable ' + (props.class ?? '')
+                )
             })
         }
     ])
@@ -79,11 +79,6 @@ export default props => {
             initNew.valid_elements += ',' + (Array.isArray(props.valid)
                 ? props.valid.join() : props.valid)
         }
-        if (props?.class) {
-            initNew.forced_root_block_attrs = {
-                'class': props.class
-            }
-        }
         if (props?.newline) {
             initNew.newline_behavior = props.newline
         }
@@ -107,5 +102,5 @@ export default props => {
 
     return init && <Editor tagName={props.tag ?? 'div'} value={props.value}
         init={init} inline={true} onEditorChange={handleChange}
-        tinymceScriptSrc={config.tinymce} class="test" />
+        tinymceScriptSrc={config.tinymce} />
 }
