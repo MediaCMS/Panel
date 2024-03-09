@@ -45,9 +45,12 @@ export default props => {
                     return original.apply(this, [dialog, params])
                 }
                 if (props?.setEditor) props.setEditor(editor)
-                editor.dom.addClass(
-                    editor.dom.getRoot(), 'editable ' + (props.class ?? '')
-                )
+                editor.dom.addClass(editor.dom.getRoot(), 'editable')
+                if (props?.class) {
+                    props.class.split(' ').forEach(className => 
+                        editor.dom.addClass(editor.dom.getRoot(), className)
+                    )
+                }
             })
         }
     ])
