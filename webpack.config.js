@@ -1,3 +1,5 @@
+import TerserPlugin from 'terser-webpack-plugin'
+
 export default {
   mode: 'development',
   entry: { index: './src/index.js' },
@@ -19,6 +21,11 @@ export default {
         use: 'file-loader'
       }
     ]
+  },
+  optimization: {
+    minimizer: [new TerserPlugin({
+      extractComments: false,
+    })],
   },
   devtool: 'source-map',
   experiments: {
