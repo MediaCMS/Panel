@@ -7,7 +7,7 @@ const components = {}
 const types = {
     main: 'Головна', header: 'Заголовок', text: 'Текст', image: 'Зображення',
     video: 'Відео', table: 'Таблиця', list: 'Перелік', quote: 'Цитата',
-    raw: 'Неформат', address: 'Адреса', code: 'Код'
+    raw: 'Неформат', address: 'Адреса', map: 'Мапа', code: 'Код'
 }
 
 for(const type of Object.keys(types)) {

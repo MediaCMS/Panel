@@ -25,7 +25,7 @@ export default props => {
             </Row>
             <Row>
                 <Cell sm={6}>
-                    <Field.Text name="user" label="автором" title="Фільтр за автором"
+                    <Field.Text name="user" label="Автор" title="Фільтр за автором"
                         placeholder="вовчок" />
                 </Cell>
                 <Cell sm={6}>

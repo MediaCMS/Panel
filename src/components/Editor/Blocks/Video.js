@@ -5,9 +5,9 @@ const api = 'https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=
 
 export default props => {
 
-    const handleChange = async (key, value) => {
+    const handleChange = async (name, value) => {
         const id = value.match(/^https:\/\/www\.youtube\.com\/watch\?v=(.*)$/)[1]
-        props.onChange(key, id)
+        props.onChange(name, id)
         const response = await fetch(api + id)
         const data = await response.json()
         const ratio = Math.round((data.width / data.height) * 100) / 100

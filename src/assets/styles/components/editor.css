@@ -90,6 +90,11 @@ article {
                 }
             }
         }
+        &.block-type-map {
+            & textarea.code { width: 90%; min-height: 200px; display: block;
+                text-align: center; margin: 2em auto;
+            }
+        }
         &.block-type-table {
             & div.mce-content-body { margin: 2em auto 0;
                 & table { margin: 1em !important; & tr { & td {
