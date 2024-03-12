@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import Field from '../Field.js'
+import { useOutletContext } from 'react-router-dom'
+import { Form } from 'react-bootstrap'
 
 const host = 'https://www.google.com/maps/embed?pb='
 const regex = /^.*src="https:\/\/www\.google\.com\/maps\/embed\?pb=([^"]*).*$/
@@ -18,8 +19,13 @@ const placeholder = '<iframe src="https://www.google.com/maps/embed?pb='
 
 export default props => {
 
+    const context = useOutletContext()
+
     const handleChange = async event => {
         const url = event.target.value.match(regex)
+        if (!url) {
+            return context.setAlert('Невідомий формат HTML-коду')
+        }
         props.onChange('url', url[1])
     }
 
@@ -36,10 +42,9 @@ export default props => {
 
     return props?.url 
         ? <iframe src={host + props.url} data-size={props.size} className="map"
-            title="Google Map" allowFullScreen="" loading="lazy"
+            title="Google Map" allowFullScreen={true} loading="lazy"
             referrerPolicy="no-referrer-when-downgrade">
         </iframe>
-        : <Field as="textarea" name="code"
-            title="Посилання на відео" onChange={handleChange} 
-            placeholder={placeholder} />
+        : <Form.Control as="textarea" title="Посилання на відео"
+            onChange={handleChange} placeholder={placeholder} />
 }

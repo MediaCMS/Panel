@@ -84,16 +84,10 @@ article {
             }
         }
         &.block-type-video {
-            & div.url { min-width: 500px; text-align: center; margin: 2em auto;
-                &:empty::before {
-                    content: 'https://www.youtube.com/watch?v=3JJyKWPKIcQ';
-                }
-            }
+            & input { min-width: 500px; text-align: center; margin: 2em auto; }
         }
-        &.block-type-map {
-            & textarea.code { width: 90%; min-height: 200px; display: block;
-                text-align: center; margin: 2em auto;
-            }
+        &.block-type-twitter {
+            & input { min-width: 500px; text-align: center; margin: 2em auto; }
         }
         &.block-type-table {
             & div.mce-content-body { margin: 2em auto 0;
@@ -126,6 +120,11 @@ article {
                         }
                     }
                 }
+            }
+        }
+        &.block-type-map {
+            & textarea { width: 90%; min-height: 200px; display: block;
+                text-align: center; margin: 2em auto;
             }
         }
         &.block-type-code { 
