@@ -6,7 +6,7 @@ import '../assets/styles/components/editor.css'
 const components = {}
 const types = {
     main: 'Головна', header: 'Заголовок', text: 'Текст', image: 'Зображення',
-    video: 'Відео', twitter: 'Твітер', table: 'Таблиця', list: 'Перелік',
+    video: 'Відео', twitter: 'Твіттер', table: 'Таблиця', list: 'Перелік',
     quote: 'Цитата', raw: 'Неформат', address: 'Адреса', map: 'Мапа', code: 'Код'
 }
 
