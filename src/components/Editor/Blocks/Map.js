@@ -24,7 +24,7 @@ export default props => {
     const handleChange = async event => {
         const url = event.target.value.match(regex)
         if (!url) {
-            return context.setAlert('Невідомий формат HTML-коду')
+            return context.setAlert('Невідомий формат HTML-коду вставлення')
         }
         props.onChange('url', url[1])
     }
@@ -45,6 +45,6 @@ export default props => {
             title="Google Map" allowFullScreen={true} loading="lazy"
             referrerPolicy="no-referrer-when-downgrade">
         </iframe>
-        : <Form.Control as="textarea" title="Посилання на відео"
+        : <Form.Control as="textarea" title="HTML-код вкладення мапи Google Map в сайт"
             onChange={handleChange} placeholder={placeholder} />
 }

@@ -17,7 +17,7 @@ export default props => {
     const handleChange = async event => {
         const matches = event.target.value.match(regex)
         if (!matches) {
-            return context.setAlert('Невідомий формат адреси твіту')
+            return context.setAlert('Невідомий формат HTML-коду вставлення')
         }
         props.onChange('url', matches[2])
     }

@@ -1,6 +1,7 @@
 const LOAD = 'load'
 const INSERT = 'insert'
 const UPDATE = 'update'
+const MERGE = 'merge'
 const MOVE = 'move'
 const REMOVE = 'remove'
 
@@ -13,6 +14,9 @@ export const actions = {
     },
     update: (id, name, value) => {
         return { type: UPDATE, payload: { id, name, value } }
+    },
+    merge: (id, data) => {
+        return { type: MERGE, payload: { id, data } }
     },
     move: (id, direction) => {
         return { type: MOVE, payload: { id, direction } }
@@ -50,6 +54,13 @@ export default function (state, action) {
                     }
                 }, block)
                 return block
+            })
+        }
+        case MERGE: {
+            return state.map(block => {
+                return (block.id === action.payload.id)
+                    ? { ...block, ...action.payload.data }
+                    : block
             })
         }
         case MOVE: {

@@ -21,7 +21,7 @@ const pathLogin = config.path
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('dist'));
+app.use(express.static(config.root + '/dist'));
 
 if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
@@ -30,6 +30,7 @@ if (app.get('env') === 'production') {
 
 app.use(function (request, response, next) {
     if (request.path.indexOf(config.path) !== 0) {
+        console.log(config.root + '/dist/index.html')
         console.error(`302 Found (${request.path})`);
         return response.status(302)
             .sendFile(config.root + '/dist/index.html');

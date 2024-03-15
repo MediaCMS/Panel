@@ -86,6 +86,11 @@ article {
         &.block-type-video {
             & input { min-width: 500px; text-align: center; margin: 2em auto; }
         }
+        &.block-type-facebook {
+            & textarea { width: 90%; min-height: 200px; display: block;
+                text-align: center; margin: 2em auto;
+            }
+        }
         &.block-type-twitter {
             & input { min-width: 500px; text-align: center; margin: 2em auto; }
         }

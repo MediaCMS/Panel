@@ -6,8 +6,9 @@ import '../assets/styles/components/editor.css'
 const components = {}
 const types = {
     main: 'Головна', header: 'Заголовок', text: 'Текст', image: 'Зображення',
-    video: 'Відео', twitter: 'Твіттер', table: 'Таблиця', list: 'Перелік',
-    quote: 'Цитата', raw: 'Неформат', address: 'Адреса', map: 'Мапа', code: 'Код'
+    video: 'Відео', facebook: 'Фейсбук', twitter: 'Твіттер', table: 'Таблиця',
+    list: 'Перелік', quote: 'Цитата', raw: 'Неформат', address: 'Адреса',
+    map: 'Мапа', code: 'Код'
 }
 
 for(const type of Object.keys(types)) {

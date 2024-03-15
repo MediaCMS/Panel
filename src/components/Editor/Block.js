@@ -14,6 +14,12 @@ export default props => {
                 props.blocks.actions.remove(props.id)
             )
         }
+        if (typeof name === 'object'
+            && !Array.isArray(name) && name !== null) {
+            return props.blocks.dispatch(
+                props.blocks.actions.merge(props.id, name)
+            )
+        }
         if (typeof value === 'undefined') {
             return props.blocks.dispatch(
                 props.blocks.actions.remove(props.id, name)
