@@ -15,10 +15,16 @@ import Log from './pages/Log.js'
 import { Login, Logout } from './pages/Access.js'
 import config from './config.js'
 
-const link = document.createElement('link')
-link.setAttribute('href', config.main.url + '/article.css?v=3')
-link.setAttribute('rel', 'stylesheet')
-document.head.appendChild(link)
+const articleLink = document.createElement('link')
+articleLink.setAttribute('href', config.main.url + '/article.css?v=3')
+articleLink.setAttribute('rel', 'stylesheet')
+document.head.appendChild(articleLink)
+
+const twitterScript = document.createElement('script')
+twitterScript.setAttribute('src', 'https://platform.twitter.com/widgets.js')
+twitterScript.setAttribute('charset', 'utf-8')
+twitterScript.setAttribute('async', 'true')
+document.head.appendChild(twitterScript)
 
 const routes = [
     { path: '/access', element: <Layout template={false} />, children: [

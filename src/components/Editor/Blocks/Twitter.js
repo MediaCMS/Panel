@@ -1,32 +1,87 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 
-const host = 'https://platform.twitter.com/embed/Tweet.html'
-const url = '?dnt=false&embedId=twitter-widget-0&frame=false'
-    + '&hideCard=false&hideThread=false&id=0123456789'
-    + '&lang=en&origin=https%3A%2F%2Fpublish.twitter.com%2F%23'
-    + '&sessionId=b25822f74af35addadf583c4f8205ac3bae9cece'
-    + '&theme=light&widgetsVersion=2615f7e52b7e0%3A1702314776716'
-const regex = /^https:\/\/(x|twitter)\.com\/[^\/]+\/status\/(\d+)(\/)?(\?.*)?$/
+const regex = /(https:\/\/(x|twitter)\.com\/[^\/]+\/status\/\d+)\??/
 
 export default props => {
 
+    const ref = useRef()
     const context = useOutletContext()
 
-    const handleChange = async event => {
+    const handleChangeLink = async event => {
         const matches = event.target.value.match(regex)
         if (!matches) {
-            return context.setAlert('Невідомий формат HTML-коду вставлення')
+            return context.setAlert('Невідомий формат посилання')
         }
-        props.onChange('url', matches[2])
+        props.onChange('url', matches[1])
     }
 
-    return props?.url 
-        ? <iframe src={host + url.replace('0123456789', props.url)}
-            allowtransparency="true" allowFullScreen={true}
-            className="twitter" >
-        </iframe>
-        : <Form.Control title="Посилання на твіт" onChange={handleChange}
-            placeholder="https://x.com/SpaceX/status/1767205077566058934" />
+    const handleChangeCode = async event => {
+        const data = {}
+        const value = event.target.value.replace(/\s\s+/gm, ' ')
+        const url = value.match(regex)
+        if (!url) {
+            return context.setAlert('Неможу визначити посилання')
+        }
+        data.url = url[1]
+        const text = value.match(/<p[^>]*>(.*)<\/p>/)
+        if (text) {
+            data.text = text[1].trim()
+        } else {
+            context.setAlert('Неможу визначити текст')
+        }
+        const author = value.match(/&mdash; (.*) \(@([^)]+)\)/)
+        if (author) {
+            data.author = { name: author[1], login: author[2] }
+        } else {
+            context.setAlert('Неможу визначити автора')
+        }
+        const date = value.match(/<p.*>.*<\/p>.*<a.*>(.*)<\/a>/)
+        if (author) {
+            data.date =  new Date(date[1]).toISOString().slice(0, 10)
+        } else {
+            context.setAlert('Неможу визначити дату')
+        }
+        props.onChange(data)
+    }
+
+    useEffect(() => {
+        if (!ref?.current) return
+        twttr.widgets.load(ref.current)
+    }, [ref.current])
+
+
+    return props?.url
+        ? <blockquote className="twitter-tweet" ref={ref}>
+            <p lang="en" dir="ltr"
+                dangerouslySetInnerHTML={{ __html: props.text ?? 'Текст твіта' }}>
+            </p>
+            <footer>
+                &mdash; {props?.author?.name} <cite>(@{props?.author?.login})</cite>&nbsp;
+                <a href={props.url}>{props?.date}</a>
+            </footer>
+        </blockquote>
+        : <div className="twitter">
+            <p>Вставте посилання на твіт:</p>
+            <p>
+                <Form.Control title="Посилання на твіт" onChange={handleChangeLink}
+                    placeholder="https://x.com/SpaceX/status/1767205077566058934" />
+            </p>
+            <p>Або HTML-код вставки:</p>
+            <p>
+                <Form.Control as="textarea" title="HTML-код вкладення"
+                    onChange={handleChangeCode} placeholder={
+                        '<blockquote class="twitter-tweet">'
+                        + '<p lang="en" dir="ltr">'
+                        + 'And while Crew-8 was readying for launch and Crew-7 was aboard the orbiting laboratory,'
+                        +' Crew-9 was preparing for their mission at SpaceX'
+                        + '<a href="https://t.co/scr0RM0DlP">pic.twitter.com/scr0RM0DlP</a>'
+                        + '</p>&mdash; SpaceX (@SpaceX)'
+                        + '<a href="https://twitter.com/SpaceX/status/1767205077566058934?ref_src=twsrc%5Etfw">March 11, 2024</a>'
+                        + '</blockquote>\n'
+                        + '<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>'
+                    } />
+            </p>
+        </div>
 }

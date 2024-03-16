@@ -92,7 +92,15 @@ article {
             }
         }
         &.block-type-twitter {
-            & input { min-width: 500px; text-align: center; margin: 2em auto; }
+            & div.twitter { width: 90%; text-align: center; margin: 2em auto;
+                & p {
+                    & input { min-width: 500px; text-align: center; margin: 0 auto; }
+                    & textarea {
+                         min-width: 800px; min-height: 180px; text-align: center;
+                         margin: 0 auto; display: block;
+                    }
+                }
+            }
         }
         &.block-type-table {
             & div.mce-content-body { margin: 2em auto 0;
