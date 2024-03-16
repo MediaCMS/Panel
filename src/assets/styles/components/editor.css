@@ -84,22 +84,27 @@ article {
             }
         }
         &.block-type-video {
-            & input { min-width: 500px; text-align: center; margin: 2em auto; }
+            & textarea {
+                min-width: 800px; min-height: 120px; font-size: 17px;
+                text-align: center; margin: 2em auto; display: block;
+            }
         }
         &.block-type-facebook {
-            & textarea { width: 90%; min-height: 200px; display: block;
-                text-align: center; margin: 2em auto;
+            & textarea {
+                min-width: 800px; min-height: 170px; font-size: 17px;
+                text-align: center; margin: 2em auto; display: block;
             }
         }
         &.block-type-twitter {
-            & div.twitter { width: 90%; text-align: center; margin: 2em auto;
-                & p {
-                    & input { min-width: 500px; text-align: center; margin: 0 auto; }
-                    & textarea {
-                         min-width: 800px; min-height: 180px; text-align: center;
-                         margin: 0 auto; display: block;
-                    }
-                }
+            & textarea {
+                min-width: 790px; min-height: 170px; font-size: 17px;
+                text-align: center; margin: 2em auto; display: block;
+            }
+        }
+        &.block-type-map {
+            & textarea {
+                min-width: 800px; min-height: 200px; font-size: 17px;
+                text-align: center; margin: 2em auto; display: block;
             }
         }
         &.block-type-table {
@@ -133,11 +138,6 @@ article {
                         }
                     }
                 }
-            }
-        }
-        &.block-type-map {
-            & textarea { width: 90%; min-height: 200px; display: block;
-                text-align: center; margin: 2em auto;
             }
         }
         &.block-type-code { 

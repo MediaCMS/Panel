@@ -6,9 +6,9 @@ import '../assets/styles/components/editor.css'
 const components = {}
 const types = {
     main: 'Головна', header: 'Заголовок', text: 'Текст', image: 'Зображення',
-    video: 'Відео', facebook: 'Фейсбук', twitter: 'Твіттер', table: 'Таблиця',
-    list: 'Перелік', quote: 'Цитата', raw: 'Неформат', address: 'Адреса',
-    map: 'Мапа', code: 'Код'
+    video: 'Відео', facebook: 'Фейсбук', twitter: 'Твіттер', map: 'Мапа',
+    table: 'Таблиця', list: 'Перелік', quote: 'Цитата', raw: 'Неформат',
+    address: 'Адреса', code: 'Код'
 }
 
 for(const type of Object.keys(types)) {
@@ -59,12 +59,12 @@ function Editor(props) {
             }
         }
 
-        Object.entries(types).slice(1, 7)
+        Object.entries(types).slice(1, 8)
         .forEach(([type, label]) => 
             menu.insert.submenu[type] = { label }
         )
         menu.insert.submenu.other = { label: 'Інші', divider: true, submenu: {} }
-        Object.entries(types).slice(7)
+        Object.entries(types).slice(8)
         .forEach(([type, label]) => 
             menu.insert.submenu.other.submenu[type] = { label }
         )

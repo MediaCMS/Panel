@@ -2,25 +2,17 @@ import React, { useEffect, useRef } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 
-const regex = /(https:\/\/(x|twitter)\.com\/[^\/]+\/status\/\d+)\??/
-
 export default props => {
 
     const ref = useRef()
     const context = useOutletContext()
 
-    const handleChangeLink = async event => {
-        const matches = event.target.value.match(regex)
-        if (!matches) {
-            return context.setAlert('Невідомий формат посилання')
-        }
-        props.onChange('url', matches[1])
-    }
-
-    const handleChangeCode = async event => {
+    const handleChange = async event => {
         const data = {}
         const value = event.target.value.replace(/\s\s+/gm, ' ')
-        const url = value.match(regex)
+        const url = value.match(
+            /(https:\/\/(x|twitter)\.com\/[^\/]+\/status\/\d+)\??/
+        )
         if (!url) {
             return context.setAlert('Неможу визначити посилання')
         }
@@ -62,26 +54,17 @@ export default props => {
                 <a href={props.url}>{props?.date}</a>
             </footer>
         </blockquote>
-        : <div className="twitter">
-            <p>Вставте посилання на твіт:</p>
-            <p>
-                <Form.Control title="Посилання на твіт" onChange={handleChangeLink}
-                    placeholder="https://x.com/SpaceX/status/1767205077566058934" />
-            </p>
-            <p>Або HTML-код вставки:</p>
-            <p>
-                <Form.Control as="textarea" title="HTML-код вкладення"
-                    onChange={handleChangeCode} placeholder={
-                        '<blockquote class="twitter-tweet">'
-                        + '<p lang="en" dir="ltr">'
-                        + 'And while Crew-8 was readying for launch and Crew-7 was aboard the orbiting laboratory,'
-                        +' Crew-9 was preparing for their mission at SpaceX'
-                        + '<a href="https://t.co/scr0RM0DlP">pic.twitter.com/scr0RM0DlP</a>'
-                        + '</p>&mdash; SpaceX (@SpaceX)'
-                        + '<a href="https://twitter.com/SpaceX/status/1767205077566058934?ref_src=twsrc%5Etfw">March 11, 2024</a>'
-                        + '</blockquote>\n'
-                        + '<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>'
-                    } />
-            </p>
-        </div>
+        : <Form.Control as="textarea" title="HTML-код вкладення"
+            onChange={handleChange} placeholder={
+                '<blockquote class="twitter-tweet">'
+                + '<p lang="en" dir="ltr">'
+                + 'And while Crew-8 was readying for launch and Crew-7 was aboard the orbiting laboratory,'
+                +' Crew-9 was preparing for their mission at SpaceX'
+                + '<a href="https://t.co/scr0RM0DlP">pic.twitter.com/scr0RM0DlP</a>'
+                + '</p>&mdash; SpaceX (@SpaceX)'
+                + '<a href="https://twitter.com/SpaceX/status/1767205077566058934?ref_src=twsrc%5Etfw">March 11, 2024</a>'
+                + '</blockquote>'
+                + '<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>'
+            }
+        />
 }
