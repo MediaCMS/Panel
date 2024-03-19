@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 export default props => {
 
@@ -10,6 +10,12 @@ export default props => {
             ? event.target.textContent : undefined)
         ref.current.scrollLeft = 0
     }
+
+    useEffect(() => {
+        if (props?.autoFocus && !props?.value) {
+            ref.current.focus()
+        }
+    }, [ref.current])
 
     return React.createElement(
         props.as ?? 'div', {

@@ -51,6 +51,9 @@ export default props => {
                         editor.dom.addClass(editor.dom.getRoot(), className)
                     )
                 }
+                if (!props?.value) {
+                    editor.dom.getRoot().focus()
+                }
             })
         }
     ])
@@ -88,8 +91,8 @@ export default props => {
         if (!props?.multiline) {
             callbacksNew.push(editor => {
                 editor.on('keydown', event => {
-                    if (event.key === 'Enter') {
-                        event.preventDefault()
+                    if (props?.onEnter) {
+                        props.onEnter(event)
                     }
                 })
             })
@@ -105,5 +108,5 @@ export default props => {
 
     return init && <Editor tagName={props.tag ?? 'div'} value={props.value}
         init={init} inline={true} onEditorChange={handleChange}
-        tinymceScriptSrc={config.tinymce} />
+        tinymceScriptSrc={config.tinymce} autoFocus />
 }

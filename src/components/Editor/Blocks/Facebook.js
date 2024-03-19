@@ -29,7 +29,7 @@ export default props => {
             allow="autoplay;clipboard-write;encrypted-media;picture-in-picture;web-share">
         </iframe>
         : <Form.Control as="textarea" title="HTML-код вкладення"
-            onChange={handleChange} placeholder={
+            onChange={handleChange} autoFocus placeholder={
                 '<iframe src="https://www.facebook.com/plugins/post.php?href='
                 + 'https%3A%2F%2Fwww.facebook.com%2Funiversemagazinecom%2Fposts%2F'
                 + 'pfbid02o95aZCpTWn8LeD2rsbkBxcV19N7t3coBobawrpYJD6AXC5rcPQb1RMFBPRm71efzl'

@@ -42,6 +42,15 @@ export default props => {
         event.preventDefault()
     }
 
+    const handleEnter = event => {
+        if (event.key === 'Enter') {
+            props.blocks.dispatch(
+                props.blocks.actions.insert(props.id, 'text')
+            )
+            event.preventDefault()
+        }
+    }
+
     useEffect(() => {
         if (!props?.size) return
         menuDispatch(
@@ -65,7 +74,7 @@ export default props => {
         className={`block block-type-${props.type} border-bottom position-relative`}>
         {React.createElement(props.component, { ...propsNew, menu: {
             state: menuState, dispatch: menuDispatch, actions: menuActions, resize 
-        }, onChange: handleChange, onPaste: handlePaste }, null)}
+        }, onChange: handleChange, onPaste: handlePaste, onEnter: handleEnter }, null)}
         {isActive &&
             (<span className="type fs-6 text-capitalize opacity-25 position-absolute">
                 <em>{props.label}</em>

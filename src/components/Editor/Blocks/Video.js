@@ -38,13 +38,13 @@ export default props => {
             allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
             allowFullScreen title="YouTube video player" className="video">
         </iframe>
-        : <Form.Control as="textarea" title="HTML-код вкладення" onChange={handleChange}
-            placeholder={
+        : <Form.Control as="textarea" title="HTML-код вкладення"
+            onChange={handleChange} placeholder={
                 '<iframe width="560" height="315"'
                 + ' src="https://www.youtube.com/embed/k7dy1B6bOeM?si=cpvSkAV6EJYu40dh'
                 + ' title="YouTube video player" frameborder="0" allowfullscreen'
                 + ' allow="accelerometer;autoplay;clipboard-write;encrypted-media;'
                 + ' gyroscope;picture-in-picture;web-share"></iframe>'
-            }
+            } autoFocus
         />
 }

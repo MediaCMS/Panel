@@ -56,7 +56,7 @@ export default props => {
             <Field as="figcaption" name="title" value={props.title}
                 title="Підпис зображення" onChange={props.onChange} />
         </figure>
-        : <Form.Control type="file" onChange={handleUpload}
+        : <Form.Control type="file" onChange={handleUpload} autoFocus
             title="Оберіть зображення для заантаження" multiple
             className="my-5 mx-auto" style={{ maxWidth: '320px' }} />
 }

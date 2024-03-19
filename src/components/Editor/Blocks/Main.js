@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 import Autocomplete from '../../Form/Field/Autocomplete/Single.js'
@@ -10,6 +10,7 @@ import config from '../../../config.js'
 
 export default props => {
 
+    const ref = useRef()
     const [categories, setCategories] = useState([])
     const [extended] = useState(!!props?.user)
     const context = useOutletContext()
@@ -24,6 +25,8 @@ export default props => {
         const categories = await context.api.panel.get('/categories')
         setCategories(categories)
     }, [])
+
+    useEffect(() => ref.current.focus(), [ref.current])
 
     return <div className={'main' + (props?.image ? ' image' : '')}
         style={{ backgroundImage: props?.image?.url
@@ -47,11 +50,11 @@ export default props => {
                 onBlur={
                     event => props.onChange('title', event.target.textContent)
                 }
-                onPaste={props.onPaste} className="editable">
+                onPaste={props.onPaste} ref={ref} className="editable">
                 {props.title}
             </h1>
             {extended &&
-                <Autocomplete name="user" value={props.category} label=""
+                <Autocomplete name="user" value={props.user} label=""
                     title="Автор" path="/users" className="user" required />
             }
             {extended &&

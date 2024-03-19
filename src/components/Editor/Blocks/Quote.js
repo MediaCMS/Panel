@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Field from '../Field.js'
 
 export default props => {
+
+    const textRef = useRef()
 
     useEffect( () => {
         props.menu.dispatch(
@@ -15,7 +17,7 @@ export default props => {
     }, [])
 
     return <blockquote data-size={props?.size} onPaste={props.onPaste}>
-        <Field as="p" name="text" value={props.text}
+        <Field as="p" name="text" value={props.text} autoFocus
             title="Текст цитати" onChange={props.onChange} />
         <footer>
             <Field as="span" name="link" value={props.link}

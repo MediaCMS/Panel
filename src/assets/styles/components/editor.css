@@ -47,7 +47,7 @@ article {
                     }
                 }
                 & div.image {
-                    & div.buttons { max-width: 500px; bottom: 40px; padding: 5px 3px; }
+                    & div.buttons { max-width: 600px; bottom: 40px; padding: 5px 3px; }
                     & div {
                         &:empty {
                             &.source::before { content: 'Facebook'; }
@@ -160,5 +160,5 @@ article {
         }
     }
 }
-.tox { width: auto !important; z-index: 9999 !important; }
-.tox-tinymce-aux { z-index: 999999!important; }
+.tox { width: auto !important; z-index: 999 !important; }
+.tox-tinymce-aux { z-index: 999999 !important; }

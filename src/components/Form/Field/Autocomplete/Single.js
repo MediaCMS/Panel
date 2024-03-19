@@ -8,7 +8,7 @@ export default function (props) {
     const [prompt, setPrompt] = useState('')
     const [items, setItems] = useState([])
     const [title, setTitle] = useState()
-    const [value, setValue] = useState()
+    const [value, setValue] = useState(props?.value)
     const context = useOutletContext()
     const data = useContext(Context)
 
@@ -52,13 +52,13 @@ export default function (props) {
     }
 
     useEffect(async () => {
-        const value = data.get(props.name)
-        if (!value) return
+        const valueNew = value ?? data.get(props.name)
+        if (!valueNew) return
         const item = await context.api.panel
-            .get(props.path + '/' + value)
+            .get(props.path + '/' + valueNew)
         setTitle(item.title)
-        setValue(value)
-    }, [data.get(props.name)])
+        setValue(valueNew)
+    }, [])
 
     useEffect(async () => {
         if (!title) return

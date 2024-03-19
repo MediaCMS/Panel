@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import hljs from 'highlight.js'
 import config from '../../../config.js'
 import 'highlight.js/styles/androidstudio.css'
 
 export default props => {
 
+    const ref = useRef()
     const [text, setText] = useState()
     const [editable, setEditable] = useState(false)
 
@@ -71,10 +72,14 @@ export default props => {
         )
     }, [props.language])
 
+    useEffect(() => {
+        if (!('text' in props) && editable) ref.current.focus()
+    }, [ref.current])
+
     return editable
         ? <pre contentEditable="true" suppressContentEditableWarning="true"
             className="code editable" onBlur={handleChangeText} onPaste={props.onPaste}
-            dangerouslySetInnerHTML={{ __html: props.text }} key="1" />
+            dangerouslySetInnerHTML={{ __html: props.text }} key="1" ref={ref} />
         : <pre data-size={props?.size} onClick={() => setEditable(true)} key="2">
             <code className="hljs" dangerouslySetInnerHTML={{ __html: text }} />
         </pre>

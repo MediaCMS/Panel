@@ -65,6 +65,6 @@ export default props => {
                 + '<a href="https://twitter.com/SpaceX/status/1767205077566058934?ref_src=twsrc%5Etfw">March 11, 2024</a>'
                 + '</blockquote>'
                 + '<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>'
-            }
+            } autoFocus
         />
 }
