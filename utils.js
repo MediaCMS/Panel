@@ -19,11 +19,6 @@ const cleanEmpty = (obj, defaults = [undefined, null, NaN, '']) => {
 }
 
 export const parseRequest = request => {
-    console.log(request.url, request.query, request.body)
-    console.dir(request.query)
-    console.dir(request.body)
-    console.dir(JSON.stringify(request.body))
-
     request.url = decodeURI(request.url);
     // Convert request params type and remove empty
     Object.entries(request.query).map(([key, value]) => {
@@ -40,5 +35,4 @@ export const parseRequest = request => {
     });
     // Clear empty properties of object
     request.body = cleanEmpty(request.body)
-    console.log(request.url, request.query, request.body)
 }

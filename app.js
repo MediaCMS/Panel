@@ -42,7 +42,7 @@ app.use(function (request, response, next) {
 app.use(function (request, response, next) {
     parseRequest(request)
     //console.log(decodeURI(request.originalUrl));
-    console.log(request.path, request.method, request.params, request.query);
+    //console.log(request.path, request.method, request.params, request.query);
     //console.log('app.use.request.cookies', request.cookies);
     if (request.cookies?.token) {
         try {
