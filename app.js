@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import { client } from './db.js';
+import { parseRequest } from './utils.js';
 import log from './log.js';
 import router from './router.js';
 import routes from './routes.js';
@@ -39,6 +40,7 @@ app.use(function (request, response, next) {
 });
 
 app.use(function (request, response, next) {
+    parseRequest(request)
     //console.log(decodeURI(request.originalUrl));
     console.log(request.path, request.method, request.params, request.query);
     //console.log('app.use.request.cookies', request.cookies);

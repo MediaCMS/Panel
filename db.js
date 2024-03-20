@@ -27,7 +27,7 @@ function filter(pipeline, query, callback) {
         match.user = { $regex : query.user, $options : 'i' }
     }
     if (('status' in query) && (query.status !== '')) {
-        match.status = query.status === 'true';
+        match.status = query.status;
     }
     if (query?._exclude) {
         match._id = {
