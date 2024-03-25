@@ -27,7 +27,7 @@ export default [
         title: 'Користувачі',
         description: 'Список користувачів сайту',
         path: '/users',
-        level: 3
+        level: 2
     },
     {
         title: 'Сторінки',
@@ -39,7 +39,7 @@ export default [
         title: 'Категорії',
         description: 'Список категорій публікацій',
         path: '/categories',
-        level: 2
+        level: 1
     },
     {
         title: 'Типи',

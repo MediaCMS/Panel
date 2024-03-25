@@ -26,7 +26,7 @@ export default props => {
             <Row>
                 <Cell sm={6}>
                     <Field.Text name="user" label="Автор" title="Фільтр за автором"
-                        placeholder="вовчок" />
+                        placeholder="вовчок" disabled={props.user.role.level === 4} />
                 </Cell>
                 <Cell sm={6}>
                     <Field.Status as="select" />

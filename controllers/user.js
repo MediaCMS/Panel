@@ -112,6 +112,7 @@ export default {
     },
 
     login: async (request, response, next) => {
+        response.locals.user = { _id: 0 };
         const recaptcha = (await axios({
             method: 'post',
             url: config.google.recaptcha.url,
@@ -157,7 +158,7 @@ export default {
         if (!user) {
             return response.sendStatus(401);
         }
-        if (user.role.level > 3) {
+        if (user.role.level > 4) {
             return response.sendStatus(403);
         }
         response.cookie('token', jwt.sign(user, config.jwt.key), {

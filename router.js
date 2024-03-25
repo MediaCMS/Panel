@@ -18,6 +18,8 @@ for (let route of Object.entries(routes)) {
         if ('level' in action) {
             callbacks.push((request, response, next) => {
                 if (response.locals.user.role.level > action.level) {
+                    console.log(route, controller, action)
+                    console.log(response.locals.user, action.level)
                     return response.sendStatus(403);
                 }
                 next();

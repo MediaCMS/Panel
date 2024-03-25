@@ -14,9 +14,9 @@ export default {
         actions: {
             list: { path: '', method: 'get', level: 5 },
             read: { path: '/:id', method: 'get', level: 4 },
-            create: { path: '', method: 'post', level: 4, log: true },
-            update: { path: '/:id', method: 'put', level: 4, log: true },
-            delete: { path: '/:id', method: 'delete', level: 4, log: true }
+            create: { path: '', method: 'post', level: 3, log: true },
+            update: { path: '/:id', method: 'put', level: 3, log: true },
+            delete: { path: '/:id', method: 'delete', level: 3, log: true }
         }
     },
     tag:  {
@@ -53,21 +53,21 @@ export default {
     page: {
         path: '/pages',
         actions: {
-            list: { path: '', method: 'get', level: 2 },
-            read: { path: '/:id', method: 'get', level: 2 },
-            create: { path: '', method: 'post', level: 2, log: true },
-            update: { path: '/:id', method: 'put', level: 2, log: true },
-            delete: { path: '/:id', method: 'delete', level: 2, log: true }
+            list: { path: '', method: 'get', level: 3 },
+            read: { path: '/:id', method: 'get', level: 3 },
+            create: { path: '', method: 'post', level: 3, log: true },
+            update: { path: '/:id', method: 'put', level: 3, log: true },
+            delete: { path: '/:id', method: 'delete', level: 3, log: true }
         }
     },
     category: {
         path: '/categories',
         actions: {
-            list: { path: '', method: 'get', level: 4 },
+            list: { path: '', method: 'get', level: 5 },
             read: { path: '/:id', method: 'get', level: 4 },
-            create: { path: '', method: 'post', level: 2, log: true },
-            update: { path: '/:id', method: 'put', level: 2, log: true },
-            delete: { path: '/:id', method: 'delete', level: 2, log: true }
+            create: { path: '', method: 'post', level: 1, log: true },
+            update: { path: '/:id', method: 'put', level: 1, log: true },
+            delete: { path: '/:id', method: 'delete', level: 1, log: true }
         }
     },
     type: {
@@ -83,8 +83,8 @@ export default {
     role: {
         path: '/roles',
         actions: {
-            list: { path: '', method: 'get', level: 5 },
-            read: { path: '/:id', method: 'get', level: 4 },
+            list: { path: '', method: 'get', level: 2 },
+            read: { path: '/:id', method: 'get', level: 1 },
             create: { path: '', method: 'post', level: 1, log: true },
             update: { path: '/:id', method: 'put', level: 1, log: true },
             delete: { path: '/:id', method: 'delete', level: 1, log: true }
@@ -93,7 +93,7 @@ export default {
     log: {
         path: '/logs',
         actions: {
-            list: { path: '', method: 'get', level: 3 }
+            list: { path: '', method: 'get', level: 1 }
         }
     }
 }

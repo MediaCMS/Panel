@@ -24,9 +24,16 @@ export default {
         ];
         filter(pipeline, request.query, match => {
             if (request.query?.tag) {
-                match.tags = { $regex : request.query.tag, $options : 'i' }
+                match.tags = {
+                    $regex : request.query.tag, $options : 'i'
+                }
             }
         })
+        if (response.locals.user.role.level === 4) {
+            if (request.query.user !== response.locals.user.title) {
+                return response.sendStatus(403);
+            }
+        }
         const posts = await db.collection('posts')
             .aggregate(pipeline).toArray()
         response.json(posts);
@@ -56,8 +63,8 @@ export default {
         post._id = ObjectId(post._id);
         if (response.locals.user.role.level === 4) {
             const postOld = await db.collection('posts')
-                .find({ _id: post._id }).toArray();
-            if (postOld.user !== response.locals.user._id) {
+                .find({ _id: post._id }).project({ user: true }).next();
+            if (postOld.user.toString() !== response.locals.user._id) {
                 return response.sendStatus(403);
             }
         }
@@ -79,8 +86,8 @@ export default {
         const _id = new ObjectId(request.params.id);
         if (response.locals.user.role.level === 4) {
             const post = await db.collection('posts')
-                .find({ _id }).toArray();
-            if (post.user !== response.locals.user._id) {
+                .find({ _id }).next();
+            if (post.user.toString() !== response.locals.user._id) {
                 return response.sendStatus(403);
             }
         }

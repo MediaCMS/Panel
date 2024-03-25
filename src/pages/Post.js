@@ -1,25 +1,26 @@
 import Moment from 'moment'
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import Table, { Row, Cell } from '../components/Table.js'
 import Editor from './Post/Editor.js'
 import Filter from './Post/Filter.js'
 
 export default () => {
 
+    const context = useOutletContext()
     const [id, setID] = useState()
-    const [posts, setPosts] = useState([])
     const [params, setParams] = useState({
         date: {
             start: Moment().add(-5, 'years').format('YYYY-MM-DD'),
             end: Moment().format('YYYY-MM-DD'),
         },
+        user: (context.user.role.level === 4) ? context.user.title : '',
         status: true,
         _sort: { field: 'date', order: -1 }
     })
+    const [posts, setPosts] = useState([])
     const [editor, setEditor] = useState(false)
     const [filter, setFilter] = useState(false)
-    const context = useOutletContext()
 
     const handleLoad = async () => {
         setPosts(
@@ -56,7 +57,7 @@ export default () => {
         </Table>
         {editor && <Editor id={id} onChange={handleLoad}
             show={editor} onHide={() => {setID();setEditor(false)}} />}
-        {filter && <Filter data={params}
+        {filter && <Filter data={params} user={context.user}
             onChange={setParams} onSubmit={handleLoad}
             show={filter} onHide={() => setFilter(false)} />}
     </>
