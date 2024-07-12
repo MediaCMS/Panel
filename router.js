@@ -1,19 +1,34 @@
 import express from 'express';
+import jwt from 'jsonwebtoken';
 import routes from './routes.js';
+import config from './config.js';
+
+const authorization = (request, response, next) => {
+    if (request.cookies?.token) {
+        try {
+            response.locals.user = jwt.verify(
+                request.cookies.token, config.jwt.key
+            );
+        } catch (error) {
+            return response.status(401).end(error);
+        }
+    } else {
+        return response.sendStatus(403);
+    }
+    next();
+}
 
 const router = express.Router();
 
-const controllers = {};
-for (const name of Object.keys(routes)) {
-    controllers[name] = (await import(`./controllers/${name}.js`)).default;
-}
-
-for (let route of Object.entries(routes)) {
-    route = { name: route[0], ...route[1] };
-    const controller = controllers[route.name];
-    for (let action of Object.entries(route.actions)) {
-        action = { name: action[0], ...action[1] };
+for (const route of routes) {
+    const controller = (await import(
+        `./controllers/${route.name}.js`
+    )).default;
+    for (const action of route.actions) {
         const callbacks = [];
+        if (!action?.access) {
+            callbacks.push(authorization);
+        }
         if (action?.level) {
             callbacks.push((request, response, next) => {
                 if (response.locals.user.role.level > action.level) {
@@ -27,7 +42,7 @@ for (let route of Object.entries(routes)) {
                 async (request, response, next) => {
                     response.locals.controller = route.name;
                     response.locals.action = action.name;
-                    next()
+                    next();
                 }
             )
         }

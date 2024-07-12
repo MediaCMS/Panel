@@ -14,15 +14,17 @@ export default () => {
     const handleSubmit = async event => {
         event.preventDefault()
         const form = new FormData(event.target)
-        if (!form.get('g-recaptcha-response')) {
-            return context.setAlert('Підтвердіть, що ви не робот')
+        if (config.mode === 'production') {
+            if (!form.get('g-recaptcha-response')) {
+                return context.setAlert('Підтвердіть, що ви не робот')
+            }
         }
         const string = form.get('email') + ':' + MD5(form.get('password'))
         const authorization = Buffer.from(string, 'utf8').toString('base64')
         const user = await context.api.panel.post(
             '/users/login',
             { recaptcha: form.get('g-recaptcha-response') },
-            { headers: { Authorization: `Basic ${authorization}}` } }
+            { headers: { Authorization: `Basic ${authorization}}` }}
         )
         context.setUser(user)
         localStorage.setItem('user', JSON.stringify(user))

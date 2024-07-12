@@ -1,99 +1,109 @@
-export default {
-    post: {
+export default [
+    {
+        name: 'post',
         path: '/posts',
-        actions: {
-            list: { path: '', method: 'get', level: 5 },
-            read: { path: '/:id', method: 'get', level: 4 },
-            create: { path: '', method: 'post', level: 4, log: true },
-            update: { path: '/:id', method: 'put', level: 4, log: true },
-            delete: { path: '/:id', method: 'delete', level: 4, log: true }
-        }
+        actions: [
+            { name: 'list', path: '', method: 'get', level: 5 },
+            { name: 'read', path: '/:id', method: 'get', level: 4 },
+            { name: 'create', path: '', method: 'post', level: 4, log: true },
+            { name: 'update', path: '/:id', method: 'put', level: 4, log: true },
+            { name: 'delete', path: '/:id', method: 'delete', level: 4, log: true }
+        ]
     },
-    image:  {
+    {
+        name: 'image',
         path: '/images',
-        actions: {
-            list: { path: '', method: 'get', level: 5 },
-            read: { path: '/:id', method: 'get', level: 4 },
-            create: { path: '', method: 'post', level: 3, log: true },
-            update: { path: '/:id', method: 'put', level: 3, log: true },
-            delete: { path: '/:id', method: 'delete', level: 3, log: true }
-        }
+        actions: [
+            { name: 'list', path: '', method: 'get', level: 5 },
+            { name: 'read', path: '/:id', method: 'get', level: 4 },
+            { name: 'create', path: '', method: 'post', level: 3, log: true },
+            { name: 'update', path: '/:id', method: 'put', level: 3, log: true },
+            { name: 'delete', path: '/:id', method: 'delete', level: 3, log: true }
+        ]
     },
-    tag:  {
+    {
+        name: 'tag',
         path: '/tags',
-        actions: {
-            list: { path: '', method: 'get', level: 5 },
-            read: { path: '/:id', method: 'get', level: 4 },
-            create: { path: '', method: 'post', level: 3, log: true },
-            update: { path: '/:id', method: 'put', level: 3, log: true },
-            delete: { path: '/:id', method: 'delete', level: 3, log: true }
-        }
+        actions: [
+            { name: 'list', path: '', method: 'get', level: 5 },
+            { name: 'read', path: '/:id', method: 'get', level: 4 },
+            { name: 'create', path: '', method: 'post', level: 3, log: true },
+            { name: 'update', path: '/:id', method: 'put', level: 3, log: true },
+            { name: 'delete', path: '/:id', method: 'delete', level: 3, log: true }
+        ]
     },
-    comment:  {
+    {
+        name: 'comment',
         path: '/comments',
-        actions: {
-            list: { path: '', method: 'get', level: 3 },
-            read: { path: '/:id', method: 'get', level: 3, log: true },
-            update: { path: '/:id', method: 'put', level: 3, log: true },
-            delete: { path: '/:id', method: 'delete', level: 3, log: true }
-        }
+        actions: [
+            { name: 'list', path: '', method: 'get', level: 3 },
+            { name: 'read', path: '/:id', method: 'get', level: 3, log: true },
+            { name: 'update', path: '/:id', method: 'put', level: 3, log: true },
+            { name: 'delete', path: '/:id', method: 'delete', level: 3, log: true }
+        ]
     },
-    user: {
+    {
+        name: 'user',
         path: '/users',
-        actions: {
-            list: { path: '', method: 'get', level: 5 },
-            read: { path: '/:id', method: 'get', level: 4 },
-            login: { path: '/login', method: 'post', log: true },
-            create: { path: '', method: 'post', level: 2, log: true },
-            update: { path: '/:id', method: 'put', level: 2, log: true },
-            logout: { path: '/logout', method: 'delete', level: 4, log: true },
-            delete: { path: '/:id', method: 'delete', level: 2, log: true }
-        }
+        actions: [
+            { name: 'list', path: '', method: 'get', level: 5 },
+            { name: 'read', path: '/:id', method: 'get', level: 4 },
+            { name: 'login', path: '/login', method: 'post', log: true, access: true },
+            { name: 'create', path: '', method: 'post', level: 2, log: true },
+            { name: 'update', path: '/:id', method: 'put', level: 2, log: true },
+            { name: 'logout', path: '/logout', method: 'delete', level: 4, log: true },
+            { name: 'delete', path: '/:id', method: 'delete', level: 2, log: true }
+        ]
     },
-    page: {
+    {
+        name: 'page',
         path: '/pages',
-        actions: {
-            list: { path: '', method: 'get', level: 3 },
-            read: { path: '/:id', method: 'get', level: 3 },
-            create: { path: '', method: 'post', level: 3, log: true },
-            update: { path: '/:id', method: 'put', level: 3, log: true },
-            delete: { path: '/:id', method: 'delete', level: 3, log: true }
-        }
+        actions: [
+            { name: 'list', path: '', method: 'get', level: 3 },
+            { name: 'read', path: '/:id', method: 'get', level: 3 },
+            { name: 'create', path: '', method: 'post', level: 3, log: true },
+            { name: 'update', path: '/:id', method: 'put', level: 3, log: true },
+            { name: 'delete', path: '/:id', method: 'delete', level: 3, log: true }
+        ]
     },
-    category: {
+    {
+        name: 'category',
         path: '/categories',
-        actions: {
-            list: { path: '', method: 'get', level: 5 },
-            read: { path: '/:id', method: 'get', level: 4 },
-            create: { path: '', method: 'post', level: 1, log: true },
-            update: { path: '/:id', method: 'put', level: 1, log: true },
-            delete: { path: '/:id', method: 'delete', level: 1, log: true }
-        }
+        actions: [
+            { name: 'list', path: '', method: 'get', level: 5 },
+            { name: 'read', path: '/:id', method: 'get', level: 4 },
+            { name: 'create', path: '', method: 'post', level: 1, log: true },
+            { name: 'update', path: '/:id', method: 'put', level: 1, log: true },
+            { name: 'delete', path: '/:id', method: 'delete', level: 1, log: true }
+        ]
     },
-    type: {
+    {
+        name: 'type',
         path: '/types',
-        actions: {
-            list: { path: '', method: 'get', level: 5 },
-            read: { path: '/:id', method: 'get', level: 4 },
-            create: { path: '', method: 'post', level: 1, log: true },
-            update: { path: '/:id', method: 'put', level: 1, log: true },
-            delete: { path: '/:id', method: 'delete', level: 1, log: true }
-        }
+        actions: [
+            { name: 'list', path: '', method: 'get', level: 5 },
+            { name: 'read', path: '/:id', method: 'get', level: 4 },
+            { name: 'create', path: '', method: 'post', level: 1, log: true },
+            { name: 'update', path: '/:id', method: 'put', level: 1, log: true },
+            { name: 'delete', path: '/:id', method: 'delete', level: 1, log: true }
+        ]
     },
-    role: {
+    {
+        name: 'role',
         path: '/roles',
-        actions: {
-            list: { path: '', method: 'get', level: 2 },
-            read: { path: '/:id', method: 'get', level: 1 },
-            create: { path: '', method: 'post', level: 1, log: true },
-            update: { path: '/:id', method: 'put', level: 1, log: true },
-            delete: { path: '/:id', method: 'delete', level: 1, log: true }
-        }
+        actions: [
+            { name: 'list', path: '', method: 'get', level: 2 },
+            { name: 'read', path: '/:id', method: 'get', level: 1 },
+            { name: 'create', path: '', method: 'post', level: 1, log: true },
+            { name: 'update', path: '/:id', method: 'put', level: 1, log: true },
+            { name: 'delete', path: '/:id', method: 'delete', level: 1, log: true }
+        ]
     },
-    log: {
+    {
+        name: 'log',
         path: '/logs',
-        actions: {
-            list: { path: '', method: 'get', level: 1 }
-        }
+        actions: [
+            { name: 'list', path: '', method: 'get', level: 1 }
+        ]
     }
-}
+]

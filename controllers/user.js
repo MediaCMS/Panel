@@ -113,21 +113,23 @@ export default {
 
     login: async (request, response, next) => {
         response.locals.user = { _id: 0 };
-        const recaptcha = (await axios({
-            method: 'post',
-            url: config.google.recaptcha.url,
-            params: {
-                secret: config.google.recaptcha.key,
-                response: request.body.recaptcha
+        if (response.locals.mode === 'production') {
+            const recaptcha = (await axios({
+                method: 'post',
+                url: config.google.recaptcha.url,
+                params: {
+                    secret: config.google.recaptcha.key,
+                    response: request.body.recaptcha
+                }
+            })).data;
+            if (recaptcha.success !== true) {
+                return next(
+                    Error(
+                        `Помилка reCaptcha (${recaptcha['error-codes'].join(', ')})`
+                    )
+                );
             }
-        })).data;
-        if (recaptcha.success !== true) {
-            return next(
-                Error(
-                    `Помилка reCaptcha (${recaptcha['error-codes'].join(', ')})`
-                )
-            );
-        }
+        } 
         const [email, password] = Buffer
             .from(request.headers.authorization.split(' ')[1], 'base64')
             .toString().split(':');
