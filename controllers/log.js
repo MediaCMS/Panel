@@ -37,14 +37,5 @@ export default {
         const logs = await db.collection('log')
             .aggregate(pipeline).toArray();
         response.json(logs);
-    },
-
-    create: async (request, response, controller, action) => {
-        const log = { date: new Date(), controller, action };
-        if (request.params?.id) {
-            log.document = new ObjectId(request.params.id)
-        }
-        log.user = new ObjectId(response.locals.user._id);
-        db.collection('log').insertOne(log);
     }
 }

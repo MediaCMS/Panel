@@ -3,9 +3,10 @@ import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
 import { client } from './db.js';
 import { parseRequest } from './utils.js';
-import log from './log.js';
 import router from './router.js';
 import routes from './routes.js';
+import log from './log.js';
+import db, { ObjectId } from './db.js';
 import config from './config.js';
 
 const app = express();
@@ -58,6 +59,23 @@ app.use(function (request, response, next) {
     next();
 });
 
+app.use(function(request, response, next) {
+    response.on('finish', () => {
+        if (!response.locals?.controller) return
+        const log = {
+            date: new Date(),
+            controller: response.locals.controller,
+            action: response.locals.action,
+            user: new ObjectId(response.locals.user._id)
+        };
+        if (request.params?.id) {
+            log.document = new ObjectId(request.params.id)
+        }
+        db.collection('log').insertOne(log);
+    });
+    next()
+})
+
 app.use(config.path, router);
 
 app.use(async (request, response, next) => {
@@ -67,6 +85,7 @@ app.use(async (request, response, next) => {
     }
     next();
 });
+
 
 app.use((error, request, response, next) => {
     console.error(error);

@@ -21,6 +21,18 @@ export default {
             key: ''
         },
     },
+    tinymce: '/tinymce/tinymce.min.js',
+    highlight: {
+        languages: {
+            count: 5,
+            list: {
+                txt: 'Text', xml: 'XML', css: 'CSS', html: 'HTML', json: 'JSON',
+                yaml: 'YAML', cpp: 'C++', java: 'Java', python: 'Python',
+                javascript: 'JavaScript', typescript: 'TypeScript',
+                perl: 'Perl', php: 'PHP'
+            }
+        }
+    },
     months: [
         'січня', 'лютого', 'березня', 'квітня', 'травня', 'червня',
         'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'

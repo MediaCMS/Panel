@@ -30,7 +30,7 @@ export default props => {
             context.setAlert('Неможу визначити автора')
         }
         const date = value.match(/<p.*>.*<\/p>.*<a.*>(.*)<\/a>/)
-        if (author) {
+        if (date) {
             data.date =  new Date(date[1]).toISOString().slice(0, 10)
         } else {
             context.setAlert('Неможу визначити дату')

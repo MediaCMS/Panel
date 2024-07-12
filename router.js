@@ -1,6 +1,5 @@
 import express from 'express';
 import routes from './routes.js';
-import log from './controllers/log.js';
 
 const router = express.Router();
 
@@ -15,28 +14,24 @@ for (let route of Object.entries(routes)) {
     for (let action of Object.entries(route.actions)) {
         action = { name: action[0], ...action[1] };
         const callbacks = [];
-        if ('level' in action) {
+        if (action?.level) {
             callbacks.push((request, response, next) => {
                 if (response.locals.user.role.level > action.level) {
-                    console.log(route, controller, action)
-                    console.log(response.locals.user, action.level)
                     return response.sendStatus(403);
                 }
                 next();
             })
         }
-        if (('log' in action) && action.log) {
+        if (action?.log) {
             callbacks.push(
-                new Proxy(controller[action.name], {
-                    apply: async (target, thisArg, args) => {
-                        await target(...args);
-                        log.create(args[0], args[1], route.name, action.name);
-                    }
-                })
+                async (request, response, next) => {
+                    response.locals.controller = route.name;
+                    response.locals.action = action.name;
+                    next()
+                }
             )
-        } else {
-            callbacks.push(controller[action.name]);
         }
+        callbacks.push(controller[action.name]);
         router[action.method](route.path + action.path, callbacks);
     }
 }
