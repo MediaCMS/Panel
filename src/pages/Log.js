@@ -35,7 +35,7 @@ export default () => {
     }, [])
 
     return <>
-        <Table columns={['Дата', 'Контроллер', 'Дія', 'Користувач', 'Документ']}>
+        <Table columns={['Дата', 'Контролер', 'Дія', 'Користувач', 'Документ']}>
             {logs.map(log => (
                 <Row key={log._id}>
                     <Cell className="text-center">{

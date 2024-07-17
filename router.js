@@ -1,19 +1,20 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import { logging } from './utils.js';
 import routes from './routes.js';
 import config from './config.js';
 
-const authorization = (request, response, next) => {
+const verification = (request, response, next) => {
     if (request.cookies?.token) {
         try {
             response.locals.user = jwt.verify(
                 request.cookies.token, config.jwt.key
             );
         } catch (error) {
-            return response.status(401).end(error);
+            return response.status(403).end(error);
         }
     } else {
-        return response.sendStatus(403);
+        return response.sendStatus(401);
     }
     next();
 }
@@ -25,12 +26,10 @@ for (const route of routes) {
         `./controllers/${route.name}.js`
     )).default;
     for (const action of route.actions) {
-        const callbacks = [];
-        if (!action?.access) {
-            callbacks.push(authorization);
-        }
+        const middleware = [];
         if (action?.level) {
-            callbacks.push((request, response, next) => {
+            middleware.push(verification);
+            middleware.push((request, response, next) => {
                 if (response.locals.user.role.level > action.level) {
                     return response.sendStatus(403);
                 }
@@ -38,16 +37,20 @@ for (const route of routes) {
             })
         }
         if (action?.log) {
-            callbacks.push(
-                async (request, response, next) => {
-                    response.locals.controller = route.name;
-                    response.locals.action = action.name;
+            middleware.push(
+                (request, response, next) => {
+                    logging(
+                        route.name,
+                        action.name,
+                        response.locals.user._id,
+                        request.params.id
+                    );
                     next();
                 }
             )
         }
-        callbacks.push(controller[action.name]);
-        router[action.method](route.path + action.path, callbacks);
+        middleware.push(controller[action.name]);
+        router[action.method](route.path + action.path, middleware);
     }
 }
 

@@ -33,7 +33,7 @@ export default {
         response.end();
     },
 
-    delete: async (request, response) => {
+    delete: async (request, response, next) => {
         const _id = new ObjectId(request.params.id);
         const count = await db.collection('posts').count({ category: _id });
         if (count > 0) {

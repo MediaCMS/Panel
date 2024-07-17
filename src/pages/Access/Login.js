@@ -22,7 +22,7 @@ export default () => {
         const string = form.get('email') + ':' + MD5(form.get('password'))
         const authorization = Buffer.from(string, 'utf8').toString('base64')
         const user = await context.api.panel.post(
-            '/users/login',
+            '/access/login',
             { recaptcha: form.get('g-recaptcha-response') },
             { headers: { Authorization: `Basic ${authorization}}` }}
         )

@@ -48,10 +48,8 @@ export default [
         actions: [
             { name: 'list', path: '', method: 'get', level: 5 },
             { name: 'read', path: '/:id', method: 'get', level: 4 },
-            { name: 'login', path: '/login', method: 'post', log: true, access: true },
             { name: 'create', path: '', method: 'post', level: 2, log: true },
             { name: 'update', path: '/:id', method: 'put', level: 2, log: true },
-            { name: 'logout', path: '/logout', method: 'delete', level: 4, log: true },
             { name: 'delete', path: '/:id', method: 'delete', level: 2, log: true }
         ]
     },
@@ -97,6 +95,14 @@ export default [
             { name: 'create', path: '', method: 'post', level: 1, log: true },
             { name: 'update', path: '/:id', method: 'put', level: 1, log: true },
             { name: 'delete', path: '/:id', method: 'delete', level: 1, log: true }
+        ]
+    },
+    {
+        name: 'access',
+        path: '/access',
+        actions: [
+            { name: 'login', path: '/login', method: 'post' },
+            { name: 'logout', path: '/logout', method: 'delete', level: 4, log: true }
         ]
     },
     {

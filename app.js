@@ -4,7 +4,6 @@ import { client } from './db.js';
 import { parseRequest } from './utils.js';
 import router from './router.js';
 import log from './log.js';
-import db, { ObjectId } from './db.js';
 import config from './config.js';
 
 const app = express();
@@ -26,44 +25,16 @@ app.use(express.static(config.root + '/dist'));
 
 app.use((request, response, next) => {
     if (request.path.indexOf(config.path) !== 0) {
-        console.log(config.root + '/dist/index.html')
         console.error(`302 Found (${request.path})`);
         return response.status(302)
             .sendFile(config.root + '/dist/index.html');
     }
-    next();
-});
-
-app.use((request, response, next) => {
     response.locals.mode = app.get('env');
     parseRequest(request);
-    response.on('finish', () => {
-        if (!response.locals?.controller) return
-        const log = {
-            date: new Date(),
-            controller: response.locals.controller,
-            action: response.locals.action,
-            user: new ObjectId(response.locals.user._id)
-        };
-        if (request.params?.id) {
-            log.document = new ObjectId(request.params.id)
-        }
-        db.collection('log').insertOne(log);
-    });
-    next()
-})
-
-app.use(config.path, router);
-
-app.use(async (request, response, next) => {
-    if (typeof request.route !== 'undefined') {
-        console.error(
-            `404 Not Found (${request.method} ${request.path})`
-        );
-        return response.sendStatus(404);
-    }
     next();
 });
+
+app.use(config.path, router);
 
 app.use((error, request, response, next) => {
     console.error(error);

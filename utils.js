@@ -1,3 +1,5 @@
+import db, { ObjectId } from './db.js';
+
 // https://gist.github.com/emmanuelnk/92ea809113ef47447b945d1948760221
 const cleanEmpty = (obj, defaults = [undefined, null, NaN, '']) => {
     if (defaults.includes(obj)) return
@@ -35,4 +37,17 @@ export const parseRequest = request => {
     });
     // Clear empty properties of object
     request.body = cleanEmpty(request.body)
+}
+
+export const logging = (controller, action, user, document) => {
+    const log = {
+        date: new Date(),
+        controller,
+        action,
+        user: new ObjectId(user)
+    };
+    if (document) {
+        log.document = new ObjectId(document)
+    }
+    db.collection('log').insertOne(log);
 }

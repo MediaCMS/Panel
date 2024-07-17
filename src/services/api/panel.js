@@ -31,12 +31,12 @@ export default (setWait, setAlert, navigate) => {
         if ('response' in error) {
             if (error.response?.status) {
                 switch(error.response.status) {
-                    case 401: setAlert('В авторизації відмовлено'); break;
-                    case 403: {
+                    case 401: {
                         setAlert('Доступ заборонено')
                         navigate('/access/login')
                         break
                     } 
+                    case 403: setAlert('В авторизації відмовлено'); break;
                     case 404: setAlert('Невідомий запит REST API'); break;
                     case 500: {
                         if (error.response?.data?.message) {
