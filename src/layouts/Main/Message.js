@@ -1,32 +1,35 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Modal, Button } from 'react-bootstrap'
 
-export default function (props) {
+const Message = ({ 
+    type, title, body, onFalse, onTrue, setMessage
+}) => {
 
     const handleClose = () => {
-        props.setMessage(null)
+        setMessage(null)
     }
 
     return (
-        <Modal show={!!props?.type} onHide={handleClose}
-            size={React.isValidElement(props.body) ? 'lg' : 'md'}>
+        <Modal show={type} onHide={handleClose}
+            size={React.isValidElement(body) ? 'lg' : 'md'}>
             <Modal.Header closeButton>
-                <Modal.Title>{props?.title ?? 'Повідомлення'}</Modal.Title>
+                <Modal.Title>{title ?? 'Повідомлення'}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {React.isValidElement(props.body) ? props.body : <p>{props.body}</p>}
+                {React.isValidElement(body) ? body : <p>{body}</p>}
             </Modal.Body>
             <Modal.Footer>
-                {props.type === 'alert' ? (
+                {type === 'alert' ? (
                     <Button variant="primary" onClick={handleClose}>Зрозуміло</Button>
                 ) : (
                     <>
                         <Button variant="secondary" onClick={() => {
-                            props?.onFalse && props.onFalse()
+                            onFalse && onFalse()
                             handleClose()
                         }}>Ні, дякую</Button>
                         <Button variant="primary" onClick={() => {
-                            props.onTrue()
+                            onTrue()
                             handleClose()
                         }}>Гаразд</Button>
                     </>
@@ -35,3 +38,16 @@ export default function (props) {
         </Modal>
     )
 }
+
+Message.propTypes = {
+    type: PropTypes.string.isRequired,
+    body: PropTypes.oneOfType([
+        PropTypes.string, PropTypes.element
+    ]).isRequired,
+    title: PropTypes.string,
+    onFalse: PropTypes.func,
+    onTrue: PropTypes.func,
+    setMessage: PropTypes.func.isRequired
+}
+
+export default Message

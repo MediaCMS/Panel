@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 
-export default () => {
+const Main = () => {
 
     const context = useOutletContext()
 
@@ -11,3 +11,5 @@ export default () => {
 
     return <p className="lead">Голова сторінка сайту</p>
 }
+
+export default Main

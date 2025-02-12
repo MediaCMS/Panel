@@ -1,7 +1,7 @@
 import React from 'react'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default props => {
+const Tag = props => {
 
     return (
         <Form {...props} as="filter">
@@ -16,3 +16,5 @@ export default props => {
         </Form>
     )
 }
+
+export default Tag

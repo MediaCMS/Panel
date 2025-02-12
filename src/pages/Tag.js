@@ -4,7 +4,7 @@ import Table, { Row, Cell } from '../components/Table.js'
 import Filter from './Tag/Filter.js'
 import Editor from './Tag/Editor.js'
 
-export default () => {
+const Tag = () => {
 
     const [id, setID] = useState()
     const [tags, setTags] = useState([])
@@ -50,3 +50,5 @@ export default () => {
             show={filter} onHide={() => setFilter(false)} />}
     </>
 }
+
+export default Tag

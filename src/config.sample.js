@@ -12,9 +12,10 @@ export default {
     },
     images: {
         url: 'https://image.example.com/',
-        widths: [320, 480, 640, 960, 1280, 1600, 1920, 2560, 3840],
         key: '',
-        timeout: 7_000
+        types: { 'image/jpeg': 'jpg' },
+        size: 10 * 1024 ** 2,
+        timeout: 30_000
     },
     google: {
         recaptcha: {
@@ -38,6 +39,7 @@ export default {
         'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'
     ],
     copyright: '2023',
+    mode: 'development',
     debug: true,
     limit: 100
 }

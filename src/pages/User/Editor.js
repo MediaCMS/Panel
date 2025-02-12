@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 import MD5 from 'crypto-js/md5.js'
 
-export default props => {
+const Editor = ({ id, show, onChange, onHide }) => {
 
     const [user, setUser] = useState({})
     const [roles, setRoles] = useState()
@@ -24,26 +25,28 @@ export default props => {
         }
         delete userNew.password2
         userNew?._id
-            ? await context.api.panel.put('/users/' + props.id, userNew)
+            ? await context.api.panel.put('/users/' + id, userNew)
             : await context.api.panel.post('/users', userNew)
-        props.onChange()
+        onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/users/' + props.id)
-        props.onChange()
+        await context.api.panel.delete('/users/' + id)
+        onChange()
     }
 
     useEffect(async () => {
         const roles = await context.api.panel.get('/roles')
         setRoles(roles)
-        props?.id
-            ? setUser(await context.api.panel.get('/users/' + props.id))
-            : setUser(user => ({ ...user, role: roles.at(-1)._id }))
+        if (id) {
+            setUser(await context.api.panel.get('/users/' + id))
+        } else {
+            setUser(user => ({ ...user, role: roles.at(-1)._id }))
+        }
    }, [])
 
     return (
-        <Form data={user} show={props.show} onHide={props.onHide}
+        <Form data={user} show={show} onHide={onHide}
             onChange={setUser} onSubmit={handleSubmit} onDelete={handleDelete}
             title="Редагування користувача">
             <Row>
@@ -96,3 +99,12 @@ export default props => {
         </Form>
     )
 }
+
+Editor.propTypes = {
+    id: PropTypes.string,
+    show: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onHide: PropTypes.func.isRequired
+}
+
+export default Editor

@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useReducer } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Editor, { Reducer, actions} from '../../components/Editor.js'
 import Form, { Field, Table, Row, Cell } from '../../components/Form.js'
 import config from '../../config.js'
 
-export default props => {
+const PageEditor = ({ id, show, onChange, onHide }) => {
 
     const [page, setPage] = useState({})
     const [state, dispatch] = useReducer(Reducer, [{
@@ -28,23 +29,23 @@ export default props => {
             delete pageNew.blocks
         }
         setPage(pageNew)
-        if (props?.id) {
-            await context.api.panel.put('/pages/' + props.id, pageNew)
+        if (id) {
+            await context.api.panel.put('/pages/' + id, pageNew)
             context.api.main.delete('/kesh/storinky/' + slug)
         } else {
             await context.api.panel.post('/pages', pageNew)
         }
-        props.onChange()
+        onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/pages/' + props.id)
-        props.onChange()
+        await context.api.panel.delete('/pages/' + id)
+        onChange()
     }
 
     useEffect(async () => {
-        if (!props?.id) return
-        const pageNew = await context.api.panel.get('/pages/' + props.id)
+        if (!id) return
+        const pageNew = await context.api.panel.get('/pages/' + id)
         const blocks = [{ id: 0, type: 'main', title: pageNew?.title }]
         if (pageNew?.image) {
             blocks[0].image = pageNew.image
@@ -63,7 +64,7 @@ export default props => {
     ), [page.slug])
 
     return (
-        <Form data={page} show={props.show} onHide={props.onHide}
+        <Form data={page} show={show} onHide={onHide}
             onChange={setPage} onSubmit={handleSubmit} onDelete={handleDelete}
             title="Редагування сторінки" fullscreen={true}>
             <Editor blocks={{ state, dispatch, actions }} />
@@ -86,5 +87,14 @@ export default props => {
                 </Row>
             </Table>
         </Form>
-     )
+    )
 }
+
+PageEditor.propTypes = {
+    id: PropTypes.string,
+    show: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onHide: PropTypes.func.isRequired
+}
+
+export default PageEditor

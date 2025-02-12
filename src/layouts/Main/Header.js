@@ -1,8 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import config from '../../config.js'
 
-export default function (props) {
+const Header = ({ menu, user }) => {
 
     return (
         <header>
@@ -17,9 +18,9 @@ export default function (props) {
                         <span className="navbar-toggler-icon" />
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        {props?.menu && (
+                        {menu && (
                             <ul className="navbar-nav me-auto mb-lg-0">
-                                {props.menu.map((item, index) =>
+                                {menu.map((item, index) =>
                                     <li className="nav-item" key={index} title={item.description}>
                                         <NavLink to={item.path} className="nav-link" >
                                             {item.title}
@@ -35,10 +36,10 @@ export default function (props) {
                         )}
                     </div>
                     <div className="d-none d-xl-block text-light"
-                        title={props.user.role.title + ' ' + props.user.description}>
-                        {props.user.title}
-                        {props.user.image ? (
-                            <img src={config.images.url + '/' + props.user.image}
+                        title={user.role.title + ' ' + user.description}>
+                        {user.title}
+                        {user.image ? (
+                            <img src={config.images.url + '/' + user.image}
                                 height="36px" className="rounded-3 ms-3" />
                         ) : null}
                     </div>
@@ -47,3 +48,21 @@ export default function (props) {
         </header>
     )
 }
+
+Header.propTypes = {
+    menu: PropTypes.arrayOf(PropTypes.shape({
+        path: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string
+    })),
+    user: PropTypes.shape({
+        role: PropTypes.shape({
+            title: PropTypes.string.isRequired
+        }).isRequired,
+        description: PropTypes.string,
+        title: PropTypes.string.isRequired,
+        image: PropTypes.string
+    }).isRequired
+}
+
+export default Header

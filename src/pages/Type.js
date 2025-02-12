@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router-dom'
 import Table, { Row, Cell } from '../components/Table.js'
 import Editor from './Type/Editor.js'
 
-export default () => {
+const Type = () => {
 
     const [id, setID] = useState()
     const [types, setTypes] = useState([])
@@ -42,3 +42,5 @@ export default () => {
             show={editor} onHide={() => {setID();setEditor(false)}} />}
     </>
 }
+
+export default Type

@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default props => {
+const Filter = props => {
 
     return (
         <Form {...props} as="filter">
@@ -45,3 +46,13 @@ export default props => {
         </Form>
     )
 }
+
+Filter.propTypes = {
+    user: PropTypes.shape({
+        role: PropTypes.shape({
+            level: PropTypes.number.isRequired
+        }).isRequired
+    }).isRequired
+}
+
+export default Filter

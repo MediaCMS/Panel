@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Outlet, Navigate, useNavigate } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import Header from './Main/Header.js'
 import Submenu from '../components/Menu.js'
 import Message from './Main/Message.js'
@@ -15,7 +16,7 @@ const paramsDefault = {
     title: '', width: 'full', submenu: []
 }
 
-export default function (props) {
+const Main = ({ template }) => {
 
     const [menu, setMenu] = useState()
     const [user, setUser] = useState(userStorage)
@@ -35,7 +36,7 @@ export default function (props) {
     }
 
     const setConfirm = (message) => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             setMessage({
                 type: 'confirm',
                 title: 'Підтвердження',
@@ -62,7 +63,7 @@ export default function (props) {
 
     return (
         <React.StrictMode>
-            {props?.template ?
+            {template ?
                 user ? (
                     <>
                         <Header menu={menu} user={user} />
@@ -91,3 +92,9 @@ export default function (props) {
         </React.StrictMode>
     )
 }
+
+Main.propTypes = {
+    template: PropTypes.bool
+}
+
+export default Main

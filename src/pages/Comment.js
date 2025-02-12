@@ -5,7 +5,7 @@ import Table, { Row, Cell } from '../components/Table.js'
 import Filter from './Comment/Filter.js'
 import Editor from './Comment/Editor.js'
 
-export default () => {
+const Comment = () => {
 
     const [id, setID] = useState()
     const [comments, setComments] = useState([])
@@ -59,3 +59,5 @@ export default () => {
             show={filter} onHide={() => setFilter(false)} />}
     </>
 }
+
+export default Comment

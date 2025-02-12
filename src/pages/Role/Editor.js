@@ -1,32 +1,35 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row, Cell } from '../../components/Form.js'
 
-export default props => {
+const Editor = ({ id, show, onChange, onHide }) => {
 
     const [role, setRole] = useState({ level: 5 })
     const context = useOutletContext()
 
     const handleSubmit = async () => {
-        props?.id
-            ? await context.api.panel.put('/roles/' + props.id, role)
-            : await context.api.panel.post('/roles', role)
-        props.onChange()
+        if (id) {
+            await context.api.panel.put('/roles/' + id, role)
+        } else {
+            await context.api.panel.post('/roles', role)
+        }
+        onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/roles/' + props.id)
-        props.onChange()
+        await context.api.panel.delete('/roles/' + id)
+        onChange()
     }
 
     useEffect(async () => {
-        props?.id && setRole(
-            await context.api.panel.get('/roles/' + props.id)
+        id && setRole(
+            await context.api.panel.get('/roles/' + id)
         )
     }, [])
 
     return (
-        <Form data={role} show={props.show} onHide={props.onHide}
+        <Form data={role} show={show} onHide={onHide}
             onChange={setRole} onSubmit={handleSubmit} onDelete={handleDelete}
             title="Редагування ролі">
             <Row>
@@ -46,3 +49,12 @@ export default props => {
         </Form>
     )
 }
+
+Editor.propTypes = {
+    id: PropTypes.string,
+    show: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onHide: PropTypes.func.isRequired
+}
+
+export default Editor

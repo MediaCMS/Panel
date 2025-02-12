@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Images from '../blocks/Images.js'
 
-export default () => {
+const Image = () => {
 
     const [upload, setUpload] = useState(false)
     const context = useOutletContext()
@@ -19,3 +19,5 @@ export default () => {
 
     return <Images upload={upload} setUpload={setUpload} />
 }
+
+export default Image

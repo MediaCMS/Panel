@@ -1,14 +1,15 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import config from '../../config.js'
 import '../../assets/styles/layouts/main/footer.css'
 
-export default function (props) {
+const Footer = ({ menu }) => {
 
     return (
         <footer className="text-center mt-5">
             <ul className="nav justify-content-center">
-                {props?.menu && props.menu.map((item, index) => (
+                {menu && menu.map((item, index) => (
                     <li className="nav-item" key={index}>
                         <NavLink
                             to={item.path}
@@ -25,3 +26,13 @@ export default function (props) {
         </footer>
     )
 }
+
+Footer.propTypes = {
+    menu: PropTypes.arrayOf(PropTypes.shape({
+        path: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        title: PropTypes.string.isRequired
+    }))
+}
+
+export default Footer

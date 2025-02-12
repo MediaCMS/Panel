@@ -5,7 +5,7 @@ import Table, { Row, Cell } from '../components/Table.js'
 import Editor from './Post/Editor.js'
 import Filter from './Post/Filter.js'
 
-export default () => {
+const Post = () => {
 
     const context = useOutletContext()
     const [id, setID] = useState()
@@ -62,3 +62,5 @@ export default () => {
             show={filter} onHide={() => setFilter(false)} />}
     </>
 }
+
+export default Post

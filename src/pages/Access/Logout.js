@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useOutletContext, useNavigate } from 'react-router-dom'
 
-export default () => {
+const Logout = () => {
 
     const context = useOutletContext()
     const navigate = useNavigate()
@@ -15,3 +15,5 @@ export default () => {
 
     return <></>
 }
+
+export default Logout

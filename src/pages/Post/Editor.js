@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useReducer } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Editor, { Reducer, actions} from '../../components/Editor.js'
 import Form, { Field, Table, Row, Cell } from '../../components/Form.js'
 import config from '../../config.js'
 
-export default props => {
+const PostEditor = ({ id, show, onChange, onHide }) => {
 
     const context = useOutletContext()
     const [post, setPost] = useState({})
@@ -32,23 +33,23 @@ export default props => {
         }
         setPost(postNew)
         console.log(postNew)
-        if (props?.id) {
-            await context.api.panel.put('/posts/' + props.id, postNew)
+        if (id) {
+            await context.api.panel.put('/posts/' + id, postNew)
             context.api.main.delete('/kesh/publikatsiyi/' + slug)
         } else {
             await context.api.panel.post('/posts', postNew)
         }
-        props.onChange()
+        onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/posts/' + props.id)
-        props.onChange()
+        await context.api.panel.delete('/posts/' + id)
+        onChange()
     }
 
     useEffect(async () => {
-        if (!props?.id) return
-        const postNew = await context.api.panel.get('/posts/' + props.id)
+        if (!id) return
+        const postNew = await context.api.panel.get('/posts/' + id)
         console.log(postNew)
         const blocks = [{
             id: 0, type: 'main', date: postNew.date, title: postNew?.title,
@@ -77,7 +78,7 @@ export default props => {
     useEffect(() => console.log(post), [post])
 
     return (
-        <Form data={post} show={props.show} onHide={props.onHide}
+        <Form data={post} show={show} onHide={onHide}
             onChange={setPost} onSubmit={handleSubmit} onDelete={handleDelete}
             title="Редагування публікації" fullscreen={true}>
             <Editor blocks={{ state, dispatch, actions }} />
@@ -117,3 +118,12 @@ export default props => {
         </Form>
     )
 }
+
+PostEditor.propTypes = {
+    id: PropTypes.string,
+    show: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onHide: PropTypes.func.isRequired
+}
+
+export default PostEditor
