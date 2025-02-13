@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { useOutletContext } from 'react-router-dom'
 import { Modal } from 'react-bootstrap'
 import Images, { Image } from '../../components/Images.js'
 import Editor from '../Image.js'
 
-export default function (props) {
+const Index = ({ tag, setTag, onChange, onChoose }) => {
 
     const [image, setImage] = useState({})
     const [images, setImages] = useState([])
@@ -14,36 +15,36 @@ export default function (props) {
     const context = useOutletContext()
 
     const handleLoad = async () => {
-        if (!props.tag) return
+        if (!tag) return
         const images = await context.api.panel.get('/images', {
-            params: { 'tagID': props.tag._id }
+            params: { 'tagID': tag._id }
         })
         if (images.length) {
             setFullScreen(images.length > 5 ? true : false)
             setSize(images.length > 2 ? 'xl' : 'lg')
             setImages(images)
         } else {
-            props.setTag()
+            setTag()
         }
-        props.onChange()
+        onChange()
     }
 
     const handleClick = async image => {
-        if (props.onChoose) {
-            props.onChoose(image)
+        if (onChoose) {
+            onChoose(image)
         } else {
             setImage(image)
             setEditor(true)
         }
     }
 
-    useEffect(() => handleLoad(), [props.tag])
+    useEffect(() => handleLoad(), [tag])
 
     return <>
-        <Modal show={!!props.tag} size={size} fullscreen={fullScreen}
-            onHide={() => props.setTag()}>
+        <Modal show={!!tag} size={size} fullscreen={fullScreen}
+            onHide={() => setTag()}>
             <Modal.Header closeButton>
-                <Modal.Title className="flex-grow-1">{props.tag.title}</Modal.Title>
+                <Modal.Title className="flex-grow-1">{tag.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Images>
@@ -58,3 +59,12 @@ export default function (props) {
             onChange={handleLoad} title="Редагування зображення" />
     </>
 }
+
+Index.propTypes = {
+    tag: PropTypes.object,
+    setTag: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onChoose: PropTypes.func
+}
+
+export default Index

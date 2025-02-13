@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Form, { Field, Row } from '../components/Form.js'
 import Image from '../components/Form/Field/Image.js'
 
-export default function (props) {
+const ImageWrapper = props => {
 
     const [image, setImage] = useState(props?.image ?? {})
     const context = useOutletContext()
@@ -52,3 +53,12 @@ export default function (props) {
         </Form>
     )
 }
+
+ImageWrapper.propTypes = {
+    image: PropTypes.object,
+    id: PropTypes.string,
+    onChange: PropTypes.func,
+    onHide: PropTypes.func
+}
+
+export default ImageWrapper

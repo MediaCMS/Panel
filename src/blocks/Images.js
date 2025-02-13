@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 import Index from './Images/Index.js'
 import Editor from './Image.js'
 
-export default function (props) {
+const Images = ({ upload, setUpload, onChoose }) => {
 
     const [tag, setTag] = useState()
     const [tags, setTags] = useState([])
@@ -38,9 +39,17 @@ export default function (props) {
             })}
         </div>
         {tag && <Index tag={tag} setTag={setTag} onChange={handleLoad}
-            onChoose={props.onChoose} />}
-        {props.upload && <Editor onChange={handleLoad}
-            show={props.upload} onHide={() => props.setUpload(false)}
+            onChoose={onChoose} />}
+        {upload && <Editor onChange={handleLoad}
+            show={upload} onHide={() => setUpload(false)}
             title="Завантаження зображення" size="lg" />}
     </>
 }
+
+Images.propTypes = {
+    upload: PropTypes.bool.isRequired,
+    setUpload: PropTypes.func.isRequired,
+    onChoose: PropTypes.func.isRequired
+}
+
+export default Images
