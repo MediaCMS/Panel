@@ -1,6 +1,7 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-export default function (props) {
+const Cell = props => {
 
     return props?.scope ? (  
         <th className="text-center" {...props}>{props.children}</th>
@@ -8,3 +9,10 @@ export default function (props) {
         <td className="text-center" {...props}>{props.children}</td>
     )
 }
+
+Cell.propTypes = {
+    children: PropTypes.node,
+    scope: PropTypes.string
+}
+
+export default Cell

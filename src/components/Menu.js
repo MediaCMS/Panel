@@ -1,7 +1,7 @@
 import React from 'react'
 import { useOutletContext, NavLink } from 'react-router-dom'
 
-export default function (props) {
+const menu = props => {
 
     const context = useOutletContext()
 
@@ -30,3 +30,5 @@ export default function (props) {
         </ul>
     )
 }
+
+export default menu

@@ -1,10 +1,16 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { Col } from 'react-bootstrap'
 
-export default function (props) {
+const Cell = props => {
 
     return (
         <Col {...props}>{props?.children}</Col>
     )
 }
 
+Cell.propTypes = {
+    children: PropTypes.node
+}
+
+export default Cell

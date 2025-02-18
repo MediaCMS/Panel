@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types'
 import React, { useContext } from 'react'
 import { transliterate } from '../../../utils.js'
 import Context from '../../../contexts/Form.js'
 import Field from './Field.js'
 
-export default function (props) {
+const Slug = props => {
 
     const name = props.name ?? 'slug'
     const data = useContext(Context)
@@ -19,3 +20,10 @@ export default function (props) {
         title="Посилання (від 1 до 128 прописних латинських букв, цифр та дефісів)"
         {...props} />
 }
+
+Slug.propTypes = {
+    source: PropTypes.string,
+    name: PropTypes.string
+}
+
+export default Slug

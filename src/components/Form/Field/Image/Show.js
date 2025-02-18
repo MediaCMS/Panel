@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
@@ -5,7 +6,7 @@ import Editor from '../../../../blocks/Image.js'
 import config from '../../../../config.js'
 import '../../../../assets/styles/components/fields/image.css'
 
-export default function (props) {
+const Show = props => {
 
     const [image, setImage] = useState({ name: props.name })
     const [editor, setEditor] = useState(false)
@@ -47,3 +48,12 @@ export default function (props) {
             title="Редагування зображення" />}
     </>
 }
+
+Show.propTypes = {
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func,
+    className: PropTypes.string,
+    as: PropTypes.string
+}
+
+export default Show

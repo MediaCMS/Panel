@@ -1,7 +1,8 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import Field from './Field.js'
 
-export default function (props) {
+const Text = props => {
 
     const minLength = props.minLength ?? 1;
     const maxLength = props.maxLength ?? 65_536;
@@ -15,3 +16,11 @@ export default function (props) {
             {...props} />
     )
 }
+
+Text.propTypes = {
+    minLength: PropTypes.number,
+    maxLength: PropTypes.number,
+    rows: PropTypes.number
+}
+
+export default Text

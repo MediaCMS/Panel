@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { Form, Modal } from 'react-bootstrap'
 import Context from '../contexts/Form.js'
@@ -78,6 +79,19 @@ function recurse(data, name, value, override = true) {
             && !isNaN(parseFloat(value)))
             ? +value : value
     }
+}
+
+FormWrapper.propTypes = {
+    title: PropTypes.string,
+    as: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    onHide: PropTypes.func.isRequired,
+    show: PropTypes.bool.isRequired,
+    size: PropTypes.string,
+    fullscreen: PropTypes.bool,
+    children: PropTypes.node
 }
 
 export { FormWrapper as default, Field, Control, Table, Row, Cell }

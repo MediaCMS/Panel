@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types'
 import React, { useState } from 'react'
+import { Button } from 'react-bootstrap'
 import Image from './Images/Image.js'
 import config from '../../config.js'
 import '../assets/styles/components/images.css'
 
-function Images(props) {
+const Images = props => {
 
     const [rows, setRows] = useState(config.rows)
 
@@ -22,6 +24,10 @@ function Images(props) {
             </div>
         ) : null}
    </>)
+}
+
+Images.propTypes = {
+    children: PropTypes.node.isRequired
 }
 
 export { Images as default, Image }

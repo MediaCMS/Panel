@@ -1,10 +1,11 @@
+import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form, Modal, Button, Row, Col } from 'react-bootstrap'
 import Images from '../../../../blocks/Images.js'
 import config from '../../../../config.js'
 
-export default function (props) {
+const Choose = props => {
 
     const [library, setLibrary] = useState(false)
     const context = useOutletContext()
@@ -62,3 +63,11 @@ export default function (props) {
         </Modal>
     </>
 }
+
+Choose.propTypes = {
+    onChange: PropTypes.func.isRequired,
+    required: PropTypes.bool,
+    library: PropTypes.bool
+}
+
+export default Choose

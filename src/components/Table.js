@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { Table, Button } from 'react-bootstrap'
 import Row from './Table/Row.js'
@@ -5,7 +6,7 @@ import Cell from './Table/Cell.js'
 import config from '../config.js'
 import '../assets/styles/components/table.css'
 
-function TableWrapper(props) {
+const TableWrapper = props => {
 
     const [rows, setRows] = useState(config.rows)
 
@@ -45,6 +46,11 @@ function TableWrapper(props) {
             ) : null}
         </Table>
    )
+}
+
+TableWrapper.propTypes = {
+    columns: PropTypes.arrayOf(PropTypes.string).isRequired,
+    children: PropTypes.node.isRequired
 }
 
 export { TableWrapper as default, Row, Cell }

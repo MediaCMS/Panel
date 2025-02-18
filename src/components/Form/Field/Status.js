@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { Form } from 'react-bootstrap'
 import Control from '../Control.js'
 
-export default function (props) {
+const Status = props => {
 
+    // eslint-disable-next-line no-unused-vars
     const { className, label, ...propsNew } = {
         name: 'status', ...props
     }
@@ -23,3 +25,11 @@ export default function (props) {
         </Form.Group>
     )
 }
+
+Status.propTypes = {
+    className: PropTypes.string,
+    label: PropTypes.string,
+    as: PropTypes.string
+}
+
+export default Status

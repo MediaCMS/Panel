@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useContext } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 import Context from '../../../../contexts/Form.js'
 
-export default function (props) {
+const Single = props => {
 
     const [prompt, setPrompt] = useState('')
     const [items, setItems] = useState([])
@@ -90,3 +91,17 @@ export default function (props) {
         </Form.Group>
     )
 }
+
+Single.propTypes = {
+    value: PropTypes.any,
+    path: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    label: PropTypes.string,
+    pattern: PropTypes.string,
+    title: PropTypes.string,
+    required: PropTypes.bool,
+    disabled: PropTypes.bool,
+    className: PropTypes.string
+}
+
+export default Single

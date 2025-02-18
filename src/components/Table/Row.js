@@ -1,20 +1,31 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 
-export default function (props) {
+const Row = ({ title, status, className, onClick, children }) => {
 
-    const className = []
+    const classNameNew = []
 
-    if (props?.className) {
-        className.push(props?.className)
+    if (className) {
+        classNameNew.push(className)
     }
 
-    if (('status' in props) && (props.status === false)) {
-        className.push('text-muted')
+    if (status && (status === false)) {
+        classNameNew.push('text-muted')
     }
 
     return (
-        <tr onClick={props?.onClick} title={props?.title} className={className}>
-            {props.children}
+        <tr onClick={onClick} title={title} className={classNameNew}>
+            {children}
         </tr>
     )
 }
+
+Row.propTypes = {
+    title: PropTypes.string,
+    status: PropTypes.bool,
+    className: PropTypes.string,
+    onClick: PropTypes.func,
+    children: PropTypes.node
+}
+
+export default Row

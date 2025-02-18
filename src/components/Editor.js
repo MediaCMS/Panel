@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useMemo } from 'react'
 import Reducer, { actions } from '../reducers/Editor.js'
 import Block from './Editor/Block.js'
@@ -33,7 +34,7 @@ function Editor(props) {
         )
     }
 
-    const handleRemove = (value = null, id) => {
+    const handleRemove = (_value = null, id) => {
         props.blocks.dispatch(
             props.blocks.actions.remove(id)
         )
@@ -77,6 +78,18 @@ function Editor(props) {
                 component={components[block.type]} key={block.id} />
     )}
     </article>
+}
+
+Editor.propTypes = {
+    blocks: PropTypes.shape({
+        state: PropTypes.arrayOf(PropTypes.object),
+        dispatch: PropTypes.func.isRequired,
+        actions: PropTypes.shape({
+            insert: PropTypes.func.isRequired,
+            move: PropTypes.func.isRequired,
+            remove: PropTypes.func.isRequired
+        }).isRequired
+    }).isRequired
 }
 
 export { Editor as default, Reducer, actions }

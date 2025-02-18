@@ -6,9 +6,7 @@ import pluginReact from "eslint-plugin-react";
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    files: ["**/*.{js,mjs,cjs,jsx}"]
-  },
-  {
+    files: ["**/*.{js,mjs,cjs,jsx}"],
     languageOptions: {
       globals: {...globals.browser, ...globals.node}
     },
@@ -16,6 +14,9 @@ export default [
       react: {
         version: "detect",
       }
+    },
+    rules: {
+      "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
     }
   },
   pluginJs.configs.recommended,

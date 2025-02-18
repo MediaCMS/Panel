@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types'
 import React, { useEffect, useContext } from 'react'
 import { Form } from 'react-bootstrap'
 import Moment from 'moment'
 import Context from '../../contexts/Form.js'
 
-export default function (props) {
+const Control = props => {
 
     const data = useContext(Context)
 
@@ -12,7 +13,7 @@ export default function (props) {
             props?.onChange(event)
         } else {
             data.set(
-                event.target.name, 
+                event.target.name,
                 event.target.type === 'checkbox'
                     ? event.target.checked
                     : event.target.value
@@ -77,3 +78,16 @@ export default function (props) {
         }
     }
 }
+
+Control.propTypes = {
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    type: PropTypes.string,
+    pattern: PropTypes.instanceOf(RegExp),
+    title: PropTypes.string,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.any,
+    children: PropTypes.node
+}
+
+export default Control

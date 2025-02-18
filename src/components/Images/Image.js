@@ -1,16 +1,27 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import config from '../../config.js'
 
-export default function (props) {
+const Image = ({ title, name, tags, status, onClick }) => {
 
-    const title = props.title + ' (' +  props?.tags.join() + ')'
+    const titleNew = title + ' (' +  tags.join() + ')'
 
     return (  
         <div className="image border border-white bg-secondary d-inline-block"
-            onClick={props.onClick}>
-            <img src={config.images.url + '/' + props.name + '?width=320'}
-                className={props.status ? '' : 'image-muted'}
-                title={title} alt={props.title} />
+            onClick={onClick}>
+            <img src={config.images.url + '/' + name + '?width=320'}
+                className={status ? '' : 'image-muted'}
+                title={titleNew} alt={title} />
         </div>
     )
 }
+
+Image.propTypes = {
+    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    status: PropTypes.bool,
+    onClick: PropTypes.func
+}
+
+export default Image

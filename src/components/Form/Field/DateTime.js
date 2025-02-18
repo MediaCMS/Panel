@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types'
 import React, { useContext, useEffect } from 'react'
 import Field from './Field.js'
 import Context from '../../../contexts/Form.js'
 
-export default function (props) {
+const DateTime = props => {
 
     const data = useContext(Context)
     const name = props?.name ?? 'date'
@@ -23,3 +24,9 @@ export default function (props) {
     return <Field type="datetime-local" name={name} label="Дата" {...props}
         onChange={handleChange} />
 }
+
+DateTime.propTypes = {
+    name: PropTypes.string
+}
+
+export default DateTime

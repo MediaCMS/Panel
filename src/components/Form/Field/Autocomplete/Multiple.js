@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import Context from '../../../../contexts/Form.js'
 
-export default function (props) {
+const Multiple = props => {
 
     const [prompt, setPrompt] = useState('')
     const [items, setItems] = useState([])
@@ -114,3 +115,15 @@ export default function (props) {
     )
     
 }
+
+Multiple.propTypes = {
+    path: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    className: PropTypes.string,
+    label: PropTypes.string,
+    pattern: PropTypes.string,
+    title: PropTypes.string,
+    required: PropTypes.bool
+}
+
+export default Multiple

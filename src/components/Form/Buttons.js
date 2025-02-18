@@ -1,25 +1,26 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Button } from 'react-bootstrap'
 
-export default props => {
+const Buttons = ({ as, data, onDelete, onHide }) => {
 
     const context = useOutletContext()
 
     const handleDelete = async () => {
         if (await context.setConfirm('Ви впевненні?')) {
-            props.onDelete()
-            props.onHide()
+            onDelete()
+            onHide()
         }
     }
 
-    return (props?.as && (props.as === 'filter'))
+    return (as && (as === 'filter'))
         ? <>
-            <Button variant="secondary" onClick={props.onHide}>Закрити</Button>
+            <Button variant="secondary" onClick={onHide}>Закрити</Button>
             <Button type="submit">Фільтрувати</Button>
         </>
         : <>
-            {props?.data?._id && props?.onDelete && (
+            {data?._id && onDelete && (
                 <Button onClick={handleDelete} variant="danger" className="me-2">
                     Видалити
                 </Button>
@@ -29,3 +30,14 @@ export default props => {
             </Button>
         </>
 }
+
+Buttons.propTypes = {
+    data: PropTypes.shape({
+        _id: PropTypes.string,
+    }),
+    as: PropTypes.string,
+    onDelete: PropTypes.func,
+    onHide: PropTypes.func,
+}
+
+export default Buttons
