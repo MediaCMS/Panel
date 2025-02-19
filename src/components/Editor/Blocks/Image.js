@@ -1,4 +1,3 @@
-/* global FormData */
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'

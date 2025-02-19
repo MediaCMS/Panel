@@ -1,4 +1,3 @@
-/* global document, window */
 import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useReducer } from 'react'
 import MenuReducer, { actions as menuActions } from '../../reducers/Menu.js'

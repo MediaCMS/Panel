@@ -1,4 +1,3 @@
-/* global document */
 import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import Editor from '../Editor.js'
