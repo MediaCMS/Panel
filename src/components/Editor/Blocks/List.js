@@ -1,27 +1,35 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect } from 'react'
 import Editor from '../Editor.js'
 
-export default props => {
+const List = ({ text, size, menu, onChange }) => {
 
     const [editor, setEditor] = useState()
 
     useEffect( () => {
-        props.menu.dispatch(
-            props.menu.actions.insert(
-                'resize', props.menu.resize
+        menu.dispatch(
+            menu.actions.insert(
+                'resize', menu.resize
             )
         )
-        if (!props?.size) {
-            props.onChange('size', 'full')
-        }
+        if (!size) onChange('size', 'full')
     }, [])
 
     useEffect( () => {
         if (!editor) return
-        editor.getBody().dataset.size = props.size
-    }, [editor, props.size])
+        editor.getBody().dataset.size = size
+    }, [editor, size])
 
-    return <Editor tag="ul" value={props?.text} plugins="lists"
-        valid="li" multiline={true} size={props.size} setEditor={setEditor}
-        onChange={value => props.onChange('text', value)} />
+    return <Editor tag="ul" value={text} plugins="lists"
+        valid="li" multiline={true} size={size} setEditor={setEditor}
+        onChange={value => onChange('text', value)} />
 }
+
+List.propTypes = {
+    text: PropTypes.string.isRequired,
+    size: PropTypes.string,
+    menu: PropTypes.object.isRequired,
+    onChange: PropTypes.func.isRequired
+}
+
+export default List

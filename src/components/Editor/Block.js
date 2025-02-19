@@ -1,11 +1,14 @@
+/* global document, window */
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useMemo, useReducer } from 'react'
 import MenuReducer, { actions as menuActions } from '../../reducers/Menu.js'
 import Menu from './Menu.js'
 
-export default props => {
+const Block = props => {
 
     const [menuState, menuDispatch] = useReducer(MenuReducer, props.menu)
     const [isActive, setActive] = useState(false)
+    // eslint-disable-next-line no-unused-vars
     const { component, blocks, ...propsNew } = props
 
     const handleChange = (name, value) => {
@@ -82,3 +85,23 @@ export default props => {
         {isActive ? <Menu items={menuState} id={props.id} /> : null}
     </div>
 }
+
+Block.propTypes = {
+    menu: PropTypes.object.isRequired,
+    component: PropTypes.elementType.isRequired,
+    blocks: PropTypes.shape({
+        dispatch: PropTypes.func.isRequired,
+        actions: PropTypes.shape({
+            remove: PropTypes.func.isRequired,
+            merge: PropTypes.func.isRequired,
+            update: PropTypes.func.isRequired,
+            insert: PropTypes.func.isRequired
+        }).isRequired
+    }).isRequired,
+    id: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    label: PropTypes.string,
+    size: PropTypes.string
+}
+
+export default Block

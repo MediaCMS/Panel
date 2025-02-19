@@ -1,3 +1,5 @@
+/* global structuredClone */
+import PropTypes from 'prop-types'
 import React,  { useState, useEffect } from 'react'
 import { Editor } from '@tinymce/tinymce-react'
 import config from '../../config.js'
@@ -28,10 +30,10 @@ const initTemplate = {
     ]
 }
 
-export default props => {
+const EditorWrapper = props => {
 
     const [init, setInit] = useState(false)
-    const [callbacks, setCallbacks] = useState([
+    const [callbacks] = useState([
         editor => {
             editor.on('init', () => {
                 const original = editor.windowManager.open
@@ -110,3 +112,21 @@ export default props => {
         init={init} inline={true} onEditorChange={handleChange}
         tinymceScriptSrc={config.tinymce} autoFocus />
 }
+
+EditorWrapper.propTypes = {
+    setEditor: PropTypes.func,
+    onChange: PropTypes.func.isRequired,
+    plugins: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+    toolbar: PropTypes.string,
+    valid: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+    newline: PropTypes.string,
+    multiline: PropTypes.bool,
+    callback: PropTypes.func,
+    onEnter: PropTypes.func,
+    tag: PropTypes.string,
+    value: PropTypes.string,
+    reset: PropTypes.bool,
+    class: PropTypes.string
+}
+
+export default EditorWrapper

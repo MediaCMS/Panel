@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef } from 'react'
 import hljs from 'highlight.js'
 import config from '../../../config.js'
 import 'highlight.js/styles/androidstudio.css'
 
-export default props => {
+const Code = props => {
 
     const ref = useRef()
     const [text, setText] = useState()
@@ -84,3 +85,14 @@ export default props => {
             <code className="hljs" dangerouslySetInnerHTML={{ __html: text }} />
         </pre>
 }
+
+Code.propTypes = {
+    text: PropTypes.string,
+    language: PropTypes.string,
+    size: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    onPaste: PropTypes.func.isRequired,
+    menu: PropTypes.object.isRequired
+}
+
+export default Code

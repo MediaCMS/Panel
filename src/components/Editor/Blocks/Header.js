@@ -1,17 +1,27 @@
+import PropTypes from 'prop-types'
 import React, { useEffect, useRef } from 'react'
 
-export default props => {
+const Header = ({ text, onChange, onEnter, onPaste }) => {
 
     const ref = useRef()
 
     useEffect(() => {
-        if (!('text' in props)) ref.current.focus()
+        if (!text) ref.current.focus()
     }, [ref.current])
 
     return <h2 contentEditable="true" suppressContentEditableWarning="true"
-        onBlur={event => props.onChange('text', event.target.textContent)}
-        onKeyDown={props.onEnter} onPaste={props.onPaste}
+        onBlur={event => onChange('text', event.target.textContent)}
+        onKeyDown={onEnter} onPaste={onPaste}
         className="editable" ref={ref}>
-        {props.text}
+        {text}
     </h2>
 }
+
+Header.propTypes = {
+    text: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    onEnter: PropTypes.func,
+    onPaste: PropTypes.func
+}
+
+export default Header

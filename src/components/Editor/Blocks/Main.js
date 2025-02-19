@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useRef } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
@@ -8,16 +9,18 @@ import Choose from '../../Form/Field/Image/Choose.js'
 import Field from '../Field.js'
 import config from '../../../config.js'
 
-export default props => {
+const Main = ({
+    title, category, image, user, menu, onChange, onPaste
+}) => {
 
     const ref = useRef()
     const [categories, setCategories] = useState([])
-    const [extended] = useState(!!props?.user)
+    const [extended] = useState(!!user)
     const context = useOutletContext()
 
     useEffect(() => {
-        props.menu.dispatch(
-            props.menu.actions.remove(['move', 'remove'])
+        menu.dispatch(
+            menu.actions.remove(['move', 'remove'])
         )
     }, [])
 
@@ -28,15 +31,15 @@ export default props => {
 
     useEffect(() => ref.current.focus(), [ref.current])
 
-    return <div className={'main' + (props?.image ? ' image' : '')}
-        style={{ backgroundImage: props?.image?.url
-            ? `url(${config.images.url + '/' + props.image.url})` : ''}}>
+    return <div className={'main' + (image ? ' image' : '')}
+        style={{ backgroundImage: image?.url
+            ? `url(${config.images.url + '/' + image.url})` : ''}}>
         <div className="text">
             {extended && 
                 <div className="category">
-                    <Form.Select value={props.category} title="Категорія"
+                    <Form.Select value={category} title="Категорія"
                         onChange={
-                            event => props.onChange('category', event.target.value)
+                            event => onChange('category', event.target.value)
                         }>
                         {categories.map(category => (
                             <option value={category._id} key={category._id}>
@@ -48,13 +51,13 @@ export default props => {
             }
             <h1 contentEditable="true" suppressContentEditableWarning="true"
                 onBlur={
-                    event => props.onChange('title', event.target.textContent)
+                    event => onChange('title', event.target.textContent)
                 }
-                onPaste={props.onPaste} ref={ref} className="editable">
-                {props.title}
+                onPaste={onPaste} ref={ref} className="editable">
+                {title}
             </h1>
             {extended &&
-                <Autocomplete name="user" value={props.user} label=""
+                <Autocomplete name="user" value={user} label=""
                     title="Автор" path="/users" className="user" required />
             }
             {extended &&
@@ -62,21 +65,33 @@ export default props => {
             }
         </div>
         <div className="image">
-            <Field name="image.source" value={props.image?.source}
+            <Field name="image.source" value={image?.source}
                 title="Джерело зображення" className="source"
-                onChange={props.onChange} />
+                onChange={onChange} />
             <div className="buttons">
-                {props?.image?.url
-                    ? <Show as="menu" name={props.image.url} className="menu"
-                        onChange={() => props.onChange('image.url')}
+                {image?.url
+                    ? <Show as="menu" name={image.url} className="menu"
+                        onChange={() => onChange('image.url')}
                         label="Видалити зображення" />
                     : <Choose library={true}
-                        onChange={value => props.onChange('image.url', value)} />
+                        onChange={value => onChange('image.url', value)} />
                 }
             </div>
-            <Field name="image.author" value={props.image?.author}
+            <Field name="image.author" value={image?.author}
                 title="Автор зображення" className="author"
-                onChange={props.onChange} />
+                onChange={onChange} />
         </div>
     </div>
 }
+
+Main.propTypes = {
+    title: PropTypes.string,
+    category: PropTypes.string,
+    image: PropTypes.object,
+    user: PropTypes.any,
+    menu: PropTypes.object,
+    onChange: PropTypes.func,
+    onPaste: PropTypes.func,
+}
+
+export default Main

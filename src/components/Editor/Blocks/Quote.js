@@ -1,31 +1,51 @@
-import React, { useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
+import React, { useEffect } from 'react'
 import Field from '../Field.js'
 
-export default props => {
-
-    const textRef = useRef()
+const Quote = ({
+    text, name, work, link, size, menu, onChange, onPaste
+}) => {
 
     useEffect( () => {
-        props.menu.dispatch(
-            props.menu.actions.insert(
-                'resize', props.menu.resize
+        menu.dispatch(
+            menu.actions.insert(
+                'resize', menu.resize
             )
         )
-        if (!props?.size) {
-            props.onChange('size', 'large')
+        if (!size) {
+            onChange('size', 'large')
         }
     }, [])
 
-    return <blockquote data-size={props?.size} onPaste={props.onPaste}>
-        <Field as="p" name="text" value={props.text} autoFocus
-            title="Текст цитати" onChange={props.onChange} />
+    return <blockquote data-size={size} onPaste={onPaste}>
+        <Field as="p" name="text" value={text} autoFocus
+            title="Текст цитати" onChange={onChange} />
         <footer>
-            <Field as="span" name="link" value={props.link}
-                title="Посилання на джерело цитати" onChange={props.onChange} />
-            <Field as="span" name="name" value={props.name}
-                title="Автор цитати" onChange={props.onChange} />
-            <Field as="span" name="work" value={props.work}
-                title="Назва публікації" onChange={props.onChange} />
+            <Field as="span" name="link" value={link}
+                title="Посилання на джерело цитати" onChange={onChange} />
+            <Field as="span" name="name" value={name}
+                title="Автор цитати" onChange={onChange} />
+            <Field as="span" name="work" value={work}
+                title="Назва публікації" onChange={onChange} />
         </footer>
     </blockquote>
 }
+
+Quote.propTypes = {
+    text: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    work: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    size: PropTypes.string,
+    menu: PropTypes.shape({
+        dispatch: PropTypes.func.isRequired,
+        actions: PropTypes.shape({
+            insert: PropTypes.func.isRequired,
+        }).isRequired,
+        resize: PropTypes.string.isRequired
+    }).isRequired,
+    onChange: PropTypes.func.isRequired,
+    onPaste: PropTypes.func.isRequired
+}
+
+export default Quote

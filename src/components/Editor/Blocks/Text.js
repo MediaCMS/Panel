@@ -1,9 +1,18 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import Editor from '../Editor.js'
 
-export default props => {
+const Text = ({ text, onChange, onEnter }) => {
 
-    return <Editor tag="p" class="block2" value={props?.text}
-        onChange={value => props.onChange('text', value)}
-        onEnter={props.onEnter} />
+    return <Editor tag="p" class="block2" value={text}
+        onChange={value => onChange('text', value)}
+        onEnter={onEnter} />
 }
+
+Text.propTypes = {
+    text: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onEnter: PropTypes.func
+}
+
+export default Text

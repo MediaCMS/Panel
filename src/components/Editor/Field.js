@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types'
 import React, { useEffect, useRef } from 'react'
 
-export default props => {
+const Field = props => {
 
+    // eslint-disable-next-line no-unused-vars
     const { as, name, value, className, ...propsNew } = { ...props }
     const ref = useRef(null)
 
@@ -31,3 +33,14 @@ export default props => {
         }, props.value
     )
 }
+
+Field.propTypes = {
+    as: PropTypes.elementType,
+    name: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    className: PropTypes.string,
+    onChange: PropTypes.func.isRequired,
+    autoFocus: PropTypes.bool
+}
+
+export default Field

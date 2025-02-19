@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 
-export default props => {
+const Video = ({ url, size, ratio, menu, onChange }) => {
 
     const context = useOutletContext()
 
@@ -19,22 +20,22 @@ export default props => {
             (parseInt(matches[1]) / parseInt(matches[2])) * 100
         ) / 100
         const data = { url: matches[3], ratio: ratio }
-        props.onChange(data)
+        onChange(data)
     }
 
     useEffect( () => {
-        props.menu.dispatch(
-            props.menu.actions.insert(
-                'resize', props.menu.resize
+        menu.dispatch(
+            menu.actions.insert(
+                'resize', menu.resize
             )
         )
-        if (!props?.size) {
-            props.onChange('size', 'small')
+        if (!size) {
+            onChange('size', 'small')
         }
     }, [])
 
-    return props?.url 
-        ? <iframe src={props.url} data-size={props.size} data-ratio={props.ratio}
+    return url 
+        ? <iframe src={url} data-size={size} data-ratio={ratio}
             allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
             allowFullScreen title="YouTube video player" className="video">
         </iframe>
@@ -48,3 +49,13 @@ export default props => {
             } autoFocus
         />
 }
+
+Video.propTypes = {
+    url: PropTypes.string,
+    size: PropTypes.string,
+    ratio: PropTypes.string,
+    menu: PropTypes.object.isRequired,
+    onChange: PropTypes.func.isRequired
+}
+
+export default Video

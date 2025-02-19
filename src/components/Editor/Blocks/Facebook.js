@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 
-export default props => {
+const Facebook = ({ url, width, height, onChange }) => {
 
     const context = useOutletContext()
 
@@ -20,12 +21,12 @@ export default props => {
             width: parseInt(matches[2]),
             height: parseInt(matches[3])
         }
-        props.onChange(data)
+        onChange(data)
     }
 
-    return props?.url 
-        ? <iframe src={props.url} className="facebook"
-            width={props?.width} height={props?.height} allowFullScreen={true}
+    return url 
+        ? <iframe src={url} className="facebook"
+            width={width} height={height} allowFullScreen={true}
             allow="autoplay;clipboard-write;encrypted-media;picture-in-picture;web-share">
         </iframe>
         : <Form.Control as="textarea" title="HTML-код вкладення"
@@ -40,3 +41,12 @@ export default props => {
             }
         />
 }
+
+Facebook.propTypes = {
+    url: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    onChange: PropTypes.func.isRequired
+}
+
+export default Facebook

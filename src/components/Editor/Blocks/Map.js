@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 
-export default props => {
+const Map = ({ url, size, menu, onChange }) => {
 
     const context = useOutletContext()
 
@@ -13,22 +14,20 @@ export default props => {
                 'Невідомий формат HTML-коду вкладення'
             )
         }
-        props.onChange('url', marches[1])
+        onChange('url', marches[1])
     }
 
     useEffect( () => {
-        props.menu.dispatch(
-            props.menu.actions.insert(
-                'resize', props.menu.resize
+        menu.dispatch(
+            menu.actions.insert(
+                'resize', menu.resize
             )
         )
-        if (!props?.size) {
-            props.onChange('size', 'large')
-        }
+        if (!size) onChange('size', 'large')
     }, [])
 
-    return props?.url 
-        ? <iframe src={props.url} data-size={props.size} className="map"
+    return url 
+        ? <iframe src={url} data-size={size} className="map"
             title="Google Map" allowFullScreen={true} loading="lazy"
             referrerPolicy="no-referrer-when-downgrade">
         </iframe>
@@ -49,3 +48,12 @@ export default props => {
             }
         />
 }
+
+Map.propTypes = {
+    url: PropTypes.string,
+    size: PropTypes.string,
+    menu: PropTypes.object.isRequired,
+    onChange: PropTypes.func.isRequired
+}
+
+export default Map

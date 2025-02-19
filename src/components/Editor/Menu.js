@@ -1,17 +1,18 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { Button, ButtonGroup } from 'react-bootstrap'
 import Dropdown from './Menu/Dropdown.js'
 
-export default props => {
+const Menu = ({ items, id }) => {
 
     return <div className="menu position-absolute top-0 end-0">
         <ButtonGroup>{
-            Object.entries(props.items).map(([key, item]) => {
+            Object.entries(items).map(([key, item]) => {
                 const variant = 'outline-' + (item.variant ?? 'secondary')
                 return item?.submenu
-                    ?   <Dropdown id={props.id} {...item}
+                    ?   <Dropdown id={id} {...item}
                             variant={item.variant ? variant : ''} key={key} />
-                    :   <Button onClick={() => item.event(key, props.id)}
+                    :   <Button onClick={() => item.event(key, id)}
                             variant={variant} key={key}>
                             {item.label}
                         </Button>
@@ -19,3 +20,10 @@ export default props => {
         }</ButtonGroup>
     </div>
 }
+
+Menu.propTypes = {
+    items: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired
+}
+
+export default Menu

@@ -1,8 +1,9 @@
+import PropTypes from 'prop-types'
 import React, { useEffect, useRef } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
 
-export default props => {
+const Twitter = ({ url, text, author, date, onChange }) => {
 
     const ref = useRef()
     const context = useOutletContext()
@@ -11,7 +12,7 @@ export default props => {
         const data = {}
         const value = event.target.value.replace(/\s\s+/gm, ' ')
         const url = value.match(
-            /(https:\/\/(x|twitter)\.com\/[^\/]+\/status\/\d+)\??/
+            /(https:\/\/(x|twitter)\.com\/[^/]+\/status\/\d+)\??/
         )
         if (!url) {
             return context.setAlert('Неможу визначити посилання')
@@ -35,23 +36,23 @@ export default props => {
         } else {
             context.setAlert('Неможу визначити дату')
         }
-        props.onChange(data)
+        onChange(data)
     }
 
     useEffect(() => {
         if (!ref?.current) return
+        // eslint-disable-next-line no-undef
         twttr.widgets.load(ref.current)
     }, [ref.current])
 
-
-    return props?.url
+    return url
         ? <blockquote className="twitter-tweet" ref={ref}>
             <p lang="en" dir="ltr"
-                dangerouslySetInnerHTML={{ __html: props.text ?? 'Текст твіта' }}>
+                dangerouslySetInnerHTML={{ __html: text ?? 'Текст твіта' }}>
             </p>
             <footer>
-                &mdash; {props?.author?.name} <cite>(@{props?.author?.login})</cite>&nbsp;
-                <a href={props.url}>{props?.date}</a>
+                &mdash; {author?.name} <cite>(@{author?.login})</cite>&nbsp;
+                <a href={url}>{date}</a>
             </footer>
         </blockquote>
         : <Form.Control as="textarea" title="HTML-код вкладення"
@@ -68,3 +69,16 @@ export default props => {
             } autoFocus
         />
 }
+
+Twitter.propTypes = {
+    url: PropTypes.string,
+    text: PropTypes.string,
+    author: PropTypes.shape({
+        name: PropTypes.string,
+        login: PropTypes.string
+    }),
+    date: PropTypes.string,
+    onChange: PropTypes.func.isRequired
+}
+
+export default Twitter

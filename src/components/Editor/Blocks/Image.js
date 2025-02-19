@@ -1,62 +1,81 @@
+/* global FormData */
+import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form, Carousel } from 'react-bootstrap'
 import Field from '../Field.js'
 import config from '../../../config.js'
 
-export default props => {
+const Image = ({
+    title, source, author, url, size, menu, onChange, onPaste
+}) => {
 
     const context = useOutletContext()
 
     const handleUpload = async event => {
         if (event.target.files.length === 0) return
-        let url = []
+        const links = []
         for await (const file of event.target.files) {
             const formData = new FormData()
             formData.append('image', file)
-            url.push(
+            links.push(
                 (await context.api.image.post('', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' }
                 })).name
             )
         }
-        props.onChange('url', url.length > 1 ? url : url[0])
+        onChange('url', links.length > 1 ? links : links[0])
     }
 
     useEffect(() => {
-        if (!props?.url) return
-        props.menu.dispatch(
-            props.menu.actions.insert('resize', props.menu.resize)
+        if (!url) return
+        menu.dispatch(
+            menu.actions.insert('resize', menu.resize)
         )
-        if (!props?.size) props.onChange('size', 'full')
-    }, [props.url])
+        if (!size) onChange('size', 'full')
+    }, [url])
 
-    return props?.url
-        ? <figure onPaste={props.onPaste}>
-            <div className="image" data-size={props.size}>
-                {Array.isArray(props.url)
+    return url
+        ? <figure onPaste={onPaste}>
+            <div className="image" data-size={size}>
+                {Array.isArray(url)
                     ? (<Carousel slide={false} interval={null}
                         nextLabel="Наступний" prevLabel="Попередній">
-                        {props.url.map((image, index) => (
+                        {url.map((image, index) => (
                             <Carousel.Item key={index}>
                                 <img src={config.images.url + '/' + image} className="d-block w-100"
                                 alt={'Зображення №' + (index + 1)} />
                             </Carousel.Item>
                         ))}
                     </Carousel>)
-                    : <img src={config.images.url + '/' + props.url} alt={props.title} />
+                    : <img src={config.images.url + '/' + url} alt={title} />
                 }
                 <div className="copyright">
-                    <Field name="source" value={props.source}
-                        title="Джерело зображення" onChange={props.onChange} />
-                    <Field name="author" value={props.author}
-                        title="Автор зображення" onChange={props.onChange} />
+                    <Field name="source" value={source}
+                        title="Джерело зображення" onChange={onChange} />
+                    <Field name="author" value={author}
+                        title="Автор зображення" onChange={onChange} />
                 </div>
             </div>
-            <Field as="figcaption" name="title" value={props.title}
-                title="Підпис зображення" onChange={props.onChange} />
+            <Field as="figcaption" name="title" value={title}
+                title="Підпис зображення" onChange={onChange} />
         </figure>
         : <Form.Control type="file" onChange={handleUpload} autoFocus
             title="Оберіть зображення для заантаження" multiple
             className="my-5 mx-auto" style={{ maxWidth: '320px' }} />
 }
+
+Image.propTypes = {
+    title: PropTypes.string,
+    source: PropTypes.string,
+    author: PropTypes.string,
+    url: PropTypes.oneOfType([
+        PropTypes.string, PropTypes.arrayOf(PropTypes.string)
+    ]),
+    size: PropTypes.string,
+    menu: PropTypes.object,
+    onChange: PropTypes.func.isRequired,
+    onPaste: PropTypes.func
+}
+
+export default Image

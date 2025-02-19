@@ -1,17 +1,18 @@
+import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { Dropdown, ButtonGroup } from 'react-bootstrap'
 
-const DropdownWrapper = props => {
+const DropdownMenu = ({ variant, label, submenu, id, event, value }) => {
 
     const [show, setShow] = useState(false)
 
     return <Dropdown as={ButtonGroup} show={show} drop="down"
         onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
-        <Dropdown.Toggle variant={props.variant ?? 'none'}>
-            {props.label}
+        <Dropdown.Toggle variant={variant ?? 'none'}>
+            {label}
         </Dropdown.Toggle>
         <Dropdown.Menu align="start" renderOnMount={true} style={{ minWidth: 'auto' }}>
-            {Object.entries(props.submenu).map(([key, item]) => {
+            {Object.entries(submenu).map(([key, item]) => {
                 const result = [];
                 if (item?.divider) {
                     result.push(<Dropdown.Divider key={key + 'Divider'} />)
@@ -20,17 +21,15 @@ const DropdownWrapper = props => {
                     <Dropdown.Item as="div"
                         onClick={
                             !item?.submenu
-                                ? () => item?.event 
-                                    ? item.event() 
-                                    : props.event(key, props.id)
+                                ? () => item?.event ? item.event() : event(key, id)
                                 : null
                         } className={
-                            props?.value && (key === props.value) ? 'active' : ''
+                            value && (key === value) ? 'active' : ''
                         } key={key}>
                             {item?.submenu
-                                ? <DropdownWrapper {...item} 
-                                    id={props.id} value={props?.value}
-                                    event={item.event ?? props.event} />
+                                ? <DropdownMenu {...item}
+                                    id={id} value={value}
+                                    event={item.event ?? event} />
                                 : item.label}
                     </Dropdown.Item>
                 )
@@ -40,4 +39,13 @@ const DropdownWrapper = props => {
     </Dropdown>
 }
 
-export { DropdownWrapper as default }
+DropdownMenu.propTypes = {
+    variant: PropTypes.string,
+    label: PropTypes.string.isRequired,
+    submenu: PropTypes.object.isRequired,
+    id: PropTypes.string.isRequired,
+    event: PropTypes.func.isRequired,
+    value: PropTypes.string
+}
+
+export { DropdownMenu as default }
