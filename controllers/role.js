@@ -10,7 +10,7 @@ export default {
 
     read: async (request, response) => {
         const role = await db.collection('roles')
-            .find({ _id: ObjectId(request.params.id) }).next()
+            .find({ _id: new ObjectId(request.params.id) }).next()
         role ? response.json(role) : response.sendStatus(404);
     },
 
@@ -18,7 +18,7 @@ export default {
         const user = await db.collection('users')
             .aggregate([
                 { $match: {
-                    _id: ObjectId(userID)
+                    _id: new ObjectId(userID)
                 } },
                 { $lookup: {
                     from: 'roles',
@@ -40,10 +40,10 @@ export default {
 
     update: async (request, response) => {
         const role = { ...request.body };
-        role._id = ObjectId(role._id);
+        role._id = new ObjectId(role._id);
         role.level = parseInt(role.level);
         await db.collection('roles').updateOne(
-            { _id: ObjectId(request.params.id) },
+            { _id: new ObjectId(request.params.id) },
             { $set: role }
         );
         response.end();

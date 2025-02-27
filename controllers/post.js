@@ -41,18 +41,18 @@ export default {
 
     read: async (request, response) => {
         const post = await db.collection('posts')
-            .find({ _id: ObjectId(request.params.id) }).next();
+            .find({ _id: new ObjectId(request.params.id) }).next();
         post ? response.json(post) : response.sendStatus(404);
     },
 
     create: async (request, response) => {
         const post = { ...request.body };
         post.date = new Date(post.date);
-        post.category = ObjectId(post.category);
+        post.category = new ObjectId(post.category);
         if (post?.tags) {
-            post.tags = post.tags.map(tag => ObjectId(tag));
+            post.tags = post.tags.map(tag => new ObjectId(tag));
         }
-        post.user = ObjectId(post.user);
+        post.user = new ObjectId(post.user);
         const result = await db.collection('posts')
             .insertOne(post);
         response.end(result.insertedId.toString());
@@ -60,7 +60,7 @@ export default {
 
     update: async (request, response) => {
         const post = { ...request.body };
-        post._id = ObjectId(post._id);
+        post._id = new ObjectId(post._id);
         if (response.locals.user.role.level === 4) {
             const postOld = await db.collection('posts')
                 .find({ _id: post._id }).project({ user: true }).next();
@@ -69,14 +69,14 @@ export default {
             }
         }
         post.date = new Date(post.date);
-        post.category = ObjectId(post.category);
+        post.category = new ObjectId(post.category);
         if (post?.tags) {
-            post.tags = post.tags.map(tag => ObjectId(tag));
+            post.tags = post.tags.map(tag => new ObjectId(tag));
         }
-        post.user = ObjectId(post.user);
+        post.user = new ObjectId(post.user);
         await db.collection('posts')
             .updateOne(
-                { _id: ObjectId(request.params.id) },
+                { _id: new ObjectId(request.params.id) },
                 { $set: post }
             );
         response.end();

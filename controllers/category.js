@@ -10,7 +10,7 @@ export default {
 
     read: async (request, response) => {
         const category = await db.collection('categories')
-            .find({ _id: ObjectId(request.params.id) }).next()
+            .find({ _id: new ObjectId(request.params.id) }).next()
         category ? response.json(category) : response.sendStatus(404);
     },
 
@@ -24,10 +24,10 @@ export default {
 
     update: async (request, response) => {
         const category = { ...request.body };
-        category._id = ObjectId(category._id);
+        category._id = new ObjectId(category._id);
         category.order = parseInt(category.order);
         await db.collection('categories').updateOne(
-            { _id: ObjectId(request.params.id) },
+            { _id: new ObjectId(request.params.id) },
             { $set: category }
         );
         response.end();

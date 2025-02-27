@@ -35,7 +35,7 @@ export default {
 
     read: async (request, response) => {
         const tag = await db.collection('tags')
-            .find({ _id: ObjectId(request.params.id) }).next();            
+            .find({ _id: new ObjectId(request.params.id) }).next();            
         tag ? response.json(tag) : response.sendStatus(404);
     },
 
@@ -48,9 +48,9 @@ export default {
 
     update: async (request, response) => {
         const tag = { ...request.body };
-        tag._id = ObjectId(tag._id);
+        tag._id = new ObjectId(tag._id);
         await db.collection('tags').updateOne(
-            { _id: ObjectId(request.params.id) },
+            { _id: new ObjectId(request.params.id) },
             { $set: tag }
         );
         response.end();

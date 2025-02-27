@@ -35,7 +35,7 @@ export default {
 
     read: async (request, response) => {
         const comment = await db.collection('comments')
-            .find({ _id: ObjectId(request.params.id) }).next();
+            .find({ _id: new ObjectId(request.params.id) }).next();
         comment ? response.json(comment) : response.sendStatus(404);
     },
 
@@ -49,12 +49,12 @@ export default {
 
     update: async (request, response) => {
         const comment = { ...request.body };
-        comment._id = ObjectId(comment._id);
+        comment._id = new ObjectId(comment._id);
         comment.date = new Date(comment.date);
-        comment.user = ObjectId(comment.user);
+        comment.user = new ObjectId(comment.user);
         await db.collection('comments')
             .updateOne(
-                { _id: ObjectId(request.params.id) },
+                { _id: new ObjectId(request.params.id) },
                 { $set: comment }
             );
         response.end();

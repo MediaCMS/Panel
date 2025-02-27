@@ -45,7 +45,7 @@ export default {
 
     read: async (request, response) => {
         const user = await db.collection('users')
-            .find({ _id: ObjectId(request.params.id) })
+            .find({ _id: new ObjectId(request.params.id) })
             .project({ password: 0, token: 0 })
             .next();
         user ? response.json(user) : response.sendStatus(404);
@@ -53,7 +53,7 @@ export default {
 
     create: async (request, response) => {
         const user = { ...request.body };
-        user.role = ObjectId(user.role);
+        user.role = new ObjectId(user.role);
         const role = await db.collection('roles')
             .find({ _id: user.role }).next();
         if ((role.level > 1)) {
@@ -75,8 +75,8 @@ export default {
             }
         }
         const user = { ...request.body };
-        user._id = ObjectId(user._id);
-        user.role = ObjectId(user.role);
+        user._id = new ObjectId(user._id);
+        user.role = new ObjectId(user.role);
         if (!user.password) {
             delete user.password;
         }

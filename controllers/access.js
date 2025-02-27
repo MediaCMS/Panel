@@ -1,6 +1,7 @@
 import db from '../db.js';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import { Buffer } from 'buffer';
 import { logging } from '../utils.js';
 import config from '../config.js';
 

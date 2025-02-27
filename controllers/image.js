@@ -9,7 +9,7 @@ export default {
                 match.name = request.query.name
             }
             if (request.query?.tagID) {
-                match.tags = ObjectId(request.query.tagID)
+                match.tags = new ObjectId(request.query.tagID)
             }
         });
         const images = await db.collection('images')
@@ -19,14 +19,14 @@ export default {
 
     read: async (request, response) => {
         const image = await db.collection('images')
-            .find({ _id: ObjectId(request.params.id) }).next();
+            .find({ _id: new ObjectId(request.params.id) }).next();
         image ? response.json(image) : response.sendStatus(404);        
     },
 
     create: async (request, response) => {
         const image = { ...request.body };
         image.date = new Date(image.date);
-        image.tags = image.tags.map(tag => ObjectId(tag));
+        image.tags = image.tags.map(tag => new ObjectId(tag));
         const result = await db.collection('images')
             .insertOne(image);
         response.end(result.insertedId.toString());
@@ -34,12 +34,12 @@ export default {
 
     update: async (request, response) => {
         const image = { ...request.body };
-        image._id = ObjectId(image._id);
+        image._id = new ObjectId(image._id);
         image.date = new Date(image.date);
-        image.tags = image.tags.map(tag => ObjectId(tag));
+        image.tags = image.tags.map(tag => new ObjectId(tag));
         await db.collection('images')
             .updateOne(
-                { _id: ObjectId(request.params.id) },
+                { _id: new ObjectId(request.params.id) },
                 { $set: image }
             );
         response.end();
@@ -47,7 +47,7 @@ export default {
 
     delete: async (request, response) => {
         await db.collection('images').deleteOne({
-            _id: ObjectId(request.params.id)
+            _id: new ObjectId(request.params.id)
         })
         response.end();
     }

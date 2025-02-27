@@ -10,7 +10,7 @@ export default {
 
     read: async (request, response) => {
         const type = await db.collection('types')
-            .find({ _id: ObjectId(request.params.id) }).next()
+            .find({ _id: new ObjectId(request.params.id) }).next()
         type ? response.json(type) : response.sendStatus(404);
     },
 
@@ -24,9 +24,9 @@ export default {
 
     update: async (request, response) => {
         const type = { ...request.body };
-        type._id = ObjectId(type._id);
+        type._id = new ObjectId(type._id);
         await db.collection('types').updateOne(
-            { _id: ObjectId(request.params.id) },
+            { _id: new ObjectId(request.params.id) },
             { $set: type }
         );
         response.end();
