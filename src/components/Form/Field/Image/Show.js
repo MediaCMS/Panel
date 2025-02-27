@@ -12,13 +12,15 @@ const Show = props => {
     const [editor, setEditor] = useState(false)
     const context = useOutletContext()
 
-    const handleLoad = async () => {
+    const handleLoad = () => {
         if (!props?.name || !props?.onChange) return
-        const images = await context.api.panel.get('/images', {
-            params: { name: props.name }}
-        )
-        if (!images.length) return
-        setImage(images[0])
+        (async () => {
+            const images = await context.api.panel.get('/images', {
+                params: { name: props.name }}
+            )
+            if (!images.length) return
+            setImage(images[0])
+        })()
     }
 
     useEffect(handleLoad, [props.name])

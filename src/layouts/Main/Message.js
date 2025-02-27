@@ -40,10 +40,10 @@ const Message = ({
 }
 
 Message.propTypes = {
-    type: PropTypes.string.isRequired,
+    type: PropTypes.string,
     body: PropTypes.oneOfType([
         PropTypes.string, PropTypes.element
-    ]).isRequired,
+    ]),
     title: PropTypes.string,
     onFalse: PropTypes.func,
     onTrue: PropTypes.func,

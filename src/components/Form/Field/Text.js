@@ -18,9 +18,18 @@ const Text = props => {
 }
 
 Text.propTypes = {
-    minLength: PropTypes.number,
-    maxLength: PropTypes.number,
-    rows: PropTypes.number
+    minLength: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string
+    ]),
+    maxLength: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string
+    ]),
+    rows: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string
+    ])
 }
 
 export default Text

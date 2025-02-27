@@ -47,8 +47,8 @@ const Images = ({ upload, setUpload, onChoose }) => {
 }
 
 Images.propTypes = {
-    upload: PropTypes.bool.isRequired,
-    setUpload: PropTypes.func.isRequired,
+    upload: PropTypes.bool,
+    setUpload: PropTypes.func,
     onChoose: PropTypes.func.isRequired
 }
 

@@ -10,8 +10,7 @@ export default {
         options: {
             connectTimeoutMS: 5_000,
             socketTimeoutMS: 5_000,
-            serverSelectionTimeoutMS: 5_000,
-            useUnifiedTopology: true
+            serverSelectionTimeoutMS: 5_000
         }
     },
     jwt: {

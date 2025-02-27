@@ -39,7 +39,7 @@ const Control = props => {
         event.target.reportValidity()
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         if ('value' in props) {
             data.set(props.name, props.value, false)
         }
@@ -83,7 +83,10 @@ Control.propTypes = {
     onChange: PropTypes.func,
     onBlur: PropTypes.func,
     type: PropTypes.string,
-    pattern: PropTypes.instanceOf(RegExp),
+    pattern: PropTypes.oneOfType([
+        PropTypes.instanceOf(RegExp),
+        PropTypes.string
+    ]),
     title: PropTypes.string,
     name: PropTypes.string.isRequired,
     value: PropTypes.any,

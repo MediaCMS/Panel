@@ -16,7 +16,7 @@ const DateTime = props => {
         )
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         if (value) return
         data.set(name, new Date().toISOString())
     }, [])

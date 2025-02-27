@@ -34,13 +34,13 @@ const Single = props => {
         setItems(items)
     }
 
-    const handleClick = async event => {
+    const handleClick = event => {
         data.set(props.name, event.target.id)
         setTitle(event.target.innerHTML)
         setItems([])
     }
 
-    const handleBlur = async event => {
+    const handleBlur = event => {
         if (event.target.value === title) return
         if (event.target.value.length) {
             setPrompt(title)
@@ -52,16 +52,18 @@ const Single = props => {
         setItems([])
     }
 
-    useEffect(async () => {
-        const valueNew = value ?? data.get(props.name)
-        if (!valueNew) return
-        const item = await context.api.panel
-            .get(props.path + '/' + valueNew)
-        setTitle(item.title)
-        setValue(valueNew)
+    useEffect(() => {
+        (async () => {
+            const valueNew = value ?? data.get(props.name)
+            if (!valueNew) return
+            const item = await context.api.panel
+                .get(props.path + '/' + valueNew)
+            setTitle(item.title)
+            setValue(valueNew)
+        })()
     }, [])
 
-    useEffect(async () => {
+    useEffect(() => {
         if (!title) return
         setPrompt(title)
     }, [title])

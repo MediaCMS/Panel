@@ -24,9 +24,11 @@ const Main = ({
         )
     }, [])
 
-    useEffect(async () => {
-        const categories = await context.api.panel.get('/categories')
-        setCategories(categories)
+    useEffect(() => {
+        (async () => {
+            const categories = await context.api.panel.get('/categories')
+            setCategories(categories)
+        })()
     }, [])
 
     useEffect(() => ref.current.focus(), [ref.current])

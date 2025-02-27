@@ -10,7 +10,7 @@ const Text = ({ text, onChange, onEnter }) => {
 }
 
 Text.propTypes = {
-    text: PropTypes.string.isRequired,
+    text: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     onEnter: PropTypes.func
 }

@@ -1,5 +1,4 @@
 article {
-    font-size: calc(16px + 0.5vw) !important;
     & div.block { border: solid 1px transparent;
         &:hover { border: dashed 1px #888 !important;
             .editable, .field, .form-control, .form-select {
@@ -34,7 +33,7 @@ article {
                     }
                     & div.user { width: fit-content; 
                         & input { 
-                            max-width: 350px; color: white; 
+                            max-width: auto; color: white; 
                             font-style: italic; font-size: 1.3em;
                         }
                         ul { width: 100%; font-style: normal; text-align: center;

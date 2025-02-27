@@ -43,7 +43,10 @@ DropdownMenu.propTypes = {
     variant: PropTypes.string,
     label: PropTypes.string.isRequired,
     submenu: PropTypes.object.isRequired,
-    id: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]).isRequired,
     event: PropTypes.func.isRequired,
     value: PropTypes.string
 }

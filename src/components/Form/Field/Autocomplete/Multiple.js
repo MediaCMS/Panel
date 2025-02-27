@@ -63,13 +63,15 @@ const Multiple = props => {
         setPrompt('')
     }
 
-    useEffect(async () => {
-        const value = data.get(props.name)
-        if (!value || !value.length) return
-        const itemsNew = await context.api.panel.get(props.path, {
-            params: { _id: value, _compact: true }})
-        setItems(itemsNew)
-        setValue(value)
+    useEffect(() => {
+        (async () => {
+            const value = data.get(props.name)
+            if (!value || !value.length) return
+            const itemsNew = await context.api.panel.get(props.path, {
+                params: { _id: value, _compact: true }})
+            setItems(itemsNew)
+            setValue(value)
+        })()
     }, [data.get(props.name)])
 
     useEffect(() => {

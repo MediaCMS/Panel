@@ -8,7 +8,7 @@ await client.connect();
 function filter(pipeline, query, callback) {
     const match = {};
     if (query?._id) {
-        match._id = { $in: query._id.map(id => ObjectId(id)) }
+        match._id = { $in: query._id.map(id => new ObjectId(id)) }
     }
     if (query?.date) {
         match.date = {}
@@ -31,7 +31,7 @@ function filter(pipeline, query, callback) {
     }
     if (query?._exclude) {
         match._id = {
-            $nin: query._exclude.split(',').map(id => ObjectId(id))
+            $nin: query._exclude.split(',').map(id => new ObjectId(id))
         }
     }
     pipeline.push({ $match: match })

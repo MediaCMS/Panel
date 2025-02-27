@@ -23,7 +23,10 @@ const Menu = ({ items, id }) => {
 
 Menu.propTypes = {
     items: PropTypes.object.isRequired,
-    id: PropTypes.string.isRequired
+    id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]).isRequired
 }
 
 export default Menu

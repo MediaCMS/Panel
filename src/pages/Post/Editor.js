@@ -47,28 +47,32 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
         onChange()
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         if (!id) return
-        const postNew = await context.api.panel.get('/posts/' + id)
-        console.log(postNew)
-        const blocks = [{
-            id: 0, type: 'main', date: postNew.date, title: postNew?.title,
-            category: postNew.category, user: postNew.user
-        }]
-        if (postNew?.image) {
-            blocks[0].image = postNew.image
-        }
-        if (postNew?.blocks) {
-            blocks.push(...postNew.blocks)
-        }
-        dispatch(actions.load(blocks))
-        setSlug(postNew.slug)
-        setPost(postNew)
+        (async () => {
+            const postNew = await context.api.panel.get('/posts/' + id)
+            console.log(postNew)
+            const blocks = [{
+                id: 0, type: 'main', date: postNew.date, title: postNew?.title,
+                category: postNew.category, user: postNew.user
+            }]
+            if (postNew?.image) {
+                blocks[0].image = postNew.image
+            }
+            if (postNew?.blocks) {
+                blocks.push(...postNew.blocks)
+            }
+            dispatch(actions.load(blocks))
+            setSlug(postNew.slug)
+            setPost(postNew)
+        })()
     }, [])
 
-    useEffect(async () => {
-        const types = await context.api.panel.get('/types')
-        setTypes(types)
+    useEffect(() => {
+        (async () => {
+            const types = await context.api.panel.get('/types')
+            setTypes(types)
+        })()
     }, [])
 
     const url = useMemo(() => (

@@ -1,5 +1,5 @@
 html {
-   min-height: 100%; font-size: calc(12px + 0.5vw);
+   min-height: 100%; font-size: calc(12px + 0.25vw + 0.25vh);
    --bs-secondary-color: #e9ecef;
   & body {
     min-height: 100vh; color: #303030; line-height: calc(130% + 0.5vw); background-color: #ffffff;

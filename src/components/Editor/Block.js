@@ -97,7 +97,10 @@ Block.propTypes = {
             insert: PropTypes.func.isRequired
         }).isRequired
     }).isRequired,
-    id: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]).isRequired,
     type: PropTypes.string.isRequired,
     label: PropTypes.string,
     size: PropTypes.string

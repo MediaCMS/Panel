@@ -26,7 +26,8 @@ const initTemplate = {
         { title: 'No Referrer', value: 'noreferrer' },
         { title: 'External Link', value: 'external' },
         { title: 'Empty' }
-    ]
+    ],
+    license_key: 'gpl'
 }
 
 const EditorWrapper = props => {
