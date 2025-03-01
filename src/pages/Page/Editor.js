@@ -43,20 +43,22 @@ const PageEditor = ({ id, show, onChange, onHide }) => {
         onChange()
     }
 
-    useEffect(async () => {
+    useEffect(() => {
         if (!id) return
-        const pageNew = await context.api.panel.get('/pages/' + id)
-        const blocks = [{ id: 0, type: 'main', title: pageNew?.title }]
-        if (pageNew?.image) {
-            blocks[0].image = pageNew.image
-        }
-        if (pageNew?.blocks) {
-            blocks.push(...pageNew.blocks)
-        }
-        dispatch(actions.load(blocks))
-        console.log(pageNew)
-        setSlug(pageNew.slug)
-        setPage(pageNew)
+        (async () => {
+            const pageNew = await context.api.panel.get('/pages/' + id)
+            const blocks = [{ id: 0, type: 'main', title: pageNew?.title }]
+            if (pageNew?.image) {
+                blocks[0].image = pageNew.image
+            }
+            if (pageNew?.blocks) {
+                blocks.push(...pageNew.blocks)
+            }
+            dispatch(actions.load(blocks))
+            console.log(pageNew)
+            setSlug(pageNew.slug)
+            setPage(pageNew)
+        })()
     }, [])
 
     const url = useMemo(() => (

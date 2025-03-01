@@ -17,7 +17,9 @@ const User = () => {
 
     const handleLoad = async () => {
         setUsers(
-            await context.api.panel.get('/users', { params })
+            await context.api.panel.get(
+                '/users', { params }
+            )
         )
     }
 

@@ -17,7 +17,9 @@ const Editor = ({ id, show, onChange, onHide }) => {
                 return context.setAlert('Відсутній повторний пароль')
             }
             if (userNew.password !== userNew.password2) {
-                return context.setAlert('Пароль відрізняється від повторного пароля')
+                return context.setAlert(
+                    'Пароль відрізняється від повторного пароля'
+                )
             }
             userNew.password = MD5(userNew.password).toString()
         } else {
@@ -31,73 +33,85 @@ const Editor = ({ id, show, onChange, onHide }) => {
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/users/' + id)
+        await context.api.panel.delete(
+            '/users/' + id
+        )
         onChange()
     }
 
-    useEffect(async () => {
-        const roles = await context.api.panel.get('/roles')
-        setRoles(roles)
-        if (id) {
-            setUser(await context.api.panel.get('/users/' + id))
-        } else {
-            setUser(user => ({ ...user, role: roles.at(-1)._id }))
-        }
+    useEffect(() => {
+        (async () => {
+            const roles = await context.api.panel.get(
+                '/roles'
+            )
+            setRoles(roles)
+            if (id) {
+                setUser(
+                    await context.api.panel.get(
+                        '/users/' + id
+                    )
+                )
+            } else {
+                setUser(
+                    user => ({
+                        ...user, role: roles.at(-1)._id
+                    })
+                )
+            }
+        })()
    }, [])
 
-    return (
-        <Form data={user} show={show} onHide={onHide}
-            onChange={setUser} onSubmit={handleSubmit} onDelete={handleDelete}
-            title="Редагування користувача">
-            <Row>
-                <Cell sm="6">
-                    <Field.Title placeholder="Леся Українка" required />
-                </Cell>
-                <Cell sm="6">
-                    <Field.Slug source={user.title} placeholder="lesia-ukrainka" required />
-                </Cell>
-            </Row>
-            <Row>
-                <Cell sm="6">
-                    <Field type="text" name="phone" label='Телефон'
-                        placeholder="+38 098 765-43-21" />
-                </Cell>
-                <Cell sm="6">
-                    <Field type="email" name="email" label='Пошта'
-                        placeholder="lesya.ukrainka@gmail.com" required />
-                </Cell>
-            </Row>
-            <Row>
-                <Cell sm="4">
-                    <Field type="password" name="password"
-                        label="Пароль" pattern="[a-zA-Z0-9$_\-]{8,32}"
-                        title="Латиниця, цифри, підкреслення (від 8 до 32 символів)" />
-                </Cell>
-                <Cell sm="4">
-                    <Field type="password" name="password2"
-                        label="Пароль (повторно)" pattern="[a-zA-Z0-9$_\-]{8,32}"
-                        title="Латиниця, цифри, підкреслення (від 8 до 32 символів)" />
-                </Cell>
-                <Cell sm="4">
-                    <Field type="select" name="role" label='Роль'>
-                        {roles?.map(role => (
-                            <option value={role._id} key={role._id}>{role.title}</option>
-                        ))}
-                    </Field>
-                </Cell>
-            </Row>
-            <Row>
-                <Field.Description label="Нотатки"
-                    placeholder="Короткий опис ..." />
-            </Row>
-            <Row><Field.Image /></Row>
-            <Row>
-                <Cell sm="6">
-                    <Field.Status label='Видимість користувача' />
-                </Cell>
-            </Row>
-        </Form>
-    )
+    return <Form data={user} show={show} onHide={onHide}
+        onChange={setUser} onSubmit={handleSubmit} onDelete={handleDelete}
+        title="Редагування користувача">
+        <Row>
+            <Cell sm="6">
+                <Field.Title placeholder="Леся Українка" required />
+            </Cell>
+            <Cell sm="6">
+                <Field.Slug source={user.title} placeholder="lesia-ukrainka" required />
+            </Cell>
+        </Row>
+        <Row>
+            <Cell sm="6">
+                <Field type="text" name="phone" label='Телефон'
+                    placeholder="+38 098 765-43-21" />
+            </Cell>
+            <Cell sm="6">
+                <Field type="email" name="email" label='Пошта'
+                    placeholder="lesya.ukrainka@gmail.com" required />
+            </Cell>
+        </Row>
+        <Row>
+            <Cell sm="4">
+                <Field type="password" name="password"
+                    label="Пароль" pattern="[a-zA-Z0-9$_\-]{8,32}"
+                    title="Латиниця, цифри, підкреслення (від 8 до 32 символів)" />
+            </Cell>
+            <Cell sm="4">
+                <Field type="password" name="password2"
+                    label="Пароль (повторно)" pattern="[a-zA-Z0-9$_\-]{8,32}"
+                    title="Латиниця, цифри, підкреслення (від 8 до 32 символів)" />
+            </Cell>
+            <Cell sm="4">
+                <Field type="select" name="role" label='Роль'>
+                    {roles?.map(role => (
+                        <option value={role._id} key={role._id}>{role.title}</option>
+                    ))}
+                </Field>
+            </Cell>
+        </Row>
+        <Row>
+            <Field.Description label="Нотатки"
+                placeholder="Короткий опис ..." />
+        </Row>
+        <Row><Field.Image /></Row>
+        <Row>
+            <Cell sm="6">
+                <Field.Status label='Видимість користувача' />
+            </Cell>
+        </Row>
+    </Form>
 }
 
 Editor.propTypes = {

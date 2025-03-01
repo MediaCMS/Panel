@@ -14,7 +14,7 @@ const Table = ({ text, size, menu, onChange }) => {
 
     const [editor, setEditor] = useState()
 
-    useEffect( () => {
+    useEffect(() => {
         menu.dispatch(
             menu.actions.insert(
                 'resize', menu.resize

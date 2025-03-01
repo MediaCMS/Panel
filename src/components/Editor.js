@@ -20,7 +20,7 @@ for(const type of Object.keys(types)) {
     ).default
 }
 
-function Editor(props) {
+const Editor = props => {
 
     const handleInsert = (type, id) => {
         props.blocks.dispatch(

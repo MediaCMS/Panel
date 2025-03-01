@@ -20,13 +20,17 @@ const Main = ({
 
     useEffect(() => {
         menu.dispatch(
-            menu.actions.remove(['move', 'remove'])
+            menu.actions.remove(
+                ['move', 'remove']
+            )
         )
     }, [])
 
     useEffect(() => {
         (async () => {
-            const categories = await context.api.panel.get('/categories')
+            const categories = await context.api.panel.get(
+                '/categories'
+            )
             setCategories(categories)
         })()
     }, [])

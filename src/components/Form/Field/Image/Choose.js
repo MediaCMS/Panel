@@ -15,12 +15,16 @@ const Choose = props => {
         const file = event.target.files[0]
         if (!(file.type in config.images.types)) {
             event.target.value = null
-            context.setAlert(`Заборонений тип файлу зображення`)
+            context.setAlert(
+                `Заборонений тип файлу зображення`
+            )
             return
         }
         if (file.size > config.images.size) {
             event.target.value = null
-            context.setAlert(`Розмір файлу зображення більше дозволеного`)
+            context.setAlert(
+                `Розмір файлу зображення більше дозволеного`
+            )
             return
         }
         const formData = new FormData()

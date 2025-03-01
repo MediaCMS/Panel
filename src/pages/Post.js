@@ -24,7 +24,9 @@ const Post = () => {
 
     const handleLoad = async () => {
         setPosts(
-            await context.api.panel.get('/posts', { params })
+            await context.api.panel.get(
+                '/posts', { params }
+            )
         )
     }
 

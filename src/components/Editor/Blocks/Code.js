@@ -11,7 +11,9 @@ const Code = props => {
     const [editable, setEditable] = useState(false)
 
     const handleChangeText = event => {
-        props.onChange('text', event.target.textContent)
+        props.onChange(
+            'text', event.target.textContent
+        )
         setEditable(false)
     }
 
@@ -74,7 +76,8 @@ const Code = props => {
     }, [props.language])
 
     useEffect(() => {
-        if (!('text' in props) && editable) ref.current.focus()
+        if (!('text' in props) && editable)
+            ref.current.focus()
     }, [ref.current])
 
     return editable

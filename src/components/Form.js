@@ -10,6 +10,23 @@ import Cell from './Form/Cell.js'
 import Buttons from './Form/Buttons.js'
 import '../assets/styles/components/form.css'
 
+const recurse = (data, name, value, override = true) => {
+    if (name.length > 1) {
+        if (typeof data[name[0]] === 'undefined') {
+            data[name[0]] = {}
+        }
+        return recurse(data[name[0]], name.slice(1), value, override)
+    } else {
+        if (typeof value === 'undefined') return data[name[0]]
+        if ((name[0] in data) && !override) return
+        data[name[0]] = (
+            (typeof value == 'string') 
+            && !isNaN(value) 
+            && !isNaN(parseFloat(value)))
+            ? +value : value
+    }
+}
+
 const FormWrapper = props => {
 
     const title = props.title ??
@@ -62,23 +79,6 @@ const FormWrapper = props => {
             </Modal>
         </Context.Provider>
     )
-}
-
-function recurse(data, name, value, override = true) {
-    if (name.length > 1) {
-        if (typeof data[name[0]] === 'undefined') {
-            data[name[0]] = {}
-        }
-        return recurse(data[name[0]], name.slice(1), value, override)
-    } else {
-        if (typeof value === 'undefined') return data[name[0]]
-        if ((name[0] in data) && !override) return
-        data[name[0]] = (
-            (typeof value == 'string') 
-            && !isNaN(value) 
-            && !isNaN(parseFloat(value)))
-            ? +value : value
-    }
 }
 
 FormWrapper.propTypes = {

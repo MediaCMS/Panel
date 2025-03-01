@@ -19,7 +19,9 @@ const Log = () => {
 
     const handleLoad = async () => {
         setLogs(
-            await context.api.panel.get('/logs', { params })
+            await context.api.panel.get(
+                '/logs', { params }
+            )
         )
     }
 

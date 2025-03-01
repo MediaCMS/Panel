@@ -10,22 +10,32 @@ const Editor = ({ id, show, onChange, onHide }) => {
 
     const handleSubmit = async () => {
         if (id) {
-            await context.api.panel.put('/comments/' + id, comment)
+            await context.api.panel.put(
+                '/comments/' + id, comment
+            )
         } else {
-            await context.api.panel.post('/comments', comment)
+            await context.api.panel.post(
+                '/comments', comment
+            )
         }
         onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/comments/' + id)
+        await context.api.panel.delete(
+            '/comments/' + id
+        )
         onChange()
     }
 
-    useEffect(async () => {
-        id && setComment(
-            await context.api.panel.get('/comments/' + id)
-        )
+    useEffect( () => {
+        id && (async () =>
+            setComment(
+                await context.api.panel.get(
+                    '/comments/' + id
+                )
+            )
+        )()
     }, [])
 
     return (

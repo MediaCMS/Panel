@@ -12,7 +12,9 @@ const Category = () => {
 
     const handleLoad = async () => {
         setCategories(
-            await context.api.panel.get('/categories')
+            await context.api.panel.get(
+                '/categories'
+            )
         )
     }
 

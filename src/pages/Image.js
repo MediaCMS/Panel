@@ -11,7 +11,10 @@ const Image = () => {
         context.init({
             title: 'Зображення',
             submenu: [
-                { title: 'Завантажити', onClick: () => setUpload(true) },
+                {
+                    title: 'Завантажити',
+                    onClick: () => setUpload(true)
+                },
             ], 
             width: 'small'
         })

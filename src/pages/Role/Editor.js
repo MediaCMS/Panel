@@ -10,22 +10,32 @@ const Editor = ({ id, show, onChange, onHide }) => {
 
     const handleSubmit = async () => {
         if (id) {
-            await context.api.panel.put('/roles/' + id, role)
+            await context.api.panel.put(
+                '/roles/' + id, role
+            )
         } else {
-            await context.api.panel.post('/roles', role)
+            await context.api.panel.post(
+                '/roles', role
+            )
         }
         onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/roles/' + id)
+        await context.api.panel.delete(
+            '/roles/' + id
+        )
         onChange()
     }
 
-    useEffect(async () => {
-        id && setRole(
-            await context.api.panel.get('/roles/' + id)
-        )
+    useEffect(() => {
+        id && (async () =>
+            setRole(
+                await context.api.panel.get(
+                    '/roles/' + id
+                )
+            )
+        )()
     }, [])
 
     return (

@@ -12,7 +12,7 @@ const List = ({ text, size, menu, onChange }) => {
                 'resize', menu.resize
             )
         )
-        if (!size) onChange('size', 'full')
+        size && onChange('size', 'full')
     }, [])
 
     useEffect( () => {

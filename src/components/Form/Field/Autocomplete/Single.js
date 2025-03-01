@@ -64,8 +64,7 @@ const Single = props => {
     }, [])
 
     useEffect(() => {
-        if (!title) return
-        setPrompt(title)
+        title && setPrompt(title)
     }, [title])
 
     return (

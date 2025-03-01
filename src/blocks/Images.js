@@ -11,12 +11,14 @@ const Images = ({ upload, setUpload, onChoose }) => {
     const [tags, setTags] = useState([])
     const context = useOutletContext()
 
-    const handleLoad = async () => {
-        setTags(
-            await context.api.panel.get('/tags', {
-                params: { _images: true }
-            })
-        )
+    const handleLoad = () => {
+        (async () => 
+            setTags(
+                await context.api.panel.get('/tags', {
+                    params: { _images: true }
+                })
+            )
+        )()
     }
 
     useEffect(() => handleLoad(), [])

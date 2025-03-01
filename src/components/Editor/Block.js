@@ -5,7 +5,9 @@ import Menu from './Menu.js'
 
 const Block = props => {
 
-    const [menuState, menuDispatch] = useReducer(MenuReducer, props.menu)
+    const [menuState, menuDispatch] = useReducer(
+        MenuReducer, props.menu
+    )
     const [isActive, setActive] = useState(false)
     // eslint-disable-next-line no-unused-vars
     const { component, blocks, ...propsNew } = props
@@ -13,22 +15,30 @@ const Block = props => {
     const handleChange = (name, value) => {
         if (typeof name === 'undefined') {
             return props.blocks.dispatch(
-                props.blocks.actions.remove(props.id)
+                props.blocks.actions.remove(
+                    props.id
+                )
             )
         }
         if (typeof name === 'object'
             && !Array.isArray(name) && name !== null) {
             return props.blocks.dispatch(
-                props.blocks.actions.merge(props.id, name)
+                props.blocks.actions.merge(
+                    props.id, name
+                )
             )
         }
         if (typeof value === 'undefined') {
             return props.blocks.dispatch(
-                props.blocks.actions.remove(props.id, name)
+                props.blocks.actions.remove(
+                    props.id, name
+                )
             )
         }
         props.blocks.dispatch(
-            props.blocks.actions.update(props.id, name, value)
+            props.blocks.actions.update(
+                props.id, name, value
+            )
         )
     }
 
@@ -47,7 +57,9 @@ const Block = props => {
     const handleEnter = event => {
         if (event.key === 'Enter') {
             props.blocks.dispatch(
-                props.blocks.actions.insert(props.id, 'text')
+                props.blocks.actions.insert(
+                    props.id, 'text'
+                )
             )
             event.preventDefault()
         }
@@ -56,7 +68,9 @@ const Block = props => {
     useEffect(() => {
         if (!props?.size) return
         menuDispatch(
-            menuActions.update('resize', { value: props.size })
+            menuActions.update(
+                'resize', { value: props.size }
+            )
         )
     }, [props.size])
 

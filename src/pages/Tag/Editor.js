@@ -10,23 +10,33 @@ const Editor = ({ id, show, onChange, onHide }) => {
 
     const handleSubmit = async () => {
         if (id) {
-            await context.api.panel.put('/tags/' + id, tag)
+            await context.api.panel.put(
+                '/tags/' + id, tag
+            )
         } else {
-            await context.api.panel.post('/tags', tag)
+            await context.api.panel.post(
+                '/tags', tag
+            )
         }
         onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete('/tags/' + id)
+        await context.api.panel.delete(
+            '/tags/' + id
+        )
         onChange()
     }
 
-    useEffect(async () => {
-        id && setTag(
-            await context.api.panel.get('/tags/' + id)
-        )
-    }, [])
+    useEffect(() => {
+        id && (async () => 
+            setTag(
+                await context.api.panel.get(
+                    '/tags/' + id
+                )
+            )
+        )()
+}, [])
 
     return (
         <Form data={tag} show={show} onHide={onHide}

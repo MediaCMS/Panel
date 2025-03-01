@@ -12,7 +12,9 @@ const Page = () => {
 
     const handleLoad = async () => {
         setPages(
-            await context.api.panel.get('/pages')
+            await context.api.panel.get(
+                '/pages'
+            )
         )
     }
 

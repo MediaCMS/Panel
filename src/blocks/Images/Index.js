@@ -14,19 +14,21 @@ const Index = ({ tag, setTag, onChange, onChoose }) => {
     const [size, setSize] = useState('lg')
     const context = useOutletContext()
 
-    const handleLoad = async () => {
+    const handleLoad = () => {
         if (!tag) return
-        const images = await context.api.panel.get('/images', {
-            params: { 'tagID': tag._id }
-        })
-        if (images.length) {
-            setFullScreen(images.length > 5 ? true : false)
-            setSize(images.length > 2 ? 'xl' : 'lg')
-            setImages(images)
-        } else {
-            setTag()
-        }
-        onChange()
+        (async () => {
+            const images = await context.api.panel.get('/images', {
+                params: { 'tagID': tag._id }
+            })
+            if (images.length) {
+                setFullScreen(images.length > 5 ? true : false)
+                setSize(images.length > 2 ? 'xl' : 'lg')
+                setImages(images)
+            } else {
+                setTag()
+            }
+            onChange()
+        })()
     }
 
     const handleClick = async image => {
@@ -38,7 +40,7 @@ const Index = ({ tag, setTag, onChange, onChoose }) => {
         }
     }
 
-    useEffect(() => handleLoad(), [tag])
+    useEffect(handleLoad, [tag])
 
     return <>
         <Modal show={!!tag} size={size} fullscreen={fullScreen}

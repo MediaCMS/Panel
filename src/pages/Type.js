@@ -12,7 +12,9 @@ const Type = () => {
 
     const handleLoad = async () => {
         setTypes(
-            await context.api.panel.get('/types')
+            await context.api.panel.get(
+                '/types'
+            )
         )
     }
 

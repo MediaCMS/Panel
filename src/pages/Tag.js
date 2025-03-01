@@ -15,7 +15,9 @@ const Tag = () => {
 
     const handleLoad = async () => {
         setTags(
-            await context.api.panel.get('/tags', { params })
+            await context.api.panel.get(
+                '/tags', { params }
+            )
         )
     }
 

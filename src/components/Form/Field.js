@@ -1,5 +1,4 @@
 import Field from './Field/Field.js'
-//import Image from './Field/Image.js'
 
 const modules = [
     'Date', 'DateTime', 'Title', 'Description', 'Body', 'Text', 'Tag', 'Image',

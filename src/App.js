@@ -57,7 +57,9 @@ function NotFound() {
     const context = useOutletContext()
 
     useEffect(() => {
-        context.init({ title: 'Сторінка не знайдена' })
+        context.init(
+            { title: 'Сторінка не знайдена' }
+        )
     }, [])
 
     return (

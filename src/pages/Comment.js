@@ -23,7 +23,9 @@ const Comment = () => {
 
     const handleLoad = async () => {
         setComments(
-            await context.api.panel.get('/comments', { params })
+            await context.api.panel.get(
+                '/comments', { params }
+            )
         )
     }
 

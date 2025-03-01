@@ -12,7 +12,9 @@ const Role = () => {
 
     const handleLoad = async () => {
         setRoles(
-            await context.api.panel.get('/roles')
+            await context.api.panel.get(
+                '/roles'
+            )
         )
     }
 

@@ -23,7 +23,7 @@ const Video = ({ url, size, ratio, menu, onChange }) => {
         onChange(data)
     }
 
-    useEffect( () => {
+    useEffect(() => {
         menu.dispatch(
             menu.actions.insert(
                 'resize', menu.resize

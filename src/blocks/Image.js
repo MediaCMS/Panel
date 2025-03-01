@@ -26,10 +26,14 @@ const ImageWrapper = props => {
         setImage({})
     }
 
-    useEffect(async () => {
-        props?.id && setImage(
-            await context.api.panel.get('/images/' + props.id)
-        )
+    useEffect( () => {
+        props?.id && (async () => 
+            setImage(
+                await context.api.panel.get(
+                    '/images/' + props.id
+                )
+            )
+        )()
     }, [props.id])
 
     return (
