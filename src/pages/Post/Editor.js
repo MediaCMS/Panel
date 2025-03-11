@@ -98,7 +98,7 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
                 </Row>
                 <Row>
                     <Cell sm="5">
-                        <Field.Slug source={post?.title} required
+                        <Field.Slug source={state[0].title} required
                             placeholder="десь-колись-з-кимось-відбулась-якась-подія" />
                     </Cell>
                     <Cell sm="3">
