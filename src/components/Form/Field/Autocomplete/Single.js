@@ -62,7 +62,7 @@ const Single = props => {
             setTitle(item.title)
             setValue(valueNew)
         })()
-    }, [props.value])
+    }, [props.value, data.get(props.name)])
 
     useEffect(() => {
         title && setPrompt(title)
