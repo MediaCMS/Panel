@@ -14,12 +14,14 @@ const Editor = ({ id, show, onChange, onHide }) => {
         const userNew = { ...user }
         if (userNew?.password) {
             if (!userNew?.password2) {
-                return context.setAlert('Відсутній повторний пароль')
+                context.setAlert('Відсутній повторний пароль')
+                return false
             }
             if (userNew.password !== userNew.password2) {
-                return context.setAlert(
+                context.setAlert(
                     'Пароль відрізняється від повторного пароля'
                 )
+                return false
             }
             userNew.password = MD5(userNew.password).toString()
         } else {

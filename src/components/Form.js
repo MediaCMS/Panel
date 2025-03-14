@@ -48,15 +48,13 @@ const FormWrapper = props => {
         }
     }
 
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault()
         event.stopPropagation()
-        props.onSubmit(
-            Object.fromEntries(
-                new FormData(event.target)
-            )
-        )
-        props.onHide()
+        const form = new FormData(event.target)
+        const data = Object.fromEntries(form)
+        const result = await props.onSubmit(data) ?? true
+        result && props.onHide()
     }
 
     return (
