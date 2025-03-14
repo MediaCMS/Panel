@@ -85,8 +85,6 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
         config.main.url + '/publikatsiyi/' + post.slug
     ), [post.slug])
 
-    useEffect(() => console.log(post), [post])
-
     return (
         <Form data={post} show={show} onHide={onHide}
             onChange={setPost} onSubmit={handleSubmit} onDelete={handleDelete}

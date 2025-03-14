@@ -12,7 +12,7 @@ import config from '../../../config.js'
 const Main = ({
     title, category, image, user, menu, onChange, onPaste
 }) => {
-
+    
     const ref = useRef()
     const [categories, setCategories] = useState([])
     const [extended] = useState(!!user)

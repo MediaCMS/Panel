@@ -9,7 +9,7 @@ const Single = props => {
     const [prompt, setPrompt] = useState('')
     const [items, setItems] = useState([])
     const [title, setTitle] = useState()
-    const [value, setValue] = useState(props?.value)
+    const [value, setValue] = useState()
     const context = useOutletContext()
     const data = useContext(Context)
 
@@ -48,20 +48,21 @@ const Single = props => {
             data.set(props.name, null)
             setPrompt('')
             setTitle('')
+            setValue('')
         }
         setItems([])
     }
 
     useEffect(() => {
         (async () => {
-            const valueNew = value ?? data.get(props.name)
+            const valueNew = props.value ?? data.get(props.name)
             if (!valueNew) return
             const item = await context.api.panel
                 .get(props.path + '/' + valueNew)
             setTitle(item.title)
             setValue(valueNew)
         })()
-    }, [])
+    }, [props.value])
 
     useEffect(() => {
         title && setPrompt(title)
@@ -78,7 +79,8 @@ const Single = props => {
                 pattern={props.pattern ?? '.{1,128}'} onChange={handleChange}
                 onFocus={handleFocus} onBlur={handleBlur} autoComplete="off"
                 title={props.title ?? 'Введіть символи для пошуку'}
-                required={!!props?.required} disabled={!!props?.disabled} />
+                required={!!props?.required} disabled={!!props?.disabled}
+                placeholder={props?.placeholder} />
             {!!items.length && (
                 <ul className="dropdown-menu show">
                     {items.map(item => (
@@ -102,6 +104,7 @@ Single.propTypes = {
     title: PropTypes.string,
     required: PropTypes.bool,
     disabled: PropTypes.bool,
+    placeholder: PropTypes.string,
     className: PropTypes.string
 }
 
