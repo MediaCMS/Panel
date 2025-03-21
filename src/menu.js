@@ -19,7 +19,7 @@ export default [
     },
     {
         title: 'Коментарі',
-        description: 'Список коментаurlрів користувачыв',
+        description: 'Список коментарів користувачыв',
         path: '/comments',
         level: 3
     },

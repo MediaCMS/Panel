@@ -28,7 +28,7 @@ export const actions = {
 
 export default function (state, action) {
     switch (action.type) {
-        case LOAD: return action.payload.blocks
+        case LOAD: return action.payload.blocks ?? []
         case INSERT: {
             const blocks = state.map(block => block)
             blocks.splice(

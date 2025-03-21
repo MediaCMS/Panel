@@ -13,9 +13,13 @@ export default {
     images: {
         url: 'https://image.example.com/',
         key: '',
-        types: { 'image/jpeg': 'jpg' },
-        size: 10 * 1024 ** 2,
-        timeout: 30_000
+        types: { 
+            'image/jpeg': 'jpg',
+            'image/png': 'png',
+            'image/gif': 'gif'
+        },
+        size: 8 * 1024 ** 2,
+        timeout: 10_000
     },
     google: {
         recaptcha: {
@@ -38,7 +42,7 @@ export default {
         'січня', 'лютого', 'березня', 'квітня', 'травня', 'червня',
         'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'
     ],
-    copyright: '2023',
+    copyright: '2025',
     mode: 'development',
     debug: true,
     limit: 100

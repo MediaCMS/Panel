@@ -16,7 +16,7 @@ import { Login, Logout } from './pages/Access.js'
 import config from './config.js'
 
 const articleLink = document.createElement('link')
-articleLink.setAttribute('href', config.main.url + '/article.css?v=3')
+articleLink.setAttribute('href', config.main.url + '/blocks.css?v=3')
 articleLink.setAttribute('rel', 'stylesheet')
 document.head.appendChild(articleLink)
 
