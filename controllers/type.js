@@ -25,9 +25,9 @@ export default {
     update: async (request, response) => {
         const type = { ...request.body };
         type._id = new ObjectId(type._id);
-        await db.collection('types').updateOne(
+        await db.collection('types').replaceOne(
             { _id: new ObjectId(request.params.id) },
-            { $set: type }
+            { ...type }
         );
         response.end();
     },

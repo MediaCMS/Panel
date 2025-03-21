@@ -52,11 +52,10 @@ export default {
         comment._id = new ObjectId(comment._id);
         comment.date = new Date(comment.date);
         comment.user = new ObjectId(comment.user);
-        await db.collection('comments')
-            .updateOne(
-                { _id: new ObjectId(request.params.id) },
-                { $set: comment }
-            );
+        await db.collection('comments').replaceOne(
+            { _id: new ObjectId(request.params.id) },
+            { ...comment }
+        );
         response.end();
     },
 

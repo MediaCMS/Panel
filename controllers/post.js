@@ -74,11 +74,10 @@ export default {
             post.tags = post.tags.map(tag => new ObjectId(tag));
         }
         post.user = new ObjectId(post.user);
-        await db.collection('posts')
-            .updateOne(
-                { _id: new ObjectId(request.params.id) },
-                { $set: post }
-            );
+        await db.collection('posts').replaceOne(
+            { _id: new ObjectId(request.params.id) },
+            { ...post }
+        );
         response.end();
     },
 

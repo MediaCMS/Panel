@@ -42,9 +42,9 @@ export default {
         const role = { ...request.body };
         role._id = new ObjectId(role._id);
         role.level = parseInt(role.level);
-        await db.collection('roles').updateOne(
+        await db.collection('roles').replaceOne(
             { _id: new ObjectId(request.params.id) },
-            { $set: role }
+            { ...role }
         );
         response.end();
     },

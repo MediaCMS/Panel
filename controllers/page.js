@@ -24,11 +24,10 @@ export default {
     update: async (request, response) => {
         const page = { ...request.body };
         page._id = new ObjectId(page._id);
-        await db.collection('pages')
-            .updateOne(
-                { _id: new ObjectId(request.params.id) },
-                { $set: page }
-            );
+        await db.collection('pages').replaceOne(
+            { _id: new ObjectId(request.params.id) },
+            { ...page }
+        );
         response.end();
     },
 

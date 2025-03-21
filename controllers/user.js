@@ -81,7 +81,7 @@ export default {
             delete user.password;
         }
         await db.collection('users')
-            .updateOne({ _id }, { $set: user });
+            .replaceOne({ _id }, { ...user });
         response.end();
     },
 

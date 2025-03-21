@@ -37,11 +37,10 @@ export default {
         image._id = new ObjectId(image._id);
         image.date = new Date(image.date);
         image.tags = image.tags.map(tag => new ObjectId(tag));
-        await db.collection('images')
-            .updateOne(
-                { _id: new ObjectId(request.params.id) },
-                { $set: image }
-            );
+        await db.collection('images').replaceOne(
+            { _id: new ObjectId(request.params.id) },
+            { ...image }
+        );
         response.end();
     },
 

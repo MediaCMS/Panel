@@ -49,9 +49,9 @@ export default {
     update: async (request, response) => {
         const tag = { ...request.body };
         tag._id = new ObjectId(tag._id);
-        await db.collection('tags').updateOne(
+        await db.collection('tags').replaceOne(
             { _id: new ObjectId(request.params.id) },
-            { $set: tag }
+            { ...tag }
         );
         response.end();
     },

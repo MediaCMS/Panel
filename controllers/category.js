@@ -26,9 +26,9 @@ export default {
         const category = { ...request.body };
         category._id = new ObjectId(category._id);
         category.order = parseInt(category.order);
-        await db.collection('categories').updateOne(
+        await db.collection('categories').replaceOne(
             { _id: new ObjectId(request.params.id) },
-            { $set: category }
+            { ...category }
         );
         response.end();
     },
