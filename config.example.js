@@ -1,5 +1,5 @@
 export default {
-    host: 'cp.example.com',
+    host: 'panel.example.com',
     protocol: 'https',
     ip: '127.0.1.2',
     port: 8888,
@@ -19,12 +19,23 @@ export default {
     cookie: {
         maxAge: 1_000 * 60 * 60 * 24
     },
+    main: {
+        url: 'https://main.varianty.com',
+        key: '',
+        timeout: 10_000
+    },
+    image: {
+        url: 'https://image.varianty.com',
+        key: '',
+        timeout: 10_000
+    },
     google: {
         recaptcha: {
             url: 'https://www.google.com/recaptcha/api/siteverify',
             key: ''
         }
     },
+    interval: 15 * 60 * 1_000,
     limit: 100,
     log: '/log'
 }
