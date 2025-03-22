@@ -12,14 +12,14 @@ const Sort = props => {
         <Form.Group className={props.className}>
             {props?.children
                  ?  (<>
-                        <Form.Label>{props.label ?? 'Сортування (поле)'}</Form.Label>
+                        <Form.Label>{props.label ?? 'Поле сортування'}</Form.Label>
                         <Control type="select" name="_sort.field"
                             title="Сортування за полем" {...propsNew} >
                             {propsNew.children}
                         </Control>
                     </>)
                  :  (<>
-                        <Form.Label>{props.label ?? 'Сортування (напрям)'}</Form.Label>
+                        <Form.Label>{props.label ?? 'Напрям сортування'}</Form.Label>
                         <Control type="select" name="_sort.order"
                             title="Напрям сортування" {...propsNew} >
                             <option value={1}>Низхідний</option>

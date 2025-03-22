@@ -36,7 +36,7 @@ const FormWrapper = props => {
         )
 
     const actions = { 
-        set: (name, value, override) => {
+        set: (name, value = null, override) => {
             props.onChange(dataOld => {
                 const dataNew = { ...dataOld }
                 recurse(dataNew, name.split('.'), value, override)

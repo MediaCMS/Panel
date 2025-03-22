@@ -9,7 +9,7 @@ const Field = props => {
     const { className, label, ...propsNew } = props
 
     return (
-        <Form.Group className={'field ' + (props.className || '')}>
+        <Form.Group className={'field ' + (props.className ?? '')}>
             {props?.label && <Form.Label>{props.label}</Form.Label>}
             {props?.type
                 ? <Control {...propsNew}>{props?.children}</Control>

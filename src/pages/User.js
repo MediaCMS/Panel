@@ -9,18 +9,25 @@ const User = () => {
     const [id, setID] = useState()
     const [users, setUsers] = useState([])
     const [params, setParams] = useState({
-        status: true, _sort: { field: 'title', order: 1 }
+        status: true, _skip: 0, _limit: 50,
+        _sort: { field: 'title', order: 1 }
     })
     const [editor, setEditor] = useState(false)
     const [filter, setFilter] = useState(false)
     const context = useOutletContext()
 
-    const handleLoad = async () => {
-        setUsers(
-            await context.api.panel.get(
-                '/users', { params }
-            )
-        )
+    const load = async params => {
+        setParams(params)
+        return await context.api.panel.get('/users', { params })
+     }
+
+    const handleLoad = async () => 
+        setUsers(await load({ ...params, _skip: 0 })
+    )
+
+    const handleAppend = async skip => {
+        const usersNew = await load({ ...params, _skip: skip })
+        setUsers([...users, ...usersNew])
     }
 
     useEffect(() => {
@@ -38,7 +45,8 @@ const User = () => {
     }, [])
 
     return <>
-        <Table columns={['Назва', 'Пошта', 'Роль']}>
+        <Table columns={['Назва', 'Пошта', 'Роль']} className=""
+            params={params} onAppend={handleAppend}>
             {users.map(user => (
                 <Row status={user.status} key={user._id}
                     onClick={() => {setID(user._id);setEditor(true)}}>

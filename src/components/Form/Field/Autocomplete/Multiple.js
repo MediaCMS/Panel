@@ -94,7 +94,7 @@ const Multiple = props => {
                         pattern={props.pattern ?? '.{1,10}'}
                         onChange={handleChange} onBlur={handleBlur}
                         title={props.title ?? 'Введіть символи для пошуку'}
-                        autoComplete="off" ref={ref} />
+                        autoComplete="off" placeholder={props.placeholder} ref={ref} />
                     {!!list.length && (
                         <ul className="dropdown-menu show">
                             {list.map(l => (
@@ -124,6 +124,7 @@ Multiple.propTypes = {
     className: PropTypes.string,
     label: PropTypes.string,
     pattern: PropTypes.string,
+    placeholder: PropTypes.string,
     title: PropTypes.string,
     required: PropTypes.bool
 }

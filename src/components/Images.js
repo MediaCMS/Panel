@@ -2,28 +2,30 @@ import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap'
 import Image from './Images/Image.js'
-import config from '../../config.js'
+import config from '../config.js'
 import '../assets/styles/components/images.css'
 
 const Images = props => {
 
-    const [rows, setRows] = useState(config.rows)
+    const [limit, setLimit] = useState(config.limit)
 
-    const handleMore = () => {
-        setRows(rowsOld => rowsOld + config.rows)
+    const handleAppend = () => {
+        setLimit(limitOld => limitOld + config.limit)
     }
 
-    return (<>
+    return <>
         <div className="images">
-            {props.children.slice(0, rows)}
+            {props.children.slice(0, limit)}
         </div>
-        {props.children.length > rows ? (
+        {props.children.length > limit && (
             <div className="text-center">
                 <Button variant="outline-secondary"
-                    classname="my-4" onClick={handleMore}>Більше ...</Button>
+                    classname="my-4" onClick={handleAppend}>
+                        Більше ...
+                </Button>
             </div>
-        ) : null}
-   </>)
+        )}
+   </>
 }
 
 Images.propTypes = {

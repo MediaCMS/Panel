@@ -3,10 +3,15 @@ import PropTypes from 'prop-types'
 
 const Cell = props => {
 
-    return props?.scope ? (  
-        <th className="text-center" {...props}>{props.children}</th>
-    ) : (
-        <td className="text-center" {...props}>{props.children}</td>
+    const { children, ...propsNew } = props
+
+    return React.createElement(
+        props?.scope ? 'th' : 'td',
+        {
+            className: 'text-center',
+            ...propsNew,
+            dangerouslySetInnerHTML: { __html: children}
+        }
     )
 }
 

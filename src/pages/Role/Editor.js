@@ -58,6 +58,7 @@ const Editor = ({ id, show, onChange, onHide }) => {
             <Row><Field.Description placeholder="Опис ролі" /></Row>
         </Form>
     )
+
 }
 
 Editor.propTypes = {

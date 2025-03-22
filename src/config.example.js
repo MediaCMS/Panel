@@ -7,12 +7,12 @@ export default {
     },
     main: {
         url: 'https://example.com/',
-        key: '',
+//        key: '',
         timeout: 3_000 
     },
     images: {
         url: 'https://image.example.com/',
-        key: '',
+//        key: '',
         types: { 
             'image/jpeg': 'jpg',
             'image/png': 'png',

@@ -1,4 +1,5 @@
 export default [
+/*
     {
         title: 'Публікації', 
         description: 'Список публікацій сайту',
@@ -23,12 +24,14 @@ export default [
         path: '/comments',
         level: 3
     },
+*/
     {
         title: 'Користувачі',
         description: 'Список користувачів сайту',
         path: '/users',
         level: 2
     },
+/*
     {
         title: 'Сторінки',
         description: 'Список сторінок сайту',
@@ -47,16 +50,19 @@ export default [
         path: '/types',
         level: 1
     },
+*/
     {
         title: 'Ролі',
         description: 'Список ролей користувачів',
         path: '/roles',
         level: 1
-    },
+    }
+/*
     {
         title: 'Журнал',
         description: 'Список дій користувачів',
         path: '/log',
         level: 1
     }
+*/
 ]
