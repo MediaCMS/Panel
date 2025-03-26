@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 import Editor from './Editor.js'
 
-const Intro = ({text, menu, onChange}) => {
+const Intro = ({text, onChange, onEnter, menu}) => {
 
     useEffect(() => {
         menu.dispatch(
@@ -12,7 +12,7 @@ const Intro = ({text, menu, onChange}) => {
 
     return <Editor tag="p" class="intro" value={text}
         onChange={value => onChange('text', value)}
-        title="Перший абзац" />
+        onEnter={onEnter} title="Перший абзац" />
 }
 
 Intro.propTypes = {

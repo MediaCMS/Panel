@@ -20,9 +20,7 @@ const Table = ({ text, size, menu, onChange }) => {
                 'resize', menu.resize
             )
         )
-        if (!size) {
-            onChange('size', 'full')
-        }
+        size || onChange('size', 'full')
     }, [])
 
     useEffect( () => {
@@ -35,8 +33,8 @@ const Table = ({ text, size, menu, onChange }) => {
     }, [editor, size])
 
     return <Editor tag="div" value={text ?? tableTemplate}
-        valid={['table', 'thead', 'tbody', 'tfoot', 'tr', 'th[class]', 'td[class]']}
-        toolbar="table align" plugins="table" setEditor={setEditor}
+        valid={['table', 'thead', 'tbody', 'tfoot', 'tr', 'th[class]', 'td[class]', 'br']}
+        toolbar="table align" plugins="table" setEditor={setEditor} multiline={true}
         onChange={
             value => onChange('text', value.replace(/\n+/g, ''))
         } />

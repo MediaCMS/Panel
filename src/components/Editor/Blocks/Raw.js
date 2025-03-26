@@ -6,7 +6,7 @@ const Raw = ({ text, onChange, onPaste }) => {
     const ref = useRef()
 
     useEffect(() => {
-        if (!text) ref.current.focus()
+        text || ref.current.focus()
     }, [ref.current])
 
     return <pre contentEditable="true" suppressContentEditableWarning="true"

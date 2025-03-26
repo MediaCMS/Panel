@@ -7,13 +7,13 @@ const Menu = ({ items, id }) => {
 
     return <div className="menu position-absolute top-0 end-0">
         <ButtonGroup>{
-            Object.entries(items).map(([key, item]) => {
+            Object.entries(items).map(([name, item]) => {
                 const variant = 'outline-' + (item.variant ?? 'secondary')
                 return item?.submenu
                     ?   <Dropdown id={id} {...item}
-                            variant={item.variant ? variant : ''} key={key} />
-                    :   <Button onClick={() => item.event(key, id)}
-                            variant={variant} key={key}>
+                            variant={item.variant ? variant : ''} key={name} />
+                    :   <Button onClick={() => item.event(name, id)}
+                            variant={variant} key={name}>
                             {item.label}
                         </Button>
             })

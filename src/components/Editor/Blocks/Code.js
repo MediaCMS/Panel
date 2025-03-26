@@ -18,10 +18,8 @@ const Code = props => {
     }
 
     useEffect( () => {
-        if (!props?.text) setEditable(true)
-        if (!props?.language) {
-            props.onChange('language', 'auto')
-        }
+        props?.text || setEditable(true)
+        props?.language || props.onChange('language', 'auto')
     }, [])
 
     useEffect(() => {

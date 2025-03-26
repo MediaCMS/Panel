@@ -12,22 +12,20 @@ const Quote = ({
                 'resize', menu.resize
             )
         )
-        if (!size) {
-            onChange('size', 'large')
-        }
+        size || onChange('size', 'large')
     }, [])
 
     return <blockquote data-size={size} onPaste={onPaste}>
         <Field as="p" name="text" value={text} autoFocus
             title="Текст цитати" onChange={onChange} />
         <footer>
-            <Field as="span" name="link" value={link}
-                title="Посилання на джерело цитати" onChange={onChange} />
             <Field as="span" name="name" value={name}
                 title="Автор цитати" onChange={onChange} />
             <Field as="span" name="work" value={work}
                 title="Назва публікації" onChange={onChange} />
         </footer>
+        <Field as="div" name="link" value={link}
+            title="Адреса публікації" onChange={onChange} />
     </blockquote>
 }
 

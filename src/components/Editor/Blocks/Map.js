@@ -23,7 +23,7 @@ const Map = ({ url, size, menu, onChange }) => {
                 'resize', menu.resize
             )
         )
-        size && onChange('size', 'large')
+        size || onChange('size', 'large')
     }, [])
 
     return url 

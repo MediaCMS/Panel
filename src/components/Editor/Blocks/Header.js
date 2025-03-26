@@ -6,7 +6,7 @@ const Header = ({ text, onChange, onEnter, onPaste }) => {
     const ref = useRef()
 
     useEffect(() => {
-        if (!text) ref.current.focus()
+        text || ref.current.focus()
     }, [ref.current])
 
     return <h2 contentEditable="true" suppressContentEditableWarning="true"
