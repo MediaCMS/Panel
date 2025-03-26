@@ -1,12 +1,14 @@
 import PropTypes from 'prop-types'
-import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import Reducer, { actions } from '../reducers/Editor.js'
+import Context from '../contexts/Form.js'
 import Block from './Editor/Block.js'
+import Intro from './Editor/Intro.js'
 import '../assets/styles/components/editor.css'
 
 const components = {}
 const types = {
-    main: 'Головна', header: 'Заголовок', text: 'Текст', image: 'Зображення',
+    header: 'Заголовок', text: 'Текст', image: 'Зображення',
     video: 'Відео', facebook: 'Фейсбук', twitter: 'Твіттер', map: 'Мапа',
     table: 'Таблиця', list: 'Перелік', quote: 'Цитата', raw: 'Неформат',
     address: 'Адреса', code: 'Код'
@@ -21,6 +23,8 @@ for(const type of Object.keys(types)) {
 }
 
 const Editor = props => {
+
+    const data = useContext(Context)
 
     const handleInsert = (type, id) => {
         props.blocks.dispatch(
@@ -60,24 +64,27 @@ const Editor = props => {
             }
         }
 
-        Object.entries(types).slice(1, 8)
+        Object.entries(types).slice(0, 7)
         .forEach(([type, label]) => 
             menu.insert.submenu[type] = { label }
         )
         menu.insert.submenu.other = { label: 'Інші', divider: true, submenu: {} }
-        Object.entries(types).slice(8)
+        Object.entries(types).slice(7, 14)
         .forEach(([type, label]) => 
             menu.insert.submenu.other.submenu[type] = { label }
         )
         return menu
     }, [])
 
-    return <article itemScope="itemscope" itemType="https://schema.org/Article">
+    return <>
+        <Block type="intro" text={data.get('description')} label={'Вступ'}
+            onChange={(name, value) => data.set('description', value)}
+            component={Intro} blocks={props.blocks} menu={menu} key={0} />
         {props.blocks?.state && props.blocks.state.map(block =>
             <Block {...props} {...block} menu={menu} label={types[block.type]}
                 component={components[block.type]} key={block.id} />
-    )}
-    </article>
+        )}
+    </>
 }
 
 Editor.propTypes = {

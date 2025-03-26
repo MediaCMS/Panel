@@ -6,15 +6,17 @@ import config from '../../config.js'
 const initTemplate = {
     menubar: false, width: '100%', height: '600px', resize: true, ui_mode: 'split',
     plugins: ['charmap', 'code', 'codesample', 'link', 'nonbreaking', 'visualchars'],
-    toolbar: 'bold italic underline strikethrough | subscript superscript' +
-        '| link | nonbreaking charmap | visualchars code',
+    toolbar: 'bold italic underline strikethrough | ndash subscript superscript' +
+        '| link | nonbreaking charmap | visualchars code | undo redo',
     bold: { inline: 'span', 'classes': 'bold' },
     italic: { inline: 'span', 'classes': 'italic' },
     underline: { inline: 'span', 'classes': 'underline', exact: true },
     strikethrough: { inline: 'del' },
     valid_elements: 'a[href|title|rel],strong,em,s,sup,sub,span[style]',
     link_target_list: false,
+    relative_urls: false,
     paste_as_text: true,
+    contextmenu: false,
     formats: {
         alignleft: { selector: 'table,tr,td,th', classes: 'left' },
         aligncenter: { selector: 'table,tr,td,th', classes: 'center' },
@@ -53,10 +55,18 @@ const EditorWrapper = props => {
                         editor.dom.addClass(editor.dom.getRoot(), className)
                     )
                 }
-                if (!props?.value) {
+                if ((props?.class !== 'intro') && !props?.value) {
                     editor.dom.getRoot().focus()
                 }
+                if (props?.title) {
+                    editor.dom.getRoot().setAttribute('title', props.title)
+                }
             })
+            editor.ui.registry.addButton('ndash', {
+                text: '—', tooltip: 'Dash', onAction: () => {
+                    editor.insertContent('&ndash;');
+                }
+            });
         }
     ])
 
@@ -108,7 +118,8 @@ const EditorWrapper = props => {
         setInit(initNew)
     }, [])
 
-    return init && <Editor tagName={props.tag ?? 'div'} value={props.value}
+    return init && <Editor tagName={props.tag ?? 'div'} 
+        value={(typeof props.value !== 'undefined') ? props.value.toString() : ''}
         init={init} inline={true} onEditorChange={handleChange}
         tinymceScriptSrc={config.tinymce} autoFocus />
 }
@@ -125,6 +136,7 @@ EditorWrapper.propTypes = {
     onEnter: PropTypes.func,
     tag: PropTypes.string,
     value: PropTypes.string,
+    title: PropTypes.string,
     reset: PropTypes.bool,
     class: PropTypes.string
 }

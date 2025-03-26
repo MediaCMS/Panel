@@ -7,7 +7,7 @@ import Main from './pages/Main.js'
 //import Tag from './pages/Tag.js'
 //import Comment from './pages/Comment.js'
 import User from './pages/User.js'
-//import Page from './pages/Page.js'
+import Page from './pages/Page.js'
 //import Category from './pages/Category.js'
 //import Type from './pages/Type.js'
 import Role from './pages/Role.js'
@@ -38,7 +38,7 @@ const routes = [
 //        { path: 'tags', element: <Tag /> },
 //        { path: 'comments', element: <Comment /> },
         { path: 'users', element: <User /> },
-//        { path: 'pages', element: <Page /> },
+        { path: 'pages', element: <Page /> },
 //        { path: 'categories', element: <Category /> },
 //        { path: 'types', element: <Type /> },
         { path: 'roles', element: <Role /> },

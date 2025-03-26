@@ -1,4 +1,5 @@
 article {
+    font-size: calc(14px + 0.5vw) !important;
     & div.block { border: solid 1px transparent;
         &:hover { border: dashed 1px #888 !important;
             .editable, .field, .form-control, .form-select {
@@ -7,66 +8,98 @@ article {
         }
         > span.type { top: 5px; left: 8px; z-index: 3 }
         & div.menu {
+            > .btn { font-size: .8em; line-height: 100%; padding: .4em .7em; } 
             .dropdown-menu { padding: 0;
                 &[x-placement="bottom-start"],
                 &[x-placement="bottom-end"] { top: -2px !important; } 
-                &[x-placement="top-start"] { bottom: -2px !important; } 
-                & div.dropdown-item { padding: 0.1em 1em;
-                    & .btn { padding: 0; }
+                &[x-placement="top-start"] { bottom: -2px !important; }
+                & div.dropdown-item {
+                    font-size: .9em; line-height: 100%; padding: .4em .7em;
+                    .btn { padding: 0; }
                 }
+                & hr.dropdown-divider { margin: 0; }
             }
         }
         &.block-type-main {
-            div.main {
-                &:not(.image) div.text h1 { color: #333; }
-                & div.text {
-                    & select, & input {
+            & div.main{
+                &:not(.image) {
+                    & h1, input, select, .editable {
+                        color: #333 !important; text-shadow: none !important;
+                    }
+                }
+                & div.layout {
+                    & select, input {
                         width: auto !important; 
                         text-align: center; background-color: transparent;
                         text-shadow: 1px 1px black;
                     }
-                    & div.category { width: fit-content;
-                        & select { color: black; font-weight: bold; font-size: 1.3em;
-                            letter-spacing: 0.3em; -webkit-text-stroke: 1px white;
-                            margin: 0 auto;
+                    & div.category {
+                        width: fit-content; background: none;
+                        padding: .3em .2em !important;
+                        & select {
+                            color: #000; text-shadow: none; text-transform: uppercase;
+                            font-weight: 500; font-size: .9em; background-color: #fff;
+                            opacity: .6; padding: .2em .3em; margin: 0 auto;
                         }
                     }
-                    & div.user { width: fit-content; 
-                        & input { 
-                            max-width: auto; color: white; 
-                            font-style: italic; font-size: 1.3em;
+                    & div.body {
+                        h1 { min-width: 350px;
+                            &:empty::before { content: 'Заголовок'; }
                         }
-                        ul { width: 100%; font-style: normal; text-align: center;
+                        
+                    }
+                    & div.user { width: fit-content;
+                        & input { 
+                            max-width: 350px; color: white; 
+                            font-style: italic; font-size: 1.0em;
+                        }
+                        & ul { width: 100%; font-style: normal; text-align: center;
                             text-shadow: none; margin: 0 auto; display: block; 
                             li { padding: 3px 8px; margin: 0; }
                         }
                     }
                     & div.date { width: fit-content; 
-                        & input { font-size: 1.3em; color: white; }
+                        & input { font-size: .9em; color: white; }
                     }
                 }
-                & div.image {
-                    & div.buttons { max-width: 600px; bottom: 40px; padding: 5px 3px; }
-                    & div {
+                & div.bottom {
+                    & div.buttons {
+                        max-width: 650px; bottom: 40px; margin: 0 auto; padding: 0 1em;
+                        .btn { font-size: .9em; line-height: 100%; padding: .4em .7em; } 
+                        & input { max-width: 250px; padding: .2em .5em; }
+                    }
+                    & div.editable { font-size: .9em; margin: auto;
                         &:empty {
                             &.source::before { content: 'Facebook'; }
-                            &.author::before { content: 'MediaCMS'; }
+                            &.description::before { content: 'Львів'; }
                         }
                     }    
                 }
             }
         }
-        &.block-type-text {
-            p { max-width: 768px; padding: 0 5px; margin: 2em auto; }
-            &:nth-child(2) {
-                p { 
-                    color: #666 !important; 
-                    font: 300 1.1em/1.5 'Open Sans', sans-serif !important;
+        &.block-type-intro {
+            p { 
+                &:empty::before {
+                    color: #000 !important; content: 'Вступ ...' !important;
                 }
-           }
+                min-width: 350px; color: #666 !important; 
+                font: 300 1.1em/1.5 'Open Sans', sans-serif !important;
+                max-width: 768px; padding: 0 5px; margin: 2em auto 0;
+            }
+        }
+        &.block-type-text {
+            & div.text { 
+                &:empty::before { content: 'Текст ...'; }
+                max-width: 768px; padding: 0 5px; margin: 2em auto 0;
+            }
+        }
+        &.block-type-header {
+            & h2 { margin: 2em auto 0;
+                &:empty::before { content: 'Заголовок'; }
+            }
         }
         &.block-type-image {
-            figure {
+            & figure {
                 & figcaption { padding: 8px 5px;
                     &:empty::before { color: #000; 
                         content: 'Чиновник на лаві підсудних за корупцію';
@@ -113,7 +146,11 @@ article {
                 }}}
             }
         }
-        &.block-type-list { ul { margin: 2em auto; } }
+        &.block-type-list {
+            & ul, & ol { margin: 2em auto;
+                & li:empty::before { content: 'Пункт переліку'; }
+            }
+        }
         &.block-type-quote {
             & blockquote { width: fit-content; margin: 2em auto;
                 & p {

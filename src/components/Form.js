@@ -13,14 +13,20 @@ import '../assets/styles/components/form.css'
 const recurse = (data, name, value, override = true) => {
     if (name.length > 1) {
         if (typeof data[name[0]] === 'undefined') {
+            if (typeof value === 'undefined') return data[name[0]]
             data[name[0]] = {}
         }
-        return recurse(data[name[0]], name.slice(1), value, override)
+        const result = recurse(data[name[0]], name.slice(1), value, override)
+        if ((value === null) && !Object.keys(data[name[0]]).length) {
+            delete data[name[0]]
+        }
+        return result;
     } else {
         if (typeof value === 'undefined') return data[name[0]]
+        if (value === null) return delete data[name[0]]
         if ((name[0] in data) && !override) return
         data[name[0]] = (
-            (typeof value == 'string') 
+            (typeof value === 'string') 
             && !isNaN(value) 
             && !isNaN(parseFloat(value)))
             ? +value : value

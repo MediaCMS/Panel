@@ -31,13 +31,13 @@ export default [
         path: '/users',
         level: 2
     },
-/*
     {
         title: 'Сторінки',
         description: 'Список сторінок сайту',
         path: '/pages',
         level: 2
     },
+/*
     {
         title: 'Категорії',
         description: 'Список категорій публікацій',

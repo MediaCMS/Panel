@@ -4,9 +4,10 @@ import Editor from '../Editor.js'
 
 const Text = ({ text, onChange, onEnter }) => {
 
-    return <Editor tag="p" class="block2" value={text}
+    return <Editor value={text} class="text" valid="p" multiline
         onChange={value => onChange('text', value)}
         onEnter={onEnter} />
+
 }
 
 Text.propTypes = {
