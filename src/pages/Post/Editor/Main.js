@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
@@ -9,7 +10,7 @@ import Choose from '../../../components/Form/Field/Image/Choose.js'
 import Field from '../../../components/Editor/Field.js'
 import config from '../../../config.js'
 
-export default props => {
+const Main = ({ onPaste }) => {
 
     const [categories, setCategories] = useState([])
     const [background, setBackground] = useState([])
@@ -17,9 +18,12 @@ export default props => {
     const context = useOutletContext()
     const data = useContext(Context)
 
-    useEffect(async () => {
-        const categories = await context.api.panel.get('/categories')
-        setCategories(categories)
+    useEffect(() => {
+        (async () => {
+            setCategories(
+                await context.api.panel.get('/categories')
+            )
+        })()
     }, [])
 
     useEffect(
@@ -29,7 +33,7 @@ export default props => {
 
     useEffect(() => {
         const background = !data.get('image.url') ? '' :
-            `url(${config.images.url + data.get('image.url')}` +
+            `url(${config.images.url}/${data.get('image.url')}` +
             `?width=${ref.main.current.offsetWidth}` +
             `&height=${ref.main.current.offsetHeight})`
         setBackground(background)
@@ -58,7 +62,7 @@ export default props => {
                         onBlur={
                             event => data.set('title', event.target.textContent)
                         }
-                        onPaste={props.onPaste} ref={ref.title} className="editable">
+                        onPaste={onPaste} ref={ref.title} className="editable">
                         {data.get('title')}
                     </h1>
                     <Autocomplete name="user" value={data.get('user')} label=""
@@ -89,3 +93,9 @@ export default props => {
         </div>
     </div>
 }
+
+Main.propTypes = {
+    onPaste: PropTypes.func
+}
+
+export default Main

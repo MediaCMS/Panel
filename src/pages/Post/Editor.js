@@ -3,31 +3,24 @@ import React, { useState, useEffect, useMemo, useReducer } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import Editor, { Reducer, actions} from '../../components/Editor.js'
 import Form, { Field, Table, Row, Cell } from '../../components/Form.js'
+import Main from './Editor/Main.js'
 import config from '../../config.js'
 
 const PostEditor = ({ id, show, onChange, onHide }) => {
 
     const context = useOutletContext()
-    const [post, setPost] = useState({})
-    const [state, dispatch] = useReducer(Reducer, [{
-        id: 0, type: 'main', title: 'Найменування',
+    const [post, setPost] = useState({
+        title: 'Заголовок',
         user: context.user._id
-    }])
+    })
+    const [state, dispatch] = useReducer(Reducer)
     const [types, setTypes] = useState([])
     const [slug, setSlug] = useState()
 
     const handleSubmit = async () => {
-        const postNew = { ...post,
-            title: state[0].title,
-            category: state[0].category
-        }
-        if (state[0]?.image) {
-            postNew.image = state[0].image
-        } else {
-            delete postNew.image
-        }
-        if (state.length > 1) {
-            postNew.blocks = state.slice(1)
+        let postNew = { ...post }
+        if (state.length > 0) {
+            postNew.blocks = state
         } else {
             delete postNew.blocks
         }
@@ -37,32 +30,28 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
             await context.api.panel.put('/posts/' + id, postNew)
             context.api.main.delete('/kesh/publikatsiyi/' + slug)
         } else {
-            await context.api.panel.post('/posts', postNew)
+            postNew = await context.api.panel.post('/posts', postNew)
+            setPost(postNew)
+            setSlug(postNew.slug)
         }
         onChange()
     }
 
     const handleDelete = async () => {
         await context.api.panel.delete('/posts/' + id)
+        context.api.main.delete('/kesh/publikatsiyi/' + slug)
         onChange()
     }
 
     useEffect(() => {
-        if (!id) return
         (async () => {
-            const postNew = await context.api.panel.get('/posts/' + id)
+            const postNew = id
+                ? await context.api.panel.get('/posts/' + id)
+                : post
             console.log(postNew)
-            const blocks = [{
-                id: 0, type: 'main', date: postNew.date, title: postNew?.title,
-                category: postNew.category, user: postNew.user
-            }]
-            if (postNew?.image) {
-                blocks[0].image = postNew.image
-            }
-            if (postNew?.blocks) {
-                blocks.push(...postNew.blocks)
-            }
-            dispatch(actions.load(blocks))
+            dispatch(
+                actions.load(postNew.blocks)
+            )
             setSlug(postNew.slug)
             setPost(postNew)
         })()
@@ -70,8 +59,9 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
 
     useEffect(() => {
         (async () => {
-            const types = await context.api.panel.get('/types')
-            setTypes(types)
+            setTypes(
+                await context.api.panel.get('/types')
+            )
         })()
     }, [])
 
@@ -83,18 +73,18 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
         <Form data={post} show={show} onHide={onHide}
             onChange={setPost} onSubmit={handleSubmit} onDelete={handleDelete}
             title="Редагування публікації" fullscreen={true}>
-            <Editor blocks={{ state, dispatch, actions }} />
+            <article itemScope="itemscope" itemType="https://schema.org/Article">
+                <Main />
+                <Editor blocks={{ state, dispatch, actions }} />
+            </article>
             <Table size="medium">
                 <Row>
-                    <Field.Description placeholder="Опис сторінки" required />
-                </Row>
-                <Row>
                     <Cell sm="5">
-                        <Field.Slug source={state[0].title} required
-                            placeholder="десь-колись-з-кимось-відбулась-якась-подія" />
+                        <Field.Slug source={post.title} required
+                            placeholder="zaholovok" />
                     </Cell>
                     <Cell sm="3">
-                        <Field type="select" name="type" label="Тип">
+                        <Field type="select" name="type" label="Тип" title="Тип публікації">
                             {types.map(type => (
                                 <option value={type._id} key={type._id}>
                                     {type.title}
@@ -105,8 +95,7 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
                     <Cell sm="4">
                         <Field.Status label="Видимість публікації" />
                     </Cell>
-                </Row>
-                
+                </Row>   
                 <Row>
                     <Field.Autocomplete name="tags" label="Мітки"
                         path="/tags" multiple required />
