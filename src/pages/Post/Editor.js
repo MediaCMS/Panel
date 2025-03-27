@@ -43,18 +43,14 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete(
-            '/posts/' + id
-        )
+        await context.api.panel.delete('/posts/' + id)
         onChange()
     }
 
     useEffect(() => {
         if (!id) return
         (async () => {
-            const postNew = await context.api.panel.get(
-                '/posts/' + id
-            )
+            const postNew = await context.api.panel.get('/posts/' + id)
             console.log(postNew)
             const blocks = [{
                 id: 0, type: 'main', date: postNew.date, title: postNew?.title,
@@ -74,9 +70,7 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
 
     useEffect(() => {
         (async () => {
-            const types = await context.api.panel.get(
-                '/types'
-            )
+            const types = await context.api.panel.get('/types')
             setTypes(types)
         })()
     }, [])

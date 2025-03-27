@@ -8,17 +8,26 @@ const Tag = () => {
 
     const [id, setID] = useState()
     const [tags, setTags] = useState([])
-    const [params, setParams] = useState({ status: true })
+    const [params, setParams] = useState({
+        status: true, _skip: 0, _limit: 50
+    })
     const [editor, setEditor] = useState(false)
     const [filter, setFilter] = useState(false)
     const context = useOutletContext()
 
-    const handleLoad = async () => {
+    const load = async params => {
+        setParams(params)
+        return await context.api.panel.get('/tags', { params })
+     }
+
+    const handleLoad = async () => 
         setTags(
-            await context.api.panel.get(
-                '/tags', { params }
-            )
+            await load({ ...params, _skip: 0 })
         )
+
+    const handleAppend = async skip => {
+        const tagsNew = await load({ ...params, _skip: skip })
+        setTags([...tags, ...tagsNew])
     }
 
     useEffect(() => {
@@ -36,12 +45,13 @@ const Tag = () => {
     }, [])
 
     return <>
-        <Table columns={['Заголовок', 'Опис']}>
+        <Table columns={['Заголовок', 'Опис']} className="mw-md"
+            params={params} onAppend={handleAppend}>
             {tags.map(tag => (
-                <Row status={tag.status} key={tag._id}
+                <Row title={tag.description} status={tag.status} key={tag._id}
                     onClick={() => {setID(tag._id);setEditor(true)}}>
-                    <Cell className="text-left col-2">{tag.title}</Cell>
-                    <Cell className="text-left">{tag.description}</Cell>
+                    <Cell className="text-left">{tag.title}</Cell>
+                    <Cell className="text-left">{tag.slug}</Cell>
                 </Row>
             ))}
         </Table>

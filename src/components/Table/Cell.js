@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 const Cell = props => {
 
     const { children, ...propsNew } = props
-
     return React.createElement(
         props?.scope ? 'th' : 'td',
         {

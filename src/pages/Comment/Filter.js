@@ -17,19 +17,17 @@ const Filter = props => {
             </Row>
             <Row>
                 <Cell sm={6}>
-                    <Field.Text name="text" title="Фільтр за текстом" placeholder="львів" />
+                    <Field.Text name="text" title="Фільтр за текстом"
+                        placeholder="львів" />
                 </Cell>
                 <Cell sm={6}>
-                    <Field.Text name="user" label="Автор" title="Фільтр за автором"
-                            placeholder="вовчок" />
+                    <Field.Text name="user" label="Автор"
+                        title="Фільтр за автором" placeholder="вовчок" />
                 </Cell>
             </Row>
             <Row>
-                <Cell sm={6}>
-                    <Field.Status as="select" />
-                </Cell>
-                <Cell sm={6}>
-                </Cell>
+                <Cell sm={6}><Field.Status as="select" /></Cell>
+                <Cell sm={6}><Field.Limit /></Cell>
             </Row>
         </Form>
     )

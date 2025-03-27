@@ -10,13 +10,11 @@ const Type = () => {
     const [editor, setEditor] = useState(false)
     const context = useOutletContext()
 
-    const handleLoad = async () => {
+    const handleLoad = async () => 
         setTypes(
-            await context.api.panel.get(
-                '/types'
-            )
+            await context.api.panel.get('/types')
         )
-    }
+
 
     useEffect(() => {
         context.init({
@@ -31,7 +29,7 @@ const Type = () => {
     }, [])
 
     return <>
-        <Table columns={['Назва', 'Опис']}>
+        <Table columns={['Назва', 'Опис']} className="mw-md">
             {types.map(type => (
                 <Row status={type.status} key={type._id}
                     onClick={() => {setID(type._id);setEditor(true)}}>

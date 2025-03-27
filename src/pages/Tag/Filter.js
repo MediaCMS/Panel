@@ -6,12 +6,13 @@ const Tag = props => {
     return (
         <Form {...props} as="filter">
             <Row>
-                <Cell sm={6}>
+                <Cell sm={4}>
                     <Field.Title title="Фільтр за назвою" placeholder="львів" />
                 </Cell>
-                <Cell sm={6}>
+                <Cell sm={4}>
                     <Field.Status as="select" />
                 </Cell>
+                <Cell sm={4}><Field.Limit /></Cell>
             </Row>
         </Form>
     )

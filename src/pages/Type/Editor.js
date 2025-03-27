@@ -10,30 +10,22 @@ const Editor = ({ id, show, onChange, onHide }) => {
 
     const handleSubmit = async () => {
         if (id) {
-            await context.api.panel.put(
-                '/types/' + id, type
-            )
+            await context.api.panel.put('/types/' + id, type)
         } else {
-            await context.api.panel.post(
-                '/types', type
-            )
+            await context.api.panel.post('/types', type)
         }
         onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete(
-            '/types/' + id
-        )
+        await context.api.panel.delete('/types/' + id)
         onChange()
     }
 
     useEffect(() => {
         id && (async () =>
             setType(
-                await context.api.panel.get(
-                    '/types/' + id
-                )
+                await context.api.panel.get('/types/' + id)
             )
         )()
     }, [])

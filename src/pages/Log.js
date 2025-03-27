@@ -12,17 +12,24 @@ const Log = () => {
             start: Moment().add(-1, 'years').format('YYYY-MM-DD'),
             end: Moment().format('YYYY-MM-DD'),
         },
-        _sort: { field: 'date', order: -1 }
+        _sort: { field: 'date', order: -1 }, _skip: 0, _limit: 50
     })
     const [filter, setFilter] = useState(false)
     const context = useOutletContext()
 
-    const handleLoad = async () => {
+    const load = async params => {
+        setParams(params)
+        return await context.api.panel.get('/logs', { params })
+     }
+
+    const handleLoad = async () => 
         setLogs(
-            await context.api.panel.get(
-                '/logs', { params }
-            )
+            await load({ ...params, _skip: 0 })
         )
+
+    const handleAppend = async skip => {
+        const logsNew = await load({ ...params, _skip: skip })
+        setLogs([...logs, ...logsNew])
     }
 
     useEffect(() => {
@@ -37,7 +44,8 @@ const Log = () => {
     }, [])
 
     return <>
-        <Table columns={['Дата', 'Контролер', 'Дія', 'Користувач', 'Документ']}>
+        <Table columns={['Дата', 'Контроллер', 'Дія', 'Користувач', 'Документ']}
+            params={params} onAppend={handleAppend}>
             {logs.map(log => (
                 <Row key={log._id}>
                     <Cell className="text-center">{

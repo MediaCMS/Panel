@@ -10,13 +10,11 @@ const Category = () => {
     const [editor, setEditor] = useState(false)
     const context = useOutletContext()
 
-    const handleLoad = async () => {
+    const handleLoad = async () => 
         setCategories(
-            await context.api.panel.get(
-                '/categories'
-            )
+            await context.api.panel.get('/categories')
         )
-    }
+
 
     useEffect(() => {
         context.init({
@@ -31,7 +29,7 @@ const Category = () => {
     }, [])
 
     return <>
-        <Table columns={['Назва', 'Посилання', 'Сортування']}>
+        <Table columns={['Назва', 'Посилання', 'Сортування']} className="mw-md">
             {categories.map(category => (
                 <Row status={category.status} key={category._id}
                     onClick={() => {setID(category._id);setEditor(true)}}>

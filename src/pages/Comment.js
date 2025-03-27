@@ -15,18 +15,25 @@ const Comment = () => {
             end: Moment().format('YYYY-MM-DD'),
         },
         status: true, 
-        _sort: { field: 'date', order: -1 }
+        _sort: { field: 'date', order: -1 }, _skip: 0, _limit: 50
     })
     const [editor, setEditor] = useState(false)
     const [filter, setFilter] = useState(false)
     const context = useOutletContext()
 
-    const handleLoad = async () => {
+    const load = async params => {
+        setParams(params)
+        return await context.api.panel.get('/comments', { params })
+    }
+
+    const handleLoad = async () => 
         setComments(
-            await context.api.panel.get(
-                '/comments', { params }
-            )
+            await load({ ...params, _skip: 0 })
         )
+
+    const handleAppend = async skip => {
+        const commentsNew = await load({ ...params, _skip: skip })
+        setComments([...comments, ...commentsNew])
     }
 
     useEffect(() => {
@@ -41,13 +48,17 @@ const Comment = () => {
     }, [])
 
     return <>
-        <Table columns={['Дата', 'Повідомлення', 'Користувач']}>
+        <Table columns={['Дата', 'Повідомлення', 'Користувач']}
+            params={params} onAppend={handleAppend}>
             {comments.map(comment => (
                 <Row status={comment.status} key={comment._id}
                     onClick={() => {setID(comment._id);setEditor(true)}}>
                     <Cell className="text-left text-nowrap">
-                        {Moment(comment.date).format('YYYY-MM-DD')}<br /> 
-                        {Moment(comment.date).format('HH:mm')}
+                        {
+                            Moment(comment.date).format('YYYY-MM-DD')
+                            + '<br />' +
+                            Moment(comment.date).format('HH:mm')
+                        }
                     </Cell>
                     <Cell className="text-left overflow-hidden">{comment.text}</Cell>
                     <Cell className="text-left">{comment.user}</Cell>

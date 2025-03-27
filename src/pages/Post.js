@@ -15,19 +15,25 @@ const Post = () => {
             end: Moment().format('YYYY-MM-DD'),
         },
         user: (context.user.role.level === 4) ? context.user.title : '',
-        status: true,
-        _sort: { field: 'date', order: -1 }
+        status: '', _sort: { field: 'date', order: -1 }, _skip: 0, _limit: 50
     })
     const [posts, setPosts] = useState([])
     const [editor, setEditor] = useState(false)
     const [filter, setFilter] = useState(false)
 
-    const handleLoad = async () => {
+    const load = async params => {
+        setParams(params)
+        return await context.api.panel.get('/posts', { params })
+     }
+
+    const handleLoad = async () => 
         setPosts(
-            await context.api.panel.get(
-                '/posts', { params }
-            )
+            await load({ ...params, _skip: 0 })
         )
+
+    const handleAppend = async skip => {
+        const postsNew = await load({ ...params, _skip: skip })
+        setPosts([...posts, ...postsNew])
     }
 
     useEffect(() => {
@@ -45,7 +51,8 @@ const Post = () => {
     }, [])
 
     return <>
-        <Table columns={['Дата', 'Назва', 'Автор']}>
+        <Table columns={['Дата', 'Назва', 'Автор']} className=""
+            params={params} onAppend={handleAppend}>
             {posts.map(post => (
                 <Row status={post.status} key={post._id}
                     onClick={() => {setID(post._id);setEditor(true)}}>

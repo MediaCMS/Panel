@@ -22,8 +22,9 @@ const User = () => {
      }
 
     const handleLoad = async () => 
-        setUsers(await load({ ...params, _skip: 0 })
-    )
+        setUsers(
+            await load({ ...params, _skip: 0 })
+        )
 
     const handleAppend = async skip => {
         const usersNew = await load({ ...params, _skip: skip })
@@ -45,7 +46,7 @@ const User = () => {
     }, [])
 
     return <>
-        <Table columns={['Назва', 'Пошта', 'Роль']} className=""
+        <Table columns={['Назва', 'Пошта', 'Роль']}
             params={params} onAppend={handleAppend}>
             {users.map(user => (
                 <Row status={user.status} key={user._id}

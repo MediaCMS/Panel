@@ -10,13 +10,10 @@ const Role = () => {
     const [editor, setEditor] = useState(false)
     const context = useOutletContext()
 
-    const handleLoad = async () => {
+    const handleLoad = async () =>
         setRoles(
-            await context.api.panel.get(
-                '/roles'
-            )
+            await context.api.panel.get('/roles')
         )
-    }
 
     useEffect(() => {
         context.init({

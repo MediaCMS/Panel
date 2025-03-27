@@ -2,16 +2,16 @@ import React, { useEffect } from 'react'
 import { useRoutes, useOutletContext } from 'react-router-dom'
 import Layout from './layouts/Main.js'
 import Main from './pages/Main.js'
-//import Post from './pages/Post.js'
-//import Image from './pages/Image.js'
-//import Tag from './pages/Tag.js'
-//import Comment from './pages/Comment.js'
+import Post from './pages/Post.js'
+import Image from './pages/Image.js'
+import Tag from './pages/Tag.js'
+import Comment from './pages/Comment.js'
 import User from './pages/User.js'
 import Page from './pages/Page.js'
-//import Category from './pages/Category.js'
-//import Type from './pages/Type.js'
+import Category from './pages/Category.js'
+import Type from './pages/Type.js'
 import Role from './pages/Role.js'
-//import Log from './pages/Log.js'
+import Log from './pages/Log.js'
 import { Login, Logout } from './pages/Access.js'
 import config from './config.js'
 
@@ -33,16 +33,16 @@ const routes = [
     ] },
     { path: '/', element: <Layout template={true} />, children: [
         { index: true, element: <Main /> },
-//        { path: 'posts', element: <Post /> },
-//        { path: 'images', element: <Image /> },
-//        { path: 'tags', element: <Tag /> },
-//        { path: 'comments', element: <Comment /> },
+        { path: 'posts', element: <Post /> },
+        { path: 'images', element: <Image /> },
+        { path: 'tags', element: <Tag /> },
+        { path: 'comments', element: <Comment /> },
         { path: 'users', element: <User /> },
         { path: 'pages', element: <Page /> },
-//        { path: 'categories', element: <Category /> },
-//        { path: 'types', element: <Type /> },
+        { path: 'categories', element: <Category /> },
+        { path: 'types', element: <Type /> },
         { path: 'roles', element: <Role /> },
-//        { path: 'log', element: <Log /> },
+        { path: 'log', element: <Log /> },
         { path: '*', element: <NotFound /> }
     ] }
 ]

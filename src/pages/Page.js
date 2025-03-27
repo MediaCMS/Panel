@@ -10,13 +10,11 @@ const Page = () => {
     const [editor, setEditor] = useState(false)
     const context = useOutletContext()
 
-    const handleLoad = async () => {
+    const handleLoad = async () =>
         setPages(
-            await context.api.panel.get(
-                '/pages'
-            )
+            await context.api.panel.get('/pages')
         )
-    }
+
 
     useEffect(() => {
         context.init({

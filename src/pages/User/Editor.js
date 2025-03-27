@@ -28,36 +28,30 @@ const Editor = ({ id, show, onChange, onHide }) => {
             delete userNew.password
         }
         delete userNew.password2
-        userNew?._id
-            ? await context.api.panel.put('/users/' + id, userNew)
-            : await context.api.panel.post('/users', userNew)
+        if (userNew?._id) {
+            await context.api.panel.put('/users/' + id, userNew)
+        } else {
+            await context.api.panel.post('/users', userNew)
+        }
         onChange()
     }
 
     const handleDelete = async () => {
-        await context.api.panel.delete(
-            '/users/' + id
-        )
+        await context.api.panel.delete('/users/' + id)
         onChange()
     }
 
     useEffect(() => {
         (async () => {
-            const roles = await context.api.panel.get(
-                '/roles'
-            )
+            const roles = await context.api.panel.get('/roles')
             setRoles(roles)
             if (id) {
                 setUser(
-                    await context.api.panel.get(
-                        '/users/' + id
-                    )
+                    await context.api.panel.get('/users/' + id)
                 )
             } else {
                 setUser(
-                    user => ({
-                        ...user, role: roles.at(-1)._id
-                    })
+                    user => ({ ...user, role: roles.at(-1)._id })
                 )
             }
         })()
