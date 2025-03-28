@@ -51,8 +51,9 @@ export default {
 
     delete: async (request, response, next) => {
         const _id = new ObjectId(request.params.id);
-        const count = await db.collection('users').count({ role: _id });
-        if (count > 0) {
+        const count = await db.collection('users')
+            .countDocuments({ role: _id });
+        if (count) {
             return next(
                 Error(`Роль використана в користувачах (${count})`)
             )

@@ -92,13 +92,13 @@ export default {
             return response.sendStatus(403);
         }
         const count = { posts: 0, logs: 0 };
-        count.posts = await db.collection('posts').count({ user: _id });
-        if (count.posts > 0) {
+        count.posts = await db.collection('posts').countDocuments({ user: _id });
+        if (count.posts) {
             return next(
                 Error(`Користувач використаний в публікаціях (${count.posts})`)
             )
         }
-        count.logs = await db.collection('logs').count({ user: _id });
+        count.logs = await db.collection('logs').countDocuments({ user: _id });
         if (count.logs > 0) {
             return next(
                 Error(`Користувач використаний в логах (${count.logs})`)

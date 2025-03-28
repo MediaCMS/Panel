@@ -35,8 +35,9 @@ export default {
 
     delete: async (request, response, next) => {
         const _id = new ObjectId(request.params.id);
-        const count = await db.collection('posts').count({ category: _id });
-        if (count > 0) {
+        const count = await db.collection('posts')
+            .countDocuments({ category: _id });
+        if (count) {
             return next(
                 Error(`Категорія використана в публікаціях (${count})`)
             )

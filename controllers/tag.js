@@ -58,8 +58,9 @@ export default {
 
     delete: async (request, response, next) => {
         const _id = new ObjectId(request.params.id);
-        const count = await db.collection('posts').count({ tags: _id });
-        if (count > 0) {
+        const count = await db.collection('posts')
+            .countDocuments({ tags: _id });
+        if (count) {
             return next(
                 Error(`Мітка використана в публікаціях (${count})`)
             )
