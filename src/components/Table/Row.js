@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const Row = ({ title, status, className, onClick, children }) => {
+const Row = ({
+    title, status, className, onClick, children
+}) => {
 
     const classNameNew = []
 
@@ -9,12 +11,14 @@ const Row = ({ title, status, className, onClick, children }) => {
         classNameNew.push(className)
     }
 
-    if (status && (status === false)) {
+    if ((typeof status !== 'undefined')
+            && (status === false)) {
         classNameNew.push('text-muted')
     }
 
     return (
-        <tr onClick={onClick} title={title} className={classNameNew}>
+        <tr onClick={onClick} title={title}
+            className={classNameNew}>
             {children}
         </tr>
     )

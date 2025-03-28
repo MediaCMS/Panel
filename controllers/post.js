@@ -17,16 +17,20 @@ export default {
                 as: 'tags'
             } },
             { $project: {
-                date: 1, title: 1, tags: '$tags.title', 
+                date: 1, title: 1,
+                category: 1, tags: '$tags.title', 
                 user: { $arrayElemAt: ['$user.title', 0] },
                 status: 1
             } }
         ];
         filter(pipeline, request.query, match => {
+            if (request.query?.category) {
+                match.category = new ObjectId(request.query.category);
+            }
             if (request.query?.tag) {
                 match.tags = {
                     $regex : request.query.tag, $options : 'i'
-                }
+                };
             }
         })
         if (response.locals.user.role.level === 4) {
