@@ -1,4 +1,4 @@
-import db from '../db.js';
+import db, { ObjectId } from '../db.js';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { Buffer } from 'buffer';
@@ -59,9 +59,12 @@ export default {
         if (user.role.level > 4) {
             return response.sendStatus(403);
         }
-        response.cookie('token', jwt.sign(user, config.jwt.key), {
-            maxAge: config.cookie.maxAge, httpOnly: true
-        });
+        const token = jwt.sign(user, config.key);
+        await db.collection('users').updateOne(
+            { _id:  new ObjectId(user._id) }, 
+            { $set: { token } }
+        )
+        response.cookie('token', token, config.cookie);
         logging('access', 'login', user._id);
         response.locals.user = user;
         response.json(user);
@@ -69,6 +72,10 @@ export default {
     },
 
     logout: async (request, response, next) => {
+        await db.collection('users').updateOne(
+            { _id: new ObjectId(response.locals.user._id) },
+            { $unset: { token: '' }}
+        )
         response.clearCookie('token');
         response.end();
         next();

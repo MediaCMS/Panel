@@ -6,9 +6,7 @@ export default (setWait, setAlert) => {
     const api = axios.create({
         baseURL: config.images.url,
         timeout: config.images.timeout,
-        headers: {
-            common: { 'x-api-key': config.images.key }
-        }
+        withCredentials: true
     })
 
     api.interceptors.request.use(

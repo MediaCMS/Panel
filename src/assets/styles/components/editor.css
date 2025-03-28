@@ -102,7 +102,7 @@ article {
             & figure {
                 & figcaption { padding: 8px 5px;
                     &:empty::before { color: #000; 
-                        content: 'Чиновник на лаві підсудних за корупцію';
+                        content: 'Підпис до зображення';
                     }
                 }
                 & div.copyright {

@@ -13,10 +13,12 @@ export default {
             serverSelectionTimeoutMS: 5_000
         }
     },
-    jwt: {
-        key: ''        
-    },
+    key: '*** Private Access Key ***',
     cookie: {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict',
+        domain: '.mediacms.local',
         maxAge: 1_000 * 60 * 60 * 24
     },
     google: {

@@ -1,3 +1,4 @@
+import process from 'process';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import { client } from './db.js';
@@ -50,7 +51,7 @@ app.use((error, request, response, next) => {
 process.on('unhandledRejection', async error => {
     console.log('Unhandled Rejection', error);
     await log(error);
-    process.exit(1);
+    //process.exit(1);
 });
 
 process.on('SIGINT', async () => {

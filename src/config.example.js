@@ -7,12 +7,10 @@ export default {
     },
     main: {
         url: 'https://example.com/',
-//        key: '',
         timeout: 3_000 
     },
     images: {
         url: 'https://image.example.com/',
-//        key: '',
         types: { 
             'image/jpeg': 'jpg',
             'image/png': 'png',
@@ -38,10 +36,6 @@ export default {
             }
         }
     },
-    months: [
-        'січня', 'лютого', 'березня', 'квітня', 'травня', 'червня',
-        'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'
-    ],
     copyright: '2025',
     mode: 'development',
     debug: true,

@@ -8,7 +8,7 @@ const verification = (request, response, next) => {
     if (request.cookies?.token) {
         try {
             response.locals.user = jwt.verify(
-                request.cookies.token, config.jwt.key
+                request.cookies.token, config.key
             );
         } catch (error) {
             return response.status(403).end(error);
