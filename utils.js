@@ -22,21 +22,7 @@ const cleanEmpty = (obj, defaults = [undefined, null, NaN, '']) => {
 
 export const parseRequest = request => {
     request.url = decodeURI(request.url);
-    // Convert request params type and remove empty
-    Object.entries(request.query).map(([key, value]) => {
-        switch(value) {
-            case '': delete request.query[key]; break;
-            case 'true': request.query[key] = true; break;
-            case 'false': request.query[key] = false; break;
-            default: {
-                if (!isNaN(value)) {
-                    request.query[key] = parseFloat(value);
-                }
-            }
-        }
-    });
-    // Clear empty properties of object
-    request.body = cleanEmpty(request.body)
+    request.bodyCleaned = cleanEmpty(request.body)
 }
 
 export const logging = (controller, action, user, document) => {

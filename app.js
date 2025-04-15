@@ -21,6 +21,7 @@ if (app.get('env') === 'production') {
 
 app.use(cookieParser());
 app.use(express.json());
+app.set('query parser', 'extended');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(config.root + '/dist'));
 

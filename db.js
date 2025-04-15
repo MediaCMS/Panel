@@ -27,7 +27,7 @@ function filter(pipeline, query, callback) {
         match.user = { $regex : query.user, $options : 'i' }
     }
     if (('status' in query) && (query.status !== '')) {
-        match.status = query.status;
+        match.status = query.status === 'true';
     }
     if (query?._exclude) {
         match._id = {
@@ -41,9 +41,9 @@ function filter(pipeline, query, callback) {
         }})
     }
     if (query?._skip) {
-        pipeline.push({ $skip: query._skip })
+        pipeline.push({ $skip: parseInt(query._skip) })
     }
-    const limit = query._limit ?? config.limit;
+    const limit = parseInt(query._limit ?? config.limit);
     pipeline.push({ '$limit': limit })
 }
 

@@ -3,6 +3,11 @@ import db, { ObjectId, filter } from '../db.js';
 export default {
 
     list: async (request, response) => {
+        if (response.locals.user.role.level === 4) {
+            if (request.query.user !== response.locals.user.title) {
+                return response.sendStatus(403);
+            }
+        }
         const pipeline = [
             { $lookup: {
                 from: 'users',
@@ -33,11 +38,6 @@ export default {
                 };
             }
         })
-        if (response.locals.user.role.level === 4) {
-            if (request.query.user !== response.locals.user.title) {
-                return response.sendStatus(403);
-            }
-        }
         const posts = await db.collection('posts')
             .aggregate(pipeline).toArray()
         response.json(posts);

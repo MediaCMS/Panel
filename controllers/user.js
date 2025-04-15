@@ -5,7 +5,7 @@ export default {
 
     list: async (request, response) => {
         const pipeline = [];
-        if (request.query?._compact) {
+        if (request.query?._compact == 'true') {
             pipeline.push(
                 { $project: { title: 1, status: 1 } }
             );
