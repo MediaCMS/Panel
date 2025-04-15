@@ -27,9 +27,9 @@ html {
         }
       */
       }
-      .mw-sm { max-width: 576px; }
-      .mw-md { max-width: 768px; }
-      .mw-lg { max-width: 992px; }
+      .mw-sm { max-width: 576px; margin-left: auto; margin-right: auto; }
+      .mw-md { max-width: 768px; margin-left: auto; margin-right: auto; }
+      .mw-lg { max-width: 992px; margin-left: auto; margin-right: auto; }
       .screen {
         min-width: 100vw; height: 50vh;text-align: center;vertical-align: middle; display: table-cell;
       }

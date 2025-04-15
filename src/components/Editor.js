@@ -68,7 +68,9 @@ const Editor = props => {
         .forEach(([type, label]) => 
             menu.insert.submenu[type] = { label }
         )
-        menu.insert.submenu.other = { label: 'Інші', divider: true, submenu: {} }
+        menu.insert.submenu.other = {
+            label: 'Інші', divider: true, submenu: {}
+        }
         Object.entries(types).slice(7, 14)
         .forEach(([type, label]) => 
             menu.insert.submenu.other.submenu[type] = { label }

@@ -13,6 +13,9 @@ const Block = props => {
     const { component, blocks, ...propsNew } = props
 
     const handleChange = (name, value) => {
+        if (props?.onChange) {
+            return props.onChange(name, value)
+        }
         if (typeof name === 'undefined') {
             return props.blocks.dispatch(
                 props.blocks.actions.remove(
@@ -117,7 +120,8 @@ Block.propTypes = {
     ]).isRequired,
     type: PropTypes.string.isRequired,
     label: PropTypes.string,
-    size: PropTypes.string
+    size: PropTypes.string,
+    onChange: PropTypes.func
 }
 
 export default Block
