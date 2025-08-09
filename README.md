@@ -1,4 +1,4 @@
-# MediaCMS Panel [alpha]
+# MediaCMS Panel [beta]
 ## Панель керування
 ### Розподілена CMS для високонавантажених інтернет-видань
 
