@@ -29,12 +29,12 @@ const Category = () => {
     }, [])
 
     return <>
-        <Table columns={['Назва', 'Посилання', 'Сортування']} className="mw-md">
+        <Table columns={['Назва', 'Опис', 'Сортування']} className="mw-lg">
             {categories.map(category => (
                 <Row status={category.status} key={category._id}
                     onClick={() => {setID(category._id);setEditor(true)}}>
                     <Cell className="text-left">{category.title}</Cell>
-                    <Cell className="text-left">{category.slug}</Cell>
+                    <Cell className="text-left">{category.description}</Cell>
                     <Cell className="text-center">{category.order}</Cell>
                 </Row>
             ))}
