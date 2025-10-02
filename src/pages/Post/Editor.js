@@ -10,8 +10,10 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
 
     const context = useOutletContext()
     const [post, setPost] = useState({
-        title: 'Заголовок',
-        user: context.user._id
+        title: 'Заголовок', 
+        date: new Date().toISOString(), 
+        user: context.user._id,
+        status: false
     })
     const [state, dispatch] = useReducer(Reducer)
     const [types, setTypes] = useState([])
@@ -48,7 +50,6 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
             const postNew = id
                 ? await context.api.panel.get('/posts/' + id)
                 : post
-            console.log(postNew)
             dispatch(
                 actions.load(postNew.blocks)
             )
