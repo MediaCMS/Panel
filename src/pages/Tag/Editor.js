@@ -36,7 +36,7 @@ const Editor = ({ id, show, onChange, onHide }) => {
             title="Редагування мітки">
             <Row>
                 <Cell sm="4">
-                    <Field.Title placeholder="Львів" maxLength="32" required />
+                    <Field.Title placeholder="Львів" maxLength="64" required />
                 </Cell>
                 <Cell sm="4">
                     <Field.Slug source={tag.title} placeholder="львів" required />
