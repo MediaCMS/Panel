@@ -56,6 +56,7 @@ export default {
         if (post?.tags) {
             post.tags = post.tags.map(tag => new ObjectId(tag));
         }
+        post.type = new ObjectId(post.type);
         post.user = new ObjectId(post.user);
         const result = await db.collection('posts')
             .insertOne(post);
@@ -77,6 +78,7 @@ export default {
         if (post?.tags) {
             post.tags = post.tags.map(tag => new ObjectId(tag));
         }
+        post.type = new ObjectId(post.type);
         post.user = new ObjectId(post.user);
         await db.collection('posts').replaceOne(
             { _id: new ObjectId(request.params.id) },
