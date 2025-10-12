@@ -9,7 +9,7 @@ const Image = ({ title, name, tags, status, onClick }) => {
     return (  
         <div className="image border border-white bg-secondary d-inline-block"
             onClick={onClick}>
-            <img src={config.images.url + '/' + name + '?width=320'}
+            <img src={config.images.url + '/' + name}
                 className={status ? '' : 'image-muted'}
                 title={titleNew} alt={title} />
         </div>

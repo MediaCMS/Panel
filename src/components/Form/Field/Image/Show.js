@@ -8,12 +8,14 @@ import '../../../../assets/styles/components/fields/image.css'
 
 const Show = props => {
 
-    const [image, setImage] = useState({ name: props.name })
+    const [image, setImage] = useState()
     const [editor, setEditor] = useState(false)
     const context = useOutletContext()
 
     const handleLoad = () => {
-        if (!props?.name || !props?.onChange) return
+        if (!props?.name) return
+        setImage({ name: props.name })
+        if (!props?.onChange) return
         (async () => {
             const images = await context.api.panel.get('/images', {
                 params: { name: props.name }}
@@ -42,7 +44,7 @@ const Show = props => {
 
     return <>
         {props?.as === 'menu' ? menu : <div className="image">
-            <img src={config.images.url + '/' + image?.name} />
+            <img src={config.images.url + '/' + image?.name + '?width=765'} />
             {menu}
         </div>}
         {editor && <Editor image={image} onChange={handleLoad}

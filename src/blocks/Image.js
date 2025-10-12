@@ -26,16 +26,16 @@ const ImageWrapper = props => {
         setImage({})
     }
 
-    useEffect( () => {
-        props?.id && (async () => 
+    useEffect(() => {
+        props?.id && (async () => {
             setImage(
                 await context.api.panel.get(
                     '/images/' + props.id
                 )
             )
-        )()
+        })()
     }, [props.id])
-
+    
     return (
         <Form {...props} data={image} onChange={setImage} size="lg" 
             onSubmit={handleSubmit} onDelete={handleDelete}>
@@ -52,7 +52,7 @@ const ImageWrapper = props => {
             </Row>
             <Row>
                 <Field.Autocomplete name="tags" label="Мітки зображення"
-                    path="/tags" multiple required />
+                    path="/tags" multiple />
             </Row>
         </Form>
     )
