@@ -35,18 +35,23 @@ const Editor = ({ id, show, onChange, onHide }) => {
             onChange={setType} onSubmit={handleSubmit} onDelete={handleDelete}
             title="Редагування типу">
             <Row>
-                <Cell sm="4">
+                <Cell sm="3">
                     <Field.Title placeholder="Новина" maxLength="16" required />
                 </Cell>
-                <Cell sm="4">
+                <Cell sm="3">
                     <Field.Slug source={type.title} placeholder="новина" required />
                 </Cell>
-                <Cell sm="4">
+                <Cell sm="3">
+                    <Field.Bool name="author" label='Видимість автора' />
+                </Cell>
+                <Cell sm="3">
                     <Field.Status label='Видимість типу' />
                 </Cell>
             </Row>
             <Row><Field.Description placeholder="Опис типу" /></Row>
-            <Row><Field.Image /></Row>
+            <Row>
+                <Field.Image />
+            </Row>
         </Form>
     )
 }
