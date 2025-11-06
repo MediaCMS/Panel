@@ -12,6 +12,7 @@ const PostEditor = ({ id, show, onChange, onHide }) => {
     const [post, setPost] = useState({
         title: 'Заголовок', 
         date: new Date().toISOString(), 
+        category: '61fae1bb6be8f90a409ecdd3',
         type: '64be89ff69a893de210bd7d4',
         user: context.user._id,
         status: false

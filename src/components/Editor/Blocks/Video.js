@@ -29,7 +29,7 @@ const Video = ({ url, size, ratio, menu, onChange }) => {
                 'resize', menu.resize
             )
         )
-        size || onChange('size', 'small')
+        size || onChange('size', 'large')
     }, [])
 
     return url 

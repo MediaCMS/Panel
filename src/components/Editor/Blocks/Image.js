@@ -31,7 +31,7 @@ const Image = ({
         menu.dispatch(
             menu.actions.insert('resize', menu.resize)
         )
-        size || onChange('size', 'full')
+        size || onChange('size', 'large')
     }, [url])
 
     return url
